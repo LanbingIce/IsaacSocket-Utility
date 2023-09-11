@@ -1,0 +1,9 @@
+/IsaacSocket/bin/
+/IsaacSocket/obj/
+
+# 忽略 Visual Studio 的一些文件
+.vscode/
+.vs/
+*.suo
+*.user
+*.sln.docstates
