@@ -2,12 +2,13 @@ namespace IsaacSocket;
 
 public partial class Form1 : Form
 {
+    private int size;
     internal Main main;
     public Form1()
     {
         InitializeComponent();
-        main = new(1024, Callback);
-
+        size = 1024;
+        main = new(size, Callback);
     }
     private void UpdateTextBox(RichTextBox richTextBox, string text)
     {
@@ -55,14 +56,13 @@ public partial class Form1 : Form
     }
     private void SetDataSpaceSizeToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        string userInput = Microsoft.VisualBasic.Interaction.InputBox("请输入新的交换区大小，范围： 64 ~ 4194304：", "请输入", "1024");
+        string userInput = Microsoft.VisualBasic.Interaction.InputBox("请输入新的交换区大小，范围： 64 ~ 4194304：", "请输入", size.ToString());
 
         if (!string.IsNullOrEmpty(userInput))
         {
-            int number;
-            if (int.TryParse(userInput, out number))
+            if (int.TryParse(userInput, out size))
             {
-                main.SetDataSpaceSize(number);
+                main.SetDataSpaceSize(size);
             }
             else
             {
