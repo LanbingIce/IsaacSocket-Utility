@@ -175,6 +175,7 @@ partial class Form1
         Controls.Add(groupBox2);
         Controls.Add(groupBox1);
         FormBorderStyle = FormBorderStyle.FixedSingle;
+        Icon = (Icon)resources.GetObject("$this.Icon");
         MaximizeBox = false;
         Name = "Form1";
         Text = "IsaacSocket 连接程序";
