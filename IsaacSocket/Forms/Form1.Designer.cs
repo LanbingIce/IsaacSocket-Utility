@@ -32,12 +32,12 @@ partial class Form1
         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
         notifyIcon1 = new NotifyIcon(components);
         contextMenuStrip1 = new ContextMenuStrip(components);
-        显示主窗口ToolStripMenuItem = new ToolStripMenuItem();
-        隐藏主窗口ToolStripMenuItem = new ToolStripMenuItem();
+        showMainWindowToolStripMenuItem = new ToolStripMenuItem();
+        hideMainWindowToolStripMenuItem = new ToolStripMenuItem();
         toolStripSeparator1 = new ToolStripSeparator();
-        设置交换区大小ToolStripMenuItem = new ToolStripMenuItem();
+        setDataSpaceSizeToolStripMenuItem = new ToolStripMenuItem();
         toolStripSeparator2 = new ToolStripSeparator();
-        退出程序ToolStripMenuItem = new ToolStripMenuItem();
+        exitToolStripMenuItem = new ToolStripMenuItem();
         groupBox1 = new GroupBox();
         richTextBox1 = new RichTextBox();
         groupBox2 = new GroupBox();
@@ -61,47 +61,47 @@ partial class Form1
         // 
         // contextMenuStrip1
         // 
-        contextMenuStrip1.Items.AddRange(new ToolStripItem[] { 显示主窗口ToolStripMenuItem, 隐藏主窗口ToolStripMenuItem, toolStripSeparator1, 设置交换区大小ToolStripMenuItem, toolStripSeparator2, 退出程序ToolStripMenuItem });
+        contextMenuStrip1.Items.AddRange(new ToolStripItem[] { showMainWindowToolStripMenuItem, hideMainWindowToolStripMenuItem, toolStripSeparator1, setDataSpaceSizeToolStripMenuItem, toolStripSeparator2, exitToolStripMenuItem });
         contextMenuStrip1.Name = "contextMenuStrip1";
-        contextMenuStrip1.Size = new Size(161, 104);
+        contextMenuStrip1.Size = new Size(181, 126);
         // 
-        // 显示主窗口ToolStripMenuItem
+        // showMainWindowToolStripMenuItem
         // 
-        显示主窗口ToolStripMenuItem.Name = "显示主窗口ToolStripMenuItem";
-        显示主窗口ToolStripMenuItem.Size = new Size(160, 22);
-        显示主窗口ToolStripMenuItem.Text = "显示主窗口";
-        显示主窗口ToolStripMenuItem.Click += 显示主窗口ToolStripMenuItem_Click;
+        showMainWindowToolStripMenuItem.Name = "showMainWindowToolStripMenuItem";
+        showMainWindowToolStripMenuItem.Size = new Size(180, 22);
+        showMainWindowToolStripMenuItem.Text = "显示主窗口";
+        showMainWindowToolStripMenuItem.Click += ShowMainWindowToolStripMenuItem_Click;
         // 
-        // 隐藏主窗口ToolStripMenuItem
+        // hideMainWindowToolStripMenuItem
         // 
-        隐藏主窗口ToolStripMenuItem.Name = "隐藏主窗口ToolStripMenuItem";
-        隐藏主窗口ToolStripMenuItem.Size = new Size(160, 22);
-        隐藏主窗口ToolStripMenuItem.Text = "隐藏主窗口";
-        隐藏主窗口ToolStripMenuItem.Click += 隐藏主窗口ToolStripMenuItem_Click;
+        hideMainWindowToolStripMenuItem.Name = "hideMainWindowToolStripMenuItem";
+        hideMainWindowToolStripMenuItem.Size = new Size(180, 22);
+        hideMainWindowToolStripMenuItem.Text = "隐藏主窗口";
+        hideMainWindowToolStripMenuItem.Click += HideMainWindowToolStripMenuItem_Click;
         // 
         // toolStripSeparator1
         // 
         toolStripSeparator1.Name = "toolStripSeparator1";
-        toolStripSeparator1.Size = new Size(157, 6);
+        toolStripSeparator1.Size = new Size(177, 6);
         // 
-        // 设置交换区大小ToolStripMenuItem
+        // setDataSpaceSizeToolStripMenuItem
         // 
-        设置交换区大小ToolStripMenuItem.Name = "设置交换区大小ToolStripMenuItem";
-        设置交换区大小ToolStripMenuItem.Size = new Size(160, 22);
-        设置交换区大小ToolStripMenuItem.Text = "设置交换区大小";
-        设置交换区大小ToolStripMenuItem.Click += 设置交换区大小ToolStripMenuItem_Click;
+        setDataSpaceSizeToolStripMenuItem.Name = "setDataSpaceSizeToolStripMenuItem";
+        setDataSpaceSizeToolStripMenuItem.Size = new Size(180, 22);
+        setDataSpaceSizeToolStripMenuItem.Text = "设置交换区大小";
+        setDataSpaceSizeToolStripMenuItem.Click += SetDataSpaceSizeToolStripMenuItem_Click;
         // 
         // toolStripSeparator2
         // 
         toolStripSeparator2.Name = "toolStripSeparator2";
-        toolStripSeparator2.Size = new Size(157, 6);
+        toolStripSeparator2.Size = new Size(177, 6);
         // 
-        // 退出程序ToolStripMenuItem
+        // exitToolStripMenuItem
         // 
-        退出程序ToolStripMenuItem.Name = "退出程序ToolStripMenuItem";
-        退出程序ToolStripMenuItem.Size = new Size(160, 22);
-        退出程序ToolStripMenuItem.Text = "退出程序";
-        退出程序ToolStripMenuItem.Click += 退出程序ToolStripMenuItem_Click;
+        exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+        exitToolStripMenuItem.Size = new Size(180, 22);
+        exitToolStripMenuItem.Text = "退出程序";
+        exitToolStripMenuItem.Click += ExitToolStripMenuItem_Click;
         // 
         // groupBox1
         // 
@@ -193,11 +193,11 @@ partial class Form1
 
     private NotifyIcon notifyIcon1;
     private ContextMenuStrip contextMenuStrip1;
-    private ToolStripMenuItem 显示主窗口ToolStripMenuItem;
-    private ToolStripMenuItem 隐藏主窗口ToolStripMenuItem;
+    private ToolStripMenuItem showMainWindowToolStripMenuItem;
+    private ToolStripMenuItem hideMainWindowToolStripMenuItem;
     private ToolStripSeparator toolStripSeparator1;
-    private ToolStripMenuItem 退出程序ToolStripMenuItem;
-    private ToolStripMenuItem 设置交换区大小ToolStripMenuItem;
+    private ToolStripMenuItem exitToolStripMenuItem;
+    private ToolStripMenuItem setDataSpaceSizeToolStripMenuItem;
     private ToolStripSeparator toolStripSeparator2;
     private GroupBox groupBox1;
     private GroupBox groupBox2;

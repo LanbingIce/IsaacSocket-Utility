@@ -53,7 +53,7 @@ public partial class Form1 : Form
                 break;
         }
     }
-    private void 设置交换区大小ToolStripMenuItem_Click(object sender, EventArgs e)
+    private void SetDataSpaceSizeToolStripMenuItem_Click(object sender, EventArgs e)
     {
         string userInput = Microsoft.VisualBasic.Interaction.InputBox("请输入新的交换区大小，范围： 64 ~ 4194304：", "请输入", "1024");
 
@@ -76,7 +76,7 @@ public partial class Form1 : Form
         main.Start();
     }
 
-    private void 显示主窗口ToolStripMenuItem_Click(object sender, EventArgs e)
+    private void ShowMainWindowToolStripMenuItem_Click(object sender, EventArgs e)
     {
         Show();
         WindowState = FormWindowState.Normal;
@@ -85,12 +85,12 @@ public partial class Form1 : Form
         TopMost=false;
     }
 
-    private void 退出程序ToolStripMenuItem_Click(object sender, EventArgs e)
+    private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
     {
         Close();
     }
 
-    private void 隐藏主窗口ToolStripMenuItem_Click(object sender, EventArgs e)
+    private void HideMainWindowToolStripMenuItem_Click(object sender, EventArgs e)
     {
         WindowState = FormWindowState.Minimized;
     }
