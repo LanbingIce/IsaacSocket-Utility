@@ -1,56 +1,83 @@
+using System.Text;
 namespace IsaacSocket;
 
 public partial class Form1 : Form
 {
+    private readonly StringBuilder stringBuilder1, stringBuilder2, stringBuilder3, stringBuilder4;
     private int size;
     internal Main main;
     public Form1()
     {
         InitializeComponent();
+        stringBuilder1 = new();
+        stringBuilder2 = new();
+        stringBuilder3 = new();
+        stringBuilder4 = new();
         size = 1024;
         main = new(size, Callback);
     }
+
+    private void UpdateStringBuilder(StringBuilder stringBuilder, string text)
+    {
+        stringBuilder.Append($"\n- {DateTime.Now:HH:mm:ss} {text}");
+    }
     private void UpdateTextBox(RichTextBox richTextBox, string text)
     {
-        DateTime currentTime = DateTime.Now;
-
-        // 提取时分秒部分
-        int hours = currentTime.Hour;
-        int minutes = currentTime.Minute;
-        int seconds = currentTime.Second;
-
-        richTextBox.AppendText($"\n- {hours:D2}:{minutes:D2}:{seconds:D2} {text}");
+        richTextBox.AppendText($"\n- {DateTime.Now:HH:mm:ss} {text}");
         richTextBox.ScrollToCaret();
     }
     private void Callback(params object[] args)
     {
-
+        if (IsDisposed)
+        {
+            return;
+        }
         switch (args[0])
         {
             case Main.CallbackType.RECEIVE:
-
-                if (!richTextBox1.IsDisposed)
+                if (Visible)
                 {
                     richTextBox1.BeginInvoke(UpdateTextBox, richTextBox1, args[1] + "\n");
                 }
+                else
+                {
+                    UpdateStringBuilder(stringBuilder1, args[1] + "\n");
+
+                }
                 break;
             case Main.CallbackType.SEND:
-                if (!richTextBox2.IsDisposed)
+                if (Visible)
                 {
                     richTextBox2.BeginInvoke(UpdateTextBox, richTextBox2, args[1] + "\n");
                 }
+                else
+                {
+                    UpdateStringBuilder(stringBuilder2, args[1] + "\n");
+
+                }
                 break;
             case Main.CallbackType.MESSAGE:
-                if (!richTextBox3.IsDisposed)
+                if (Visible)
                 {
                     richTextBox3.BeginInvoke(UpdateTextBox, richTextBox3, args[1] + "\n");
                 }
+                else
+                {
+                    UpdateStringBuilder(stringBuilder3, args[1] + "\n");
+                }
                 break;
             case Main.CallbackType.HEART_BEAT:
-                if (!richTextBox4.IsDisposed)
+
+                if (Visible)
                 {
                     richTextBox4.BeginInvoke(UpdateTextBox, richTextBox4, args[1]);
                 }
+                else
+                {
+                    UpdateStringBuilder(stringBuilder4, (string)args[1]);
+                }
+
+
                 break;
         }
     }
@@ -82,6 +109,19 @@ public partial class Form1 : Form
         Visible = true;
         WindowState = FormWindowState.Normal;
         TopMost = false;
+
+        richTextBox1.AppendText(stringBuilder1.ToString());
+        richTextBox2.AppendText(stringBuilder2.ToString());
+        richTextBox3.AppendText(stringBuilder3.ToString());
+        richTextBox4.AppendText(stringBuilder4.ToString());
+        richTextBox1.ScrollToCaret();
+        richTextBox2.ScrollToCaret();
+        richTextBox3.ScrollToCaret();
+        richTextBox4.ScrollToCaret();
+        stringBuilder1.Clear();
+        stringBuilder2.Clear();
+        stringBuilder3.Clear();
+        stringBuilder4.Clear();
     }
 
     private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -99,6 +139,14 @@ public partial class Form1 : Form
         switch (WindowState)
         {
             case FormWindowState.Minimized:
+                stringBuilder1.Append(richTextBox1.Text);
+                stringBuilder2.Append(richTextBox2.Text);
+                stringBuilder3.Append(richTextBox3.Text);
+                stringBuilder4.Append(richTextBox4.Text);
+                richTextBox1.Clear();
+                richTextBox2.Clear();
+                richTextBox3.Clear();
+                richTextBox4.Clear();
                 // 设置通知消息文本
                 notifyIcon1.BalloonTipText = "要再次打开窗口，请在托盘区双击托盘图标";
                 Visible = false;
@@ -126,5 +174,17 @@ public partial class Form1 : Form
         Visible = true;
         WindowState = FormWindowState.Normal;
         TopMost = false;
+        richTextBox1.AppendText(stringBuilder1.ToString());
+        richTextBox2.AppendText(stringBuilder2.ToString());
+        richTextBox3.AppendText(stringBuilder3.ToString());
+        richTextBox4.AppendText(stringBuilder4.ToString());
+        richTextBox1.ScrollToCaret();
+        richTextBox2.ScrollToCaret();
+        richTextBox3.ScrollToCaret();
+        richTextBox4.ScrollToCaret();
+        stringBuilder1.Clear();
+        stringBuilder2.Clear();
+        stringBuilder3.Clear();
+        stringBuilder4.Clear();
     }
 }
