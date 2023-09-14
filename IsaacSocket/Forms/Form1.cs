@@ -6,7 +6,7 @@ public partial class Form1 : Form
 {
     private readonly StringBuilder stringBuilder1, stringBuilder2, stringBuilder3, stringBuilder4;
     private int size;
-    internal Main main;
+    private readonly Main main;
     public Form1()
     {
         InitializeComponent();
@@ -20,7 +20,6 @@ public partial class Form1 : Form
         size = 1024;
         main = new(size, Callback);
     }
-
     private void UpdateStringBuilder(StringBuilder stringBuilder, string text)
     {
         stringBuilder.Append($"\n- {DateTime.Now:HH:mm:ss} {text}");
@@ -80,8 +79,6 @@ public partial class Form1 : Form
                 {
                     UpdateStringBuilder(stringBuilder4, (string)args[1]);
                 }
-
-
                 break;
         }
     }
@@ -101,12 +98,10 @@ public partial class Form1 : Form
             }
         }
     }
-
     private void Form1_Load(object sender, EventArgs e)
     {
         main.Start();
     }
-
     private void ShowMainWindowToolStripMenuItem_Click(object sender, EventArgs e)
     {
         TopMost = true;
@@ -127,68 +122,43 @@ public partial class Form1 : Form
         stringBuilder3.Clear();
         stringBuilder4.Clear();
     }
-
     private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
     {
         Close();
     }
-
     private void HideMainWindowToolStripMenuItem_Click(object sender, EventArgs e)
     {
         WindowState = FormWindowState.Minimized;
     }
-
     private void Form1_SizeChanged(object sender, EventArgs e)
     {
-        switch (WindowState)
+        if (WindowState == FormWindowState.Minimized)
         {
-            case FormWindowState.Minimized:
-                stringBuilder1.Append(richTextBox1.Text);
-                stringBuilder2.Append(richTextBox2.Text);
-                stringBuilder3.Append(richTextBox3.Text);
-                stringBuilder4.Append(richTextBox4.Text);
-                richTextBox1.Clear();
-                richTextBox2.Clear();
-                richTextBox3.Clear();
-                richTextBox4.Clear();
-                // 设置通知消息文本
-                notifyIcon1.BalloonTipText = "要再次打开窗口，请在托盘区双击托盘图标";
-                Visible = false;
-                // 显示通知消息
-                notifyIcon1.ShowBalloonTip(3000); // 2000表示通知消息显示的时间（以毫秒为单位）
-                break;
-            case FormWindowState.Normal:
-                break;
+            stringBuilder1.Append(richTextBox1.Text);
+            stringBuilder2.Append(richTextBox2.Text);
+            stringBuilder3.Append(richTextBox3.Text);
+            stringBuilder4.Append(richTextBox4.Text);
+            richTextBox1.Clear();
+            richTextBox2.Clear();
+            richTextBox3.Clear();
+            richTextBox4.Clear();
+            // 设置通知消息文本
+            notifyIcon1.BalloonTipText = "要再次打开窗口，请在托盘区双击托盘图标";
+            Visible = false;
+            // 显示通知消息
+            notifyIcon1.ShowBalloonTip(3000); // 3000表示通知消息显示的时间（以毫秒为单位）
         }
     }
-
     private void Form1_FormClosing(object sender, FormClosingEventArgs e)
     {
         DialogResult result = MessageBox.Show("确定要退出程序吗？", "退出程序", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
         if (result == DialogResult.No)
         {
             e.Cancel = true;
-
         }
     }
-
-    private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+    private void NotifyIcon1_DoubleClick(object sender, EventArgs e)
     {
-        TopMost = true;
-        Visible = true;
-        WindowState = FormWindowState.Normal;
-        TopMost = false;
-        richTextBox1.AppendText(stringBuilder1.ToString());
-        richTextBox2.AppendText(stringBuilder2.ToString());
-        richTextBox3.AppendText(stringBuilder3.ToString());
-        richTextBox4.AppendText(stringBuilder4.ToString());
-        richTextBox1.ScrollToCaret();
-        richTextBox2.ScrollToCaret();
-        richTextBox3.ScrollToCaret();
-        richTextBox4.ScrollToCaret();
-        stringBuilder1.Clear();
-        stringBuilder2.Clear();
-        stringBuilder3.Clear();
-        stringBuilder4.Clear();
+        showMainWindowToolStripMenuItem.PerformClick();
     }
 }

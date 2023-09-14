@@ -57,7 +57,7 @@ partial class Form1
         notifyIcon1.Icon = (Icon)resources.GetObject("notifyIcon1.Icon");
         notifyIcon1.Text = "IsaacSocket";
         notifyIcon1.Visible = true;
-        notifyIcon1.DoubleClick += notifyIcon1_DoubleClick;
+        notifyIcon1.DoubleClick += NotifyIcon1_DoubleClick;
         // 
         // contextMenuStrip1
         // 
