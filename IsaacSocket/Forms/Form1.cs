@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 namespace IsaacSocket;
 
@@ -9,6 +10,9 @@ public partial class Form1 : Form
     public Form1()
     {
         InitializeComponent();
+        Version? version = Assembly.GetEntryAssembly()?.GetName().Version;
+        string versionString = $"{version?.Major}.{version?.Minor}";
+        Text = $"IsaacSocket Á¬½Ó³ÌÐò v{versionString}";
         stringBuilder1 = new();
         stringBuilder2 = new();
         stringBuilder3 = new();
