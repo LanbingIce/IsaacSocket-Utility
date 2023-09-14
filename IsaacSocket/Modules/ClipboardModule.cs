@@ -15,9 +15,9 @@ namespace IsaacSocket.Modules
             {
                 clipboardText = Clipboard.GetText();
                 this.callback = callback;
+                WindowState=FormWindowState.Minimized;
                 Show();
-                Hide();
-                ShowInTaskbar = false;
+                Visible = false;
             }
 
             internal void SendClipboardText()

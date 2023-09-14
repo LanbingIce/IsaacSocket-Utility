@@ -78,11 +78,10 @@ public partial class Form1 : Form
 
     private void ShowMainWindowToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Show();
-        WindowState = FormWindowState.Normal;
-
         TopMost = true;
-        TopMost=false;
+        Visible = true;
+        WindowState = FormWindowState.Normal;
+        TopMost = false;
     }
 
     private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -102,13 +101,11 @@ public partial class Form1 : Form
             case FormWindowState.Minimized:
                 // 设置通知消息文本
                 notifyIcon1.BalloonTipText = "要再次打开窗口，请在托盘区双击托盘图标";
-                Hide();
+                Visible = false;
                 // 显示通知消息
                 notifyIcon1.ShowBalloonTip(3000); // 2000表示通知消息显示的时间（以毫秒为单位）
-                ShowInTaskbar = false;
                 break;
             case FormWindowState.Normal:
-                ShowInTaskbar = true;
                 break;
         }
     }
@@ -125,10 +122,9 @@ public partial class Form1 : Form
 
     private void notifyIcon1_DoubleClick(object sender, EventArgs e)
     {
-        Show();
-        WindowState = FormWindowState.Normal;
-
         TopMost = true;
+        Visible = true;
+        WindowState = FormWindowState.Normal;
         TopMost = false;
     }
 }
