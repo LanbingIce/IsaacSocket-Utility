@@ -63,43 +63,43 @@ partial class Form1
         // 
         contextMenuStrip1.Items.AddRange(new ToolStripItem[] { showMainWindowToolStripMenuItem, hideMainWindowToolStripMenuItem, toolStripSeparator1, setDataSpaceSizeToolStripMenuItem, toolStripSeparator2, exitToolStripMenuItem });
         contextMenuStrip1.Name = "contextMenuStrip1";
-        contextMenuStrip1.Size = new Size(181, 126);
+        contextMenuStrip1.Size = new Size(161, 104);
         // 
         // showMainWindowToolStripMenuItem
         // 
         showMainWindowToolStripMenuItem.Name = "showMainWindowToolStripMenuItem";
-        showMainWindowToolStripMenuItem.Size = new Size(180, 22);
+        showMainWindowToolStripMenuItem.Size = new Size(160, 22);
         showMainWindowToolStripMenuItem.Text = "显示主窗口";
         showMainWindowToolStripMenuItem.Click += ShowMainWindowToolStripMenuItem_Click;
         // 
         // hideMainWindowToolStripMenuItem
         // 
         hideMainWindowToolStripMenuItem.Name = "hideMainWindowToolStripMenuItem";
-        hideMainWindowToolStripMenuItem.Size = new Size(180, 22);
+        hideMainWindowToolStripMenuItem.Size = new Size(160, 22);
         hideMainWindowToolStripMenuItem.Text = "隐藏主窗口";
         hideMainWindowToolStripMenuItem.Click += HideMainWindowToolStripMenuItem_Click;
         // 
         // toolStripSeparator1
         // 
         toolStripSeparator1.Name = "toolStripSeparator1";
-        toolStripSeparator1.Size = new Size(177, 6);
+        toolStripSeparator1.Size = new Size(157, 6);
         // 
         // setDataSpaceSizeToolStripMenuItem
         // 
         setDataSpaceSizeToolStripMenuItem.Name = "setDataSpaceSizeToolStripMenuItem";
-        setDataSpaceSizeToolStripMenuItem.Size = new Size(180, 22);
+        setDataSpaceSizeToolStripMenuItem.Size = new Size(160, 22);
         setDataSpaceSizeToolStripMenuItem.Text = "设置交换区大小";
         setDataSpaceSizeToolStripMenuItem.Click += SetDataSpaceSizeToolStripMenuItem_Click;
         // 
         // toolStripSeparator2
         // 
         toolStripSeparator2.Name = "toolStripSeparator2";
-        toolStripSeparator2.Size = new Size(177, 6);
+        toolStripSeparator2.Size = new Size(157, 6);
         // 
         // exitToolStripMenuItem
         // 
         exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-        exitToolStripMenuItem.Size = new Size(180, 22);
+        exitToolStripMenuItem.Size = new Size(160, 22);
         exitToolStripMenuItem.Text = "退出程序";
         exitToolStripMenuItem.Click += ExitToolStripMenuItem_Click;
         // 
@@ -111,7 +111,7 @@ partial class Form1
         groupBox1.Size = new Size(320, 480);
         groupBox1.TabIndex = 1;
         groupBox1.TabStop = false;
-        groupBox1.Text = "收到的消息";
+        groupBox1.Text = "消息：从 Mod 到 连接程序";
         // 
         // richTextBox1
         // 
@@ -129,7 +129,7 @@ partial class Form1
         groupBox2.Size = new Size(320, 480);
         groupBox2.TabIndex = 2;
         groupBox2.TabStop = false;
-        groupBox2.Text = "发出的消息";
+        groupBox2.Text = "消息：从 连接程序 到 Mod";
         // 
         // richTextBox2
         // 
@@ -148,7 +148,7 @@ partial class Form1
         groupBox3.Size = new Size(320, 480);
         groupBox3.TabIndex = 3;
         groupBox3.TabStop = false;
-        groupBox3.Text = "心跳包和其他消息";
+        groupBox3.Text = "心跳包和系统消息";
         // 
         // richTextBox4
         // 
