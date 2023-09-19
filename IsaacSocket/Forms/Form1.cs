@@ -1,10 +1,10 @@
 using System.Reflection;
-using System.Text;
+
 namespace IsaacSocket;
 
 public partial class Form1 : Form
 {
-    private readonly StringBuilder stringBuilder1, stringBuilder2, stringBuilder3, stringBuilder4;
+    private readonly Queue<string> logQueue1, logQueue2, logQueue3, logQueue4;
     private int size;
     private readonly Main main;
     public Form1()
@@ -13,22 +13,34 @@ public partial class Form1 : Form
         Version? version = Assembly.GetEntryAssembly()?.GetName().Version;
         string versionString = $"{version?.Major}.{version?.Minor}";
         Text = $"IsaacSocket 连接程序 v{versionString}";
-        stringBuilder1 = new();
-        stringBuilder2 = new();
-        stringBuilder3 = new();
-        stringBuilder4 = new();
+        logQueue1 = new();
+        logQueue2 = new();
+        logQueue3 = new();
+        logQueue4 = new();
         size = 1024;
         main = new(size, Callback);
     }
-    private void UpdateStringBuilder(StringBuilder stringBuilder, string text)
+    private void UpdateLog(Queue<string> logQueue, RichTextBox logTextBox, string logText)
     {
-        stringBuilder.Append($"\n- {DateTime.Now:HH:mm:ss} {text}");
+        if (logText != "")
+        {
+            logQueue.Enqueue($"- {DateTime.Now:HH:mm:ss} {logText}");
+            if (logQueue.Count > 100)
+            {
+                logQueue.Dequeue();
+            }
+        }
+        if (Visible)
+        {
+            BeginInvoke(() =>
+            {
+                logTextBox.Text = string.Join(Environment.NewLine, logQueue);
+                logTextBox.SelectionStart = logTextBox.Text.Length - 1;
+                logTextBox.ScrollToCaret();
+            });
+        }
     }
-    private void UpdateTextBox(RichTextBox richTextBox, string text)
-    {
-        richTextBox.AppendText($"\n- {DateTime.Now:HH:mm:ss} {text}");
-        richTextBox.ScrollToCaret();
-    }
+
     private void Callback(params object[] args)
     {
         if (IsDisposed)
@@ -38,47 +50,16 @@ public partial class Form1 : Form
         switch (args[0])
         {
             case Main.CallbackType.RECEIVE:
-                if (Visible)
-                {
-                    richTextBox1.BeginInvoke(UpdateTextBox, richTextBox1, args[1] + "\n");
-                }
-                else
-                {
-                    UpdateStringBuilder(stringBuilder1, args[1] + "\n");
-
-                }
+                UpdateLog(logQueue1, richTextBox1, args[1] + Environment.NewLine);
                 break;
             case Main.CallbackType.SEND:
-                if (Visible)
-                {
-                    richTextBox2.BeginInvoke(UpdateTextBox, richTextBox2, args[1] + "\n");
-                }
-                else
-                {
-                    UpdateStringBuilder(stringBuilder2, args[1] + "\n");
-
-                }
+                UpdateLog(logQueue2, richTextBox2, args[1] + Environment.NewLine);
                 break;
             case Main.CallbackType.MESSAGE:
-                if (Visible)
-                {
-                    richTextBox3.BeginInvoke(UpdateTextBox, richTextBox3, args[1] + "\n");
-                }
-                else
-                {
-                    UpdateStringBuilder(stringBuilder3, args[1] + "\n");
-                }
+                UpdateLog(logQueue3, richTextBox3, args[1] + Environment.NewLine);
                 break;
             case Main.CallbackType.HEART_BEAT:
-
-                if (Visible)
-                {
-                    richTextBox4.BeginInvoke(UpdateTextBox, richTextBox4, args[1]);
-                }
-                else
-                {
-                    UpdateStringBuilder(stringBuilder4, (string)args[1]);
-                }
+                UpdateLog(logQueue4, richTextBox4, (string)args[1]);
                 break;
         }
     }
@@ -109,18 +90,10 @@ public partial class Form1 : Form
         WindowState = FormWindowState.Normal;
         TopMost = false;
 
-        richTextBox1.AppendText(stringBuilder1.ToString());
-        richTextBox2.AppendText(stringBuilder2.ToString());
-        richTextBox3.AppendText(stringBuilder3.ToString());
-        richTextBox4.AppendText(stringBuilder4.ToString());
-        richTextBox1.ScrollToCaret();
-        richTextBox2.ScrollToCaret();
-        richTextBox3.ScrollToCaret();
-        richTextBox4.ScrollToCaret();
-        stringBuilder1.Clear();
-        stringBuilder2.Clear();
-        stringBuilder3.Clear();
-        stringBuilder4.Clear();
+        UpdateLog(logQueue1, richTextBox1, "");
+        UpdateLog(logQueue2, richTextBox2, "");
+        UpdateLog(logQueue3, richTextBox3, "");
+        UpdateLog(logQueue4, richTextBox4, "");
     }
     private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
     {
@@ -134,14 +107,6 @@ public partial class Form1 : Form
     {
         if (WindowState == FormWindowState.Minimized)
         {
-            stringBuilder1.Append(richTextBox1.Text);
-            stringBuilder2.Append(richTextBox2.Text);
-            stringBuilder3.Append(richTextBox3.Text);
-            stringBuilder4.Append(richTextBox4.Text);
-            richTextBox1.Clear();
-            richTextBox2.Clear();
-            richTextBox3.Clear();
-            richTextBox4.Clear();
             // 设置通知消息文本
             notifyIcon1.BalloonTipText = "要再次打开窗口，请在托盘区双击托盘图标";
             Visible = false;
