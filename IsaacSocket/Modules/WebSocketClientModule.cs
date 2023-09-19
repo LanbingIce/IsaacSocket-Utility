@@ -135,15 +135,12 @@ namespace IsaacSocket.Modules
         }
         internal override void DisConnected()
         {
-            WebSocket[] temp = clientWebSockets;
-            clientWebSockets = new WebSocket[256];
-            Task.Run(() =>
+            // 这里使用异步关闭会出问题，因此改成同步
+            foreach (var websocket in clientWebSockets)
             {
-                for (byte i = 255; i > 0; i--)
-                {
-                    temp[i]?.Close();
-                }
-            });
+                websocket?.Close();
+            }
+            clientWebSockets = new WebSocket[256];
         }
 
 
