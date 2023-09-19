@@ -154,15 +154,15 @@ partial class Form1
         // 
         richTextBox4.Location = new Point(6, 22);
         richTextBox4.Name = "richTextBox4";
-        richTextBox4.Size = new Size(308, 64);
+        richTextBox4.Size = new Size(308, 80);
         richTextBox4.TabIndex = 1;
         richTextBox4.Text = "";
         // 
         // richTextBox3
         // 
-        richTextBox3.Location = new Point(6, 92);
+        richTextBox3.Location = new Point(6, 108);
         richTextBox3.Name = "richTextBox3";
-        richTextBox3.Size = new Size(308, 382);
+        richTextBox3.Size = new Size(308, 366);
         richTextBox3.TabIndex = 0;
         richTextBox3.Text = "";
         // 
