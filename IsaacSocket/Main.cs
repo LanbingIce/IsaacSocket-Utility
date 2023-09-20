@@ -423,7 +423,7 @@ namespace IsaacSocket
             newSize = dataSpaceSize;
             modules = new()
             {
-                [Channel.WEB_SOCKET] = new WebsocketClientModule(Channel.WEB_SOCKET, ModuleCallback),
+                [Channel.WEB_SOCKET_CLIENT] = new WebsocketClientModule(Channel.WEB_SOCKET_CLIENT, ModuleCallback),
                 [Channel.CLIPBOARD] = new ClipboardModule(Channel.CLIPBOARD, ModuleCallback)
             };
             cancellationTokenSource = new();
