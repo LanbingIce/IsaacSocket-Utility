@@ -1,3 +1,4 @@
+using IsaacSocket.Forms;
 using IsaacSocket.Utils;
 using System.Diagnostics;
 using System.Reflection;

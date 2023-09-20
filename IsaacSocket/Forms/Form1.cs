@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace IsaacSocket;
+namespace IsaacSocket.Forms;
 
 public partial class Form1 : Form
 {

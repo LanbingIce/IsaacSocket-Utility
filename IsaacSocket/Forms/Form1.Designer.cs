@@ -1,4 +1,4 @@
-﻿namespace IsaacSocket;
+﻿namespace IsaacSocket.Forms;
 
 partial class Form1
 {
