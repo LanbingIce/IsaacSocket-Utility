@@ -35,8 +35,11 @@ public partial class Form1 : Form
             BeginInvoke(() =>
             {
                 logTextBox.Text = string.Join(Environment.NewLine, logQueue);
-                logTextBox.SelectionStart = logTextBox.Text.Length - 1;
-                logTextBox.ScrollToCaret();
+                if (logTextBox.Text.Length > 0)
+                {
+                    logTextBox.SelectionStart = logTextBox.Text.Length - 1;
+                    logTextBox.ScrollToCaret();
+                }
             });
         }
     }
