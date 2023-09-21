@@ -178,6 +178,7 @@ partial class Form1
         Icon = (Icon)resources.GetObject("$this.Icon");
         MaximizeBox = false;
         Name = "Form1";
+        StartPosition = FormStartPosition.CenterScreen;
         Text = "IsaacSocket 连接程序";
         FormClosing += Form1_FormClosing;
         Load += Form1_Load;
