@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Reflection;
 using System.Text.Json;
 
@@ -6,7 +7,7 @@ namespace IsaacSocket.Forms;
 public partial class Form1 : Form
 {
     private readonly UpdateForm updateForm;
-    private readonly Queue<string> logQueue1, logQueue2, logQueue3, logQueue4;
+    private readonly ConcurrentQueue<string> logQueue1, logQueue2, logQueue3, logQueue4;
     private int size;
     private readonly Main main;
     public Form1()
@@ -23,14 +24,14 @@ public partial class Form1 : Form
         updateForm = new();
         main = new(size, Callback);
     }
-    private void UpdateLog(Queue<string> logQueue, RichTextBox logTextBox, string logText)
+    private void UpdateLog(ConcurrentQueue<string> logQueue, RichTextBox logTextBox, string logText)
     {
         if (logText != "")
         {
             logQueue.Enqueue($"- {DateTime.Now:HH:mm:ss} {logText}");
             if (logQueue.Count > 100)
             {
-                logQueue.Dequeue();
+                logQueue.TryDequeue(out _);
             }
         }
         if (Visible)
