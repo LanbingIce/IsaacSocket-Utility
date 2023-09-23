@@ -450,7 +450,7 @@ namespace IsaacSocket
         {
             Channel channel = (Channel)newMessage[0];
             byte[] message = newMessage[1..];
-            callback.Invoke(CallbackType.SEND, $"【{channel}】：\n{modules[channel].MemoryMessageToString(message)}");
+            callback.Invoke(CallbackType.SEND, $"【{channel}】：{Environment.NewLine}{modules[channel].MemoryMessageToString(message)}");
 
         }
         private  void NewMessageReceived(byte[] newMessage)
@@ -463,7 +463,7 @@ namespace IsaacSocket
             }
             else
             {
-                callback.Invoke(CallbackType.RECEIVE, $"【{channel}】：\n{modules[channel].MemoryMessageToString(message)}");
+                callback.Invoke(CallbackType.RECEIVE, $"【{channel}】：{Environment.NewLine}{modules[channel].MemoryMessageToString(message)}");
                  modules[channel].ReceiveMemoryMessage(message);
             }
         }
