@@ -47,25 +47,25 @@ namespace IsaacSocket.Modules
             WinAPIUtil.AddClipboardFormatListener(virtualForm.Handle);
         }
 
-        private enum MessageType
+        private enum ActionType
         {
-            CLIPBOARD_UPDATE = 0,
+            CLIPBOARD_UPDATED = 0,
             SET_CLIPBOARD = 1
         }
 
         internal void VirtualFormCallBack(params object[] args)
         {
-            List<byte> buffer = new() { (byte)MessageType.CLIPBOARD_UPDATE };
+            List<byte> buffer = new() { (byte)ActionType.CLIPBOARD_UPDATED };
             buffer.AddRange(Encoding.UTF8.GetBytes((string)args[0]));
             Callback(CallbackType.MEMORY_MESSAGE_GENERATED, buffer.ToArray());
         }
 
         internal override void ReceiveMemoryMessage(byte[] message)
         {
-            MessageType messageType = (MessageType)message[0];
+            ActionType messageType = (ActionType)message[0];
             switch (messageType)
             {
-                case MessageType.SET_CLIPBOARD:
+                case ActionType.SET_CLIPBOARD:
                     string text = Encoding.UTF8.GetString(message[1..]);
                     virtualForm.Invoke(() =>
                     {
@@ -99,10 +99,10 @@ namespace IsaacSocket.Modules
         {
             StringBuilder stringBuilder = new();
             string text = Encoding.UTF8.GetString(message[1..]);
-            MessageType messageType = (MessageType)message[0];
+            ActionType messageType = (ActionType)message[0];
             switch (messageType)
             {
-                case MessageType.CLIPBOARD_UPDATE:
+                case ActionType.CLIPBOARD_UPDATED:
                     if (text == "")
                     {
                         stringBuilder.Append($"剪贴板内容变为空");
@@ -113,7 +113,7 @@ namespace IsaacSocket.Modules
                     }
                     break;
 
-                case MessageType.SET_CLIPBOARD:
+                case ActionType.SET_CLIPBOARD:
                     if (text == "")
                     {
                         stringBuilder.Append($"清空剪贴板");
