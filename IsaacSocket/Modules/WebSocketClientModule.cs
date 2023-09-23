@@ -52,10 +52,6 @@ namespace IsaacSocket.Modules
             byte id = message[1];
             try
             {
-                if (id == 0)
-                {
-                    throw new Exception("Too many connections");
-                }
                 WebSocket ws = clientWebSockets[id];
                 switch (actionType)
                 {
