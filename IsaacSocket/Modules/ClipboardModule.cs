@@ -11,9 +11,19 @@ namespace IsaacSocket.Modules
             private static readonly int WM_CLIPBOARDUPDATE = 0x031D;
             private readonly CallbackDelegate callback;
             private string clipboardText;
+            private static string GetClipboardText()
+            {
+                string text = "";
+                try
+                {
+                    text = Clipboard.GetText();
+                }
+                catch { }
+                return text;
+            }
             internal VirtualForm(CallbackDelegate callback)
             {
-                clipboardText = Clipboard.GetText();
+                clipboardText = GetClipboardText();
                 this.callback = callback;
                 WindowState=FormWindowState.Minimized;
                 Show();
@@ -29,7 +39,7 @@ namespace IsaacSocket.Modules
                 base.DefWndProc(ref m);
                 if (m.Msg == WM_CLIPBOARDUPDATE)
                 {
-                    string newText = Clipboard.GetText();
+                    string newText = GetClipboardText();
                     if (newText != clipboardText)
                     {
                         clipboardText = newText;
@@ -69,14 +79,11 @@ namespace IsaacSocket.Modules
                     string text = Encoding.UTF8.GetString(message[1..]);
                     virtualForm.Invoke(() =>
                     {
-                        if (text == "")
+                        try
                         {
-                            Clipboard.Clear();
+                            Clipboard.SetDataObject(text);
                         }
-                        else
-                        {
-                            Clipboard.SetText(text);
-                        }
+                        catch { }
                     });
                     break;
             }
