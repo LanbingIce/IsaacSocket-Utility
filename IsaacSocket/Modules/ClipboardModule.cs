@@ -103,14 +103,7 @@ namespace IsaacSocket.Modules
             switch (messageType)
             {
                 case ActionType.CLIPBOARD_UPDATED:
-                    if (text == "")
-                    {
-                        stringBuilder.Append($"剪贴板内容变为空");
-                    }
-                    else
-                    {
-                        stringBuilder.Append($"剪贴板内容变为：{text}");
-                    }
+                    stringBuilder.Append($"当前剪贴板长度：{text.Length} 字符 / {Encoding.UTF8.GetByteCount(text)} 字节");
                     break;
 
                 case ActionType.SET_CLIPBOARD:
