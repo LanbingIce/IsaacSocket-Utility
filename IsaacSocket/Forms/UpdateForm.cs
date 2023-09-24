@@ -17,7 +17,7 @@ namespace IsaacSocket.Forms
             richTextBox1.Text = $"{tagName} 更新说明：{Environment.NewLine}{Environment.NewLine}{body}";
             Text = $"软件有更新版本：{tagName}";
         }
-        private async void Button1_Click(object sender, EventArgs e)
+        private async void UpdateAsync()
         {
             label1.Text = "正在下载";
             button1.Enabled = false;
@@ -77,7 +77,10 @@ if exist %1 (
                 button2.Enabled = true;
             }
         }
-
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            UpdateAsync();
+        }
         private void UpdateForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)

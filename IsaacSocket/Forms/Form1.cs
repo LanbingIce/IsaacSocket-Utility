@@ -88,7 +88,7 @@ public partial class Form1 : Form
     }
     private void Form1_Load(object sender, EventArgs e)
     {
-        _ = CheckUpdate();
+        _ = CheckUpdateAsync();
         main.Start();
     }
     private void ShowMainWindowToolStripMenuItem_Click(object sender, EventArgs e)
@@ -138,7 +138,7 @@ public partial class Form1 : Form
     {
         showMainWindowToolStripMenuItem.PerformClick();
     }
-    private async Task CheckUpdate()
+    private async Task CheckUpdateAsync()
     {
         File.Delete("update.bat");
         using HttpClient client = new();
