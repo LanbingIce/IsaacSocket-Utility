@@ -120,6 +120,7 @@ partial class Form1
         richTextBox1.Size = new Size(308, 452);
         richTextBox1.TabIndex = 0;
         richTextBox1.Text = "";
+        richTextBox1.WordWrap = false;
         // 
         // groupBox2
         // 
@@ -138,6 +139,7 @@ partial class Form1
         richTextBox2.Size = new Size(308, 452);
         richTextBox2.TabIndex = 0;
         richTextBox2.Text = "";
+        richTextBox2.WordWrap = false;
         // 
         // groupBox3
         // 
@@ -157,6 +159,7 @@ partial class Form1
         richTextBox4.Size = new Size(308, 80);
         richTextBox4.TabIndex = 1;
         richTextBox4.Text = "";
+        richTextBox4.WordWrap = false;
         // 
         // richTextBox3
         // 
@@ -165,6 +168,7 @@ partial class Form1
         richTextBox3.Size = new Size(308, 366);
         richTextBox3.TabIndex = 0;
         richTextBox3.Text = "";
+        richTextBox3.WordWrap = false;
         // 
         // Form1
         // 
