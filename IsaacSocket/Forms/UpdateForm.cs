@@ -22,13 +22,15 @@ namespace IsaacSocket.Forms
             label1.Text = "正在下载";
             button1.Enabled = false;
             button2.Enabled = false;
+            string argument1 = Path.GetFileName(Process.GetCurrentProcess()?.MainModule?.FileName ?? "IsaacSocket.exe");
+            string argument2 = argument1 + "_update";
             try
             {
                 using HttpClient client = new();
                 Uri downloadUri = new(downloadLink ?? "");
                 using (var response = await client.GetAsync(downloadUri, HttpCompletionOption.ResponseHeadersRead))
                 using (var stream = await response.Content.ReadAsStreamAsync())
-                using (var fileStream = new FileStream("update.exe", FileMode.Create, FileAccess.Write))
+                using (var fileStream = new FileStream(argument2, FileMode.Create, FileAccess.Write))
                 {
                     var buffer = new byte[8192];
                     int bytesRead;
@@ -56,10 +58,10 @@ if exist %1 (
     start .\%1
 )
 ";
-                string batchFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "update.bat");
-                File.WriteAllText("update.bat", batchScript);
-                string argument1 = AppDomain.CurrentDomain.FriendlyName + ".exe";
-                string argument2 = "update.exe";
+                string batchFileName = $"{argument1}_update.bat";
+                string batchFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, batchFileName);
+                File.WriteAllText(batchFileName, batchScript);
+
 
                 // 运行批处理文件
                 Process.Start(new ProcessStartInfo
