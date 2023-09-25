@@ -7,6 +7,8 @@
         // WebSocket
         WEB_SOCKET_CLIENT = 1,
         //剪贴板
-        CLIPBOARD = 2
+        CLIPBOARD = 2,
+        //HTTP
+        HTTP_CLIENT = 3
     }
 }

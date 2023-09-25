@@ -218,7 +218,7 @@ namespace IsaacSocket
         private const int DATA_HEAD_SIZE = 1 + 1 + 4 ;
         private const uint SEND_ADDRESS_FEATURE_VALUE = 1842063751;
         private const uint RECEIVE_ADDRESS_FEATURE_VALUE = 2128394904;
-
+        
 
         private readonly CallbackDelegate callback;
         private readonly Dictionary<Channel, Module> modules;
@@ -424,7 +424,8 @@ namespace IsaacSocket
             modules = new()
             {
                 [Channel.WEB_SOCKET_CLIENT] = new WebsocketClientModule(Channel.WEB_SOCKET_CLIENT, ModuleCallback),
-                [Channel.CLIPBOARD] = new ClipboardModule(Channel.CLIPBOARD, ModuleCallback)
+                [Channel.CLIPBOARD] = new ClipboardModule(Channel.CLIPBOARD, ModuleCallback),
+                [Channel.HTTP_CLIENT] = new HttpClientModule(Channel.HTTP_CLIENT, ModuleCallback)
             };
             cancellationTokenSource = new();
         }
