@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
 
@@ -88,7 +89,9 @@ public partial class Form1 : Form
     }
     private void Form1_Load(object sender, EventArgs e)
     {
-        _ = CheckUpdateAsync();
+        if (!Debugger.IsAttached) {
+            _ = CheckUpdateAsync();
+        }
         main.Start();
     }
     private void ShowMainWindowToolStripMenuItem_Click(object sender, EventArgs e)
