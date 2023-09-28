@@ -201,11 +201,20 @@ internal class HttpClientModule : Module
         {
             request = new()
             {
+                Content = new ByteArrayContent(body),
+                Method = action == ActionType.GET_REQUEST ? HttpMethod.Get : HttpMethod.Post,
                 RequestUri = new(url)
             };
             foreach (var kvp in headers)
             {
-                request.Headers.Add(kvp.Key, kvp.Value);
+                try
+                {
+                    request.Headers.Add(kvp.Key, kvp.Value);
+                }
+                catch (InvalidOperationException)
+                {
+                    request.Content.Headers.Add(kvp.Key, kvp.Value);
+                }
             }
         }
         catch (Exception e)
@@ -213,24 +222,18 @@ internal class HttpClientModule : Module
             Callback(CallbackType.MEMORY_MESSAGE_GENERATED, SerializeFaulted(id, e.Message));
             return;
         }
-        switch (action)
-        {
-            case ActionType.GET_REQUEST:
-                request.Method = HttpMethod.Get;
-                Interlocked.Increment(ref taskCounter);
-                client.SendAsync(request, cancellationTokenSource.Token).ContinueWith(task =>
-                 {
-                     if (task.IsCompletedSuccessfully)
-                     {
-                         Callback(CallbackType.MEMORY_MESSAGE_GENERATED, SerializeResponse(id, task.Result));
-                     }
-                     else
-                     {
-                         Callback(CallbackType.MEMORY_MESSAGE_GENERATED, SerializeFaulted(id, task.Exception?.Message ?? ""));
-                     }
-                     Interlocked.Decrement(ref taskCounter);
-                 });
-                break;
-        }
+        Interlocked.Increment(ref taskCounter);
+        client.SendAsync(request, cancellationTokenSource.Token).ContinueWith(task =>
+         {
+             if (task.IsCompletedSuccessfully)
+             {
+                 Callback(CallbackType.MEMORY_MESSAGE_GENERATED, SerializeResponse(id, task.Result));
+             }
+             else
+             {
+                 Callback(CallbackType.MEMORY_MESSAGE_GENERATED, SerializeFaulted(id, task.Exception?.Message ?? ""));
+             }
+             Interlocked.Decrement(ref taskCounter);
+         });
     }
 }
