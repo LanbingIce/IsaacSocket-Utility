@@ -33,6 +33,7 @@
             progressBar1 = new ProgressBar();
             button2 = new Button();
             label1 = new Label();
+            button3 = new Button();
             SuspendLayout();
             // 
             // button1
@@ -79,12 +80,23 @@
             label1.Size = new Size(0, 17);
             label1.TabIndex = 4;
             // 
+            // button3
+            // 
+            button3.Location = new Point(108, 171);
+            button3.Name = "button3";
+            button3.Size = new Size(93, 23);
+            button3.TabIndex = 5;
+            button3.Text = "打开发布页面";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
+            // 
             // UpdateForm
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(304, 201);
+            ClientSize = new Size(300, 197);
             ControlBox = false;
+            Controls.Add(button3);
             Controls.Add(label1);
             Controls.Add(button2);
             Controls.Add(progressBar1);
@@ -97,7 +109,7 @@
             ShowIcon = false;
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "UpdateForm";
+            Text = "打开发布页面";
             TopMost = true;
             FormClosing += UpdateForm_FormClosing;
             Load += UpdateForm_Load;
@@ -112,5 +124,6 @@
         private ProgressBar progressBar1;
         private Button button2;
         private Label label1;
+        private Button button3;
     }
 }

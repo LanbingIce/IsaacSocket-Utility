@@ -100,5 +100,9 @@ if exist %1 (
         {
             Process.Start("explorer.exe", e.LinkText ?? "");
         }
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe", "https://github.com/LanbingIce/IsaacSocket-Utility/releases/latest");
+        }
     }
 }
