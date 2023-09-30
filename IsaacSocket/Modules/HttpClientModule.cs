@@ -1,4 +1,5 @@
 ﻿using IsaacSocket.Common;
+using IsaacSocket.Utils;
 using System.Text;
 using System.Text.Json;
 
@@ -172,8 +173,16 @@ internal class HttpClientModule : Module
                 stringBuilder.Append(SerializeHeaders(headers));
                 if (body.Length != 0)
                 {
-                    stringBuilder.AppendLine("请求主体 :");
-                    stringBuilder.AppendLine(Encoding.UTF8.GetString(body));
+                    if (MiscUtil.IsValidUTF8ByteArray(body))
+                    {
+                        stringBuilder.AppendLine($"请求主体（UTF-8 文本：{body.Length}字节） :");
+                        stringBuilder.AppendLine(Encoding.UTF8.GetString(body));
+                    }
+                    else
+                    {
+                        stringBuilder.AppendLine($"请求主体（二进制数据：{body.Length}字节） :");
+                        stringBuilder.AppendLine(BitConverter.ToString(body));
+                    }
                 }
                 break;
             case ActionType.RESPONSE:
@@ -182,8 +191,19 @@ internal class HttpClientModule : Module
                 stringBuilder.AppendLine($"状态码 :\t{statusCode} {reasonPhrase}");
                 stringBuilder.AppendLine("响应标头 :");
                 stringBuilder.Append(SerializeHeaders(headers));
-                stringBuilder.AppendLine($"响应主体 :");
-                stringBuilder.AppendLine(Encoding.UTF8.GetString(body));
+                if (body.Length != 0)
+                {
+                    if (MiscUtil.IsValidUTF8ByteArray(body))
+                    {
+                        stringBuilder.AppendLine($"响应主体（UTF-8 文本：{body.Length} 字节）:");
+                        stringBuilder.AppendLine(Encoding.UTF8.GetString(body));
+                    }
+                    else
+                    {
+                        stringBuilder.AppendLine($"响应主体（二进制数据：{body.Length} 字节）:");
+                        stringBuilder.AppendLine(BitConverter.ToString(body));
+                    }
+                }
                 break;
             case ActionType.FAULTED:
                 stringBuilder.AppendLine("消息类别 :\t任务失败");
