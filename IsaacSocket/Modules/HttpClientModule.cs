@@ -172,17 +172,17 @@ internal class HttpClientModule : Module
                 stringBuilder.Append(SerializeHeaders(headers));
                 if (body.Length != 0)
                 {
-                    stringBuilder.AppendLine("请求正文 :");
+                    stringBuilder.AppendLine("请求主体 :");
                     stringBuilder.AppendLine(Encoding.UTF8.GetString(body));
                 }
                 break;
             case ActionType.RESPONSE:
                 stringBuilder.AppendLine("消息类别 :\tHTTP 响应");
                 DeserializeResponse(message, out _, out ushort statusCode, out string reasonPhrase, out headers, out body);
-                stringBuilder.AppendLine($"状态代码 :\t{statusCode} {reasonPhrase}");
+                stringBuilder.AppendLine($"状态码 :\t{statusCode} {reasonPhrase}");
                 stringBuilder.AppendLine("响应标头 :");
                 stringBuilder.Append(SerializeHeaders(headers));
-                stringBuilder.AppendLine($"响应正文 :");
+                stringBuilder.AppendLine($"响应主体 :");
                 stringBuilder.AppendLine(Encoding.UTF8.GetString(body));
                 break;
             case ActionType.FAULTED:
