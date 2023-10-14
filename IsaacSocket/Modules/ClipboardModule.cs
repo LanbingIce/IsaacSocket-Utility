@@ -96,7 +96,7 @@ namespace IsaacSocket.Modules
 
         }
 
-        internal override void DisConnected()
+        internal override void Disconnected()
         {
 
         }

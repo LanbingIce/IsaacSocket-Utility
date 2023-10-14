@@ -129,7 +129,7 @@ namespace IsaacSocket.Modules
         internal override void Connected()
         {
         }
-        internal override void DisConnected()
+        internal override void Disconnected()
         {
             // 这里使用异步关闭会出问题，因此改成同步
             foreach (var websocket in clientWebSockets)

@@ -321,7 +321,7 @@ namespace IsaacSocket
                         case ConnectionState.FOUND_PROCESS:
                             if (oldState == ConnectionState.CONNECTING || oldState == ConnectionState.CONNECTED)
                             {
-                                 DisConnected();
+                                 Disconnected();
                             }
                             if (ProcessUtil.IsProcessRunning(isaacProcessHandle))
                             {
@@ -489,11 +489,11 @@ namespace IsaacSocket
             callback.Invoke(CallbackType.MESSAGE, "正在等待Mod回应...");
         }
 
-        private  void DisConnected()
+        private  void Disconnected()
         {
             foreach (KeyValuePair<Channel, Module> keyValuePair in modules)
             {
-                 keyValuePair.Value.DisConnected();
+                 keyValuePair.Value.Disconnected();
             }
             callback.Invoke(CallbackType.MESSAGE, "连接已断开！");
         }

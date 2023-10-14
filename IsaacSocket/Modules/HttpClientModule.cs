@@ -134,7 +134,7 @@ internal class HttpClientModule : Module
     internal override void Connected()
     {
     }
-    internal override void DisConnected()
+    internal override void Disconnected()
     {
         cancellationTokenSource.Cancel();
         //要等待所有任务都结束之后才可以进行下一步

@@ -24,7 +24,7 @@ namespace IsaacSocket.Modules
             callback?.Invoke(callbackType, channel, args[0]);
         }
         internal abstract void Connected();
-        internal abstract void DisConnected();
+        internal abstract void Disconnected();
         internal abstract void Exited();
         
         internal Module(Channel channel, CallbackDelegate callback)
