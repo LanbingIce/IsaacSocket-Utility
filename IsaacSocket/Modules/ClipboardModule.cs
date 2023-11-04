@@ -132,5 +132,10 @@ namespace IsaacSocket.Modules
             WinAPIUtil.RemoveClipboardFormatListener(virtualForm.Handle);
 
         }
+
+        internal override void Update()
+        {
+            
+        }
     }
 }

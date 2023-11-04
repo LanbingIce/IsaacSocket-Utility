@@ -4,6 +4,16 @@ namespace IsaacSocket.Utils
 {
     internal static class MiscUtil
     {
+        internal static byte[] ConvertToByteArray(object value)
+        {
+            return value switch
+            {
+                int intValue => BitConverter.GetBytes(intValue),
+                byte byteValue => new byte[] { byteValue },
+                float floatValue => BitConverter.GetBytes(floatValue),
+                _ => Array.Empty<byte>()
+            };
+        }
 
         internal static int FindPatternIndex(byte[] byteArray, byte[] patternData, int startIndex)
         {

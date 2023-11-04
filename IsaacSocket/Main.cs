@@ -218,7 +218,7 @@ namespace IsaacSocket
         private const int DATA_HEAD_SIZE = 1 + 1 + 4 ;
         private const uint SEND_ADDRESS_FEATURE_VALUE = 1842063751;
         private const uint RECEIVE_ADDRESS_FEATURE_VALUE = 2128394904;
-        
+
 
         private readonly CallbackDelegate callback;
         private readonly Dictionary<Channel, Module> modules;
@@ -281,7 +281,7 @@ namespace IsaacSocket
                             {
                                 receiveTable.Initialize();
                                 sendTable.Initialize(dataSpaceSize);
-                                 Connected(dataSpaceSize);
+                                Connected(dataSpaceSize, isaacProcessHandle);
                             }
                             uint size;
                             if (receiveAddressType == 68)
@@ -300,6 +300,7 @@ namespace IsaacSocket
                                 NewMessageReceived(newMessage);
                                 newMessage = receiveTable.GetMessage();
                             }
+                            UpdateModules();
                             while (sendMessagesBuffer.TryDequeue(out newMessage))
                             {
                                 sendTable.AddNewMessage(newMessage);
@@ -309,7 +310,7 @@ namespace IsaacSocket
                             if (sendTable.Update(receiveTable))
                             {
 
-                                    MemoryUtil.WriteToMemory(isaacProcessHandle, (IntPtr)(sendTextAddress + 16), sendTable.Serialize());
+                                MemoryUtil.WriteToMemory(isaacProcessHandle, (IntPtr)(sendTextAddress + 16), sendTable.Serialize());
 
 
                             }
@@ -321,7 +322,7 @@ namespace IsaacSocket
                         case ConnectionState.FOUND_PROCESS:
                             if (oldState == ConnectionState.CONNECTING || oldState == ConnectionState.CONNECTED)
                             {
-                                 Disconnected();
+                                Disconnected();
                             }
                             if (ProcessUtil.IsProcessRunning(isaacProcessHandle))
                             {
@@ -425,7 +426,8 @@ namespace IsaacSocket
             {
                 [Channel.WEB_SOCKET_CLIENT] = new WebsocketClientModule(Channel.WEB_SOCKET_CLIENT, ModuleCallback),
                 [Channel.CLIPBOARD] = new ClipboardModule(Channel.CLIPBOARD, ModuleCallback),
-                [Channel.HTTP_CLIENT] = new HttpClientModule(Channel.HTTP_CLIENT, ModuleCallback)
+                [Channel.HTTP_CLIENT] = new HttpClientModule(Channel.HTTP_CLIENT, ModuleCallback),
+                [Channel.ISAAC_API] = new IsaacAPIModule(Channel.ISAAC_API, ModuleCallback)
             };
             cancellationTokenSource = new();
         }
@@ -465,7 +467,7 @@ namespace IsaacSocket
             else
             {
                 callback.Invoke(CallbackType.RECEIVE, $"【{channel}】：{Environment.NewLine}{modules[channel].MemoryMessageToString(message)}");
-                 modules[channel].ReceiveMemoryMessage(message);
+                modules[channel].ReceiveMemoryMessage(message);
             }
         }
 
@@ -480,7 +482,13 @@ namespace IsaacSocket
             callback.Invoke(CallbackType.MESSAGE, "以撒进程已关闭！");
         }
 
-
+        private void UpdateModules()
+        {
+            foreach (KeyValuePair<Channel, Module> keyValuePair in modules)
+            {
+                keyValuePair.Value.Update();
+            }
+        }
 
 
 
@@ -493,17 +501,21 @@ namespace IsaacSocket
         {
             foreach (KeyValuePair<Channel, Module> keyValuePair in modules)
             {
-                 keyValuePair.Value.Disconnected();
+                keyValuePair.Value.Disconnected();
             }
             callback.Invoke(CallbackType.MESSAGE, "连接已断开！");
         }
 
-        private  void Connected(int dataSpaceSize)
+        private void Connected(int dataSpaceSize, nint isaacProcessHandle)
         {
             sendMessagesBuffer.Clear();
             foreach (KeyValuePair<Channel, Module> keyValuePair in modules)
             {
-                 keyValuePair.Value.Connected();
+                if (keyValuePair.Value is IProcessOperation m)
+                {
+                    m.IsaacProcessHandle = isaacProcessHandle;
+                }
+                keyValuePair.Value.Connected();
             }
             callback.Invoke(CallbackType.MESSAGE, "已连接！交换区大小：" + dataSpaceSize +"字节");
         }

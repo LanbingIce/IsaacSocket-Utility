@@ -256,4 +256,9 @@ internal class HttpClientModule : Module
              Interlocked.Decrement(ref taskCounter);
          });
     }
+
+    internal override void Update()
+    {
+       
+    }
 }

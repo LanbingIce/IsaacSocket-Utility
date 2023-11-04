@@ -3,6 +3,34 @@ namespace IsaacSocket.Utils
 {
     internal static partial class WinAPIUtil
     {
+        [DllImport("kernel32.dll")]
+        internal static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress, uint dwSize, AllocationType flAllocationType, MemoryProtection flProtect);
+
+        [Flags]
+        internal enum AllocationType : uint
+        {
+            COMMIT = 0x1000,
+            RESERVE = 0x2000,
+            RESET = 0x80000,
+            LARGE_PAGES = 0x20000000,
+            PHYSICAL = 0x400000,
+            TOP_DOWN = 0x100000,
+        }
+
+        [Flags]
+        internal enum MemoryProtection : uint
+        {
+            EXECUTE = 0x10,
+            EXECUTE_READ = 0x20,
+            EXECUTE_READWRITE = 0x40,
+            EXECUTE_WRITECOPY = 0x80,
+            NOACCESS = 0x01,
+            READONLY = 0x02,
+            READWRITE = 0x04,
+            WRITECOPY = 0x08,
+        }
+        [DllImport("kernel32.dll")]
+        internal static extern int GetProcessId(IntPtr processHandle);
 
         [DllImport("user32.dll", SetLastError = true)]
         internal static extern bool AddClipboardFormatListener(IntPtr hwnd);

@@ -25,6 +25,7 @@ namespace IsaacSocket.Modules
         }
         internal abstract void Connected();
         internal abstract void Disconnected();
+        internal abstract void Update();
         internal abstract void Exited();
         
         internal Module(Channel channel, CallbackDelegate callback)

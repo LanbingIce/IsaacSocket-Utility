@@ -14,7 +14,7 @@ namespace IsaacSocket.Utils
         {
 
 
-            IntPtr processHandle = WinAPIUtil.OpenProcess(WinAPIUtil.ProcessAccessFlags.VMRead | WinAPIUtil.ProcessAccessFlags.VMWrite | WinAPIUtil.ProcessAccessFlags.QueryInformation, false, processId);
+            IntPtr processHandle = WinAPIUtil.OpenProcess(WinAPIUtil.ProcessAccessFlags.VMRead | WinAPIUtil.ProcessAccessFlags.VMWrite | WinAPIUtil.ProcessAccessFlags.VMOperation | WinAPIUtil.ProcessAccessFlags.QueryInformation, false, processId);
             return processHandle;
         }
         internal static void CloseProcessHandle(IntPtr processHandle)

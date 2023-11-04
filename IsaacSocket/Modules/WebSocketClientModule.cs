@@ -185,6 +185,11 @@ namespace IsaacSocket.Modules
         internal override void Exited()
         {
         }
+
+        internal override void Update()
+        {
+            
+        }
     }
 
 }

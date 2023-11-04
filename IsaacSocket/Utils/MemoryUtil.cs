@@ -41,21 +41,43 @@ namespace IsaacSocket.Utils
             return readResult ? dataBuffer[0] : (byte)0;
         }
 
+        internal static float ReadFloatFromMemory(IntPtr processHandle, IntPtr address)
+        {
+            byte[] dataBuffer = new byte[4];
+            bool readResult = WinAPIUtil.ReadProcessMemory(processHandle, address, dataBuffer, 4, out _);
+            return readResult ? BitConverter.ToSingle(dataBuffer, 0) : 0;
+        }
 
         internal static int ReadInt32FromMemory(IntPtr processHandle, IntPtr address)
         {
             byte[] dataBuffer = new byte[4];
-            bool readResult = WinAPIUtil.ReadProcessMemory(processHandle, address, dataBuffer, 8, out _);
+            bool readResult = WinAPIUtil.ReadProcessMemory(processHandle, address, dataBuffer, 4, out _);
             return readResult ? BitConverter.ToInt32(dataBuffer, 0) : 0;
         }
         internal static uint ReadUInt32FromMemory(IntPtr processHandle, IntPtr address)
         {
             byte[] dataBuffer = new byte[4];
-            bool readResult = WinAPIUtil.ReadProcessMemory(processHandle, address, dataBuffer, 8, out _);
+            bool readResult = WinAPIUtil.ReadProcessMemory(processHandle, address, dataBuffer, 4, out _);
             return readResult ? BitConverter.ToUInt32(dataBuffer, 0) : 0;
         }
 
+        internal static int CalculateAddress(nint processHandle, int address, params int[] offsets)
+        {
+            int result = address;
+            foreach (var offset in offsets)
+            {
+                result = ReadInt32FromMemory(processHandle, result) + offset;
+            }
+            return result;
+        }
 
+        // 获取第一个模块地址
+        internal static int GetImageBaseAdress(nint processHandle)
+        {
+            int targetProcessId = WinAPIUtil.GetProcessId(processHandle);
+            using Process targetProcess = Process.GetProcessById(targetProcessId);
+            return (int)(targetProcess?.MainModule?.BaseAddress ?? 0);
+        }
 
         // 定义函数来搜索值
         internal static IntPtr SearchAddresses(IntPtr processHandle, long data)
