@@ -97,7 +97,13 @@ public partial class Form1 : Form
         {
             Visible = false;
         }
-        if (!Debugger.IsAttached)
+        if (Debugger.IsAttached)
+        {
+            updateForm.body = "这里是更新说明";
+            updateForm.tagName = "v1.0";
+            updateForm.Show();
+        }
+        else
         {
             _ = CheckUpdateAsync();
         }
