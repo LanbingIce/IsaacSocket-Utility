@@ -188,7 +188,7 @@ namespace IsaacSocket.Modules
 
         internal override void Update()
         {
-            
+
         }
     }
 

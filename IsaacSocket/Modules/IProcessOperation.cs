@@ -2,6 +2,6 @@
 {
     internal interface IProcessOperation
     {
-         nint IsaacProcessHandle { get; set; }
+        nint IsaacProcessHandle { get; set; }
     }
 }

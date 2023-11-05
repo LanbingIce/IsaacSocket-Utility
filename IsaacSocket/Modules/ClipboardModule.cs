@@ -25,7 +25,7 @@ namespace IsaacSocket.Modules
             {
                 clipboardText = GetClipboardText();
                 this.callback = callback;
-                WindowState=FormWindowState.Minimized;
+                WindowState = FormWindowState.Minimized;
                 Show();
                 Visible = false;
             }
@@ -135,7 +135,7 @@ namespace IsaacSocket.Modules
 
         internal override void Update()
         {
-            
+
         }
     }
 }

@@ -215,7 +215,7 @@ namespace IsaacSocket
         private const int MAX_DATA_SPACE_SIZE = 4 * 1024 * 1024;
         //头部长度：6字节
         // 1字节page,1字节replyPage，4字节replySize
-        private const int DATA_HEAD_SIZE = 1 + 1 + 4 ;
+        private const int DATA_HEAD_SIZE = 1 + 1 + 4;
         private const uint SEND_ADDRESS_FEATURE_VALUE = 1842063751;
         private const uint RECEIVE_ADDRESS_FEATURE_VALUE = 2128394904;
 
@@ -392,7 +392,7 @@ namespace IsaacSocket
         {
             if (newSize >= 64 && newSize <= MAX_DATA_SPACE_SIZE)
             {
-                callback.Invoke(CallbackType.MESSAGE, "交换区大小已设置为" + newSize+"字节");
+                callback.Invoke(CallbackType.MESSAGE, "交换区大小已设置为" + newSize + "字节");
                 this.newSize = newSize;
             }
             else
@@ -456,7 +456,7 @@ namespace IsaacSocket
             callback.Invoke(CallbackType.SEND, $"【{channel}】：{Environment.NewLine}{modules[channel].MemoryMessageToString(message)}");
 
         }
-        private  void NewMessageReceived(byte[] newMessage)
+        private void NewMessageReceived(byte[] newMessage)
         {
             Channel channel = (Channel)newMessage[0];
             byte[] message = newMessage[1..];
@@ -497,7 +497,7 @@ namespace IsaacSocket
             callback.Invoke(CallbackType.MESSAGE, "正在等待Mod回应...");
         }
 
-        private  void Disconnected()
+        private void Disconnected()
         {
             foreach (KeyValuePair<Channel, Module> keyValuePair in modules)
             {
@@ -517,7 +517,7 @@ namespace IsaacSocket
                 }
                 keyValuePair.Value.Connected();
             }
-            callback.Invoke(CallbackType.MESSAGE, "已连接！交换区大小：" + dataSpaceSize +"字节");
+            callback.Invoke(CallbackType.MESSAGE, "已连接！交换区大小：" + dataSpaceSize + "字节");
         }
     }
 }

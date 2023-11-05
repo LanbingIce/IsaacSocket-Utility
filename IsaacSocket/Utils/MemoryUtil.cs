@@ -96,7 +96,7 @@ namespace IsaacSocket.Utils
             int foundOffset = 0;
 
             int count = 0;
-            while (WinAPIUtil.VirtualQueryEx(processHandle, memoryAddress, out WinAPIUtil.MEMORY_BASIC_INFORMATION memoryBlockInfo, (uint)Marshal.SizeOf(typeof(WinAPIUtil.MEMORY_BASIC_INFORMATION)))!=0)
+            while (WinAPIUtil.VirtualQueryEx(processHandle, memoryAddress, out WinAPIUtil.MEMORY_BASIC_INFORMATION memoryBlockInfo, (uint)Marshal.SizeOf(typeof(WinAPIUtil.MEMORY_BASIC_INFORMATION))) != 0)
             {
 
                 if (memoryBlockInfo.Protect == 4 && memoryBlockInfo.Type == 0x00020000)
@@ -113,7 +113,7 @@ namespace IsaacSocket.Utils
                             foundOffset = 0;
                             break;
                         }
-                        else if (address ==0)
+                        else if (address == 0)
                         {
                             address = memoryAddress + foundOffset + 4;
                         }
