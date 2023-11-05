@@ -38,7 +38,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(12, 171);
+            button1.Location = new Point(12, 226);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 0;
@@ -50,21 +50,21 @@
             // 
             richTextBox1.Location = new Point(12, 12);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(284, 124);
+            richTextBox1.Size = new Size(360, 176);
             richTextBox1.TabIndex = 1;
             richTextBox1.Text = "";
             richTextBox1.LinkClicked += RichTextBox1_LinkClicked;
             // 
             // progressBar1
             // 
-            progressBar1.Location = new Point(12, 142);
+            progressBar1.Location = new Point(12, 194);
             progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(284, 23);
+            progressBar1.Size = new Size(360, 23);
             progressBar1.TabIndex = 2;
             // 
             // button2
             // 
-            button2.Location = new Point(221, 171);
+            button2.Location = new Point(297, 226);
             button2.Name = "button2";
             button2.Size = new Size(75, 23);
             button2.TabIndex = 3;
@@ -82,7 +82,7 @@
             // 
             // button3
             // 
-            button3.Location = new Point(108, 171);
+            button3.Location = new Point(144, 226);
             button3.Name = "button3";
             button3.Size = new Size(93, 23);
             button3.TabIndex = 5;
@@ -94,7 +94,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(300, 197);
+            ClientSize = new Size(384, 261);
             ControlBox = false;
             Controls.Add(button3);
             Controls.Add(label1);
@@ -109,7 +109,7 @@
             ShowIcon = false;
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "打开发布页面";
+            Text = "IsaacSocket 连接工具 有更新版本：";
             TopMost = true;
             FormClosing += UpdateForm_FormClosing;
             Load += UpdateForm_Load;

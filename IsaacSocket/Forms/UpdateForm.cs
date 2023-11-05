@@ -15,7 +15,7 @@ namespace IsaacSocket.Forms
         private void UpdateForm_Load(object sender, EventArgs e)
         {
             richTextBox1.Text = $"{tagName} 更新说明：{Environment.NewLine}{Environment.NewLine}{body}";
-            Text = $"软件有更新版本：{tagName}";
+            Text = $"IsaacSocket 连接工具 有更新版本：{tagName}";
         }
         private async void UpdateAsync()
         {
