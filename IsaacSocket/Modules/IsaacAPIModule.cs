@@ -318,40 +318,41 @@ namespace IsaacSocket.Modules
             {
                 case ActionType.DATA_UPDATED:
                 case ActionType.SET_DATA:
+                    string actionText = action == ActionType.DATA_UPDATED ? "当前值" : "设置为";
                     DataType dataType = (DataType)message[1];
                     switch (dataType)
                     {
                         case DataType.DEBUG_FLAG:
                             int debugFlag = BitConverter.ToInt32(message, 2);
-                            stringBuilder.Append($"debugFlag {debugFlag}");
+                            stringBuilder.Append($"Debug标志 {actionText}: {debugFlag}");
                             break;
                         case DataType.PLAYER_DATA:
                             byte playerId = message[2];
-                            stringBuilder.Append($"player {playerId} ");
+                            stringBuilder.Append($"角色 {playerId} ");
                             PlayerDataType playerDataType = (PlayerDataType)message[3];
                             switch (playerDataType)
                             {
                                 case PlayerDataType.CAN_SHOOT:
                                     byte canShoot = message[4];
-                                    stringBuilder.Append($"canShoot {canShoot} ");
+                                    stringBuilder.Append($"能否射击: {canShoot == 1}");
                                     break;
                                 case PlayerDataType.ACTIVE_DATA:
                                     byte activeSlot = message[4];
-                                    stringBuilder.Append($"active {activeSlot} ");
+                                    stringBuilder.Append($"主动 {activeSlot} 的 ");
                                     ActiveDataType activeDataType = (ActiveDataType)message[5];
                                     switch (activeDataType)
                                     {
                                         case ActiveDataType.VAR_DATA:
                                             int varData = BitConverter.ToInt32(message, 6);
-                                            stringBuilder.Append($"varData {varData} ");
+                                            stringBuilder.Append($"VarData: {varData}");
                                             break;
                                         case ActiveDataType.PARTIAL_CHARGE:
                                             float partialCharge = BitConverter.ToSingle(message, 6);
-                                            stringBuilder.Append($"partialCharge {partialCharge} ");
+                                            stringBuilder.Append($"4.5伏特充能: {partialCharge}");
                                             break;
                                         case ActiveDataType.SUB_CHARGE:
                                             int subCharge = BitConverter.ToInt32(message, 6);
-                                            stringBuilder.Append($"subCharge {subCharge} ");
+                                            stringBuilder.Append($"9伏特充能: {subCharge}");
                                             break;
                                     }
                                     break;
