@@ -7,12 +7,14 @@ namespace IsaacSocket.Forms;
 
 public partial class Form1 : Form
 {
+    private bool silent;
     private readonly UpdateForm updateForm;
     private readonly ConcurrentQueue<string> logQueue1, logQueue2, logQueue3, logQueue4;
     private int size;
     private readonly Main main;
     public Form1(bool silentStart)
     {
+        silent = silentStart;
         InitializeComponent();
         Version? version = Assembly.GetEntryAssembly()?.GetName().Version;
         string versionString = $"{version?.Major}.{version?.Minor}";
@@ -24,7 +26,7 @@ public partial class Form1 : Form
         size = 1024;
         updateForm = new();
         main = new(size, Callback);
-        if (silentStart)
+        if (silent)
         {
             WindowState = FormWindowState.Minimized;
         }
@@ -93,7 +95,7 @@ public partial class Form1 : Form
     }
     private void Form1_Load(object sender, EventArgs e)
     {
-        if (WindowState == FormWindowState.Minimized)
+        if (silent)
         {
             Visible = false;
         }
@@ -111,6 +113,7 @@ public partial class Form1 : Form
     }
     private void ShowMainWindowToolStripMenuItem_Click(object sender, EventArgs e)
     {
+        silent = false;
         TopMost = true;
         Visible = true;
         WindowState = FormWindowState.Normal;
@@ -133,11 +136,15 @@ public partial class Form1 : Form
     {
         if (WindowState == FormWindowState.Minimized)
         {
-            // 设置通知消息文本
-            notifyIcon1.BalloonTipText = "要再次打开窗口，请在托盘区双击托盘图标";
+
             Visible = false;
             // 显示通知消息
-            notifyIcon1.ShowBalloonTip(3000); // 3000表示通知消息显示的时间（以毫秒为单位）
+            if (!silent)
+            {
+                // 设置通知消息文本
+                notifyIcon1.BalloonTipText = "要再次打开窗口，请在托盘区双击托盘图标";
+                notifyIcon1.ShowBalloonTip(3000); // 3000表示通知消息显示的时间（以毫秒为单位）
+            }
         }
     }
     private void Form1_FormClosing(object sender, FormClosingEventArgs e)
