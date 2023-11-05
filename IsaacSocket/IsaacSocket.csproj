@@ -7,8 +7,8 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>IsaacSocket.ico</ApplicationIcon>
-    <FileVersion>1.6</FileVersion>
-    <AssemblyVersion>1.6</AssemblyVersion>
+    <FileVersion>1.7</FileVersion>
+    <AssemblyVersion>1.7</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
