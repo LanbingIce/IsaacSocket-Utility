@@ -11,7 +11,7 @@ public partial class Form1 : Form
     private readonly ConcurrentQueue<string> logQueue1, logQueue2, logQueue3, logQueue4;
     private int size;
     private readonly Main main;
-    public Form1()
+    public Form1(bool silentStart)
     {
         InitializeComponent();
         Version? version = Assembly.GetEntryAssembly()?.GetName().Version;
@@ -24,6 +24,10 @@ public partial class Form1 : Form
         size = 1024;
         updateForm = new();
         main = new(size, Callback);
+        if (silentStart)
+        {
+            WindowState = FormWindowState.Minimized;
+        }
     }
     private void UpdateLog(ConcurrentQueue<string> logQueue, RichTextBox logTextBox, string logText)
     {
@@ -89,7 +93,12 @@ public partial class Form1 : Form
     }
     private void Form1_Load(object sender, EventArgs e)
     {
-        if (!Debugger.IsAttached) {
+        if (WindowState == FormWindowState.Minimized)
+        {
+            Visible = false;
+        }
+        if (!Debugger.IsAttached)
+        {
             _ = CheckUpdateAsync();
         }
         main.Start();
