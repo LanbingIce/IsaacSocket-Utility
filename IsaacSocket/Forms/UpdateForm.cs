@@ -24,6 +24,7 @@ namespace IsaacSocket.Forms
             string downloadFileFullPath = exeFileFullPath + "_update";
             string batchFileFullPath = downloadFileFullPath + ".bat";
             label1.Text = "正在下载";
+            label1.Left = (progressBar1.Width - label1.Width) / 2 + progressBar1.Left;
             button1.Enabled = false;
             button2.Enabled = false;
             try
@@ -73,6 +74,7 @@ if exist %2 (
             catch (Exception)
             {
                 label1.Text = "下载出错,请稍后再试";
+                label1.Left = (progressBar1.Width - label1.Width) / 2 + progressBar1.Left;
                 button1.Enabled = true;
                 button2.Enabled = true;
             }
