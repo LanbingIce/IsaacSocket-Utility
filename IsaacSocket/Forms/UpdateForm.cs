@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using IsaacSocket.Utils;
+using System.Diagnostics;
 
 namespace IsaacSocket.Forms
 {
@@ -19,18 +20,19 @@ namespace IsaacSocket.Forms
         }
         private async void UpdateAsync()
         {
+            string exeFileFullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, MiscUtil.GetCurrentExecutableFileName());
+            string downloadFileFullPath = exeFileFullPath + "_update";
+            string batchFileFullPath = downloadFileFullPath + ".bat";
             label1.Text = "正在下载";
             button1.Enabled = false;
             button2.Enabled = false;
-            string argument1 = Path.GetFileName(Process.GetCurrentProcess()?.MainModule?.FileName ?? "IsaacSocket.exe");
-            string argument2 = argument1 + "_update";
             try
             {
                 using HttpClient client = new();
                 Uri downloadUri = new(downloadLink ?? "");
                 using (var response = await client.GetAsync(downloadUri, HttpCompletionOption.ResponseHeadersRead))
                 using (var stream = await response.Content.ReadAsStreamAsync())
-                using (var fileStream = new FileStream(argument2, FileMode.Create, FileAccess.Write))
+                using (var fileStream = new FileStream(downloadFileFullPath, FileMode.Create, FileAccess.Write))
                 {
                     var buffer = new byte[8192];
                     int bytesRead;
@@ -46,28 +48,24 @@ namespace IsaacSocket.Forms
                     }
                 }
 
-                string batchScript = @"
-@echo off
-:a
-if exist %1 (
-    timeout /t 1 /nobreak > nul
-    del /f /q %1
-    goto a
+                string batchScript = @"@echo off
+:loop
+timeout /t 1 > nul
+del %2
+if exist %2 (
+    goto loop
 ) else (
-    ren %2 %1
-    start .\%1
-)
-";
-                string batchFileName = $"{argument1}_update.bat";
-                string batchFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, batchFileName);
-                File.WriteAllText(batchFileName, batchScript);
-
-
+    copy %1 %2 
+    del %0
+    del %1
+    start """" %2
+)";
+                File.WriteAllText(batchFileFullPath, batchScript);
                 // 运行批处理文件
                 Process.Start(new ProcessStartInfo
                 {
-                    FileName = batchFilePath,
-                    Arguments = $"\"{argument1}\" \"{argument2}\"",
+                    FileName = batchFileFullPath,
+                    Arguments = $"\"{downloadFileFullPath}\" \"{exeFileFullPath}\"",
                     UseShellExecute = true
                 });
                 Application.Exit();

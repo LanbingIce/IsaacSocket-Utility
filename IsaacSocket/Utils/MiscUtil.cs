@@ -112,6 +112,11 @@ namespace IsaacSocket.Utils
 
             return extraByteCount == 0;
         }
+        internal static string GetCurrentExecutableFileName()
+        {
+            using Process process = Process.GetCurrentProcess();
+            return Path.GetFileName(process.MainModule?.FileName ?? "IsaacSocket.exe");
+        }
         internal static long GetSystemStartTime()
         {
             // 获取系统启动时间
