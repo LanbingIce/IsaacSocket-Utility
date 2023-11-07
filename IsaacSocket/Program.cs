@@ -24,7 +24,8 @@ static class Program
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             bool silentStart = args.Contains("-silent");
-            Application.Run(new Form1(silentStart));
+            bool noUpdate = args.Contains("-noupdate");
+            Application.Run(new Form1(silentStart, noUpdate));
         }
     }
 }

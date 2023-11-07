@@ -8,13 +8,15 @@ namespace IsaacSocket.Forms;
 public partial class Form1 : Form
 {
     private bool silent;
+    private bool noUpdate;
     private readonly UpdateForm updateForm;
     private readonly ConcurrentQueue<string> logQueue1, logQueue2, logQueue3, logQueue4;
     private int size;
     private readonly Main main;
-    public Form1(bool silentStart)
+    public Form1(bool silentStart, bool noUpdate)
     {
         silent = silentStart;
+        this.noUpdate = noUpdate;
         InitializeComponent();
         Version? version = Assembly.GetEntryAssembly()?.GetName().Version;
         string versionString = $"{version?.Major}.{version?.Minor}";
@@ -106,7 +108,7 @@ public partial class Form1 : Form
             updateForm.tagName = "v1.0";
             updateForm.Show();
         }
-        else
+        else if (!noUpdate)
         {
             _ = CheckUpdateAsync();
         }
