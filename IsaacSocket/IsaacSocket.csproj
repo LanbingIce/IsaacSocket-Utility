@@ -9,6 +9,7 @@
     <ApplicationIcon>IsaacSocket.ico</ApplicationIcon>
     <FileVersion>1.8</FileVersion>
     <AssemblyVersion>1.8</AssemblyVersion>
+    <Platforms>x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
