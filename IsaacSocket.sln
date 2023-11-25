@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IsaacSocket", "IsaacSocket\IsaacSocket.csproj", "{7BA8DC5C-0E00-4170-870F-51D51838D8D6}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IsaacSocket-DLL", "IsaacSocket-DLL\IsaacSocket-DLL.vcxproj", "{2A65B58F-1973-48AB-B6CF-B11C5367E001}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -15,8 +17,14 @@ Global
 		{7BA8DC5C-0E00-4170-870F-51D51838D8D6}.Debug|x86.Build.0 = Debug|x86
 		{7BA8DC5C-0E00-4170-870F-51D51838D8D6}.Release|x86.ActiveCfg = Release|x86
 		{7BA8DC5C-0E00-4170-870F-51D51838D8D6}.Release|x86.Build.0 = Release|x86
+		{2A65B58F-1973-48AB-B6CF-B11C5367E001}.Debug|x86.ActiveCfg = Release|Win32
+		{2A65B58F-1973-48AB-B6CF-B11C5367E001}.Release|x86.ActiveCfg = Release|Win32
+		{2A65B58F-1973-48AB-B6CF-B11C5367E001}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7DB0EA05-B3BF-41F7-B806-24C7F63F0F74}
 	EndGlobalSection
 EndGlobal

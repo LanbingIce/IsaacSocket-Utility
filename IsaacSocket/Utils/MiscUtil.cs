@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 
 namespace IsaacSocket.Utils
 {
@@ -41,6 +42,20 @@ namespace IsaacSocket.Utils
             }
 
             return -1;
+        }
+        internal static string GetTemporaryDirectory(string prefix)
+        {
+            string tempDirectory = Path.Combine(Path.GetTempPath(), prefix + Path.GetRandomFileName());
+
+            if (File.Exists(tempDirectory))
+            {
+                return GetTemporaryDirectory(prefix);
+            }
+            else
+            {
+                Directory.CreateDirectory(tempDirectory);
+                return tempDirectory;
+            }
         }
         internal static long GetCurrentTime()
         {
@@ -111,6 +126,25 @@ namespace IsaacSocket.Utils
             }
 
             return extraByteCount == 0;
+        }
+        internal static bool ExtractFile(string resource, string path)
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Stream? stream = assembly.GetManifestResourceStream("IsaacSocket.Resources." + resource);
+            if (stream == null)
+            {
+                return false;
+            }
+            try
+            {
+                using FileStream fileStream = File.Create(path);
+                stream.CopyTo(fileStream);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
         internal static string GetCurrentExecutableFileName()
         {

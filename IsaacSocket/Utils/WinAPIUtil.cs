@@ -91,6 +91,20 @@ namespace IsaacSocket.Utils
 
         [DllImport("user32.dll", SetLastError = true)]
         internal static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+        [DllImport("kernel32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
+        internal static extern nint GetProcAddress(nint hModule, string procName);
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        internal static extern nint CreateRemoteThread(nint hProcess, nint lpThreadAttributes, uint dwStackSize, nint lpStartAddress, nint lpParameter, uint dwCreationFlags, nint lpThreadId);
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        internal static extern uint WaitForSingleObject(IntPtr hHandle, uint dwMilliseconds);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        internal static extern bool GetExitCodeThread(IntPtr hThread, out uint lpExitCode);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool VirtualFreeEx(IntPtr hProcess, IntPtr lpAddress, int dwSize, uint dwFreeType);
+        [DllImport("kernel32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
+        internal static extern nint GetModuleHandleA(string moduleName);
 
     }
 }

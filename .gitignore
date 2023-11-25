@@ -1,5 +1,7 @@
 /IsaacSocket/bin/
 /IsaacSocket/obj/
+/IsaacSocket-DLL/Release
+/Release
 
 # 忽略 Visual Studio 的一些文件
 .vscode/

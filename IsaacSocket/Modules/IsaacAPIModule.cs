@@ -1,5 +1,8 @@
 ﻿using IsaacSocket.Common;
 using IsaacSocket.Utils;
+using System.Diagnostics;
+using System.IO.MemoryMappedFiles;
+using System.Reflection;
 using System.Text;
 
 namespace IsaacSocket.Modules
@@ -21,7 +24,8 @@ namespace IsaacSocket.Modules
             //设置数据
             SET_DATA = 1,
             //重载lua环境
-            RELOAD_LUA = 2
+            RELOAD_LUA = 2,
+            FORCE_PAUSE = 3
         }
         private enum DataType
         {
@@ -47,9 +51,8 @@ namespace IsaacSocket.Modules
             //9伏特进度
             SUB_CHARGE = 2
         }
-
+        private string tempDLLPath;
         private byte numPlayer;
-        private int reloadAddress;
         private nint isaacProcessHandle;
         private int ImageBaseAdress;
         private readonly Dictionary<DataType, object> dataDictionary;
@@ -62,6 +65,8 @@ namespace IsaacSocket.Modules
 
         internal IsaacAPIModule(Channel channel, CallbackDelegate callback) : base(channel, callback)
         {
+            tempDLLPath = Path.Combine(MiscUtil.GetTemporaryDirectory("IsaacSocket_"), "IsaacSocket.dll");
+            MiscUtil.ExtractFile("IsaacSocket.dll", tempDLLPath);
             Dictionary<PlayerDataType, object>[] players = new Dictionary<PlayerDataType, object>[64];
             for (byte i = 0; i < 64; i++)
             {
@@ -87,6 +92,8 @@ namespace IsaacSocket.Modules
                 { DataType.PLAYER_DATA, players }
             };
         }
+
+
         private int GetDataAddress(params object[] args)
         {
             switch ((DataType)args[0])
@@ -161,9 +168,18 @@ namespace IsaacSocket.Modules
             buffer.AddRange(MiscUtil.ConvertToByteArray(data));
             Callback(CallbackType.MEMORY_MESSAGE_GENERATED, buffer.ToArray());
         }
+
+        private void ForcePause(bool pause)
+        {
+            using MemoryMappedFile mmf = MemoryMappedFile.OpenExisting("IsaacSocketSharedMemory");
+            using MemoryMappedViewAccessor accessor = mmf.CreateViewAccessor();
+            accessor.Write(4, pause);
+        }
         private void ReloadLua()
         {
-            MemoryUtil.WriteToMemory(isaacProcessHandle, reloadAddress, new byte[] { 1 });
+            using MemoryMappedFile mmf = MemoryMappedFile.OpenExisting("IsaacSocketSharedMemory");
+            using MemoryMappedViewAccessor accessor = mmf.CreateViewAccessor();
+            accessor.Write(0, true);
         }
         private byte GetNumPlayers()
         {
@@ -173,89 +189,35 @@ namespace IsaacSocket.Modules
             int value2 = MemoryUtil.ReadInt32FromMemory(isaacProcessHandle, address2);
             return (byte)((value2 - value1) / 4);
         }
-        private byte[] GetReloadAssembly(int pMem)
-        {
-            AssemblyCode assembly = new(pMem);
-            //判断标志
-            assembly.cmp_byte_ptr(pMem + 0xC5, 0);
-            assembly.je("originalcode");
-            assembly.mov_byte_ptr(pMem + 0xC5, 0);
-            //传入this
-            assembly.mov_ecx(ImageBaseAdress + 0x7FD680);
-            assembly.lea_ecx_ecx(0x00029FD8);
-            assembly.push_esi();
-            assembly.move_esi(ImageBaseAdress + 0x7FD674);
-            assembly.push_edi();
-            assembly.push(ImageBaseAdress + 0x74F6F4);
-            assembly.push((byte)0);
-            assembly.mov_edi_ecx();
-            assembly.call(ImageBaseAdress + 0x55E330);//输出
-            assembly.add_esp(8);
-            assembly.mov_ecx_esi();
-            assembly.call(ImageBaseAdress + 0x40AE00);//卸载lua环境
-            assembly.movzx_eax_byte_ptr_esi(0x1C);
-            assembly.mov_ecx_esi();
-            assembly.push_eax();
-            assembly.call(ImageBaseAdress + 0x3FCB00);//加载lua配置
-            assembly.mov_ecx_edi();
-            assembly.call(ImageBaseAdress + 0x4702F0);//移除mod列表
-            assembly.mov_ecx_edi();
-            assembly.call(ImageBaseAdress + 0x470B40);//重建mod列表
-            assembly.mov_ecx_edi();
-            assembly.call(ImageBaseAdress + 0x46F2B0);//重载着色器
-            assembly.call(ImageBaseAdress + 0x4AF200);//重新加载图形
-            assembly.mov_ecx_edi();
-            assembly.call(ImageBaseAdress + 0x46DAE0);//加载lua环境
-            assembly.cmp_dword_ptr_byte(ImageBaseAdress + 0x7FD688, 0);
-            assembly.je("pd");
-            assembly.mov_ecx(ImageBaseAdress + GAME_OFFSET);
-            assembly.test_ecx_ecx();
-            assembly.je("pe");
-            assembly.add_ecx(0x0010203C);
-            assembly.call(ImageBaseAdress + 0x517F20);
-            assembly.Flag("pe");
-            assembly.call(ImageBaseAdress + 0x92A0);
-            assembly.call(ImageBaseAdress + 0x4AFA70);
-            assembly.move_esi(ImageBaseAdress + 0X7FD688);
-            assembly.lea_ecx_esi(0x00101C00);
-            assembly.call(ImageBaseAdress + 0x4A3F30);
-            assembly.lea_ecx_esi(0x00102E80);
-            assembly.call(ImageBaseAdress + 0x4AB4E0);
-            assembly.Flag("pd");
-            assembly.pop_edi();
-            assembly.pop_esi();
-            assembly.Flag("originalcode");
-            assembly.call(ImageBaseAdress + 0x4B0010);
-            assembly.jmp(ImageBaseAdress + 0x48BDFA);
-            return assembly.GetBytes();
-        }
+
         private void InjectCode()
         {
-            int pMem;
-            AssemblyCode assembly = new(ImageBaseAdress + INJECTION_POINT_OFFSET);
-            assembly.call(ImageBaseAdress + 0x4B0010);
-            byte[] byteArray = MemoryUtil.ReadFromMemory(isaacProcessHandle, ImageBaseAdress + INJECTION_POINT_OFFSET, 5);
-            if (byteArray.SequenceEqual(assembly.GetBytes()))
+            if (File.Exists(tempDLLPath))
             {
-                pMem = (int)WinAPIUtil.VirtualAllocEx(isaacProcessHandle, 0, 256, WinAPIUtil.AllocationType.COMMIT | WinAPIUtil.AllocationType.RESERVE, WinAPIUtil.MemoryProtection.EXECUTE_READWRITE);
-                if (pMem != 0)
-                {
-                    byteArray = GetReloadAssembly(pMem);
-                    MemoryUtil.WriteToMemory(isaacProcessHandle, pMem, byteArray);
+                _ = WinAPIUtil.GetWindowThreadProcessId(WinAPIUtil.FindWindow("GLFW30", "Binding of Isaac: Repentance"), out uint processID);
+                using Process isaacProcess = Process.GetProcessById((int)processID);
+                nint handle = WinAPIUtil.GetModuleHandleA("Kernel32.dll");
+                nint address = WinAPIUtil.GetProcAddress(handle, "LoadLibraryW");
+                int size = Encoding.Unicode.GetByteCount(tempDLLPath); ;
+                int pMem = (int)WinAPIUtil.VirtualAllocEx(isaacProcess.Handle, 0, (uint)size, WinAPIUtil.AllocationType.COMMIT | WinAPIUtil.AllocationType.RESERVE, WinAPIUtil.MemoryProtection.EXECUTE_READWRITE);
+                bool success = WinAPIUtil.WriteProcessMemory(isaacProcess.Handle, pMem, Encoding.Unicode.GetBytes(tempDLLPath), (uint)size, out _);
+                nint hThread = WinAPIUtil.CreateRemoteThread(isaacProcess.Handle, 0, 0, address, pMem, 0, 0);
 
-                    assembly = new(ImageBaseAdress + INJECTION_POINT_OFFSET);
-                    assembly.jmp(pMem);
-                    MemoryUtil.WriteToMemory(isaacProcessHandle, ImageBaseAdress + INJECTION_POINT_OFFSET, assembly.GetBytes());
-                }
+                _ = WinAPIUtil.WaitForSingleObject(hThread, uint.MaxValue);
+                WinAPIUtil.GetExitCodeThread(hThread, out uint hDllModule);
+                WinAPIUtil.CloseHandle(hThread);
+                WinAPIUtil.VirtualFreeEx(isaacProcess.Handle, pMem, size, 32768);
+
+                using MemoryMappedFile mmf = MemoryMappedFile.OpenExisting("IsaacSocketSharedMemory");
+                string s = "注入dll成功";
+                Callback(CallbackType.MESSAGE, s);
             }
             else
             {
-                pMem = ImageBaseAdress + INJECTION_POINT_OFFSET + BitConverter.ToInt32(byteArray, 1) + 5;
-                byteArray = GetReloadAssembly(pMem);
+                string s = "注入dll失败";
+                Callback(CallbackType.MESSAGE, s);
             }
-            reloadAddress = pMem + byteArray.Length;
-            string s = $"注入重载lua环境代码成功：{Environment.NewLine}\t内存地址：\t0x{pMem.ToString("X")}{Environment.NewLine}\t开关地址：\t0x{reloadAddress.ToString("X")} （1字节）{Environment.NewLine}\t注入点：\t0x{(ImageBaseAdress + INJECTION_POINT_OFFSET).ToString("X")}";
-            Callback(CallbackType.MESSAGE, s);
+
         }
         internal override void Connected()
         {
@@ -363,6 +325,17 @@ namespace IsaacSocket.Modules
                 case ActionType.RELOAD_LUA:
                     stringBuilder.Append(" 重新加载lua环境");
                     break;
+                case ActionType.FORCE_PAUSE:
+                    bool pause = message[1] == 1;
+                    if (pause)
+                    {
+                        stringBuilder.Append("强制暂停游戏");
+                    }
+                    else
+                    {
+                        stringBuilder.Append("取消强制暂停");
+                    }
+                    break;
             }
             return stringBuilder.ToString();
         }
@@ -414,6 +387,10 @@ namespace IsaacSocket.Modules
                     break;
                 case ActionType.RELOAD_LUA:
                     ReloadLua();
+                    break;
+                case ActionType.FORCE_PAUSE:
+                    bool pause = message[1] == 1;
+                    ForcePause(pause);
                     break;
             }
         }
