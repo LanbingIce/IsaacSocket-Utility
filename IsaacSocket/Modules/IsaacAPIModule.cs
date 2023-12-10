@@ -65,7 +65,14 @@ namespace IsaacSocket.Modules
 
         internal IsaacAPIModule(Channel channel, CallbackDelegate callback) : base(channel, callback)
         {
-            tempDLLPath = Path.Combine(MiscUtil.GetTemporaryDirectory("IsaacSocket_"), "IsaacSocket.dll");
+            if (Debugger.IsAttached)
+            {
+                tempDLLPath = "C:\\Users\\lanbing\\OneDrive\\Desktop\\IsaacSocket\\Release\\IsaacSocket.dll";
+            }
+            else
+            {
+                tempDLLPath = Path.Combine(MiscUtil.GetTemporaryDirectory("IsaacSocket_"), "IsaacSocket.dll");
+            }
             MiscUtil.ExtractFile("IsaacSocket.dll", tempDLLPath);
             Dictionary<PlayerDataType, object>[] players = new Dictionary<PlayerDataType, object>[64];
             for (byte i = 0; i < 64; i++)
