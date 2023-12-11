@@ -29,6 +29,13 @@ namespace IsaacSocket.Utils
             READWRITE = 0x04,
             WRITECOPY = 0x08,
         }
+        [Flags]
+        public enum FreeType : uint
+        {
+            MEM_DECOMMIT = 0x4000,
+            MEM_RELEASE = 0x8000
+        }
+
         [DllImport("kernel32.dll")]
         internal static extern int GetProcessId(IntPtr processHandle);
 
@@ -102,7 +109,7 @@ namespace IsaacSocket.Utils
         internal static extern bool GetExitCodeThread(IntPtr hThread, out uint lpExitCode);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern bool VirtualFreeEx(IntPtr hProcess, IntPtr lpAddress, int dwSize, uint dwFreeType);
+        public static extern bool VirtualFreeEx(IntPtr hProcess, IntPtr lpAddress, int dwSize, FreeType dwFreeType);
         [DllImport("kernel32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
         internal static extern nint GetModuleHandleA(string moduleName);
 

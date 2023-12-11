@@ -9,8 +9,6 @@
         //剪贴板
         CLIPBOARD = 2,
         //HTTP
-        HTTP_CLIENT = 3,
-        //以撒API
-        ISAAC_API = 4
+        HTTP_CLIENT = 3
     }
 }

@@ -2,6 +2,9 @@
 using IsaacSocket.Modules;
 using IsaacSocket.Utils;
 using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.IO.MemoryMappedFiles;
+using System.Text;
 
 
 namespace IsaacSocket
@@ -225,6 +228,7 @@ namespace IsaacSocket
         private readonly ConcurrentQueue<byte[]> sendMessagesBuffer;
         private int newSize;
         private readonly CancellationTokenSource cancellationTokenSource;
+        private readonly string tempDLLPath;
 
         private async Task UpdateTask(CancellationToken cancellationToken)
         {
@@ -281,7 +285,7 @@ namespace IsaacSocket
                             {
                                 receiveTable.Initialize();
                                 sendTable.Initialize(dataSpaceSize);
-                                Connected(dataSpaceSize, isaacProcessHandle);
+                                Connected(dataSpaceSize);
                             }
                             uint size;
                             if (receiveAddressType == 68)
@@ -331,10 +335,20 @@ namespace IsaacSocket
 
                                 if (sendAddress != 0 && receiveAddress != 0)
                                 {
-                                    MemoryUtil.WriteToMemory(isaacProcessHandle, sendAddress, BitConverter.GetBytes(dataSpaceSize));
-                                    MemoryUtil.WriteToMemory(isaacProcessHandle, receiveAddress, BitConverter.GetBytes(1));
-                                    connectionState = ConnectionState.CONNECTING;
-                                    Connecting();
+                                    try
+                                    {
+                                        using MemoryMappedFile mmf = MemoryMappedFile.OpenExisting("IsaacSocketSharedMemory");
+                                        using MemoryMappedViewAccessor accessor = mmf.CreateViewAccessor();
+                                        accessor.Write(8, true);
+                                        MemoryUtil.WriteToMemory(isaacProcessHandle, sendAddress, BitConverter.GetBytes(dataSpaceSize));
+                                        MemoryUtil.WriteToMemory(isaacProcessHandle, receiveAddress, BitConverter.GetBytes(1));
+                                        connectionState = ConnectionState.CONNECTING;
+                                        Connecting();
+                                    }
+                                    catch (FileNotFoundException)
+                                    {
+                                        callback.Invoke(CallbackType.MESSAGE, $"注入dll{(InjectCode(isaacProcessHandle) ? "成功" : "失败")} ");
+                                    }
                                 }
                                 else
                                 {
@@ -379,7 +393,30 @@ namespace IsaacSocket
             }
         }
 
-
+        private bool InjectCode(nint isaacProcessHandle)
+        {
+            int pMem = 0;
+            nint hThread = 0;
+            uint pExitCode = 0;
+            try
+            {
+                int nSize = Encoding.Unicode.GetByteCount(tempDLLPath);
+                pMem = (int)WinAPIUtil.VirtualAllocEx(isaacProcessHandle, 0, (uint)nSize, WinAPIUtil.AllocationType.COMMIT | WinAPIUtil.AllocationType.RESERVE, WinAPIUtil.MemoryProtection.EXECUTE_READWRITE);
+                WinAPIUtil.WriteProcessMemory(isaacProcessHandle, pMem, Encoding.Unicode.GetBytes(tempDLLPath), (uint)nSize, out _);
+                nint hModule = WinAPIUtil.GetModuleHandleA("Kernel32.dll");
+                nint funcAddress = WinAPIUtil.GetProcAddress(hModule, "LoadLibraryW");
+                hThread = WinAPIUtil.CreateRemoteThread(isaacProcessHandle, 0, 0, funcAddress, pMem, 0, 0);
+                _ = WinAPIUtil.WaitForSingleObject(hThread, uint.MaxValue);
+                WinAPIUtil.GetExitCodeThread(hThread, out pExitCode);
+            }
+            catch { }
+            finally
+            {
+                WinAPIUtil.CloseHandle(hThread);
+                WinAPIUtil.VirtualFreeEx(isaacProcessHandle, pMem, 0, WinAPIUtil.FreeType.MEM_RELEASE);
+            }
+            return pExitCode != 0;
+        }
 
         internal void Send(Channel channel, byte[] data)
         {
@@ -418,6 +455,15 @@ namespace IsaacSocket
 
         internal Main(int dataSpaceSize, CallbackDelegate callback)
         {
+            if (Debugger.IsAttached)
+            {
+                tempDLLPath = "C:\\Users\\lanbing\\OneDrive\\Desktop\\IsaacSocket\\Release\\IsaacSocket.dll";
+            }
+            else
+            {
+                tempDLLPath = Path.Combine(MiscUtil.GetTemporaryDirectory("IsaacSocket_"), "IsaacSocket.dll");
+                MiscUtil.ExtractFile("IsaacSocket.dll", tempDLLPath);
+            }
             Application.ApplicationExit += OnExit;
             sendMessagesBuffer = new();
             this.callback = callback;
@@ -426,8 +472,7 @@ namespace IsaacSocket
             {
                 [Channel.WEB_SOCKET_CLIENT] = new WebsocketClientModule(Channel.WEB_SOCKET_CLIENT, ModuleCallback),
                 [Channel.CLIPBOARD] = new ClipboardModule(Channel.CLIPBOARD, ModuleCallback),
-                [Channel.HTTP_CLIENT] = new HttpClientModule(Channel.HTTP_CLIENT, ModuleCallback),
-                [Channel.ISAAC_API] = new IsaacAPIModule(Channel.ISAAC_API, ModuleCallback)
+                [Channel.HTTP_CLIENT] = new HttpClientModule(Channel.HTTP_CLIENT, ModuleCallback)
             };
             cancellationTokenSource = new();
         }
@@ -464,7 +509,7 @@ namespace IsaacSocket
             {
                 callback.Invoke(CallbackType.HEART_BEAT, "心跳包");
             }
-            else
+            else if (Enum.IsDefined(typeof(Channel), channel))
             {
                 callback.Invoke(CallbackType.RECEIVE, $"【{channel}】：{Environment.NewLine}{modules[channel].MemoryMessageToString(message)}");
                 modules[channel].ReceiveMemoryMessage(message);
@@ -506,15 +551,11 @@ namespace IsaacSocket
             callback.Invoke(CallbackType.MESSAGE, "连接已断开！");
         }
 
-        private void Connected(int dataSpaceSize, nint isaacProcessHandle)
+        private void Connected(int dataSpaceSize)
         {
             sendMessagesBuffer.Clear();
             foreach (KeyValuePair<Channel, Module> keyValuePair in modules)
             {
-                if (keyValuePair.Value is IProcessOperation m)
-                {
-                    m.IsaacProcessHandle = isaacProcessHandle;
-                }
                 keyValuePair.Value.Connected();
             }
             callback.Invoke(CallbackType.MESSAGE, "已连接！交换区大小：" + dataSpaceSize + "字节");
