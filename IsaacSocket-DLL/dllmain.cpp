@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <sstream>
 #include <vector>
+#include "isaac.hpp"
 
 using std::endl;
 using std::hex;
@@ -23,101 +24,17 @@ struct Config
 	int IsForcePaused;
 	int needPrint;
 };
-// 武器类，未研究完毕
-struct Weapon
-{
-	int ptr;
-	// 虚表指针
-	int var2;
-	float var3;
-	float fireDelay;
-	float abp_tears;
-	float charge;
-	float var7;
-	float dirX;
-	float dirY;
-	int var10;
-	int var11;
-	int type;
-};
-// 被动道具类
-struct PassiveSlot
-{
-	int pickTime;
-	char name_guess[4];
-	int item;
-	int pickStage;
-	int pickStageVariat;
-	int pickRoomType;
-	int itemPool;
-};
-// 主动道具类
-struct ActiveSlot
-{
-	int item;
-	int charge;
-	int batteryCharge;
-	int subCharge;
-	int timedRechargeCooldown;
-	float partialCharge;
-	int varData;
-};
-// 角色类
-struct Player
-{
-	char pad_0x132C[0x132C];
-	Weapon* weapon;
-	char pad_0x14C4[0x14C4 - 0x132C - 4];
-	ActiveSlot activeSlots[4];
-	// 4 * 28 bytes
-	char pad_0x1745[0x1745 - 0x14C4 - 4 * 28];
-	bool canShoot;
-	char pad_0x1D0C[0x1D0C - 0x1745 - 1];
-	vector<PassiveSlot> passiveSlots;
-};
-// 控制台类
-struct Console
-{
-	char pad_0x20[0x20];
-	int isConsoleOpen;
-	char pad_0x30[0x30 - 0x20 - 4];
-	float consoleOffsetY;
-	char pad_0x3C[0x3C - 0x30 - 4];
-	string consoleText;
-};
-
-// 游戏类
-struct Game
-{
-	char pad_0x1BA50[0x1BA50];
-	vector<Player*> players;
-	// 12 bytes
-	char pad_0x1BB60[0x1BB60 - 0x1BA50 - 12];
-	Console console;
-	char pad_0x10203C[0x10203C - 0x1BB60 - sizeof(console)];
-	int isMenuPaused;
-	char pad_0x1C3164[0x1C3164 - 0x10203C - 4];
-	int debugFlag;
-};
-// 以撒程序类
-struct IsaacImage
-{
-	char pad_0x7FD65C[0x7FD65C];
-	Game* game;
-	char pad_0x7FD680[0x7FD680 - 0x7FD65C - 4];
-	int lua_guess;
-};
 // 对注入的函数进行声明
 static void __fastcall Render_inj();
-static void __fastcall GameUpdate_inj(Game* gamePtr);
-static void __fastcall ConsoleOutput_inj(Console& console, void*, const string& text, int color, int type_guess);
-static void __fastcall ExecuteCommand_inj(Console& console, void*, const string& text, int, int);
+static void __fastcall GameUpdate_inj(isaac::Game* gamePtr);
+static void __fastcall ConsoleOutput_inj(isaac::Console& console, void*, const string& text, int color, int type_guess);
+static void __fastcall ExecuteCommand_inj(isaac::Console& console, void*, const string& text, int, int);
 static void __fastcall AdditionalUpdate_inj();
-static bool __fastcall IsPaused_inj(Game* gamePtr);
+static bool __fastcall IsPaused_inj(isaac::Game* gamePtr);
 // IsaacSocket类，实现具体功能
 struct IsaacSocket
 {
-	static inline IsaacImage* isaac;
+	static inline isaac::IsaacImage* isaac;
 	static inline Config* config;
 	// int转16进制文本
 	static string ToHexString(int num)
@@ -135,7 +52,7 @@ struct IsaacSocket
 	// 重新载入lua环境
 	static void ResetLua()
 	{
-		void* thisPtr = (char*)(isaac->lua_guess) + 0x00029FD8;
+		void* thisPtr = (char*)(isaac->luaVM) + 0x00029FD8;
 		int d_0x7FD674 = *(int*)((unsigned)isaac + 0x7FD674);
 		void (*f_0x55E330)(void*, int) = (void (*)(void*, int))((unsigned)isaac + 0x55E330);
 		// 输出日志
@@ -167,9 +84,9 @@ struct IsaacSocket
 		{
 			if (isaac->game)
 			{
-				void(__fastcall * f_0x517F20)(int&) = (void(__fastcall*)(int&))((unsigned)isaac + 0x517F20);
+				void(__fastcall * f_0x517F20)(isaac::PauseMenu&) = (void(__fastcall*)(isaac::PauseMenu&))((unsigned)isaac + 0x517F20);
 				// 不懂，可能是某种初始化
-				f_0x517F20(isaac->game->isMenuPaused);
+				f_0x517F20(isaac->game->pauseMenu);
 			}
 			void (*f_0x92A0)() = (void (*)())((unsigned)isaac + 0x92A0);
 			// 可能是清除什么缓存
@@ -270,7 +187,7 @@ __declspec(naked) void __fastcall Render_inj()
 	}
 }
 // 游戏更新函数
-__declspec(naked) void __fastcall GameUpdate_inj(Game* gamePtr)
+__declspec(naked) void __fastcall GameUpdate_inj(isaac::Game* gamePtr)
 {
 	__asm {
 		push ecx
@@ -308,7 +225,7 @@ __declspec(naked) void __fastcall AdditionalUpdate_inj()
 	}
 }
 // 执行控制台指令函数
-__declspec(naked) void __fastcall ExecuteCommand_inj(Console& console, void*, const string& text, int, int)
+__declspec(naked) void __fastcall ExecuteCommand_inj(isaac::Console& console, void*, const string& text, int, int)
 {
 	__asm {
 		push ecx
@@ -325,7 +242,7 @@ __declspec(naked) void __fastcall ExecuteCommand_inj(Console& console, void*, co
 	}
 }
 // 控制台输出函数
-__declspec(naked) void __fastcall ConsoleOutput_inj(Console& console, void*, const string& text, int color, int type_guess)
+__declspec(naked) void __fastcall ConsoleOutput_inj(isaac::Console& console, void*, const string& text, int color, int type_guess)
 {
 	__asm {
 		push ecx
@@ -343,7 +260,7 @@ __declspec(naked) void __fastcall ConsoleOutput_inj(Console& console, void*, con
 	}
 }
 // 游戏是否暂停函数
-__declspec(naked) bool __fastcall IsPaused_inj(Game* gamePtr)
+__declspec(naked) bool __fastcall IsPaused_inj(isaac::Game* gamePtr)
 {
 	__asm {
 		push ecx
@@ -388,7 +305,7 @@ static void Init()
 	if (hMapFile)
 	{
 		IsaacSocket::config = (Config*)MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, 1024);
-		IsaacSocket::isaac = (IsaacImage*)GetModuleHandle(NULL);
+		IsaacSocket::isaac = (isaac::IsaacImage*)GetModuleHandle(NULL);
 		// 渲染
 		Inject(0x4B0600, &Render_inj, 1);
 		// 执行控制台指令
