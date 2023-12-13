@@ -9,5 +9,10 @@
 
 // 添加要在此处预编译的标头
 #include "framework.h"
+#include <conio.h>
+#include <iomanip>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #endif //PCH_H
