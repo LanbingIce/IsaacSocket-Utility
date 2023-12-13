@@ -28,7 +28,7 @@ namespace utils {
 	void cw(const T& value) {
 		if (GetConsoleWindow())
 		{
-			ostringstream oss;
+			std::ostringstream oss;
 			oss << value << '\n';
 			Utf8Cprintf(oss.str().c_str());
 		}
