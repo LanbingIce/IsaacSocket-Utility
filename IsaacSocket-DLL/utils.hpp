@@ -24,12 +24,14 @@ namespace utils {
 		delete[] u8Str;
 	}
 
-	template <typename T>
-	void cw(const T& value) {
+	// 折叠表达式打印可变参数列表
+	template <typename... Args>
+	void cw(const Args&... args) {
 		if (GetConsoleWindow())
 		{
 			std::ostringstream oss;
-			oss << value << '\n';
+			((oss << args << " "), ...);
+			oss << '\n';
 			Utf8Cprintf(oss.str().c_str());
 		}
 	}
