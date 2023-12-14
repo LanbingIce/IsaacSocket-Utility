@@ -27,6 +27,9 @@
     <ClInclude Include="isaac.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="inject.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
