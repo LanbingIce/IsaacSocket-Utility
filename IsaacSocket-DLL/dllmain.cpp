@@ -7,6 +7,7 @@
 #include <vector>
 #include "isaac.hpp"
 #include "inject.hpp"
+#include "state.hpp"
 
 using std::endl;
 using std::hex;
@@ -18,20 +19,12 @@ using std::string;
 using std::to_string;
 using std::vector;
 
-// 共享内存中与连接程序交互的数据结构
-struct Config
-{
-	int needReload;
-	int IsForcePaused;
-	int needPrint;
-};
-
 // IsaacSocket类，实现具体功能
 struct IsaacSocket
 {
 	static inline HANDLE hProcess;
 	static inline isaac::IsaacImage* isaac;
-	static inline Config* config;
+	static inline state::StateData* stateData;
 	// int转16进制文本
 	static string ToHexString(int num)
 	{
@@ -90,9 +83,9 @@ struct IsaacSocket
 	// 渲染回调，时机在渲染函数的起始位置，只要游戏进程存在就一直触发
 	static void OnRender()
 	{
-		if (config->needReload == 1)
+		if (stateData->needReload)
 		{
-			config->needReload = 0;
+			stateData->needReload = false;
 			IsaacSocket::ReloadLuaWithoutDeleteRoom();
 		}
 	}
@@ -101,7 +94,7 @@ struct IsaacSocket
 	{
 		if (str == "lualua")
 		{
-			config->needReload = 1;
+			stateData->needReload = true;
 		}
 		if (str == "ac")
 		{
@@ -145,7 +138,7 @@ static void Init()
 	if (hMapFile)
 	{
 		IsaacSocket::hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, FALSE, GetCurrentProcessId());
-		IsaacSocket::config = (Config*)MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, 1024);
+		IsaacSocket::stateData = (state::StateData*)MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, 1024);
 		IsaacSocket::isaac = (isaac::IsaacImage*)GetModuleHandle(NULL);
 		inject::Callbacks callbacks =
 		{
