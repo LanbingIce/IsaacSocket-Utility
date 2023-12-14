@@ -4,6 +4,7 @@
 #include "inject.hpp"
 #include "state.hpp"
 #include "function.hpp"
+#include "lua.hpp"
 
 // IsaacSocket类，实现具体功能
 struct IsaacSocket
@@ -11,6 +12,7 @@ struct IsaacSocket
 	static inline HANDLE hProcess;
 	static inline isaac::IsaacImage* isaac;
 	static inline state::StateData* stateData;
+	static inline lua::Lua* lua;
 
 	// 渲染回调，时机在渲染函数的起始位置，只要游戏进程存在就一直触发
 	static void OnRender()
@@ -88,6 +90,7 @@ static void Init()
 		};
 		inject::Init(IsaacSocket::hProcess, IsaacSocket::isaac, callbacks);
 		function::Init(IsaacSocket::isaac);
+		IsaacSocket::lua = new lua::Lua{ GetModuleHandleA("Lua5.3.3r.dll") };
 	}
 }
 BOOL APIENTRY DllMain(HMODULE hModule,
