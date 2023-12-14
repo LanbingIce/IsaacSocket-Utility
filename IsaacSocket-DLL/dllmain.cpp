@@ -1,23 +1,8 @@
 ﻿// dllmain.cpp : 定义 DLL 应用程序的入口点。
 #include "pch.h"
-#include <string>
-#include <fstream>
-#include <iomanip>
-#include <sstream>
-#include <vector>
 #include "isaac.hpp"
 #include "inject.hpp"
 #include "state.hpp"
-
-using std::endl;
-using std::hex;
-using std::ios;
-using std::ofstream;
-using std::ostringstream;
-using std::setiosflags;
-using std::string;
-using std::to_string;
-using std::vector;
 
 // IsaacSocket类，实现具体功能
 struct IsaacSocket
@@ -25,13 +10,6 @@ struct IsaacSocket
 	static inline HANDLE hProcess;
 	static inline isaac::IsaacImage* isaac;
 	static inline state::StateData* stateData;
-	// int转16进制文本
-	static string ToHexString(int num)
-	{
-		ostringstream os;
-		os << hex << setiosflags(ios::uppercase) << num;
-		return os.str();
-	}
 
 	// 重新载入lua环境
 	static void ReloadLuaWithoutDeleteRoom()
