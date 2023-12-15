@@ -147,6 +147,22 @@ namespace lua {
 		{
 			return lua_pcallk(L, n, r, f, 0, NULL);
 		}
+
+		int lua_isnone(lua_State* L, int n) const
+		{
+			return lua_type(L, (n)) == LUA_TNONE;
+		}
+
+		int lua_isnoneornil(lua_State* L, int n) const
+		{
+			return lua_type(L, (n)) <= 0;
+		}
 	};
 #undef _
 }
+
+#define _CHECK_ARG(index,luaType,type,name) if(lua->lua_is##luaType(L,index)){name = (type)lua->lua_to##luaType(L,index);}else{return lua->luaL_error(L, "bad argument #"#index" :"#name" should be "#luaType);}
+#define ARG(index,luaType,type,name) type name; _CHECK_ARG(index,luaType,type,name)
+#define ARG_DEF(index,luaType,type,name,def) type name;if(lua->lua_isnoneornil(L,index)){name=def;}else _CHECK_ARG(index,luaType,type,name)
+#define ARG_RANGE(name,range) if (name >= range){std::ostringstream oss;oss<<"invalid "#name" : "<<std::to_string(name); return lua->luaL_error(L, oss.str().c_str());}
+#define RET(type,value) lua->lua_push##type(L,value);return 1;

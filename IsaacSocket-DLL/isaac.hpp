@@ -69,13 +69,13 @@ namespace isaac {
 	// 主动道具类
 	struct Active
 	{
-		int32_t Item;
-		int32_t Charge;
-		int32_t BatteryCharge;
-		int32_t SubCharge;
-		int32_t TimedRechargeCooldown;
-		float_t PartialCharge;
-		int32_t VarData;
+		int32_t item;
+		int32_t charge;
+		int32_t batteryCharge;
+		int32_t subCharge;
+		int32_t timedRechargeCooldown;
+		float_t partialCharge;
+		int32_t varData;
 	};
 
 	// 被动道具类，未研究完毕

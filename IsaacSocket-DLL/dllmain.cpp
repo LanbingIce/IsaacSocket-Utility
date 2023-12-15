@@ -5,6 +5,7 @@
 #include "state.hpp"
 #include "function.hpp"
 #include "lua.hpp"
+#include "isaac_api.hpp"
 
 // IsaacSocket类，实现具体功能
 struct IsaacSocket
@@ -91,6 +92,7 @@ static void Init()
 		inject::Init(IsaacSocket::hProcess, IsaacSocket::isaac, callbacks);
 		function::Init(IsaacSocket::isaac);
 		IsaacSocket::lua = new lua::Lua{ GetModuleHandleA("Lua5.3.3r.dll") };
+		isaac_api::Init(IsaacSocket::isaac, IsaacSocket:: lua, IsaacSocket:: stateData);
 	}
 }
 BOOL APIENTRY DllMain(HMODULE hModule,
