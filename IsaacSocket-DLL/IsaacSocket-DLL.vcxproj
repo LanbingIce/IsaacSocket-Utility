@@ -67,6 +67,7 @@
     <ClInclude Include="memory.hpp" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="state.hpp" />
+    <ClInclude Include="system_.hpp" />
     <ClInclude Include="utils.hpp" />
     <ClInclude Include="win_api.hpp" />
   </ItemGroup>
