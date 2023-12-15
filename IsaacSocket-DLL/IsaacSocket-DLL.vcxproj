@@ -64,6 +64,7 @@
     <ClInclude Include="isaac_api.hpp" />
     <ClInclude Include="isaac_socket.hpp" />
     <ClInclude Include="lua.hpp" />
+    <ClInclude Include="memory.hpp" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="state.hpp" />
     <ClInclude Include="utils.hpp" />

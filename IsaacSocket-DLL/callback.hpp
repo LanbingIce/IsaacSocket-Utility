@@ -6,6 +6,7 @@
 #include "lua.hpp"
 #include "utils.hpp"
 #include "isaac_api.hpp"
+#include "memory.hpp"
 #include "function.hpp"
 
 using utils::cw;
@@ -31,6 +32,7 @@ namespace callback {
 		{
 			stateData->state = state::NORMAL;
 			isaac_api::Init(isaac, lua, stateData);
+			memory::Init(hProcess, isaac, lua);
 		}
 
 		if (stateData->needReload)
