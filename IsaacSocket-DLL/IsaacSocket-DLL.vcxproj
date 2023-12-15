@@ -62,6 +62,7 @@
     <ClInclude Include="inject.hpp" />
     <ClInclude Include="isaac.hpp" />
     <ClInclude Include="isaac_api.hpp" />
+    <ClInclude Include="isaac_socket.hpp" />
     <ClInclude Include="lua.hpp" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="state.hpp" />
