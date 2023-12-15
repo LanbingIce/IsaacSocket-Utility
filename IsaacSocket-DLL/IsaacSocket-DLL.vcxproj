@@ -68,6 +68,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="state.hpp" />
     <ClInclude Include="utils.hpp" />
+    <ClInclude Include="win_api.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
