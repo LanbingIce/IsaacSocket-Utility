@@ -188,8 +188,7 @@ namespace isaac_api {
 		RET(boolean, stateData->lockedMTRandomValue);
 	}
 
-	//锁定MT随机数值,尚未实现
-	//TODO
+	//锁定MT随机数值
 	static int LockMTRandom(lua_State* L) {
 		ARG_DEF(1, integer, uint32_t, value, 0);
 		stateData->lockedMTRandomValue = value;
