@@ -69,4 +69,9 @@ namespace function {
 		FUNC(0x46DAE0, void, __fastcall, isaac::ModManager&);
 		f_0x46DAE0(isaac->fileManager->modManager);
 	}
+
+	// 设置GLFW的接收字符回调，使得直接设置控制台state的方式打开控制台也可以输入字符
+	static void SetGLFWCharacter() {
+		isaac->window->character = (char*)isaac + 0x25ECE0;
+	}
 }

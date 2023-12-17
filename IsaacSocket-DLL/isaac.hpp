@@ -142,6 +142,16 @@ namespace isaac {
 		vector<GlitchedEvent*> glitchedEvents;
 	};
 
+	//GLFW窗口类
+	struct _GLFWwindow
+	{
+		union
+		{
+			//GLFWcharmodsfun
+			FIELD(0x214, LPCVOID, character);
+		};
+	};
+
 	// 游戏类
 	struct Game
 	{
@@ -162,6 +172,7 @@ namespace isaac {
 	{
 		union
 		{
+			FIELD(0x7C7B08, _GLFWwindow*, window);
 			FIELD(0x7FD65C, Game*, game);
 			FIELD(0x7FD674, LuaVM*, luaVM);
 			FIELD(0x7FD680, FileManager*, fileManager);

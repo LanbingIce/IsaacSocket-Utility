@@ -26,6 +26,7 @@ namespace isaac_socket{
 			function::Init(isaac);
 			callback::Init(stateData, isaac, hProcess, lua);
 			inject::Init(hProcess, isaac, callback::GetCallbacks());
+			function::SetGLFWCharacter();
 		}
 	}
 }
