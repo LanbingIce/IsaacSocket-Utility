@@ -45,30 +45,28 @@ namespace function {
 	// 重新载入lua环境
 	static void ReloadLuaWithoutDeleteRoom()
 	{
-#define _(offset,...) auto f_##offset = (void(__fastcall*)(__VA_ARGS__))((char*)isaac + offset)
 		// 输出日志
 		inject::LogPrintf(0, "Lua is resetting!\n");
 		// 卸载lua环境
-		_(0x40AE00, isaac::LuaVM*);
+		FUNC(0x40AE00, void, __fastcall, isaac::LuaVM*);
 		f_0x40AE00(isaac->luaVM);
 		// 加载lua环境
-		_(0x3FCB00, isaac::LuaVM*, LPCVOID, bool);
+		FUNC(0x3FCB00, void, __fastcall, isaac::LuaVM*, LPCVOID, bool);
 		f_0x3FCB00(isaac->luaVM, NULL, isaac->luaVM->luaDebug);
 		// 清除mod列表
-		_(0x4702F0, isaac::ModManager&);
+		FUNC(0x4702F0, void, __fastcall, isaac::ModManager&);
 		f_0x4702F0(isaac->fileManager->modManager);
 		// 创建mod列表
-		_(0x470B40, isaac::ModManager&);
+		FUNC(0x470B40, void, __fastcall, isaac::ModManager&);
 		f_0x470B40(isaac->fileManager->modManager);
 		// 重新加载着色器
-		_(0x46F2B0, isaac::ModManager&);
+		FUNC(0x46F2B0, void, __fastcall, isaac::ModManager&);
 		f_0x46F2B0(isaac->fileManager->modManager);
 		// 重新加载精灵和字体
-		_(0x4AF200);
+		FUNC(0x4AF200, void, __fastcall);
 		f_0x4AF200();
 		// 重新加载xml
-		_(0x46DAE0, isaac::ModManager&);
+		FUNC(0x46DAE0, void, __fastcall, isaac::ModManager&);
 		f_0x46DAE0(isaac->fileManager->modManager);
-#undef _
 	}
 }
