@@ -157,6 +157,10 @@ namespace lua {
 		{
 			return lua_type(L, (n)) <= 0;
 		}
+
+		int lua_isnil(lua_State* L, int idx) const {
+			return lua_type(L, idx) == LUA_TNIL;
+		}
 	};
 #undef _
 }

@@ -11,11 +11,13 @@ namespace inject {
 		LPCVOID OnExecuteCommand;
 		LPCVOID OnConsoleOutput;
 		uint32_t(__fastcall* OnMTRandom)(uint32_t);
+		LPCVOID OnWindowMessage;
 	};
 
 	static const char* logPreFix = "[LOG(%d)] ";
 	static HANDLE hProcess;
 	static isaac::IsaacImage* isaac;
+	static HANDLE hOpenGL;
 	static Callbacks callbacks;
 	static int tmpRetIP;
 	static int tmpLogLevel;
@@ -140,10 +142,27 @@ namespace inject {
 		}
 	}
 
-	//注入代码
-	static void InjectCode(size_t offset, LPCVOID fuctionAddress, size_t paddingSize)
+	//窗口过程回调函数
+	__declspec(naked) LRESULT __stdcall Wndproc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
-		char* injectAddress = (char*)isaac + offset;
+		__asm {
+			call callbacks.OnWindowMessage
+			test eax, eax
+			je flag
+			//mov edi, edi
+			push ebp
+			mov ebp, esp
+			mov eax, hOpenGL
+			add eax, 0x3BBC5
+			jmp eax
+			flag : ret 0x10
+		}
+	}
+
+	//注入代码
+	static void InjectCode(LPCVOID ModuleBase, size_t offset, LPCVOID fuctionAddress, size_t paddingSize)
+	{
+		char* injectAddress = (char*)ModuleBase + offset;
 		//操作码长度为1，操作数长度为4，两者加起来是5
 		uint8_t opcode = 0xE9;//jmp
 		WriteProcessMemory(hProcess, injectAddress, &opcode, 1, nullptr);
@@ -156,23 +175,26 @@ namespace inject {
 		}
 	}
 
-	void Init(HANDLE hProcess, isaac::IsaacImage* isaac, Callbacks callbacks) {
+	void Init(HANDLE hProcess, isaac::IsaacImage* isaac, HMODULE hOpenGL, Callbacks callbacks) {
 		inject::hProcess = hProcess;
 		inject::isaac = isaac;
+		inject::hOpenGL = hOpenGL;
 		inject::callbacks = callbacks;
 		// 渲染
-		InjectCode(0x4B0600, Render, 1);
+		InjectCode(isaac, 0x4B0600, Render, 1);
 		// 执行控制台指令
-		InjectCode(0x2655C0, ExecuteCommand, 0);
+		InjectCode(isaac, 0x2655C0, ExecuteCommand, 0);
 		// 控制台输出
-		InjectCode(0x26AEC0, ConsoleOutput, 0);
+		InjectCode(isaac, 0x26AEC0, ConsoleOutput, 0);
 		// 游戏更新
-		InjectCode(0x2CDCF0, GameUpdate, 1);
+		InjectCode(isaac, 0x2CDCF0, GameUpdate, 1);
 		// 特殊更新
-		InjectCode(0x2D0400, SpecialUpdate, 1);
+		InjectCode(isaac, 0x2D0400, SpecialUpdate, 1);
 		// 日志输出
-		InjectCode(0x55E330, LogPrintf, 1);
+		InjectCode(isaac, 0x55E330, LogPrintf, 1);
 		// MT19937随机数生成
-		InjectCode(0x2C3EA8, MTRandom, 1);
+		InjectCode(isaac, 0x2C3EA8, MTRandom, 1);
+		// 窗口消息
+		InjectCode(hOpenGL, 0x3BBC0, Wndproc, 0);
 	}
 }

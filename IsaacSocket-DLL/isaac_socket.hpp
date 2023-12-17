@@ -10,6 +10,7 @@
 namespace isaac_socket{
 
 	static HANDLE hProcess;
+	static HMODULE hOpenGL;
 	static isaac::IsaacImage* isaac;
 	static state::StateData* stateData;
 	static lua::Lua* lua;
@@ -23,9 +24,10 @@ namespace isaac_socket{
 			lua = new lua::Lua{ GetModuleHandleA("Lua5.3.3r.dll") };
 			stateData = (state::StateData*)MapViewOfFile(hMapFile, FILE_MAP_WRITE, 0, 0, 0);
 			isaac = (isaac::IsaacImage*)GetModuleHandleA(NULL);
+			hOpenGL = GetModuleHandleA("opengl32.dll");
 			function::Init(isaac);
 			callback::Init(stateData, isaac, hProcess, lua);
-			inject::Init(hProcess, isaac, callback::GetCallbacks());
+			inject::Init(hProcess, isaac, hOpenGL, callback::GetCallbacks());
 			function::SetGLFWCharacter();
 		}
 	}
