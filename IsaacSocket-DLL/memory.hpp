@@ -20,10 +20,6 @@ namespace memory
 		Double
 	};
 
-	static HANDLE hProcess;
-	static isaac::IsaacImage* isaac;
-	static lua::Lua* lua;
-
 	static int Write(lua_State* L) {
 
 		ARG(1, integer, uint32_t, address);
@@ -50,7 +46,7 @@ namespace memory
 
 		case Memory:
 			ARG(2, string, const char*, value);
-			lua->luaL_len(L, 2);
+			local.lua->luaL_len(L, 2);
 			ARG(-1, integer, size_t, size);
 			std::copy(value, value + size, (char*)address);
 			break;
@@ -83,14 +79,14 @@ namespace memory
 
 		case Memory:
 			ARG(2, integer, size_t, size);
-			lua->lua_pushlstring(L, (const char*)address, size);
+			local.lua->lua_pushlstring(L, (const char*)address, size);
 			break;
 		}
 
 		return 1;
 	}
 
-#define _(type) static int Read##type(lua_State* L) {lua->lua_pushinteger(L,(uint32_t)ValueType::type); return Read(L);}static int Write##type(lua_State* L) {lua->lua_pushinteger(L,(uint32_t)ValueType::type); return Write(L);}
+#define _(type) static int Read##type(lua_State* L) {local.lua->lua_pushinteger(L,(uint32_t)ValueType::type); return Read(L);}static int Write##type(lua_State* L) {local.lua->lua_pushinteger(L,(uint32_t)ValueType::type); return Write(L);}
 	_(Memory);
 	_(Int8);
 	_(UInt8);
@@ -107,7 +103,7 @@ namespace memory
 	static int CalcAddress(lua_State* L) {
 		ARG(1, integer, uint32_t, address);
 		size_t i = 2;
-		while (lua->lua_isinteger(L, i))
+		while (local.lua->lua_isinteger(L, i))
 		{
 			ARG(i, integer, uint32_t, offset);
 			address = *(uint32_t*)address + offset;
@@ -117,25 +113,21 @@ namespace memory
 	}
 
 	static int GetImageBase(lua_State* L) {
-		RET(integer, (uint32_t)isaac);
+		RET(integer, (uint32_t)local.isaac);
 	}
 
-	void Init(HANDLE hProcess, isaac::IsaacImage* isaac, lua::Lua* lua) {
+	void Init() {
 
-		lua_State* L = isaac->luaVM->L;
-		size_t top = lua->lua_gettop(L);
+		lua_State* L = local.isaac->luaVM->L;
+		size_t top = local.lua->lua_gettop(L);
 
-		memory::hProcess = hProcess;
-		memory::isaac = isaac;
-		memory::lua = lua;
+		local.lua->lua_getglobal(L, "_ISAAC_SOCKET");
+		local.lua->lua_pushstring(L, "IsaacSocket");
+		local.lua->lua_gettable(L, -2);
+		local.lua->lua_pushstring(L, "Memory");
+		local.lua->lua_newtable(L);
 
-		lua->lua_getglobal(L, "_ISAAC_SOCKET");
-		lua->lua_pushstring(L, "IsaacSocket");
-		lua->lua_gettable(L, -2);
-		lua->lua_pushstring(L, "Memory");
-		lua->lua_newtable(L);
-
-#define _(name) lua->lua_pushstring(L, #name);lua->lua_pushcfunction(L, name); lua->lua_settable(L, -3)
+#define _(name) local.lua->lua_pushstring(L, #name);local.lua->lua_pushcfunction(L, name); local.lua->lua_settable(L, -3)
 
 		_(ReadMemory);
 		_(ReadInt8);
@@ -166,7 +158,7 @@ namespace memory
 
 #undef _
 
-		lua->lua_settable(L, -3);
-		lua->lua_settop(L, top);
+		local.lua->lua_settable(L, -3);
+		local.lua->lua_settop(L, top);
 	}
 }

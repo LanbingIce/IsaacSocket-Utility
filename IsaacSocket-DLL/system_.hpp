@@ -5,7 +5,6 @@
 
 namespace system_
 {
-	static lua::Lua* lua;
 
 	//系统控制台输出
 	static int ConsoleOutput(lua_State* L) {
@@ -19,7 +18,7 @@ namespace system_
 
 	//获取剪贴板
 	static int GetClipboard(lua_State* L) {
-		lua->lua_pushnil(L);
+		local.lua->lua_pushnil(L);
 
 		if (!OpenClipboard(nullptr)) {
 			//无法打开剪贴板
@@ -47,7 +46,7 @@ namespace system_
 		GlobalUnlock(hClipboardData);
 		CloseClipboard();
 
-		lua->lua_pushstring(L, u8);
+		local.lua->lua_pushstring(L, u8);
 
 		delete[] u8;
 
@@ -92,17 +91,17 @@ namespace system_
 		return 0;
 	}
 
-	void Init(lua_State* L, lua::Lua* lua) {
-		size_t top = lua->lua_gettop(L);
-		system_::lua = lua;
+	void Init() {
+		lua_State* L = local.isaac->luaVM->L;
+		size_t top = local.lua->lua_gettop(L);
 
-		lua->lua_getglobal(L, "_ISAAC_SOCKET");
-		lua->lua_pushstring(L, "IsaacSocket");
-		lua->lua_gettable(L, -2);
-		lua->lua_pushstring(L, "System");
-		lua->lua_newtable(L);
+		local.lua->lua_getglobal(L, "_ISAAC_SOCKET");
+		local.lua->lua_pushstring(L, "IsaacSocket");
+		local.lua->lua_gettable(L, -2);
+		local.lua->lua_pushstring(L, "System");
+		local.lua->lua_newtable(L);
 
-#define _(name) lua->lua_pushstring(L, #name);lua->lua_pushcfunction(L, name); lua->lua_settable(L, -3)
+#define _(name) local.lua->lua_pushstring(L, #name);local.lua->lua_pushcfunction(L, name); local.lua->lua_settable(L, -3)
 
 		_(ConsoleOutput);
 		_(GetClipboard);
@@ -110,7 +109,7 @@ namespace system_
 
 #undef _
 
-		lua->lua_settable(L, -3);
-		lua->lua_settop(L, top);
+		local.lua->lua_settable(L, -3);
+		local.lua->lua_settop(L, top);
 	}
 };

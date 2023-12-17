@@ -7,28 +7,29 @@
 #include "inject.hpp"
 #include "callback.hpp"
 
-namespace isaac_socket{
-
-	static HANDLE hProcess;
-	static HMODULE hOpenGL;
-	static isaac::IsaacImage* isaac;
-	static state::StateData* stateData;
-	static lua::Lua* lua;
-
+namespace isaac_socket {
 	// 初始化，共享内存和注入
-	static void Init(){
-		HANDLE hMapFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(state::StateData), "IsaacSocketSharedMemory");
+	static void Init() {
+		HANDLE hMapFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(global), "IsaacSocketSharedMemory");
 		if (hMapFile)
 		{
-			hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, FALSE, GetCurrentProcessId());
-			lua = new lua::Lua{ GetModuleHandleA("Lua5.3.3r.dll") };
-			stateData = (state::StateData*)MapViewOfFile(hMapFile, FILE_MAP_WRITE, 0, 0, 0);
-			isaac = (isaac::IsaacImage*)GetModuleHandleA(NULL);
-			hOpenGL = GetModuleHandleA("opengl32.dll");
-			function::Init(isaac);
-			callback::Init(stateData, isaac, hProcess, lua);
-			inject::Init(hProcess, isaac, hOpenGL, callback::GetCallbacks());
-			function::SetGLFWCharacter();
+			global = (state::_GlobalState*)MapViewOfFile(hMapFile, FILE_MAP_WRITE, 0, 0, 0);
+
+			local.hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, FALSE, GetCurrentProcessId());
+			local.lua = new lua::Lua{ GetModuleHandleA("Lua5.3.3r.dll") };
+			local.isaac = (isaac::IsaacImage*)GetModuleHandleA(NULL);
+			local.hOpenGL = GetModuleHandleA("opengl32.dll");
+
+			callbacks = {
+					callback::OnRender,
+					callback::OnGameUpdate,
+					callback::OnSpecialUpdate,
+					callback::OnExecuteCommand,
+					callback::OnConsoleOutput,
+					callback::OnWindowMessage
+			};
+
+			inject::Init();
 		}
 	}
 }

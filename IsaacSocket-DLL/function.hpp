@@ -6,12 +6,6 @@
 
 namespace function {
 
-	isaac::IsaacImage* isaac;
-
-	static void Init(isaac::IsaacImage* isaac) {
-		function::isaac = isaac;
-	}
-
 	// 进行一次 “额外更新”，即人物更新之类的每秒额外30次更新
 	static void SpecialUpdate()
 	{
@@ -21,7 +15,7 @@ namespace function {
 	// 进行一次 “游戏更新”
 	static void GameUpdate()
 	{
-		inject::GameUpdate(isaac->game);
+		inject::GameUpdate(local.isaac->game);
 	}
 
 	// 进行一次“渲染”
@@ -33,18 +27,19 @@ namespace function {
 	// 进行一次 “控制台输出”
 	static void ConsoleOutput(const string& text, uint32_t color = 0xFFD3D3D3)
 	{
-		inject::ConsoleOutput(isaac->game->console, NULL, text, color, 0x96);
+		inject::ConsoleOutput(local.isaac->game->console, NULL, text, color, 0x96);
 	}
 
 	// 进行一次 “执行控制台指令”
 	static void ExecuteCommand(const string& commandText)
 	{
-		inject::ExecuteCommand(isaac->game->console, NULL, commandText, 0, 0);
+		inject::ExecuteCommand(local.isaac->game->console, NULL, commandText, 0, 0);
 	}
 
 	// 重新载入lua环境
 	static void ReloadLuaWithoutDeleteRoom()
 	{
+		isaac::IsaacImage* isaac = local.isaac;
 		// 输出日志
 		inject::LogPrintf(0, "Lua is resetting!\n");
 		// 卸载lua环境
@@ -72,6 +67,6 @@ namespace function {
 
 	// 设置GLFW的接收字符回调，使得直接设置控制台state的方式打开控制台也可以输入字符
 	static void SetGLFWCharacter() {
-		isaac->window->character = (char*)isaac + 0x25ECE0;
+		local.isaac->window->character = (char*)local.isaac + 0x25ECE0;
 	}
 }

@@ -1,24 +1,11 @@
 ﻿#pragma once
 #include "pch.h"
 #include "utils.hpp"
+#include "state.hpp"
 
 namespace inject {
-	struct Callbacks
-	{
-		LPCVOID OnRender;
-		LPCVOID OnGameUpdate;
-		LPCVOID OnSpecialUpdate;
-		LPCVOID OnExecuteCommand;
-		LPCVOID OnConsoleOutput;
-		uint32_t(__fastcall* OnMTRandom)(uint32_t);
-		LPCVOID OnWindowMessage;
-	};
 
 	static const char* logPreFix = "[LOG(%d)] ";
-	static HANDLE hProcess;
-	static isaac::IsaacImage* isaac;
-	static HANDLE hOpenGL;
-	static Callbacks callbacks;
 	static int tmpRetIP;
 	static int tmpLogLevel;
 
@@ -40,7 +27,7 @@ namespace inject {
 			flag : push ebp
 			mov ebp, esp
 			and esp, -0x08
-			mov eax, isaac
+			mov eax, local.isaac
 			add eax, 0x55E336
 			jmp eax
 		}
@@ -54,7 +41,7 @@ namespace inject {
 			push ebp
 			mov ebp, esp
 			and esp, -0x08
-			mov eax, isaac
+			mov eax, local.isaac
 			add eax, 0x4B0606
 			jmp eax
 		}
@@ -70,7 +57,7 @@ namespace inject {
 			push ebp
 			mov ebp, esp
 			and esp, -0x10
-			mov eax, isaac
+			mov eax, local.isaac
 			add eax, 0x2CDCF6
 			jmp eax
 		}
@@ -84,7 +71,7 @@ namespace inject {
 			push ebp
 			mov ebp, esp
 			sub esp, 0x0C
-			mov eax, isaac
+			mov eax, local.isaac
 			add eax, 0x2D0406
 			jmp eax
 		}
@@ -104,7 +91,7 @@ namespace inject {
 			push ebp
 			mov ebp, esp
 			push - 0x01
-			mov eax, isaac
+			mov eax, local.isaac
 			add eax, 0x2655C5
 			jmp eax
 		}
@@ -124,21 +111,23 @@ namespace inject {
 			push ebp
 			mov ebp, esp
 			push - 0x01
-			mov eax, isaac
+			mov eax, local.isaac
 			add eax, 0x26AEC5
 			jmp eax
 		}
 	}
 
 	// MT19937随机数生成,这个函数的注入点在尾部，因此不会影响正常的随机序列，且可以获取并覆盖原函数的返回值
-	// 这个函数对原代码做了优化,节省了部分代码，回调函数的调用约定为fastcall
 	__declspec(naked) void MTRandom()
 	{
+
 		__asm {
 			shr eax, 0x12
-			xor ecx, eax
-			call callbacks.OnMTRandom
-			ret
+			xor eax, ecx
+			cmp local.MTRandomLockedValue, 0
+			je flag
+			mov eax, local.MTRandomLockedValue
+			flag : ret
 		}
 	}
 
@@ -152,7 +141,7 @@ namespace inject {
 			//mov edi, edi
 			push ebp
 			mov ebp, esp
-			mov eax, hOpenGL
+			mov eax, local.hOpenGL
 			add eax, 0x3BBC5
 			jmp eax
 			flag : ret 0x10
@@ -165,36 +154,32 @@ namespace inject {
 		char* injectAddress = (char*)ModuleBase + offset;
 		//操作码长度为1，操作数长度为4，两者加起来是5
 		uint8_t opcode = 0xE9;//jmp
-		WriteProcessMemory(hProcess, injectAddress, &opcode, 1, nullptr);
+		WriteProcessMemory(local.hProcess, injectAddress, &opcode, 1, nullptr);
 		int32_t operand = (char*)fuctionAddress - injectAddress - 5;
-		WriteProcessMemory(hProcess, injectAddress + 1, &operand, 4, nullptr);
+		WriteProcessMemory(local.hProcess, injectAddress + 1, &operand, 4, nullptr);
 		for (size_t i = 0; i < paddingSize; i++)
 		{
 			opcode = 0x90;//nop
-			WriteProcessMemory(hProcess, injectAddress + 5 + i, &opcode, 1, nullptr);
+			WriteProcessMemory(local.hProcess, injectAddress + 5 + i, &opcode, 1, nullptr);
 		}
 	}
 
-	void Init(HANDLE hProcess, isaac::IsaacImage* isaac, HMODULE hOpenGL, Callbacks callbacks) {
-		inject::hProcess = hProcess;
-		inject::isaac = isaac;
-		inject::hOpenGL = hOpenGL;
-		inject::callbacks = callbacks;
+	void Init() {
 		// 渲染
-		InjectCode(isaac, 0x4B0600, Render, 1);
+		InjectCode(local.isaac, 0x4B0600, Render, 1);
 		// 执行控制台指令
-		InjectCode(isaac, 0x2655C0, ExecuteCommand, 0);
+		InjectCode(local.isaac, 0x2655C0, ExecuteCommand, 0);
 		// 控制台输出
-		InjectCode(isaac, 0x26AEC0, ConsoleOutput, 0);
+		InjectCode(local.isaac, 0x26AEC0, ConsoleOutput, 0);
 		// 游戏更新
-		InjectCode(isaac, 0x2CDCF0, GameUpdate, 1);
+		InjectCode(local.isaac, 0x2CDCF0, GameUpdate, 1);
 		// 特殊更新
-		InjectCode(isaac, 0x2D0400, SpecialUpdate, 1);
+		InjectCode(local.isaac, 0x2D0400, SpecialUpdate, 1);
 		// 日志输出
-		InjectCode(isaac, 0x55E330, LogPrintf, 1);
+		InjectCode(local.isaac, 0x55E330, LogPrintf, 1);
 		// MT19937随机数生成
-		InjectCode(isaac, 0x2C3EA8, MTRandom, 1);
+		InjectCode(local.isaac, 0x2C3EA8, MTRandom, 1);
 		// 窗口消息
-		InjectCode(hOpenGL, 0x3BBC0, Wndproc, 0);
+		InjectCode(local.hOpenGL, 0x3BBC0, Wndproc, 0);
 	}
 }
