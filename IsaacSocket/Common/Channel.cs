@@ -6,8 +6,6 @@
         HEARTBEAT = 0,
         // WebSocket
         WEB_SOCKET_CLIENT = 1,
-        //剪贴板
-        CLIPBOARD = 2,
         //HTTP
         HTTP_CLIENT = 3
     }
