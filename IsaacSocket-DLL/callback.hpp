@@ -13,6 +13,10 @@ namespace callback {
 	// 渲染回调，时机在渲染函数的起始位置，只要游戏进程存在就一直触发
 	static void OnRender()
 	{
+		if (global->connectionState == state::DISCONNECTED)
+		{
+			return;
+		}
 		if (global->connectionState == state::CONNECTING)
 		{
 			if (!local.initialized)
@@ -36,18 +40,29 @@ namespace callback {
 	// 额外更新回调，时机在额外更新函数的起始位置
 	static void OnSpecialUpdate()
 	{
-
+		if (global->connectionState != state::CONNECTED)
+		{
+			return;
+		}
 	}
 
 	// 游戏更新回调，时机在游戏更新函数的起始位置
 	static void OnGameUpdate()
 	{
-
+		if (global->connectionState != state::CONNECTED)
+		{
+			return;
+		}
 	}
 
 	// 执行控制台指令回调，时机在执行控制台指令函数的起始位置
 	static void OnExecuteCommand(const string& text, int unknow, LPCVOID unknow_point_guess)
 	{
+		if (global->connectionState != state::CONNECTED)
+		{
+			return;
+		}
+
 		if (text == "test")
 		{
 			//function::ExecuteCommand("g k1");
@@ -80,7 +95,10 @@ namespace callback {
 	// 控制台输出回调，时机在控制台输出函数的起始位置
 	static void OnConsoleOutput(const string& text, uint32_t color, int32_t type)
 	{
-
+		if (global->connectionState != state::CONNECTED)
+		{
+			return;
+		}
 	}
 
 
@@ -119,6 +137,10 @@ namespace callback {
 	// 窗口消息回调，返回0则拦截此次消息
 	static LRESULT OnWindowMessage(LPCVOID _, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
+		if (global->connectionState != state::CONNECTED)
+		{
+			return 1;
+		}
 		int result = 1;
 		switch (uMsg)
 		{
