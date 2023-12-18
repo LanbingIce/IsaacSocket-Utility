@@ -45,7 +45,7 @@
     <ClInclude Include="callback.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="isaac_socket.hpp">
+    <ClInclude Include="main.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="memory.hpp">
@@ -58,6 +58,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="opengl.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="_isaac_socket.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

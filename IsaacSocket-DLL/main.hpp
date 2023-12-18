@@ -7,7 +7,7 @@
 #include "inject.hpp"
 #include "callback.hpp"
 
-namespace isaac_socket {
+namespace main {
 	// 初始化，共享内存和注入
 	static void Init() {
 		HANDLE hMapFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(global), "IsaacSocketSharedMemory");

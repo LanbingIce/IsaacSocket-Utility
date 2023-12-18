@@ -2,15 +2,9 @@
 
 #include "pch.h"
 #include "state.hpp"
-#include "isaac.hpp"
-#include "lua.hpp"
 #include "utils.hpp"
-#include "isaac_api.hpp"
-#include "memory.hpp"
-#include "win_api.hpp"
-#include "system_.hpp"
 #include "function.hpp"
-#include "opengl.hpp"
+#include "_isaac_socket.hpp"
 
 using utils::cw;
 
@@ -28,11 +22,7 @@ namespace callback {
 				local.initialized = true;
 			}
 			global->connectionState = state::CONNECTED;
-			isaac_api::Init();
-			memory::Init();
-			win_api::Init();
-			system_::Init();
-			opengl::Init();
+			_isaac_socket::Init();
 		}
 
 		if (local.needReload)
