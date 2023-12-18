@@ -147,6 +147,8 @@ namespace isaac {
 	{
 		union
 		{
+			FIELD(0x14, uint32_t, width);
+			FIELD(0x18, uint32_t, height);
 			//GLFWcharmodsfun
 			FIELD(0x214, LPCVOID, character);
 		};

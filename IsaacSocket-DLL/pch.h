@@ -14,5 +14,6 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <glad/glad.h>
 
 #endif //PCH_H

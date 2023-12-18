@@ -10,6 +10,7 @@
 #include "win_api.hpp"
 #include "system_.hpp"
 #include "function.hpp"
+#include "opengl.hpp"
 
 using utils::cw;
 
@@ -22,6 +23,7 @@ namespace callback {
 		{
 			if (!local.initialized)
 			{
+				gladLoadGL();
 				function::SetGLFWCharacter();
 				local.initialized = true;
 			}
@@ -30,6 +32,7 @@ namespace callback {
 			memory::Init();
 			win_api::Init();
 			system_::Init();
+			opengl::Init();
 		}
 
 		if (local.needReload)
