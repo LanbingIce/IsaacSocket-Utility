@@ -10,6 +10,8 @@ using utils::cw;
 
 namespace callback {
 
+	static char buffer[3];
+
 	// 渲染回调，时机在渲染函数的起始位置，只要游戏进程存在就一直触发
 	static void OnRender()
 	{
@@ -147,17 +149,32 @@ namespace callback {
 		case WM_CHAR:
 			if (!std::iscntrl(wParam))
 			{
-				// 使用构造函数将单个Unicode码转换为字符串
-				std::wstring unicode_string = std::wstring(1, wParam);
-				const wchar_t* u16 = unicode_string.c_str();
-				size_t size = utils::U16ToU8(u16);
-				char* u8 = new char[size];
-				utils::U16ToU8(u16, u8, size);
-				if (OnCharInput(u8))
+				if (buffer[0] < 0)
 				{
-					result = 0;
+					buffer[1] = wParam;
+					size_t len = utils::AnsiToU16(buffer);
+					wchar_t* u16 = new wchar_t[len];
+					utils::AnsiToU16(buffer, u16, len);
+					len = utils::U16ToU8(u16);
+					char* u8 = new char[len];
+					utils::U16ToU8(u16, u8, len);
+					delete[] u16;
+					if (OnCharInput(u8))
+					{
+						result = 0;
+					}
+					delete[]u8;
+					buffer[0] = 0;
+					buffer[1] = 0;
 				}
-				delete[]u8;
+				else
+				{
+					buffer[0] = wParam;
+					if (buffer[0] >= 0 && OnCharInput(buffer))
+					{
+						result = 0;
+					}
+				}
 			}
 		}
 		return result;

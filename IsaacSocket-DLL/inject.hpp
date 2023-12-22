@@ -138,11 +138,11 @@ namespace inject {
 			call callbacks.OnWindowMessage
 			test eax, eax
 			je flag
-			//mov edi, edi
 			push ebp
 			mov ebp, esp
-			mov eax, local.hOpenGL
-			add eax, 0x3BBC5
+			and esp, -0x40
+			mov eax, local.isaac
+			add eax, 0X5971D6
 			jmp eax
 			flag : ret 0x10
 		}
@@ -180,6 +180,6 @@ namespace inject {
 		// MT19937随机数生成
 		InjectCode(local.isaac, 0x2C3EA8, MTRandom, 1);
 		// 窗口消息
-		InjectCode(local.hOpenGL, 0x3BBC0, Wndproc, 0);
+		InjectCode(local.isaac, 0x5971D0, Wndproc, 1);
 	}
 }
