@@ -10,6 +10,11 @@ namespace utils {
 	}
 
 	// 只能传入一个或三个参数，若传入一个参数，则返回转换后的长度(包括\0)
+	static size_t AnsiToU16(const char* ansi, wchar_t* u16 = nullptr, size_t len = 0) {
+		return MultiByteToWideChar(CP_ACP, 0, ansi, -1, u16, len);
+	}
+
+	// 只能传入一个或三个参数，若传入一个参数，则返回转换后的长度(包括\0)
 	static size_t U8ToU16(const char* u8, wchar_t* u16 = nullptr, size_t len = 0) {
 		return MultiByteToWideChar(CP_UTF8, 0, u8, -1, u16, len);
 	}
