@@ -333,6 +333,13 @@ namespace IsaacSocket
                                 sendAddress = MemoryUtil.SearchAddresses(isaacProcessHandle, SEND_ADDRESS_FEATURE_VALUE);
                                 receiveAddress = MemoryUtil.SearchAddresses(isaacProcessHandle, RECEIVE_ADDRESS_FEATURE_VALUE);
 
+                                if (sendAddress == -1 || receiveAddress == -1)
+                                {
+                                    sendAddress = 0;
+                                    receiveAddress = 0;
+                                    callback.Invoke(CallbackType.MESSAGE, "请在游戏中关闭多余的 IsaacSocket ");
+                                }
+
                                 if (sendAddress != 0 && receiveAddress != 0)
                                 {
                                     try

@@ -119,7 +119,7 @@ namespace IsaacSocket.Utils
                         }
                         else
                         {
-                            return 0;
+                            return -1;
                         }
                         foundOffset += 16;
                     }
