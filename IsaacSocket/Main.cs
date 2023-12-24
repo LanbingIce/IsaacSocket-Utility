@@ -344,6 +344,15 @@ namespace IsaacSocket
                                 {
                                     try
                                     {
+                                        using (MemoryMappedFile.OpenExisting("IsaacSocketSharedMemory")) { }
+                                    }
+                                    catch (FileNotFoundException)
+                                    {
+                                        callback.Invoke(CallbackType.MESSAGE, $"注入dll{(InjectCode(isaacProcessHandle) ? "成功" : "失败")} ");
+                                    }
+
+                                    try
+                                    {
                                         using MemoryMappedFile mmf = MemoryMappedFile.OpenExisting("IsaacSocketSharedMemory");
                                         using MemoryMappedViewAccessor accessor = mmf.CreateViewAccessor();
                                         accessor.Write(0, true);
@@ -354,7 +363,7 @@ namespace IsaacSocket
                                     }
                                     catch (FileNotFoundException)
                                     {
-                                        callback.Invoke(CallbackType.MESSAGE, $"注入dll{(InjectCode(isaacProcessHandle) ? "成功" : "失败")} ");
+                                        callback.Invoke(CallbackType.MESSAGE, "打开共享内存失败 ");
                                     }
                                 }
                                 else
