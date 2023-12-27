@@ -37,7 +37,7 @@ namespace inject {
 	__declspec(naked) void Render()
 	{
 		__asm {
-			call callbacks.OnRender
+			call local.callbacks.OnRender
 			push ebp
 			mov ebp, esp
 			and esp, -0x08
@@ -52,7 +52,7 @@ namespace inject {
 	{
 		__asm {
 			push ecx
-			call callbacks.OnGameUpdate
+			call local.callbacks.OnGameUpdate
 			pop ecx
 			push ebp
 			mov ebp, esp
@@ -67,7 +67,7 @@ namespace inject {
 	__declspec(naked) void SpecialUpdate()
 	{
 		__asm {
-			call callbacks.OnSpecialUpdate
+			call local.callbacks.OnSpecialUpdate
 			push ebp
 			mov ebp, esp
 			sub esp, 0x0C
@@ -85,7 +85,7 @@ namespace inject {
 			push[esp + 0x10]
 			push[esp + 0x10]
 			push[esp + 0x10]
-			call callbacks.OnExecuteCommand
+			call local.callbacks.OnExecuteCommand
 			add esp, 0x0C
 			pop ecx
 			push ebp
@@ -105,7 +105,7 @@ namespace inject {
 			push[esp + 0x10]
 			push[esp + 0x10]
 			push[esp + 0x10]
-			call callbacks.OnConsoleOutput
+			call local.callbacks.OnConsoleOutput
 			add esp, 0x0C
 			pop ecx
 			push ebp
@@ -135,7 +135,7 @@ namespace inject {
 	__declspec(naked) LRESULT __stdcall Wndproc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		__asm {
-			call callbacks.OnWindowMessage
+			call local.callbacks.OnWindowMessage
 			test eax, eax
 			je flag
 			push ebp

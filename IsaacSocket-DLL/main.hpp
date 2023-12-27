@@ -20,7 +20,7 @@ namespace main {
 			local.isaac = (isaac::IsaacImage*)GetModuleHandleA(NULL);
 			local.hOpenGL = GetModuleHandleA("opengl32.dll");
 
-			callbacks = {
+			local.callbacks = {
 					callback::OnRender,
 					callback::OnGameUpdate,
 					callback::OnSpecialUpdate,
