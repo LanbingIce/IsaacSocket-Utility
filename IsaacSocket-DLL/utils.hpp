@@ -35,7 +35,8 @@ namespace utils {
 		wchar_t* u16 = new wchar_t[len];
 		U8ToU16(u8, u16, len);
 		_cwprintf(u16);
-		delete[] u8, u16;
+		delete[] u8;
+		delete[] u16;
 	}
 
 	// 折叠表达式打印可变参数列表
