@@ -108,31 +108,31 @@ namespace callback {
 	static bool OnCharInput(const char* text)
 	{
 		lua_State* L = local.isaac->luaVM->L;
-		size_t top = local.lua->lua_gettop(L);
+		size_t top = local.lua.lua_gettop(L);
 
-		local.lua->lua_getglobal(L, "Isaac");
-		local.lua->lua_pushstring(L, "GetCallbacks");
-		local.lua->lua_gettable(L, -2);
-		local.lua->lua_pushstring(L, "ISAAC_SOCKET_ON_CHAR_INPUT");
-		local.lua->lua_pcall(L, 1, 1, 0);
+		local.lua.lua_getglobal(L, "Isaac");
+		local.lua.lua_pushstring(L, "GetCallbacks");
+		local.lua.lua_gettable(L, -2);
+		local.lua.lua_pushstring(L, "ISAAC_SOCKET_ON_CHAR_INPUT");
+		local.lua.lua_pcall(L, 1, 1, 0);
 		bool result = false;
-		local.lua->lua_pushnil(L);  // 将nil推入栈顶，准备开始遍历
-		while (local.lua->lua_next(L, -2) != 0) {
-			local.lua->lua_pushstring(L, "Function");
-			local.lua->lua_gettable(L, -2);
-			local.lua->lua_pushstring(L, "Mod");
-			local.lua->lua_gettable(L, -3);
-			local.lua->lua_pushstring(L, text);
-			local.lua->lua_pcall(L, 2, 1, 0);
+		local.lua.lua_pushnil(L);  // 将nil推入栈顶，准备开始遍历
+		while (local.lua.lua_next(L, -2) != 0) {
+			local.lua.lua_pushstring(L, "Function");
+			local.lua.lua_gettable(L, -2);
+			local.lua.lua_pushstring(L, "Mod");
+			local.lua.lua_gettable(L, -3);
+			local.lua.lua_pushstring(L, text);
+			local.lua.lua_pcall(L, 2, 1, 0);
 			//如果返回值不是nil，则返回true，拦截此次消息
-			if (!local.lua->lua_isnil(L, -1))
+			if (!local.lua.lua_isnil(L, -1))
 			{
 				result = true;
 				break;
 			}
-			local.lua->lua_pop(L, 2);
+			local.lua.lua_pop(L, 2);
 		}
-		local.lua->lua_settop(L, top);
+		local.lua.lua_settop(L, top);
 		return result;
 	}
 
