@@ -41,25 +41,74 @@ static	void opengl_check_error(const char* filename, int lineno, const char* exp
     }
 }
 
-static int PutPixel(lua_State* L) {
-    ARG_DEF(1, integer, uint32_t, x, 0);
-    ARG_DEF(2, integer, uint32_t, y, 0);
-    ARG_DEF(3, integer, uint32_t, rgba, 0);
+static gl_clean_state() {
+    clear_gl_error();
+    glUseProgram(0);
+}
 
+static gl_put_vertex(uint32_t x, uint32_t y) {
+    uint32_t width = local.isaac->window->width;
+    uint32_t height = local.isaac->window->height;
+    glVertex3f((x + 0.5f) / width * 2.0f - 1.0f, (y + 0.5f) / height * 2.0f - 1.0f, 1.0);
+}
+
+static gl_set_color(uint32_t rgba) {
     // 直接提取RGBA分量
     float r = ((rgba >> 24) & 0xFF) / 255.0f;
     float g = ((rgba >> 16) & 0xFF) / 255.0f;
     float b = ((rgba >> 8) & 0xFF) / 255.0f;
     float a = (rgba & 0xFF) / 255.0f;
-    clear_gl_error();
-    glUseProgram(0);
-    glBegin(GL_POINTS);
     glColor4f(r, g, b, a);
-    uint32_t width = local.isaac->window->width;
-    uint32_t height = local.isaac->window->height;
+}
 
-    glVertex3f((x + 0.5f) / width * 2.0f - 1.0f, (y + 0.5f) / height * 2.0f - 1.0f, 1.0);
+static int PutPixel(lua_State* L) {
+    ARG_DEF(1, integer, uint32_t, x, 0);
+    ARG_DEF(2, integer, uint32_t, y, 0);
+    ARG_DEF(3, integer, uint32_t, rgba, 0xFFFFFFFF);
 
+    gl_clean_state();
+    gl_set_color(rgba);
+    glBegin(GL_POINTS);
+    gl_put_vertex(x, y);
+    CHECK_GL(glEnd());
+
+    return 0;
+}
+
+static int DrawTriangle(lua_State* L) {
+    ARG_DEF(1, integer, uint32_t, x1, 0);
+    ARG_DEF(2, integer, uint32_t, y1, 0);
+    ARG_DEF(2, integer, uint32_t, x2, 0);
+    ARG_DEF(2, integer, uint32_t, y2, 0);
+    ARG_DEF(2, integer, uint32_t, x3, 0);
+    ARG_DEF(2, integer, uint32_t, y3, 0);
+    ARG_DEF(3, integer, uint32_t, rgba, 0xFFFFFFFF);
+
+    gl_clean_state();
+    gl_set_color(rgba);
+    glBegin(GL_TRIANGLES);
+    gl_put_vertex(x1, y1);
+    gl_put_vertex(x2, y2);
+    gl_put_vertex(x3, y3);
+    CHECK_GL(glEnd());
+
+    return 0;
+}
+
+static int DrawRect(lua_State* L) {
+    ARG_DEF(1, integer, uint32_t, x1, 0);
+    ARG_DEF(2, integer, uint32_t, y1, 0);
+    ARG_DEF(2, integer, uint32_t, x2, 0);
+    ARG_DEF(2, integer, uint32_t, y2, 0);
+    ARG_DEF(3, integer, uint32_t, rgba, 0xFFFFFFFF);
+
+    gl_clean_state();
+    gl_set_color(rgba);
+    glBegin(GL_TRIANGLE_STRIP);
+    gl_put_vertex(x1, y1);
+    gl_put_vertex(x1, y2);
+    gl_put_vertex(x2, y2);
+    gl_put_vertex(x2, y1);
     CHECK_GL(glEnd());
 
     return 0;
