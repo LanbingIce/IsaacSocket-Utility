@@ -60,7 +60,7 @@ namespace isaac {
 		{
 			//0:关闭 2:开启 4:正在关闭 小于0:强制暂停
 			FIELD(0x20, int32_t, state);
-			FIELD(0x30, float_t, offsetY);
+			FIELD(0x30, float, offsetY);
 			FIELD(0x3C, string, consoleText);
 		};
 		~Console() {}
@@ -74,7 +74,7 @@ namespace isaac {
 		int32_t batteryCharge;
 		int32_t subCharge;
 		int32_t timedRechargeCooldown;
-		float_t partialCharge;
+		float partialCharge;
 		int32_t varData;
 	};
 
