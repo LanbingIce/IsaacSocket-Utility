@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "pch.h"
 #include "isaac.hpp"
+#include "state.hpp"
 
 using isaac::lua_State;
 

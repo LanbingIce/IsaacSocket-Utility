@@ -1,8 +1,9 @@
 ﻿#pragma once
 
 #include "pch.h"
-#include "isaac.hpp"
-#include "lua.hpp"
+
+namespace lua { struct Lua; }
+namespace isaac { struct IsaacImage; }
 
 namespace state {
 

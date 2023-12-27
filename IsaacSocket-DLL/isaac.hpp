@@ -5,7 +5,7 @@
 
 namespace isaac {
 
-	typedef struct lua_State lua_State;
+	struct lua_State;
 
 	//Lua虚拟机类
 	struct LuaVM

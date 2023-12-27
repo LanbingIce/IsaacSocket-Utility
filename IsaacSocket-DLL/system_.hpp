@@ -91,7 +91,7 @@ namespace system_
 		return 0;
 	}
 
-	void Init() {
+	static void Init() {
 		lua_State* L = local.isaac->luaVM->L;
 		size_t top = local.lua->lua_gettop(L);
 

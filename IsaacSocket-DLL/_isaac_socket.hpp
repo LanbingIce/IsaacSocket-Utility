@@ -19,7 +19,7 @@ namespace _isaac_socket
 		return 0;
 	}
 
-	void Init() {
+	static void Init() {
 
 		isaac_api::Init();
 		memory::Init();
