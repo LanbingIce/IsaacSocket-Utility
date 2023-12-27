@@ -16,4 +16,7 @@
 #include <vector>
 #include <glad/glad.h>
 
+using std::string;
+using std::vector;
+
 #endif //PCH_H

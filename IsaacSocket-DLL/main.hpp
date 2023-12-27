@@ -26,7 +26,7 @@ namespace main {
 					callback::OnSpecialUpdate,
 					callback::OnExecuteCommand,
 					callback::OnConsoleOutput,
-					callback::OnWindowMessage
+					callback::OnWindowMessage,
 			};
 
 			inject::Init();

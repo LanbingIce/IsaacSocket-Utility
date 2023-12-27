@@ -2,6 +2,8 @@
 
 #include "pch.h"
 #include "isaac.hpp"
+#include "state.hpp"
+#include "utils.hpp"
 #include "inject.hpp"
 
 namespace function {
@@ -43,25 +45,25 @@ namespace function {
 		// 输出日志
 		inject::LogPrintf(0, "Lua is resetting!\n");
 		// 卸载lua环境
-		FUNC(0x40AE00, void, __fastcall, isaac::LuaVM*);
+		FUNC(0x40AE00, void, FASTCALL, isaac::LuaVM*);
 		f_0x40AE00(isaac->luaVM);
 		// 加载lua环境
-		FUNC(0x3FCB00, void, __fastcall, isaac::LuaVM*, LPCVOID, bool);
+		FUNC(0x3FCB00, void, FASTCALL, isaac::LuaVM*, LPCVOID, bool);
 		f_0x3FCB00(isaac->luaVM, NULL, isaac->luaVM->luaDebug);
 		// 清除mod列表
-		FUNC(0x4702F0, void, __fastcall, isaac::ModManager&);
+		FUNC(0x4702F0, void, FASTCALL, isaac::ModManager&);
 		f_0x4702F0(isaac->fileManager->modManager);
 		// 创建mod列表
-		FUNC(0x470B40, void, __fastcall, isaac::ModManager&);
+		FUNC(0x470B40, void, FASTCALL, isaac::ModManager&);
 		f_0x470B40(isaac->fileManager->modManager);
 		// 重新加载着色器
-		FUNC(0x46F2B0, void, __fastcall, isaac::ModManager&);
+		FUNC(0x46F2B0, void, FASTCALL, isaac::ModManager&);
 		f_0x46F2B0(isaac->fileManager->modManager);
 		// 重新加载精灵和字体
-		FUNC(0x4AF200, void, __fastcall);
+		FUNC(0x4AF200, void, FASTCALL);
 		f_0x4AF200();
 		// 重新加载xml
-		FUNC(0x46DAE0, void, __fastcall, isaac::ModManager&);
+		FUNC(0x46DAE0, void, FASTCALL, isaac::ModManager&);
 		f_0x46DAE0(isaac->fileManager->modManager);
 	}
 

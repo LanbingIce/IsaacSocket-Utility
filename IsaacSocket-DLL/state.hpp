@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 #include "pch.h"
+#include "isaac.hpp"
+#include "lua.hpp"
 
 namespace state {
 

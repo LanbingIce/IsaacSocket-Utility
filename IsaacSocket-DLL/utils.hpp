@@ -53,3 +53,4 @@ namespace utils {
 }
 
 #define FUNC(offset,ret,convention,...) auto f_##offset=(ret(convention*)(__VA_ARGS__))((char*)local.isaac+offset)
+#define FIELD(address,type,name) struct{char pad_##address[address];type name;}
