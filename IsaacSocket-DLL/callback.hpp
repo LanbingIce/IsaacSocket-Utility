@@ -153,17 +153,15 @@ namespace callback {
 				{
 					buffer[1] = wParam;
 					size_t len = utils::AnsiToU16(buffer);
-					wchar_t* u16 = new wchar_t[len];
-					utils::AnsiToU16(buffer, u16, len);
-					len = utils::U16ToU8(u16);
-					char* u8 = new char[len];
-					utils::U16ToU8(u16, u8, len);
-					delete[] u16;
-					if (OnCharInput(u8))
+					vector<wchar_t> u16(len);
+					utils::AnsiToU16(buffer, u16.data(), len);
+					len = utils::U16ToU8(u16.data());
+					vector<char> u8(len);
+					utils::U16ToU8(u16.data(), u8.data(), len);
+					if (OnCharInput(u8.data()))
 					{
 						result = 0;
 					}
-					delete[]u8;
 					buffer[0] = 0;
 					buffer[1] = 0;
 				}

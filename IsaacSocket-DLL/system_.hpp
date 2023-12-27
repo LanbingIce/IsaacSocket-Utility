@@ -40,15 +40,13 @@ namespace system_
 		}
 
 		size_t len = utils::U16ToU8(u16);
-		char* u8 = new char[len];
-		utils::U16ToU8(u16, u8, len);
+		vector<char> u8(len);
+		utils::U16ToU8(u16, u8.data(), len);
 
 		GlobalUnlock(hClipboardData);
 		CloseClipboard();
 
-		local.lua->lua_pushstring(L, u8);
-
-		delete[] u8;
+		local.lua->lua_pushstring(L, u8.data());
 
 		return 1;
 	}
