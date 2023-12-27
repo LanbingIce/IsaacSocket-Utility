@@ -13,10 +13,10 @@ public partial class Form1 : Form
     private readonly ConcurrentQueue<string> logQueue1, logQueue2, logQueue3, logQueue4;
     private int size;
     private readonly Main main;
-    public Form1(bool silentStart, bool noUpdate)
+    public Form1(string[] args)
     {
-        silent = silentStart;
-        this.noUpdate = noUpdate;
+        silent = args.Contains("-silent");
+        noUpdate = args.Contains("-noupdate");
         InitializeComponent();
         Version? version = Assembly.GetEntryAssembly()?.GetName().Version;
         string versionString = $"{version?.Major}.{version?.Minor}";
