@@ -23,12 +23,12 @@ namespace state {
 	{
 		struct
 		{
-			void (*OnRender)();
-			void (*OnGameUpdate)();
-			void (*OnSpecialUpdate)();
-			void (*OnExecuteCommand)(const string&, int, LPCVOID);
-			void (*OnConsoleOutput)(const string&, uint32_t, int32_t);
-			LRESULT(*OnWindowMessage)(LPCVOID, HWND, UINT, WPARAM, LPARAM);
+			LPCVOID Render;
+			LPCVOID GameUpdate;
+			LPCVOID SpecialUpdate;
+			LPCVOID ExecuteCommand;
+			LPCVOID ConsoleOutput;
+			LPCVOID OnWindowMessage;
 		} callbacks;
 
 		bool initialized = false;
