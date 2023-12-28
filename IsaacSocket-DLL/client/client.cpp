@@ -103,9 +103,9 @@ int main(int argc, char **argv) {
 
     std::cout << std::format("Waiting for 5 seconds before injection") << std::endl;
     Sleep(5000);
-    dllInjection(hProcess, L"libwinpthread-1.dll");
-    dllInjection(hProcess, L"libgcc_s_dw2-1.dll");
-    dllInjection(hProcess, L"libstdc++-6.dll");
+    /* dllInjection(hProcess, L"libwinpthread-1.dll"); */
+    /* dllInjection(hProcess, L"libgcc_s_dw2-1.dll"); */
+    /* dllInjection(hProcess, L"libstdc++-6.dll"); */
     dllInjection(hProcess, L"IsaacSocket.dll");
 
     std::cout << std::format("Waiting for game to exit") << std::endl;

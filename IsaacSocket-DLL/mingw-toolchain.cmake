@@ -18,6 +18,8 @@ set(CMAKE_RC_COMPILER ${TOOLCHAIN_PREFIX}-windres)
 # target environment on the build host system, the 13.1.0 may vary from version to version
 set(CMAKE_FIND_ROOT_PATH /usr/${TOOLCHAIN_PREFIX} /usr/lib/gcc/${TOOLCHAIN_PREFIX}/13.1.0)
 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -static")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
 
 # modify default behavior of FIND_XXX() commands to
 # search for headers/libs in the target environment and
