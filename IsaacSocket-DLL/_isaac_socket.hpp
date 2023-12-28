@@ -20,6 +20,7 @@ namespace _isaac_socket
 	}
 
 	static void Init() {
+        MessageBoxW(NULL, L"IsaacSocket 正在初始化", L"喜报", MB_OK);
 
 		isaac_api::Init();
 		memory::Init();

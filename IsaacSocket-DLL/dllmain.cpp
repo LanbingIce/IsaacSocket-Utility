@@ -10,7 +10,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 	{
 	case DLL_PROCESS_ATTACH:
         MessageBoxW(NULL, L"IsaacSocket 注入成功", L"喜报", MB_OK);
-		main::Init();
+		main::Init(false);
 		break;
 	case DLL_THREAD_ATTACH:
 	case DLL_THREAD_DETACH:

@@ -8,28 +8,33 @@
 #include "callback.hpp"
 
 namespace main {
-	// 初始化，共享内存和注入
-	static void Init() {
-		HANDLE hMapFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(*global), "IsaacSocketSharedMemory");
-		if (hMapFile)
-		{
-			global = (state::_GlobalState*)MapViewOfFile(hMapFile, FILE_MAP_WRITE, 0, 0, 0);
+// 初始化，共享内存和注入
+static void Init(bool useSharedMemory) { // true: c# 客户端, false: c++ 客户端
 
-			local.hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, FALSE, GetCurrentProcessId());
-			local.lua = new lua::Lua{ GetModuleHandleA("Lua5.3.3r.dll") };
-			local.isaac = (isaac::IsaacImage*)GetModuleHandleA(NULL);
-			local.hOpenGL = GetModuleHandleA("opengl32.dll");
+    if (useSharedMemory) {
+        HANDLE hMapFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(*global), "IsaacSocketSharedMemory");
+        if (!hMapFile) return;
 
-			callbacks = {
-					callback::OnRender,
-					callback::OnGameUpdate,
-					callback::OnSpecialUpdate,
-					callback::OnExecuteCommand,
-					callback::OnConsoleOutput,
-					callback::OnWindowMessage,
-			};
+        global = (state::_GlobalState*)MapViewOfFile(hMapFile, FILE_MAP_WRITE, 0, 0, 0);
+    } else {
+        global = new state::_GlobalState{state::CONNECTING};
+    }
 
-			inject::Init();
-		}
-	}
+    local.hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, FALSE, GetCurrentProcessId());
+    local.lua = new lua::Lua{ GetModuleHandleA("Lua5.3.3r.dll") };
+    local.isaac = (isaac::IsaacImage*)GetModuleHandleA(NULL);
+    local.hOpenGL = GetModuleHandleA("opengl32.dll");
+
+    callbacks = {
+        callback::OnRender,
+        callback::OnGameUpdate,
+        callback::OnSpecialUpdate,
+        callback::OnExecuteCommand,
+        callback::OnConsoleOutput,
+        callback::OnWindowMessage,
+    };
+
+    inject::Init();
+}
+
 }
