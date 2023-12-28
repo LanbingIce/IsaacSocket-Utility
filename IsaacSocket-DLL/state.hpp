@@ -14,16 +14,6 @@ namespace state {
 		CONNECTED = 2
 	};
 
-	struct _Callbacks
-	{
-		void (*OnRender)();
-		void (*OnGameUpdate)();
-		void (*OnSpecialUpdate)();
-		void (*OnExecuteCommand)(const string&, int, LPCVOID);
-		void (*OnConsoleOutput)(const string&, uint32_t, int32_t);
-		LRESULT(*OnWindowMessage)(LPCVOID, HWND, UINT, WPARAM, LPARAM);
-	};
-
 	struct _GlobalState
 	{
 		ConnectionState connectionState;
@@ -31,21 +21,29 @@ namespace state {
 
 	struct _LocalState
 	{
+		struct
+		{
+			void (*OnRender)();
+			void (*OnGameUpdate)();
+			void (*OnSpecialUpdate)();
+			void (*OnExecuteCommand)(const string&, int, LPCVOID);
+			void (*OnConsoleOutput)(const string&, uint32_t, int32_t);
+			LRESULT(*OnWindowMessage)(LPCVOID, HWND, UINT, WPARAM, LPARAM);
+		} callbacks;
+
 		bool initialized = false;
 		bool needReload = false;
 		HANDLE hProcess;
 		HMODULE hOpenGL;
 		isaac::IsaacImage* isaac;
-		lua::Lua* lua;
+		lua::Lua lua;
 		uint32_t MTRandomLockedValue = 0;
 	};
 
 	static state::_GlobalState* global;
 	static state::_LocalState local;
-	static state::_Callbacks callbacks;
 
 }
 
 using state::global;
 using state::local;
-using state::callbacks;

@@ -469,17 +469,23 @@ namespace IsaacSocket
             }
         }
 
-        internal Main(int dataSpaceSize, CallbackDelegate callback)
+        internal Main(int dataSpaceSize, CallbackDelegate callback, string dllPath)
         {
-            if (Debugger.IsAttached)
+            tempDLLPath = dllPath;
+
+            if (tempDLLPath == "")
             {
-                tempDLLPath = "C:\\Users\\lanbing\\OneDrive\\Desktop\\IsaacSocket\\Release\\IsaacSocket.dll";
+                if (Debugger.IsAttached)
+                {
+                    tempDLLPath = "C:\\Users\\lanbing\\OneDrive\\Desktop\\IsaacSocket\\Release\\IsaacSocket.dll";
+                }
+                else
+                {
+                    tempDLLPath = Path.Combine(MiscUtil.GetTemporaryDirectory("IsaacSocket_"), "IsaacSocket.dll");
+                    MiscUtil.ExtractFile("IsaacSocket.dll", tempDLLPath);
+                }
             }
-            else
-            {
-                tempDLLPath = Path.Combine(MiscUtil.GetTemporaryDirectory("IsaacSocket_"), "IsaacSocket.dll");
-                MiscUtil.ExtractFile("IsaacSocket.dll", tempDLLPath);
-            }
+
             Application.ApplicationExit += OnExit;
             sendMessagesBuffer = new();
             this.callback = callback;
@@ -492,8 +498,17 @@ namespace IsaacSocket
             cancellationTokenSource = new();
         }
 
-        internal void Start()
+        internal void Start(string dllPath)
         {
+            if (dllPath != "")
+            {
+                callback.Invoke(CallbackType.MESSAGE, "已指定dll路径：" + dllPath);
+                if (!File.Exists(dllPath))
+                {
+                    callback.Invoke(CallbackType.MESSAGE, "指定的dll不存在");
+                    return;
+                }
+            }
             Task.Run(() => UpdateTask(cancellationTokenSource.Token));
         }
 

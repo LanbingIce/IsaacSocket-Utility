@@ -28,15 +28,13 @@ namespace utils {
 		va_list v;
 		va_start(v, format);
 		size_t len = vsnprintf(nullptr, 0, format, v) + 1;
-		char* u8 = new char[len];
-		vsnprintf(u8, len, format, v);
+		vector<char> u8(len);
+		vsnprintf(u8.data(), len, format, v);
 		va_end(v);
-		len = U8ToU16(u8);
-		wchar_t* u16 = new wchar_t[len];
-		U8ToU16(u8, u16, len);
-		_cwprintf(u16);
-		delete[] u8;
-		delete[] u16;
+		len = U8ToU16(u8.data());
+		vector<wchar_t> u16(len);
+		U8ToU16(u8.data(), u16.data(), len);
+		_cwprintf(L"%s", u16.data());
 	}
 
 	// 折叠表达式打印可变参数列表

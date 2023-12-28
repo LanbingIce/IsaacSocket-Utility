@@ -23,9 +23,7 @@ static class Program
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            bool silentStart = args.Contains("-silent");
-            bool noUpdate = args.Contains("-noupdate");
-            Application.Run(new Form1(silentStart, noUpdate));
+            Application.Run(new Form1(args));
         }
     }
 }

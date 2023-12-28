@@ -63,8 +63,8 @@ namespace isaac_api {
 		ARG_DEF(2, integer, uint32_t, activeId, 0);
 		ARG_RANGE(activeId, 4);
 
-		local.lua->lua_newtable(L);
-#define _(type,name) local.lua->lua_pushstring(L,#name); local.lua->lua_push##type(L, local.isaac->game->players[playerId]->actives[activeId].name); local.lua->lua_settable(L, -3)
+		local.lua.lua_newtable(L);
+#define _(type,name) local.lua.lua_pushstring(L,#name); local.lua.lua_push##type(L, local.isaac->game->players[playerId]->actives[activeId].name); local.lua.lua_settable(L, -3)
 		_(integer, item);
 		_(integer, charge);
 		_(integer, batteryCharge);
@@ -82,11 +82,11 @@ namespace isaac_api {
 		ARG_RANGE(playerId, local.isaac->game->players.size());
 		ARG_DEF(2, integer, uint32_t, activeId, 0);
 		ARG_RANGE(activeId, 4);
-		if (!local.lua->lua_istable(L, 3))
+		if (!local.lua.lua_istable(L, 3))
 		{
-			return local.lua->luaL_error(L, "bad argument #3 :active should be table");
+			return local.lua.luaL_error(L, "bad argument #3 :active should be table");
 		}
-#define _(luaType,type,name) local.lua->lua_pushstring(L, #name); local.lua->lua_gettable(L, 3); if (local.lua->lua_is##luaType(L, -1)){local.isaac->game->players[playerId]->actives[activeId].name = (type)local.lua->lua_to##luaType(L, -1);}
+#define _(luaType,type,name) local.lua.lua_pushstring(L, #name); local.lua.lua_gettable(L, 3); if (local.lua.lua_is##luaType(L, -1)){local.isaac->game->players[playerId]->actives[activeId].name = (type)local.lua.lua_to##luaType(L, -1);}
 		_(integer, int32_t, item);
 		_(integer, int32_t, charge);
 		_(integer, int32_t, batteryCharge);
@@ -193,15 +193,15 @@ namespace isaac_api {
 
 	static void Init() {
 		lua_State* L = local.isaac->luaVM->L;
-		size_t top = local.lua->lua_gettop(L);
+		size_t top = local.lua.lua_gettop(L);
 
-		local.lua->lua_getglobal(L, "_ISAAC_SOCKET");
-		local.lua->lua_pushstring(L, "IsaacSocket");
-		local.lua->lua_gettable(L, -2);
-		local.lua->lua_pushstring(L, "IsaacAPI");
-		local.lua->lua_newtable(L);
+		local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
+		local.lua.lua_pushstring(L, "IsaacSocket");
+		local.lua.lua_gettable(L, -2);
+		local.lua.lua_pushstring(L, "IsaacAPI");
+		local.lua.lua_newtable(L);
 
-#define _(name) local.lua->lua_pushstring(L, #name);local.lua->lua_pushcfunction(L, name); local.lua->lua_settable(L, -3)
+#define _(name) local.lua.lua_pushstring(L, #name);local.lua.lua_pushcfunction(L, name); local.lua.lua_settable(L, -3)
 
 		_(IsForcePaused);
 		_(ForcePause);
@@ -232,7 +232,7 @@ namespace isaac_api {
 		_(GetGlitchedItemTrigger);
 		_(GetGlitchedItemEffect);
 #undef _
-		local.lua->lua_settable(L, -3);
-		local.lua->lua_settop(L, top);
+		local.lua.lua_settable(L, -3);
+		local.lua.lua_settop(L, top);
 	}
 }

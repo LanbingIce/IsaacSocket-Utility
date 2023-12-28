@@ -158,7 +158,7 @@ static void Init() {
     local.lua->lua_pushstring(L, "OpenGL");
     local.lua->lua_newtable(L);
 
-#define _(name) local.lua->lua_pushstring(L, #name);local.lua->lua_pushcfunction(L, name); local.lua->lua_settable(L, -3)
+#define _(name) local.lua.lua_pushstring(L, #name);local.lua.lua_pushcfunction(L, name); local.lua.lua_settable(L, -3)
 
     _(PutPixel);
 
@@ -166,6 +166,4 @@ static void Init() {
 
     local.lua->lua_settable(L, -3);
     local.lua->lua_settop(L, top);
-}
-
 }
