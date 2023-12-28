@@ -14,5 +14,10 @@ project(IsaacSocket LANGUAGES CXX ASM)
 
 file(GLOB files *.cpp *.hpp *.h *.S)
 add_library(IsaacSocket SHARED)
+set_target_properties(IsaacSocket PROPERTIES PREFIX "")
 target_sources(IsaacSocket PRIVATE ${files})
 target_include_directories(IsaacSocket PRIVATE include)
+
+add_executable(IsaacSocketClient)
+target_sources(IsaacSocketClient PRIVATE client/client.cpp)
+target_include_directories(IsaacSocketClient PRIVATE include)
