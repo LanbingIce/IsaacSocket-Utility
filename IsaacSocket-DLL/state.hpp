@@ -33,6 +33,7 @@ namespace state {
 
 		bool initialized = false;
 		bool needReload = false;
+        bool useSharedMemory;
 		HANDLE hProcess;
 		HMODULE hOpenGL;
 		isaac::IsaacImage* isaac;
@@ -40,8 +41,8 @@ namespace state {
 		uint32_t MTRandomLockedValue = 0;
 	};
 
-	static state::_GlobalState* global;
-	static state::_LocalState local;
+	inline state::_GlobalState* global;
+	inline state::_LocalState local;
 
 }
 

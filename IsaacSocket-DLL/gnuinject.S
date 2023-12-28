@@ -50,7 +50,7 @@ __ZN6inject9LogPrintfEiPKcz:
     add esp, 0x08
     pop [tmpRetIP]
     pop [tmpLogLevel]
-    call utils.Utf8Cprintf
+    call [utils.Utf8Cprintf]
     push tmpLogLevel
     push tmpRetIP
     flag1 : push ebp

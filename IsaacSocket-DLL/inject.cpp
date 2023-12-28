@@ -180,6 +180,8 @@ namespace inject {
         memcpy(gnuinjectState + 5, &local.callbacks, sizeof(local.callbacks));
 #endif
 
+    /* if (!local.isaac) MessageBoxW(NULL, L"以撒句柄 local.isaac 为空2！", L"错误", MB_OK); */
+
 #define INJECT(offset, name, padding) InjectCode(local.isaac, offset, (LPCVOID)name, padding)
 		// 渲染
 		INJECT(0x4B0600, Render, 1);
