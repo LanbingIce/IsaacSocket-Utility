@@ -18,6 +18,10 @@
 #include <algorithm>
 #include <glad/glad.h>
 
+#ifdef _MSC_VER
+#define FASTCALL __fastcall
+#endif //_MSC_VER
+
 using std::string;
 using std::vector;
 
