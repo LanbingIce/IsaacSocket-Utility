@@ -18,7 +18,7 @@ namespace system_
 
 	//获取剪贴板
 	static int GetClipboard(lua_State* L) {
-		local.lua->lua_pushnil(L);
+		local.lua.lua_pushnil(L);
 
 		if (!OpenClipboard(nullptr)) {
 			//无法打开剪贴板
@@ -40,15 +40,13 @@ namespace system_
 		}
 
 		size_t len = utils::U16ToU8(u16);
-		char* u8 = new char[len];
-		utils::U16ToU8(u16, u8, len);
+		vector<char> u8(len);
+		utils::U16ToU8(u16, u8.data(), len);
 
 		GlobalUnlock(hClipboardData);
 		CloseClipboard();
 
-		local.lua->lua_pushstring(L, u8);
-
-		delete[] u8;
+		local.lua.lua_pushstring(L, u8.data());
 
 		return 1;
 	}
@@ -93,15 +91,15 @@ namespace system_
 
 	static void Init() {
 		lua_State* L = local.isaac->luaVM->L;
-		size_t top = local.lua->lua_gettop(L);
+		size_t top = local.lua.lua_gettop(L);
 
-		local.lua->lua_getglobal(L, "_ISAAC_SOCKET");
-		local.lua->lua_pushstring(L, "IsaacSocket");
-		local.lua->lua_gettable(L, -2);
-		local.lua->lua_pushstring(L, "System");
-		local.lua->lua_newtable(L);
+		local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
+		local.lua.lua_pushstring(L, "IsaacSocket");
+		local.lua.lua_gettable(L, -2);
+		local.lua.lua_pushstring(L, "System");
+		local.lua.lua_newtable(L);
 
-#define _(name) local.lua->lua_pushstring(L, #name);local.lua->lua_pushcfunction(L, name); local.lua->lua_settable(L, -3)
+#define _(name) local.lua.lua_pushstring(L, #name);local.lua.lua_pushcfunction(L, name); local.lua.lua_settable(L, -3)
 
 		_(ConsoleOutput);
 		_(GetClipboard);
@@ -109,7 +107,7 @@ namespace system_
 
 #undef _
 
-		local.lua->lua_settable(L, -3);
-		local.lua->lua_settop(L, top);
+		local.lua.lua_settable(L, -3);
+		local.lua.lua_settop(L, top);
 	}
 };

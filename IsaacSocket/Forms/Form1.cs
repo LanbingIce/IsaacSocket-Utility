@@ -9,14 +9,25 @@ public partial class Form1 : Form
 {
     private bool silent;
     private bool noUpdate;
+    private readonly string dllPath;
     private readonly UpdateForm updateForm;
     private readonly ConcurrentQueue<string> logQueue1, logQueue2, logQueue3, logQueue4;
     private int size;
     private readonly Main main;
-    public Form1(bool silentStart, bool noUpdate)
+    public Form1(string[] args)
     {
-        silent = silentStart;
-        this.noUpdate = noUpdate;
+        dllPath = "";
+        foreach (string arg in args)
+        {
+            if (arg.StartsWith("-dllpath="))
+            {
+                dllPath = arg["-dllpath=".Length..];
+                break;
+            }
+        }
+
+        silent = args.Contains("-silent");
+        noUpdate = args.Contains("-noupdate");
         InitializeComponent();
         Version? version = Assembly.GetEntryAssembly()?.GetName().Version;
         string versionString = $"{version?.Major}.{version?.Minor}";
@@ -27,7 +38,7 @@ public partial class Form1 : Form
         logQueue4 = new();
         size = 1024;
         updateForm = new();
-        main = new(size, Callback);
+        main = new(size, Callback, dllPath);
         if (silent)
         {
             WindowState = FormWindowState.Minimized;
@@ -112,7 +123,7 @@ public partial class Form1 : Form
         {
             _ = CheckUpdateAsync();
         }
-        main.Start();
+        main.Start(dllPath);
     }
     private void ShowMainWindowToolStripMenuItem_Click(object sender, EventArgs e)
     {

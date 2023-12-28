@@ -9,7 +9,7 @@
 
 namespace main {
 // 初始化，共享内存和注入
-static void Init(bool useSharedMemory) { // true: c# 客户端, false: c++ 客户端
+static void Init(bool useSharedMemory = true) { // true: c# 客户端, false: c++ 客户端
 
     if (useSharedMemory) {
         HANDLE hMapFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(*global), "IsaacSocketSharedMemory");
@@ -36,5 +36,4 @@ static void Init(bool useSharedMemory) { // true: c# 客户端, false: c++ 客�
 
     inject::Init();
 }
-
 }
