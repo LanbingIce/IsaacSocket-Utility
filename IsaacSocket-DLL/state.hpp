@@ -43,6 +43,8 @@ namespace state {
 
 	inline state::_GlobalState* global;
 	inline state::_LocalState local;
+	inline char charsBuffer[3];
+
 
 }
 

@@ -128,10 +128,13 @@ __ZN6inject13SpecialUpdateEv:
 __ZN6inject8MTRandomEv:
     shr eax, 0x12
     xor eax, ecx
-    cmp dword ptr [local.MTRandomLockedValue], 0
+    push ebx
+    mov ebx, [local.MTRandomLockedValue]
+    cmp dword ptr [ebx], 0
     je flag2
-    mov eax, [local.MTRandomLockedValue]
-    flag2 : ret
+    mov eax, [ebx]
+    flag2 : pop ebx
+    ret
 
 .global __ZN6inject7WndprocEP6HWND__jjl@16
 __ZN6inject7WndprocEP6HWND__jjl@16:

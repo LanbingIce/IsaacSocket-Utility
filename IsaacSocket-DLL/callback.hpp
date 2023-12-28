@@ -10,8 +10,6 @@ using utils::cw;
 
 namespace callback {
 
-	static char buffer[3];
-
 	// 渲染回调，时机在渲染函数的起始位置，只要游戏进程存在就一直触发
 	static void OnRender()
 	{
@@ -154,6 +152,7 @@ namespace callback {
 			return 1;
 		}
 		int result = 1;
+        char *buffer = state::charsBuffer;
 		switch (uMsg)
 		{
 		case WM_CHAR:

@@ -172,7 +172,7 @@ namespace inject {
 #ifdef __MINGW32__
         // 以下代码仅在 MinGW 下编译
         extern LPCVOID gnuinjectState[];  // 在gnuinject.S中定义
-        gnuinjectState[0] = &local.isaac;
+        gnuinjectState[0] = local.isaac;
         gnuinjectState[1] = &local.MTRandomLockedValue;
         gnuinjectState[2] = (LPCVOID)utils::Utf8Cprintf;
         gnuinjectState[3] = (LPCVOID)GetConsoleWindow;
