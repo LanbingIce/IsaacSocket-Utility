@@ -11,7 +11,7 @@
 namespace _isaac_socket
 {
 	static int Disconnect(lua_State* L) {
-		global->connectionState = state::DISCONNECTED;
+        if (local.useSharedMemory) global->connectionState = state::DISCONNECTED;
 		local.MTRandomLockedValue = 0;
 		local.needReload = false;
 		local.isaac->game->console.state += local.isaac->game->console.state < 0 ? 5 : 0;
@@ -19,7 +19,8 @@ namespace _isaac_socket
 		return 0;
 	}
 
-	void Init() {
+	static void Init() {
+        /* MessageBoxW(NULL, L"IsaacSocket 正在初始化", L"喜报", MB_OK); */
 
 		isaac_api::Init();
 		memory::Init();

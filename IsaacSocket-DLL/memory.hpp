@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "lua.hpp"
-#include "isaac.hpp"
 
 namespace memory
 {
@@ -39,8 +38,8 @@ namespace memory
 			_(UInt32, uint32_t, integer);
 			_(Int64, int64_t, integer);
 			_(UInt64, uint64_t, integer);
-			_(Float, float_t, number);
-			_(Double, double_t, number);
+			_(Float, float, number);
+			_(Double, double, number);
 
 #undef _
 
@@ -72,8 +71,8 @@ namespace memory
 			_(UInt32, uint32_t, integer);
 			_(Int64, int64_t, integer);
 			_(UInt64, uint64_t, integer);
-			_(Float, float_t, number);
-			_(Double, double_t, number);
+			_(Float, float, number);
+			_(Double, double, number);
 
 #undef _
 
@@ -116,7 +115,7 @@ namespace memory
 		RET(integer, (uint32_t)local.isaac);
 	}
 
-	void Init() {
+	static void Init() {
 
 		lua_State* L = local.isaac->luaVM->L;
 		size_t top = local.lua.lua_gettop(L);

@@ -14,6 +14,11 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <memory>
+#include <algorithm>
 #include <glad/glad.h>
+
+using std::string;
+using std::vector;
 
 #endif //PCH_H

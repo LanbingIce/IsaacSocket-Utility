@@ -1,6 +1,9 @@
 ﻿#pragma once
 
+#include "lua.hpp"
 #include "pch.h"
+
+namespace isaac { struct IsaacImage; }
 
 namespace state {
 
@@ -30,15 +33,18 @@ namespace state {
 
 		bool initialized = false;
 		bool needReload = false;
+        bool useSharedMemory;
 		HANDLE hProcess;
 		HMODULE hOpenGL;
 		isaac::IsaacImage* isaac;
-		lua::Lua lua;
+        lua::Lua lua;
 		uint32_t MTRandomLockedValue = 0;
 	};
 
-	static state::_GlobalState* global;
-	static state::_LocalState local;
+	inline state::_GlobalState* global;
+	inline state::_LocalState local;
+	inline char charsBuffer[3];
+
 
 }
 

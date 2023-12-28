@@ -1,0 +1,5 @@
+/include/
+/glad.cpp
+/build/
+/*.vcxproj
+/*.vcxproj.*
