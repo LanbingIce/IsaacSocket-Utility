@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "pch.h"
 #include "isaac.hpp"
-#include "state.hpp"
 
 using isaac::lua_State;
 
@@ -168,6 +167,6 @@ namespace lua {
 
 #define _CHECK_ARG(index,luaType,type,name) if(local.lua.lua_is##luaType(L,index)){name = (type)local.lua.lua_to##luaType(L,index);}else{return local.lua.luaL_error(L, "bad argument #"#index" :"#name" should be "#luaType);}
 #define ARG(index,luaType,type,name) type name; _CHECK_ARG(index,luaType,type,name)
-#define ARG_DEF(index,luaType,type,name,def) type name;if(local.lua->lua_isnoneornil(L,index)){name=def;}else _CHECK_ARG(index,luaType,type,name)
-#define ARG_RANGE(name,range) if (name >= range){std::ostringstream oss;oss<<"invalid "#name" : "<<std::to_string(name); return local.lua->luaL_error(L, oss.str().c_str());}
-#define RET(type,value) local.lua->lua_push##type(L,value);return 1;
+#define ARG_DEF(index,luaType,type,name,def) type name;if(local.lua.lua_isnoneornil(L,index)){name=def;}else _CHECK_ARG(index,luaType,type,name)
+#define ARG_RANGE(name,range) if (name >= range){std::ostringstream oss;oss<<"invalid "#name" : "<<std::to_string(name); return local.lua.luaL_error(L, oss.str().c_str());}
+#define RET(type,value) local.lua.lua_push##type(L,value);return 1;

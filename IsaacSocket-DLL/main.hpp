@@ -21,7 +21,6 @@ static void Init(bool useSharedMemory = true) { // true: c# 客户端, false: c+
     }
 
     local.hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, FALSE, GetCurrentProcessId());
-    local.lua = std::make_unique<lua::Lua>();
     local.isaac = (isaac::IsaacImage*)GetModuleHandleA(NULL);
     local.hOpenGL = GetModuleHandleA("opengl32.dll");
 

@@ -1,8 +1,8 @@
 ﻿#pragma once
 
+#include "lua.hpp"
 #include "pch.h"
 
-namespace lua { struct Lua; }
 namespace isaac { struct IsaacImage; }
 
 namespace state {
@@ -36,7 +36,7 @@ namespace state {
 		HANDLE hProcess;
 		HMODULE hOpenGL;
 		isaac::IsaacImage* isaac;
-        std::unique_ptr<lua::Lua> lua;
+        lua::Lua lua;
 		uint32_t MTRandomLockedValue = 0;
 	};
 
