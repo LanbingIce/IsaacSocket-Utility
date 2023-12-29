@@ -2,6 +2,7 @@
 
 #include "lua.hpp"
 #include "pch.h"
+#include "handle.hpp"
 
 namespace isaac { struct IsaacImage; }
 
@@ -35,11 +36,11 @@ namespace state {
 		bool needReload = false;
 		bool needReloadDll = false;
         bool useSharedMemory;
-		HANDLE hProcess;
-		HMODULE hOpenGL;
 		isaac::IsaacImage* isaac;
         lua::Lua lua;
 		uint32_t MTRandomLockedValue = 0;
+		HANDLE hProcess;
+		HMODULE hOpenGL;
 	};
 
 	inline state::_GlobalState* global;

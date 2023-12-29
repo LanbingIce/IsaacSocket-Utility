@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "module.hpp"
+#include <stb_image.h>
 
 using utils::cw;
 
@@ -106,6 +107,82 @@ static void gl_set_color(uint32_t rgba) {
     glColor4f(r, g, b, a);
 }
 
+struct Image {
+    std::vector<uint8_t> data;
+    int width, height, channels;
+};
+
+static std::unique_ptr<Image> load_image(const char *filename, int channels = 4) {
+    auto img = std::make_unique<Image>();
+    uint8_t *p = stbi_load(filename, &img->width, &img->height, &img->channels, channels);
+    if (!p) {
+        return nullptr;
+    }
+    img->data.assign(p, p + img->width * img->height * img->channels);
+    stbi_image_free(p);
+    return img;
+}
+
+static void gl_draw_image(const uint8_t *data, int width, int height, int channels) {
+    if (channels < 1 || channels > 4) [[unlikely]] {
+        return;
+    }
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    static const GLenum formatTable[] = {GL_LUMINANCE, GL_RG, GL_RGB, GL_RGBA};
+    glDrawPixels(width, height, formatTable[channels - 1], GL_UNSIGNED_BYTE, data);
+}
+
+inline auto *image_handles() {
+    static HandleTable<Image> table;
+    return &table;
+}
+inline auto *image_cache() {
+    static KVCache<std::string, Handle> table;
+    return &table;
+}
+
+static int ReadImage(lua_State* L) {
+    ARG_DEF(1, string, const char *, path, nullptr);
+    ARG_DEF(2, integer, int, channels, 4);
+    ARG_DEF(3, boolean, bool, useCached, true);
+    if (!path) [[unlikely]] {
+        return 0;
+    }
+    auto gen = [path, channels] {
+        if (auto img = load_image(path, channels)) {
+            return image_handles()->create(std::move(img));
+        }
+        return NULL_HANDLE;
+    };
+    Handle imageHandle = useCached ? image_cache()->find(path, gen) : gen();
+    RET(integer, imageHandle);
+}
+
+static int DrawImage(lua_State* L) {
+    ARG_DEF(1, number, float, x, 0);
+    ARG_DEF(2, number, float, y, 0);
+    ARG_DEF(3, integer, Handle, imageHandle, NULL_HANDLE);
+    ARG_DEF(4, integer, uint32_t, color, 0xFFFFFFFF);
+    ARG_DEF(5, number, float, zoomX, 1);
+    ARG_DEF(6, number, float, zoomY, 1);
+
+    GLStateGuard _;
+    if (auto image = image_handles()->find(imageHandle)) {
+        gl_set_color(color);
+        glPixelZoom(zoomX, zoomY);
+        glRasterPos2f(x, y);
+        gl_draw_image(image->data.data(), image->width, image->height, image->channels);
+    }
+
+    return 0;
+}
+
+static int FreeImage(lua_State* L) {
+    ARG_DEF(1, integer, Handle, imageHandle, NULL_HANDLE);
+    image_handles()->destroy(imageHandle);
+    return 0;
+}
+
 static int PutPixel(lua_State* L) {
     ARG_DEF(1, number, float, x, 0);
     ARG_DEF(2, number, float, y, 0);
@@ -197,6 +274,11 @@ static void Init() {
     DEF(DrawLine);
     DEF(DrawTriangle);
     DEF(DrawRect);
+
+    DEF(ReadImage);
+    DEF(DrawImage);
+    DEF(FreeImage);
+
     ENDMOD();
 }
 

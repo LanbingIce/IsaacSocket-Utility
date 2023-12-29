@@ -2,7 +2,6 @@
 #include "utils.hpp"
 #include <fstream>
 #include <ostream>
-#include <map>
 
 namespace {
 
@@ -82,7 +81,7 @@ HMODULE cloneLibrary(const char* libraryName)
     return LoadLibraryW(newdllname.c_str());
 }
 
-std::map<std::string, FILETIME> libraryLoadTime;
+std::unordered_map<std::string, FILETIME> libraryLoadTime;
 
 }
 
