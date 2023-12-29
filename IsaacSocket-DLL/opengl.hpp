@@ -47,11 +47,17 @@ struct GLStateGuard {
         glUseProgram(0);
         glDisable(GL_CULL_FACE);
         glDepthFunc(GL_GEQUAL);
-        /* glEnable(GL_BLEND); */
-        /* glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); */
+        glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
+        // ((x + 0.5f) / width * 2.0f - 1.0f, (y + 0.5f) / height * 2.0f - 1.0f, 0.0f)
+        float sx = 1.0f / local.isaac->window->width;
+        float sy = 1.0f / local.isaac->window->height;
+        glTranslatef(sx - 1.0f, sy - 1.0f, 1.0f);
+        glScalef(2.0f * sx, 2.0f * sy, 1.0f);
     }
 
     ~GLStateGuard() {
+        glPopMatrix();
         glPopAttrib();
     }
 
@@ -85,11 +91,11 @@ static void gl_set_border(float border, const char *stipple = nullptr) {
     }
 }
 
-static void gl_put_vertex(float x, float y) {
-    uint32_t width = local.isaac->window->width;
-    uint32_t height = local.isaac->window->height;
-    glVertex3f((x + 0.5f) / width * 2.0f - 1.0f, (y + 0.5f) / height * 2.0f - 1.0f, 1.0f);
-}
+/* static void glVertex2f(float x, float y) { */
+    /* uint32_t width = local.isaac->window->width; */
+    /* uint32_t height = local.isaac->window->height; */
+    /* glVertex3f((x + 0.5f) / width * 2.0f - 1.0f, (y + 0.5f) / height * 2.0f - 1.0f, 1.0f); */
+/* } */
 
 static void gl_set_color(uint32_t rgba) {
     // 直接提取RGBA分量
@@ -110,7 +116,7 @@ static int PutPixel(lua_State* L) {
     glPointSize(radius);
     gl_set_color(color);
     glBegin(GL_POINTS);
-    gl_put_vertex(x, y);
+    glVertex2f(x, y);
     CHECK_GL(glEnd());
 
     return 0;
@@ -129,8 +135,8 @@ static int DrawLine(lua_State* L) {
     gl_set_border(border, stipple);
     gl_set_color(color);
     glBegin(GL_LINES);
-    gl_put_vertex(x1, y1);
-    gl_put_vertex(x2, y2);
+    glVertex2f(x1, y1);
+    glVertex2f(x2, y2);
     CHECK_GL(glEnd());
 
     return 0;
@@ -151,9 +157,9 @@ static int DrawTriangle(lua_State* L) {
     gl_set_border(border, stipple);
     gl_set_color(color);
     glBegin(GL_TRIANGLES);
-    gl_put_vertex(x1, y1);
-    gl_put_vertex(x2, y2);
-    gl_put_vertex(x3, y3);
+    glVertex2f(x1, y1);
+    glVertex2f(x2, y2);
+    glVertex2f(x3, y3);
     CHECK_GL(glEnd());
 
     return 0;
@@ -176,10 +182,10 @@ static int DrawRect(lua_State* L) {
     gl_set_border(border, stipple);
     gl_set_color(color);
     glBegin(GL_QUADS);
-    gl_put_vertex(x1, y1);
-    gl_put_vertex(x1, y2);
-    gl_put_vertex(x2, y2);
-    gl_put_vertex(x2, y1);
+    glVertex2f(x1, y1);
+    glVertex2f(x1, y2);
+    glVertex2f(x2, y2);
+    glVertex2f(x2, y1);
     CHECK_GL(glEnd());
 
     return 0;
