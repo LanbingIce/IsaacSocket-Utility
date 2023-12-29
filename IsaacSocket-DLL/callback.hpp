@@ -5,6 +5,7 @@
 #include "utils.hpp"
 #include "function.hpp"
 #include "_isaac_socket.hpp"
+#include "reload.hpp"
 
 using utils::cw;
 
@@ -30,7 +31,8 @@ namespace callback {
                 _isaac_socket::Init();
             }
         } else {
-                if (!local.initialized)
+        
+                if (!local.initialized && _isaac_socket::LuaReady())
                 {
                     gladLoadGL();
                     function::SetGLFWCharacter();
@@ -38,6 +40,20 @@ namespace callback {
                     local.initialized = true;
                 }
         }
+#ifdef __MINGW32__
+		if (getenv("IsaacSocketAutoReloadDll")) {
+            if (reloadLibraryMain("IsaacSocket.dll", true)) {
+                _cprintf("auto reloaded dll\n");
+                return;
+            }
+        }
+#endif
+        if (local.needReloadDll)
+		{
+            reloadLibraryMain("IsaacSocket.dll");
+			local.needReloadDll = false;
+            return;
+		}
 
 		if (local.needReload)
 		{
@@ -85,6 +101,11 @@ namespace callback {
 		if (text == "lualua")
 		{
 			local.needReload = true;
+		}
+
+		if (text == "luadll")
+		{
+			local.needReloadDll = true;
 		}
 
 		if (text == "ac")

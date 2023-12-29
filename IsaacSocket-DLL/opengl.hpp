@@ -30,32 +30,46 @@ static const char* opengl_errno_name(GLenum err) {
     }
     return "unknown error";
 }
-static	void opengl_check_error(const char* filename, int lineno, const char* expr) {
+static void opengl_check_error(const char* filename, int lineno, const char* expr) {
     GLenum err = glad_glGetError();
     if (err != GL_NO_ERROR) [[unlikely]] {
-        AllocConsole();
+        if (!GetConsoleWindow()) AllocConsole();
         cw(filename, ":", lineno, ": ", expr, " failed: ", opengl_errno_name(err));
-        system("pause");
-        std::terminate();
+        /* system("pause"); */
+        /* std::terminate(); */
     }
 }
 
-static void gl_clean_state() {
-    clear_gl_error();
-    glUseProgram(0);
-}
+struct GLStateGuard {
+    GLStateGuard() {
+        clear_gl_error();
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glUseProgram(0);
+        glDisable(GL_CULL_FACE);
+        glDepthFunc(GL_GEQUAL);
+        /* glEnable(GL_BLEND); */
+        /* glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); */
+    }
 
-static void gl_set_border(uint32_t border, const char *stipple = nullptr) {
+    ~GLStateGuard() {
+        glPopAttrib();
+    }
+
+    GLStateGuard(GLStateGuard &&) = delete;
+};
+
+static void gl_set_border(float border, const char *stipple = nullptr) {
     // border=0: fill, border>0: stroke
-    if (border) {
+    if (border > 0) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glLineWidth(border);
         if (stipple) {
             GLushort c = 0;
-            GLint factor = border;
+            GLint factor = (int)std::ceil(border);
             for (size_t i = 0; stipple[i] && i < 16; i++) {
-                c |= (stipple[i] & 1) << i; // '0' = 48, '1' = 49
+                c |= (GLushort)(stipple[i] & 1) << i; // '0' = 48, '1' = 49
             }
+            glEnable(GL_LINE_STIPPLE);
             glLineStipple(factor, c);
         }
     } else {
@@ -63,17 +77,18 @@ static void gl_set_border(uint32_t border, const char *stipple = nullptr) {
         if (stipple) {
             uint32_t c[32]{};
             for (size_t i = 0; stipple[i] && i < 32 * 32; i++) {
-                c[i >> 5] |= (stipple[i] & 1) << (i & 31);
+                c[i >> 5] |= (uint32_t)(stipple[i] & 1) << (i & 31);
             }
+            glEnable(GL_POLYGON_STIPPLE);
             glPolygonStipple((const GLubyte *)c);
         }
     }
 }
 
-static void gl_put_vertex(uint32_t x, uint32_t y) {
+static void gl_put_vertex(float x, float y) {
     uint32_t width = local.isaac->window->width;
     uint32_t height = local.isaac->window->height;
-    glVertex3f((x + 0.5f) / width * 2.0f - 1.0f, (y + 0.5f) / height * 2.0f - 1.0f, 1.0);
+    glVertex3f((x + 0.5f) / width * 2.0f - 1.0f, (y + 0.5f) / height * 2.0f - 1.0f, 1.0f);
 }
 
 static void gl_set_color(uint32_t rgba) {
@@ -86,11 +101,13 @@ static void gl_set_color(uint32_t rgba) {
 }
 
 static int PutPixel(lua_State* L) {
-    ARG_DEF(1, integer, uint32_t, x, 0);
-    ARG_DEF(2, integer, uint32_t, y, 0);
+    ARG_DEF(1, number, float, x, 0);
+    ARG_DEF(2, number, float, y, 0);
     ARG_DEF(3, integer, uint32_t, color, 0xFFFFFFFF);
+    ARG_DEF(4, number, float, radius, 1);
 
-    gl_clean_state();
+    GLStateGuard _;
+    glPointSize(radius);
     gl_set_color(color);
     glBegin(GL_POINTS);
     gl_put_vertex(x, y);
@@ -99,18 +116,38 @@ static int PutPixel(lua_State* L) {
     return 0;
 }
 
-static int DrawTriangle(lua_State* L) {
-    ARG_DEF(1, integer, uint32_t, x1, 0);
-    ARG_DEF(2, integer, uint32_t, y1, 0);
-    ARG_DEF(2, integer, uint32_t, x2, 0);
-    ARG_DEF(2, integer, uint32_t, y2, 0);
-    ARG_DEF(2, integer, uint32_t, x3, 0);
-    ARG_DEF(2, integer, uint32_t, y3, 0);
-    ARG_DEF(3, integer, uint32_t, color, 0xFFFFFFFF);
-    ARG_DEF(3, integer, uint32_t, border, 0);
-    ARG_DEF(3, string, const char *, stipple, nullptr);
+static int DrawLine(lua_State* L) {
+    ARG_DEF(1, number, float, x1, 0);
+    ARG_DEF(2, number, float, y1, 0);
+    ARG_DEF(3, number, float, x2, 0);
+    ARG_DEF(4, number, float, y2, 0);
+    ARG_DEF(5, integer, uint32_t, color, 0xFFFFFFFF);
+    ARG_DEF(6, number, float, border, 1);
+    ARG_DEF(7, string, const char *, stipple, nullptr);
 
-    gl_clean_state();
+    GLStateGuard _;
+    gl_set_border(border, stipple);
+    gl_set_color(color);
+    glBegin(GL_LINES);
+    gl_put_vertex(x1, y1);
+    gl_put_vertex(x2, y2);
+    CHECK_GL(glEnd());
+
+    return 0;
+}
+
+static int DrawTriangle(lua_State* L) {
+    ARG_DEF(1, number, float, x1, 0);
+    ARG_DEF(2, number, float, y1, 0);
+    ARG_DEF(3, number, float, x2, 0);
+    ARG_DEF(4, number, float, y2, 0);
+    ARG_DEF(5, number, float, x3, 0);
+    ARG_DEF(6, number, float, y3, 0);
+    ARG_DEF(7, integer, uint32_t, color, 0xFFFFFFFF);
+    ARG_DEF(8, number, float, border, 0);
+    ARG_DEF(9, string, const char *, stipple, nullptr);
+
+    GLStateGuard _;
     gl_set_border(border, stipple);
     gl_set_color(color);
     glBegin(GL_TRIANGLES);
@@ -123,22 +160,22 @@ static int DrawTriangle(lua_State* L) {
 }
 
 static int DrawRect(lua_State* L) {
-    ARG_DEF(1, integer, uint32_t, x1, 0);
-    ARG_DEF(2, integer, uint32_t, y1, 0);
-    ARG_DEF(2, integer, uint32_t, x2, 0);
-    ARG_DEF(2, integer, uint32_t, y2, 0);
-    ARG_DEF(3, integer, uint32_t, color, 0xFFFFFFFF);
-    ARG_DEF(3, integer, uint32_t, border, 0);
-    ARG_DEF(3, string, const char *, stipple, nullptr);
+    ARG_DEF(1, number, float, x1, 0);
+    ARG_DEF(2, number, float, y1, 0);
+    ARG_DEF(3, number, float, x2, 0);
+    ARG_DEF(4, number, float, y2, 0);
+    ARG_DEF(5, integer, uint32_t, color, 0xFFFFFFFF);
+    ARG_DEF(6, number, float, border, 0);
+    ARG_DEF(7, string, const char *, stipple, nullptr);
 
     /* // 保证 x1 <= x2, y1 <= y2 */
     /* std::tie(x1, x2) = std::minmax(x1, x2); */
     /* std::tie(y1, y2) = std::minmax(y1, y2); */
 
-    gl_clean_state();
+    GLStateGuard _;
     gl_set_border(border, stipple);
     gl_set_color(color);
-    glBegin(GL_POLYGON);
+    glBegin(GL_QUADS);
     gl_put_vertex(x1, y1);
     gl_put_vertex(x1, y2);
     gl_put_vertex(x2, y2);
@@ -151,8 +188,9 @@ static int DrawRect(lua_State* L) {
 static void Init() {
     DEFMOD(OpenGL);
     DEF(PutPixel);
-    DEF(DrawRect);
+    DEF(DrawLine);
     DEF(DrawTriangle);
+    DEF(DrawRect);
     ENDMOD();
 }
 

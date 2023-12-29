@@ -61,6 +61,8 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="function.hpp" />
     <ClInclude Include="inject.hpp" />
+    <ClInclude Include="reload.hpp" />
+    <ClInclude Include="module.hpp" />
     <ClInclude Include="isaac.hpp" />
     <ClInclude Include="isaac_api.hpp" />
     <ClInclude Include="_isaac_socket.hpp" />
@@ -78,6 +80,7 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="glad.cpp" />
     <ClCompile Include="inject.cpp" />
+    <ClCompile Include="reload.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>

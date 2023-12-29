@@ -16,6 +16,7 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
+#include <cmath>
 #include <glad/glad.h>
 
 #ifdef _MSC_VER

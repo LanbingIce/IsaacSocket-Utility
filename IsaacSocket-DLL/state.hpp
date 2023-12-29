@@ -33,6 +33,7 @@ namespace state {
 
 		bool initialized = false;
 		bool needReload = false;
+		bool needReloadDll = false;
         bool useSharedMemory;
 		HANDLE hProcess;
 		HMODULE hOpenGL;
