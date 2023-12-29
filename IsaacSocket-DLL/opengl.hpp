@@ -112,7 +112,7 @@ struct Image {
     int width, height, channels;
 };
 
-static std::unique_ptr<Image> load_image(const char *filename, int channels = 4) {
+static std::unique_ptr<Image> load_image(const char *filename, int channels = 0) {
     auto img = std::make_unique<Image>();
     uint8_t *p = stbi_load(filename, &img->width, &img->height, &img->channels, channels);
     if (!p) {
@@ -143,7 +143,7 @@ inline auto *image_cache() {
 
 static int ReadImage(lua_State* L) {
     ARG_DEF(1, string, const char *, path, nullptr);
-    ARG_DEF(2, integer, int, channels, 4);
+    ARG_DEF(2, integer, int, channels, 0);
     ARG_DEF(3, boolean, bool, useCached, true);
     if (!path) [[unlikely]] {
         return 0;
