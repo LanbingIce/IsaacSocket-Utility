@@ -75,6 +75,7 @@
     <ClInclude Include="system_.hpp" />
     <ClInclude Include="utils.hpp" />
     <ClInclude Include="win_api.hpp" />
+    <ClInclude Include="handle.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />

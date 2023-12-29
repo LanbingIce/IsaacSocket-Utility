@@ -11,4 +11,7 @@
 #define ARG(index,luaType,type,name) type name; _CHECK_ARG(index,luaType,type,name)
 #define ARG_DEF(index,luaType,type,name,def) type name;if(local.lua.lua_isnoneornil(L,index)){name=def;}else _CHECK_ARG(index,luaType,type,name)
 #define ARG_RANGE(name,range) if (name >= range){std::ostringstream oss;oss<<"invalid "#name": "<<std::to_string(name); return local.lua.luaL_error(L, oss.str().c_str());}
-#define RET(type,value) local.lua.lua_push##type(L,value);return 1;
+#define RET(type,value) local.lua.lua_push##type(L,value);return 1
+#define RET_TABLE() local.lua.lua_newtable(L)
+#define RET_TABLE_KEY(key,type,value) local.lua.lua_pushstring(L,#key);local.lua.lua_push##type(L,value);local.lua.lua_settable(L,-3);local.lua.lua_pop(L,2)
+#define RET_TABLE_END() return 1

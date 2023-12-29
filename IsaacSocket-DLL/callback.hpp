@@ -42,9 +42,13 @@ namespace callback {
         }
 #ifdef __MINGW32__
 		if (getenv("IsaacSocketAutoReloadDll")) {
-            if (reloadLibraryMain("IsaacSocket.dll", true)) {
-                _cprintf("auto reloaded dll\n");
-                return;
+            static int counter = 0;
+            counter++;
+            if (counter % 30) {
+                if (reloadLibraryMain("IsaacSocket.dll", true)) {
+                    _cprintf("auto reloaded dll\n");
+                    return;
+                }
             }
         }
 #endif
