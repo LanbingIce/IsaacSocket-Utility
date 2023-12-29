@@ -50,6 +50,7 @@ namespace callback {
 	// 额外更新回调，时机在额外更新函数的起始位置
 	static void OnSpecialUpdate()
 	{
+		if (!local.initialized) return;
 		if (local.useSharedMemory && global->connectionState != state::CONNECTED)
 		{
 			return;
@@ -59,6 +60,7 @@ namespace callback {
 	// 游戏更新回调，时机在游戏更新函数的起始位置
 	static void OnGameUpdate()
 	{
+		if (!local.initialized) return;
 		if (local.useSharedMemory && global->connectionState != state::CONNECTED)
 		{
 			return;
@@ -68,6 +70,7 @@ namespace callback {
 	// 执行控制台指令回调，时机在执行控制台指令函数的起始位置
 	static void OnExecuteCommand(const string& text, int unknow, LPCVOID unknow_point_guess)
 	{
+		if (!local.initialized) return;
 		if (local.useSharedMemory && global->connectionState != state::CONNECTED)
 		{
 			return;
@@ -105,6 +108,7 @@ namespace callback {
 	// 控制台输出回调，时机在控制台输出函数的起始位置
 	static void OnConsoleOutput(const string& text, uint32_t color, int32_t type)
 	{
+		if (!local.initialized) return;
 		if (local.useSharedMemory && global->connectionState != state::CONNECTED)
 		{
 			return;
@@ -147,6 +151,7 @@ namespace callback {
 	// 窗口消息回调，返回0则拦截此次消息
 	static LRESULT OnWindowMessage(LPCVOID _, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
+		if (!local.initialized) return 1;
 		if (local.useSharedMemory && global->connectionState != state::CONNECTED)
 		{
 			return 1;
