@@ -50,18 +50,6 @@ namespace isaac {
 		int32_t state;
 	};
 
-	// 控制台类
-	struct Console
-	{
-		union
-		{
-			//0:关闭 2:开启 4:正在关闭 小于0:强制暂停
-			FIELD(0x20, int32_t, state);
-			FIELD(0x30, float, offsetY);
-			FIELD(0x3C, gnucompat::string, consoleText);
-		};
-	};
-
 	// 主动道具类
 	struct Active
 	{
@@ -104,18 +92,6 @@ namespace isaac {
 		//int type;
 	};
 
-	// 角色类
-	struct Player
-	{
-		union
-		{
-			FIELD(0x132C, Weapon*, weapon);
-			FIELD(0x14C4, Active, actives[4]);
-			FIELD(0x1745, uint8_t, canShoot);
-			FIELD(0x1D0C, gnucompat::vector<Passive>, passives);
-		};
-	};
-
 	//种子
 	struct Seeds
 	{
@@ -149,6 +125,32 @@ namespace isaac {
 		};
 	};
 
+#pragma warning(disable: 4624)//禁用警告C4624: 已将析构函数隐式定义为“已删除”
+
+	// 控制台类
+	struct Console
+	{
+		union
+		{
+			//0:关闭 2:开启 4:正在关闭 小于0:强制暂停
+			FIELD(0x20, int32_t, state);
+			FIELD(0x30, float, offsetY);
+			FIELD(0x3C, gnucompat::string, consoleText);
+		};
+	};
+
+	// 角色类
+	struct Player
+	{
+		union
+		{
+			FIELD(0x132C, Weapon*, weapon);
+			FIELD(0x14C4, Active, actives[4]);
+			FIELD(0x1745, uint8_t, canShoot);
+			FIELD(0x1D0C, gnucompat::vector<Passive>, passives);
+		};
+	};
+
 	// 游戏类
 	struct Game
 	{
@@ -162,6 +164,8 @@ namespace isaac {
 			FIELD(0x283C20, gnucompat::vector<GlitchedItem*>, glitchedItems);
 		};
 	};
+
+#pragma warning(default: 4624)//重新启用警告C4624
 
 	// 以撒主模块镜像类
 	struct IsaacImage
