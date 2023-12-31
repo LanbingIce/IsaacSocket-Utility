@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
 
@@ -9,6 +8,7 @@ public partial class Form1 : Form
 {
     private bool silent;
     private bool noUpdate;
+    private bool debugUpdate;
     private readonly string dllPath;
     private readonly UpdateForm updateForm;
     private readonly ConcurrentQueue<string> logQueue1, logQueue2, logQueue3, logQueue4;
@@ -26,6 +26,7 @@ public partial class Form1 : Form
             }
         }
 
+        debugUpdate = args.Contains("-debugupdate");
         silent = args.Contains("-silent");
         noUpdate = args.Contains("-noupdate");
         InitializeComponent();
@@ -112,7 +113,7 @@ public partial class Form1 : Form
         {
             Visible = false;
         }
-        if (Debugger.IsAttached)
+        if (debugUpdate)
         {
             updateForm.downloadLink = "https://github.com/LanbingIce/IsaacSocket-Utility/releases/download/v1.0/IsaacSocket.exe";
             updateForm.body = "这里是更新说明";

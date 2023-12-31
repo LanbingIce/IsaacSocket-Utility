@@ -2,7 +2,6 @@
 using IsaacSocket.Modules;
 using IsaacSocket.Utils;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.IO.MemoryMappedFiles;
 using System.Text;
 
@@ -475,15 +474,8 @@ namespace IsaacSocket
 
             if (tempDLLPath == "")
             {
-                if (Debugger.IsAttached)
-                {
-                    tempDLLPath = "C:\\Users\\lanbing\\OneDrive\\Desktop\\IsaacSocket\\Release\\IsaacSocket.dll";
-                }
-                else
-                {
-                    tempDLLPath = Path.Combine(MiscUtil.GetTemporaryDirectory("IsaacSocket_"), "IsaacSocket.dll");
-                    MiscUtil.ExtractFile("IsaacSocket.dll", tempDLLPath);
-                }
+                tempDLLPath = Path.Combine(MiscUtil.GetTemporaryDirectory("IsaacSocket_"), "IsaacSocket.dll");
+                MiscUtil.ExtractFile("IsaacSocket.dll", tempDLLPath);
             }
 
             Application.ApplicationExit += OnExit;

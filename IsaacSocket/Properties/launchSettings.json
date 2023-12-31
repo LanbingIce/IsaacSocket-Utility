@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "IsaacSocket": {
+      "commandName": "Project",
+      "commandLineArgs": "-console\r\n-dllpath=\"$(SolutionDir)Release\\IsaacSocket.dll\""
+    }
+  }
+}

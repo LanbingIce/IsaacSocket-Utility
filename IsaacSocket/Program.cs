@@ -1,6 +1,5 @@
 using IsaacSocket.Forms;
 using IsaacSocket.Utils;
-using System.Diagnostics;
 
 namespace IsaacSocket;
 
@@ -15,8 +14,7 @@ static class Program
         using Mutex mutex = new(true, "Isaac Socket", out bool createdNew);
         if (createdNew)
         {
-            // 判断是否处于调试模式，是的话启用命令行窗口
-            if (Debugger.IsAttached)
+            if (args.Contains("-console"))
             {
                 WinAPIUtil.AllocConsole();
             }
