@@ -63,6 +63,15 @@
     <ClInclude Include="_isaac_socket.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="handle.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="module.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="reload.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -75,6 +84,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="inject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="reload.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

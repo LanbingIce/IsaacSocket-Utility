@@ -24,11 +24,11 @@ namespace state {
 	{
 		struct
 		{
-			LPCVOID Render;
-			LPCVOID GameUpdate;
-			LPCVOID SpecialUpdate;
-			LPCVOID ExecuteCommand;
-			LPCVOID ConsoleOutput;
+			LPCVOID OnRender;
+			LPCVOID OnGameUpdate;
+			LPCVOID OnSpecialUpdate;
+			LPCVOID OnExecuteCommand;
+			LPCVOID OnConsoleOutput;
 			LPCVOID OnWindowMessage;
 		} callbacks;
 
