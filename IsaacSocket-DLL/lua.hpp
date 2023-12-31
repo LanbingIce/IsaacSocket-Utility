@@ -47,7 +47,12 @@ namespace lua {
 
 	struct Lua
 	{
+
+#pragma warning(disable: 6387)//禁用警告	C6387	“hLuaModule”可能是“0” : 这不符合函数“GetProcAddress”的规范。
+
 		HMODULE hLuaModule = GetModuleHandleA("Lua5.3.3r.dll");
+
+#pragma warning(default: 6387)//重新启用警告C6387
 
 		_(const char*, lua_pushstring, lua_State* L, const char* s);
 
