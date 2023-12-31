@@ -2,7 +2,7 @@
 
 #include "module.hpp"
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include <stbi/stb_image.h>
 
 using utils::cw;
 
