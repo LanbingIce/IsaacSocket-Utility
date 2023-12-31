@@ -192,47 +192,37 @@ namespace isaac_api {
 	}
 
 	static void Init() {
-		lua_State* L = local.isaac->luaVM->L;
-		size_t top = local.lua.lua_gettop(L);
+        DEFMOD(IsaacAPI);
 
-		local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
-		local.lua.lua_pushstring(L, "IsaacSocket");
-		local.lua.lua_gettable(L, -2);
-		local.lua.lua_pushstring(L, "IsaacAPI");
-		local.lua.lua_newtable(L);
+		DEF(IsForcePaused);
+		DEF(ForcePause);
 
-#define _(name) local.lua.lua_pushstring(L, #name);local.lua.lua_pushcfunction(L, name); local.lua.lua_settable(L, -3)
+		DEF(ReloadLua);
+		DEF(GetDebugFlag);
 
-		_(IsForcePaused);
-		_(ForcePause);
+		DEF(GetConsoleInput);
+		DEF(IsConsoleOpen);
 
-		_(ReloadLua);
-		_(GetDebugFlag);
+		DEF(SetCanShoot);
 
-		_(GetConsoleInput);
-		_(IsConsoleOpen);
+		DEF(IsPauseMenuForceHidden);
+		DEF(ForceHidePauseMenu);
 
-		_(SetCanShoot);
+		DEF(GetActive);
+		DEF(SetActive);
 
-		_(IsPauseMenuForceHidden);
-		_(ForceHidePauseMenu);
+		DEF(GetEdenTokens);
+		DEF(SetEdenTokens);
 
-		_(GetActive);
-		_(SetActive);
+		DEF(IsAchievementUnlocked);
+		DEF(UnlockAchievement);
 
-		_(GetEdenTokens);
-		_(SetEdenTokens);
+		DEF(IsMTRandomLocked);
+		DEF(LockMTRandom);
 
-		_(IsAchievementUnlocked);
-		_(UnlockAchievement);
+		DEF(GetGlitchedItemTrigger);
+		DEF(GetGlitchedItemEffect);
 
-		_(IsMTRandomLocked);
-		_(LockMTRandom);
-
-		_(GetGlitchedItemTrigger);
-		_(GetGlitchedItemEffect);
-#undef _
-		local.lua.lua_settable(L, -3);
-		local.lua.lua_settop(L, top);
+        ENDMOD();
 	}
 }

@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-#include "lua.hpp"
-#include "utils.hpp"
+#include "module.hpp"
 
 namespace system_
 {
@@ -90,24 +89,10 @@ namespace system_
 	}
 
 	static void Init() {
-		lua_State* L = local.isaac->luaVM->L;
-		size_t top = local.lua.lua_gettop(L);
-
-		local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
-		local.lua.lua_pushstring(L, "IsaacSocket");
-		local.lua.lua_gettable(L, -2);
-		local.lua.lua_pushstring(L, "System");
-		local.lua.lua_newtable(L);
-
-#define _(name) local.lua.lua_pushstring(L, #name);local.lua.lua_pushcfunction(L, name); local.lua.lua_settable(L, -3)
-
-		_(ConsoleOutput);
-		_(GetClipboard);
-		_(SetClipboard);
-
-#undef _
-
-		local.lua.lua_settable(L, -3);
-		local.lua.lua_settop(L, top);
+        DEFMOD(System);
+		DEF(ConsoleOutput);
+		DEF(GetClipboard);
+		DEF(SetClipboard);
+        ENDMOD();
 	}
 };

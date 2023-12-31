@@ -2,6 +2,7 @@
 
 #include "lua.hpp"
 #include "pch.h"
+#include "handle.hpp"
 
 namespace isaac { struct IsaacImage; }
 
@@ -23,22 +24,23 @@ namespace state {
 	{
 		struct
 		{
-			void (*OnRender)();
-			void (*OnGameUpdate)();
-			void (*OnSpecialUpdate)();
-			void (*OnExecuteCommand)(const string&, int, LPCVOID);
-			void (*OnConsoleOutput)(const string&, uint32_t, int32_t);
-			LRESULT(*OnWindowMessage)(LPCVOID, HWND, UINT, WPARAM, LPARAM);
+			LPCVOID Render;
+			LPCVOID GameUpdate;
+			LPCVOID SpecialUpdate;
+			LPCVOID ExecuteCommand;
+			LPCVOID ConsoleOutput;
+			LPCVOID OnWindowMessage;
 		} callbacks;
 
 		bool initialized = false;
 		bool needReload = false;
+		bool needReloadDll = false;
         bool useSharedMemory;
-		HANDLE hProcess;
-		HMODULE hOpenGL;
 		isaac::IsaacImage* isaac;
         lua::Lua lua;
 		uint32_t MTRandomLockedValue = 0;
+		HANDLE hProcess;
+		HMODULE hOpenGL;
 	};
 
 	inline state::_GlobalState* global;

@@ -82,6 +82,7 @@ int main(int argc, char **argv) {
     if (!game) return -1;
 
     putenv("IsaacSocketDoNotUseSharedMemory=1");
+    putenv("IsaacSocketAutoReloadDll=1");
 
     std::cout << std::format("Launching {}", game) << std::endl;
     HANDLE hProcess = executeCommandA(game);

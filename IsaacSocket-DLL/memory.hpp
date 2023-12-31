@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "lua.hpp"
+#include "module.hpp"
 
 namespace memory
 {
@@ -116,48 +116,35 @@ namespace memory
 	}
 
 	static void Init() {
+        DEFMOD(Memory);
 
-		lua_State* L = local.isaac->luaVM->L;
-		size_t top = local.lua.lua_gettop(L);
+		DEF(ReadMemory);
+		DEF(ReadInt8);
+		DEF(ReadUInt8);
+		DEF(ReadInt16);
+		DEF(ReadUInt16);
+		DEF(ReadInt32);
+		DEF(ReadUInt32);
+		DEF(ReadInt64);
+		DEF(ReadUInt64);
+		DEF(ReadFloat);
+		DEF(ReadDouble);
 
-		local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
-		local.lua.lua_pushstring(L, "IsaacSocket");
-		local.lua.lua_gettable(L, -2);
-		local.lua.lua_pushstring(L, "Memory");
-		local.lua.lua_newtable(L);
+		DEF(WriteMemory);
+		DEF(WriteInt8);
+		DEF(WriteUInt8);
+		DEF(WriteInt16);
+		DEF(WriteUInt16);
+		DEF(WriteInt32);
+		DEF(WriteUInt32);
+		DEF(WriteInt64);
+		DEF(WriteUInt64);
+		DEF(WriteFloat);
+		DEF(WriteDouble);
 
-#define _(name) local.lua.lua_pushstring(L, #name);local.lua.lua_pushcfunction(L, name); local.lua.lua_settable(L, -3)
+		DEF(GetImageBase);
+		DEF(CalcAddress);
 
-		_(ReadMemory);
-		_(ReadInt8);
-		_(ReadUInt8);
-		_(ReadInt16);
-		_(ReadUInt16);
-		_(ReadInt32);
-		_(ReadUInt32);
-		_(ReadInt64);
-		_(ReadUInt64);
-		_(ReadFloat);
-		_(ReadDouble);
-
-		_(WriteMemory);
-		_(WriteInt8);
-		_(WriteUInt8);
-		_(WriteInt16);
-		_(WriteUInt16);
-		_(WriteInt32);
-		_(WriteUInt32);
-		_(WriteInt64);
-		_(WriteUInt64);
-		_(WriteFloat);
-		_(WriteDouble);
-
-		_(GetImageBase);
-		_(CalcAddress);
-
-#undef _
-
-		local.lua.lua_settable(L, -3);
-		local.lua.lua_settop(L, top);
+        ENDMOD();
 	}
 }
