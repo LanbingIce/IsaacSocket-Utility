@@ -41,4 +41,26 @@ static void Init(bool useSharedMemory = true) { // true: c# 客户端, false: c+
 
     inject::Init();
 }
+
+static bool InitRepentogon() {
+    //注意，如果Repentogon没有加载，这个LoadLibraryA会加载它
+    //注意，Repentogon在游戏传递-repentogonoff的情况下，需要进行妥善处理！（我们不会调用ModInit，所以大概没有问题）
+    HMODULE loader = LoadLibraryA("RepentogonLoader.dll");
+    if (loader == NULL)
+        return false;
+    auto HookCallbacks = (bool (*)(decltype(&local.callbacks)))GetProcAddress(loader, "HookCallbacks");
+    if (HookCallbacks == NULL)
+        return false;
+
+    local.callbacks = {
+    (LPCVOID)callback::OnRender,
+    (LPCVOID)callback::OnGameUpdate,
+    (LPCVOID)callback::OnSpecialUpdate,
+    (LPCVOID)callback::OnExecuteCommand,
+    (LPCVOID)callback::OnConsoleOutput,
+    (LPCVOID)callback::OnWindowMessage,
+    };
+
+    return HookCallbacks(&local.callbacks);
+}
 }

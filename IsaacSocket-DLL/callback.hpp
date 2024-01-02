@@ -80,6 +80,7 @@ namespace callback {
 	// 游戏更新回调，时机在游戏更新函数的起始位置
 	static void OnGameUpdate()
 	{
+		MessageBoxA(NULL, "Game Update Called!", "Test Message", 0);
 		if (!local.initialized) return;
 		if (local.useSharedMemory && global->connectionState != state::CONNECTED)
 		{
