@@ -10,6 +10,9 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 	{
 	case DLL_PROCESS_ATTACH:
 		/* MessageBoxW(NULL, L"IsaacSocket 注入成功", L"喜报", MB_OK); */
+		if (main::InitRepentogon())
+			break;
+		
 #ifdef _MSC_VER
 		main::Init(true);
 #else
