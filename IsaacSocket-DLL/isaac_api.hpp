@@ -229,6 +229,24 @@ namespace isaac_api {
 		return 0;
 	}
 
+	//获取被动道具列表
+	static int GetItemIds(lua_State* L) {
+		ARG_DEF(1, integer, uint32_t, playerId, 0);
+		ARG_RANGE(playerId, local.isaac->game->players.size());
+
+		vector<isaac::Passive>& passives = local.isaac->game->players[playerId]->passives;
+
+		local.lua.lua_newtable(L);
+
+		for (size_t i = 0; i < passives.size(); i++) {
+			local.lua.lua_pushinteger(L, (lua_Integer)i + 1);
+			local.lua.lua_pushinteger(L, passives[i].item);
+			local.lua.lua_settable(L, -3);
+		}
+
+		return 1;
+	}
+
 	static void Init() {
 		DEFMOD(IsaacAPI);
 
@@ -269,6 +287,8 @@ namespace isaac_api {
 
 		DEF(GetGreedDonationCount);
 		DEF(SetGreedDonationCount);
+
+		DEF(GetItemIds);
 
 		ENDMOD();
 	}
