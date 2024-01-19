@@ -43,7 +43,7 @@ namespace _isaac_socket
     }
 
 	static void Init() {
-        _cprintf("IsaacSocket initializing...\n");
+        //_cprintf("IsaacSocket initializing...\n");
         /* MessageBoxW(NULL, L"IsaacSocket 正在初始化", L"喜报", MB_OK); */
 
         if (!local.useSharedMemory) {
@@ -80,6 +80,6 @@ namespace _isaac_socket
 
 		local.lua.lua_settop(L, top);
 
-        _cprintf("IsaacSocket initialized\n");
+        //_cprintf("IsaacSocket initialized\n");
 	}
 }
