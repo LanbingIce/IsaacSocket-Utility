@@ -205,6 +205,30 @@ namespace isaac_api {
 		return 0;
 	}
 
+	//获取捐款机计数
+	static int GetDonationCount(lua_State* L) {
+		RET(integer, local.isaac->fileManager->donationCount);
+	}
+
+	//设置捐款机计数
+	static int SetDonationCount(lua_State* L) {
+		ARG(1, integer, int32_t, count);
+		local.isaac->fileManager->donationCount = count;
+		return 0;
+	}
+
+	//获取贪婪捐款机计数
+	static int GetGreedDonationCount(lua_State* L) {
+		RET(integer, local.isaac->fileManager->greedDonationCount);
+	}
+
+	//设置贪婪捐款机计数
+	static int SetGreedDonationCount(lua_State* L) {
+		ARG(1, integer, int32_t, count);
+		local.isaac->fileManager->greedDonationCount = count;
+		return 0;
+	}
+
 	static void Init() {
 		DEFMOD(IsaacAPI);
 
@@ -239,6 +263,12 @@ namespace isaac_api {
 
 		DEF(GetFrameInterval);
 		DEF(SetFrameInterval);
+
+		DEF(GetDonationCount);
+		DEF(SetDonationCount);
+
+		DEF(GetGreedDonationCount);
+		DEF(SetGreedDonationCount);
 
 		ENDMOD();
 	}
