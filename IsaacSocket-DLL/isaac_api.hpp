@@ -200,8 +200,8 @@ namespace isaac_api {
 
 	//设置帧间隔
 	static int SetFrameInterval(lua_State* L) {
-		ARG_DEF(1, number, double, value, 1.0 / 60);
-		VAR_WRITE(local.isaac->FrameInterval, value);
+		ARG_DEF(1, number, double, interval, 1.0 / 60);
+		VAR_WRITE(local.isaac->FrameInterval, interval);
 		return 0;
 	}
 
