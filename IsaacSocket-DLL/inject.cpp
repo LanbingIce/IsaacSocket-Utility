@@ -8,17 +8,21 @@ namespace inject {
 	//注入代码
 	static void InjectCode(LPCVOID ModuleBase, size_t offset, LPCVOID fuctionAddress, size_t paddingSize)
 	{
+		size_t opSize = 1 + 4; //操作码长度为1，操作数长度为4
 		char* injectAddress = (char*)ModuleBase + offset;
-		//操作码长度为1，操作数长度为4，两者加起来是5
-		uint8_t opcode = 0xE9;//jmp
-		WriteProcessMemory(local.hProcess, injectAddress, &opcode, 1, nullptr);
-		int32_t operand = (char*)fuctionAddress - injectAddress - 5;
-		WriteProcessMemory(local.hProcess, injectAddress + 1, &operand, 4, nullptr);
+
+		DWORD oldProtect;
+		VirtualProtect(injectAddress, opSize + paddingSize, PAGE_EXECUTE_READWRITE, &oldProtect); //修改页保护
+
+		injectAddress[0] = 0xE9;//操作码：jmp
+		*(int32_t*)(injectAddress + 1) = (char*)fuctionAddress - injectAddress - opSize;//操作数：跳转到的地址
+
 		for (size_t i = 0; i < paddingSize; i++)
 		{
-			opcode = 0x90;//nop
-			WriteProcessMemory(local.hProcess, injectAddress + 5 + i, &opcode, 1, nullptr);
+			injectAddress[opSize + i] = 0x90;//nop填充
 		}
+
+		VirtualProtect(injectAddress, opSize + paddingSize, oldProtect, &oldProtect); //恢复页保护
 	}
 
 #ifndef __MINGW32__
@@ -170,17 +174,17 @@ namespace inject {
 
 	void Init() {
 #ifdef __MINGW32__
-        // 以下代码仅在 MinGW 下编译
-        extern LPCVOID gnuinjectState[];  // 在gnuinject.S中定义
-        gnuinjectState[0] = local.isaac;
-        gnuinjectState[1] = &local.MTRandomLockedValue;
-        gnuinjectState[2] = (LPCVOID)utils::Utf8Cprintf;
-        gnuinjectState[3] = (LPCVOID)GetConsoleWindow;
-        gnuinjectState[4] = (LPCVOID)_cprintf;
-        memcpy(gnuinjectState + 5, &local.callbacks, sizeof(local.callbacks));
+		// 以下代码仅在 MinGW 下编译
+		extern LPCVOID gnuinjectState[];  // 在gnuinject.S中定义
+		gnuinjectState[0] = local.isaac;
+		gnuinjectState[1] = &local.MTRandomLockedValue;
+		gnuinjectState[2] = (LPCVOID)utils::Utf8Cprintf;
+		gnuinjectState[3] = (LPCVOID)GetConsoleWindow;
+		gnuinjectState[4] = (LPCVOID)_cprintf;
+		memcpy(gnuinjectState + 5, &local.callbacks, sizeof(local.callbacks));
 #endif
 
-    /* if (!local.isaac) MessageBoxW(NULL, L"以撒句柄 local.isaac 为空2！", L"错误", MB_OK); */
+		/* if (!local.isaac) MessageBoxW(NULL, L"以撒句柄 local.isaac 为空2！", L"错误", MB_OK); */
 
 #define INJECT(offset, name, padding) InjectCode(local.isaac, offset, (LPCVOID)name, padding)
 		// 渲染

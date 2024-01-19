@@ -39,7 +39,6 @@ namespace state {
 		isaac::IsaacImage* isaac;
         lua::Lua lua;
 		uint32_t MTRandomLockedValue = 0;
-		HANDLE hProcess;
 		HMODULE hOpenGL;
 	};
 
