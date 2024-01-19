@@ -24,9 +24,9 @@ namespace isaac {
 		union
 		{
 			FIELD(0x4C, uint8_t, achievements[638]);
-			FIELD(0x31C, int32_t, donationMachine);
+			FIELD(0x31C, int32_t, donationCount);
 			FIELD(0x320, uint32_t, edenTokens);
-			FIELD(0x498, int32_t, greedDonationMachine);
+			FIELD(0x498, int32_t, greedDonationCount);
 			FIELD(0x29FD8, ModManager, modManager);
 		};
 	};
