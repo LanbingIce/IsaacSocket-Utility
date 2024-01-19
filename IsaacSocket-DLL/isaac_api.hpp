@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "pch.h"
+#include "module.hpp"
 #include "isaac.hpp"
 #include "lua.hpp"
 #include "state.hpp"
