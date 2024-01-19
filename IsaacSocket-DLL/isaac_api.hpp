@@ -4,6 +4,7 @@
 #include "isaac.hpp"
 #include "lua.hpp"
 #include "state.hpp"
+#include "utils.hpp"
 
 using isaac::lua_State;
 
@@ -191,8 +192,20 @@ namespace isaac_api {
 		return 0;
 	}
 
+	//获取帧间隔
+	static int GetFrameInterval(lua_State* L) {
+		RET(number, local.isaac->FrameInterval);
+	}
+
+	//设置帧间隔
+	static int SetFrameInterval(lua_State* L) {
+		ARG_DEF(1, number, double, value, 1.0 / 60);
+		VAR_WRITE(local.isaac->FrameInterval, value);
+		return 0;
+	}
+
 	static void Init() {
-        DEFMOD(IsaacAPI);
+		DEFMOD(IsaacAPI);
 
 		DEF(IsForcePaused);
 		DEF(ForcePause);
@@ -223,6 +236,9 @@ namespace isaac_api {
 		DEF(GetGlitchedItemTrigger);
 		DEF(GetGlitchedItemEffect);
 
-        ENDMOD();
+		DEF(GetFrameInterval);
+		DEF(SetFrameInterval);
+
+		ENDMOD();
 	}
 }

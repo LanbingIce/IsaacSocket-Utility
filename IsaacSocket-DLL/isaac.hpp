@@ -172,6 +172,7 @@ namespace isaac {
 	{
 		union
 		{
+			FIELD(0x76A658, double, FrameInterval);
 			FIELD(0x7C7B08, _GLFWwindow*, window);
 			FIELD(0x7FD65C, Game*, game);
 			FIELD(0x7FD674, LuaVM*, luaVM);

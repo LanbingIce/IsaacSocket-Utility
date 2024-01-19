@@ -52,3 +52,4 @@ namespace utils {
 
 #define FUNC(offset,ret,convention,...) auto f_##offset=(ret(convention*)(__VA_ARGS__))((char*)local.isaac+offset)
 #define FIELD(address,type,name) struct{char pad_##address[address];type name;}
+#define VAR_WRITE(var,value) DWORD oldProtect;VirtualProtect(&var,sizeof(var),PAGE_READWRITE,&oldProtect);var=value;VirtualProtect(&var,sizeof(var),oldProtect,&oldProtect)
