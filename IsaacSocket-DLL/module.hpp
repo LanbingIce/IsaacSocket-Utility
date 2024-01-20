@@ -13,6 +13,6 @@
 #define ARG_RANGE(name,range) if (name >= range){std::ostringstream oss;oss<<"invalid "#name": "<<std::to_string(name); return local.lua.luaL_error(L, oss.str().c_str());}
 #define RET(type,value) local.lua.lua_push##type(L,value);return 1
 #define RET_TABLE() local.lua.lua_newtable(L)
-#define RET_TABLE_KEY(key,type,value) local.lua.lua_pushstring(L,#key);local.lua.lua_push##type(L,value);local.lua.lua_settable(L,-3);local.lua.lua_pop(L,2)
+#define RET_TABLE_KEY(key,type,value) local.lua.lua_pushstring(L,#key);local.lua.lua_push##type(L,value);local.lua.lua_settable(L,-3)
 #define RET_TABLE_END() return 1
 #define MOD_CALLBACK(name,param_type,param,terminateCondition)lua_State* L = local.isaac->luaVM->L;size_t top = local.lua.lua_gettop(L);local.lua.lua_getglobal(L, "Isaac");local.lua.lua_pushstring(L, "GetCallbacks");local.lua.lua_gettable(L, -2);local.lua.lua_pushstring(L, #name);local.lua.lua_pcall(L, 1, 1, 0);bool terminate = false;local.lua.lua_pushnil(L);while(local.lua.lua_next(L, -2) != 0){local.lua.lua_pushstring(L, "Function");local.lua.lua_gettable(L, -2);local.lua.lua_pushstring(L, "Mod");local.lua.lua_gettable(L, -3);local.lua.lua_push##param_type(L, param);local.lua.lua_pcall(L, 2, 1, 0);if (terminateCondition){terminate = true;break;}local.lua.lua_pop(L, 2);}local.lua.lua_settop(L, top)
