@@ -236,15 +236,13 @@ namespace isaac_api {
 
 		vector<isaac::Passive>& passives = local.isaac->game->players[playerId]->passives;
 
-		local.lua.lua_newtable(L);
+		RET_TABLE();
 
 		for (size_t i = 0; i < passives.size(); i++) {
-			local.lua.lua_pushinteger(L, (lua_Integer)i + 1);
-			local.lua.lua_pushinteger(L, passives[i].item);
-			local.lua.lua_settable(L, -3);
+			RET_TABLE_KEY(integer, i + 1, integer, passives[i].item);
 		}
 
-		return 1;
+		RET_TABLE_END();
 	}
 
 	static void Init() {
