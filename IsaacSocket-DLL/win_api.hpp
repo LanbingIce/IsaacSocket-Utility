@@ -14,10 +14,16 @@ namespace win_api
 		return 0;
 	}
 
+	static int GetAsyncKeyState(lua_State* L) {
+		ARG(1, integer, int32_t, vKey);
+		RET(integer, ::GetAsyncKeyState(vKey));
+	}
+
 	static void Init() {
-        DEFMOD(WinAPI);
+		DEFMOD(WinAPI);
 		DEF(AllocConsole);
 		DEF(FreeConsole);
-        ENDMOD();
+		DEF(GetAsyncKeyState);
+		ENDMOD();
 	}
 }
