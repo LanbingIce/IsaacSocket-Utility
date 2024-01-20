@@ -198,10 +198,10 @@ namespace opengl
 
 		if (auto image = image_handles()->find(imageHandle)) {
 			RET_TABLE();
-			RET_TABLE_KEY(width, integer, image->width);
-			RET_TABLE_KEY(height, integer, image->height);
-			RET_TABLE_KEY(channels, integer, image->channels);
-			RET_TABLE_KEY(data_address, integer, reinterpret_cast<uintptr_t>(image->data.data()));
+			RET_TABLE_KEY(string, "width", integer, image->width);
+			RET_TABLE_KEY(string, "height", integer, image->height);
+			RET_TABLE_KEY(string, "channels", integer, image->channels);
+			RET_TABLE_KEY(string, "data_address", integer, reinterpret_cast<uintptr_t>(image->data.data()));
 			RET_TABLE_END();
 		}
 
