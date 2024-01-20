@@ -116,7 +116,7 @@ namespace memory
 	}
 
 	static void Init() {
-        DEFMOD(Memory);
+		DEFMOD(Memory);
 
 		DEF(ReadMemory);
 		DEF(ReadInt8);
@@ -145,6 +145,6 @@ namespace memory
 		DEF(GetImageBase);
 		DEF(CalcAddress);
 
-        ENDMOD();
+		ENDMOD();
 	}
 }

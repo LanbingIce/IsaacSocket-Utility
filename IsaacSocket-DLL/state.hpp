@@ -35,9 +35,9 @@ namespace state {
 		bool initialized = false;
 		bool needReload = false;
 		bool needReloadDll = false;
-        bool useSharedMemory;
+		bool useSharedMemory;
 		isaac::IsaacImage* isaac;
-        lua::Lua lua;
+		lua::Lua lua;
 		uint32_t MTRandomLockedValue = 0;
 		HMODULE hOpenGL;
 	};

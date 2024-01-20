@@ -30,7 +30,8 @@ namespace callback {
 				global->connectionState = state::CONNECTED;
 				_isaac_socket::Init();
 			}
-        } else {
+		}
+		else {
 
 			if (!local.initialized && _isaac_socket::LuaReady())
 			{
@@ -157,7 +158,7 @@ namespace callback {
 			return 1;
 		}
 		int result = 1;
-        char *buffer = state::charsBuffer;
+		char* buffer = state::charsBuffer;
 		switch (uMsg)
 		{
 		case WM_CHAR:

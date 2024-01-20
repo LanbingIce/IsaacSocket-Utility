@@ -29,11 +29,11 @@ namespace _isaac_socket
 	}
 
 	static bool LuaReady() {
-        isaac::LuaVM *luaVM = local.isaac->luaVM;
+		isaac::LuaVM* luaVM = local.isaac->luaVM;
 		if (!luaVM) {
 			return false;
 		}
-        lua_State *L = luaVM->L;
+		lua_State* L = luaVM->L;
 		if (!L) {
 			return false;
 		}

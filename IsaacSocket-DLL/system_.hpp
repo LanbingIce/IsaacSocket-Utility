@@ -89,10 +89,10 @@ namespace system_
 	}
 
 	static void Init() {
-        DEFMOD(System);
+		DEFMOD(System);
 		DEF(ConsoleOutput);
 		DEF(GetClipboard);
 		DEF(SetClipboard);
-        ENDMOD();
+		ENDMOD();
 	}
 };
