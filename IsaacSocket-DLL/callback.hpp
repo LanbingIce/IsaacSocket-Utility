@@ -162,33 +162,35 @@ namespace callback {
 		switch (uMsg)
 		{
 		case WM_CHAR:
-			if (!std::iscntrl(wParam))
+			if (std::iscntrl(wParam))
 			{
-				if (buffer[0] < 0)
+				break;
+			}
+			if (buffer[0] < 0)
+			{
+				buffer[1] = wParam;
+				size_t len = utils::AnsiToU16(buffer);
+				vector<wchar_t> u16(len);
+				utils::AnsiToU16(buffer, u16.data(), len);
+				len = utils::U16ToU8(u16.data());
+				vector<char> u8(len);
+				utils::U16ToU8(u16.data(), u8.data(), len);
+				if (OnCharInput(u8.data()))
 				{
-					buffer[1] = wParam;
-					size_t len = utils::AnsiToU16(buffer);
-					vector<wchar_t> u16(len);
-					utils::AnsiToU16(buffer, u16.data(), len);
-					len = utils::U16ToU8(u16.data());
-					vector<char> u8(len);
-					utils::U16ToU8(u16.data(), u8.data(), len);
-					if (OnCharInput(u8.data()))
-					{
-						result = 0;
-					}
-					buffer[0] = 0;
-					buffer[1] = 0;
+					result = 0;
 				}
-				else
+				buffer[0] = 0;
+				buffer[1] = 0;
+			}
+			else
+			{
+				buffer[0] = wParam;
+				if (buffer[0] >= 0 && OnCharInput(buffer))
 				{
-					buffer[0] = wParam;
-					if (buffer[0] >= 0 && OnCharInput(buffer))
-					{
-						result = 0;
-					}
+					result = 0;
 				}
 			}
+			break;
 		}
 		return result;
 	}
