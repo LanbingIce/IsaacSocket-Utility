@@ -19,11 +19,17 @@ namespace win_api
 		RET(integer, ::GetAsyncKeyState(vKey));
 	}
 
+	static int GetKeyState(lua_State* L) {
+		ARG(1, integer, int32_t, nVirtKey);
+		RET(integer, ::GetKeyState(nVirtKey));
+	}
+
 	static void Init() {
 		DEFMOD(WinAPI);
 		DEF(AllocConsole);
 		DEF(FreeConsole);
 		DEF(GetAsyncKeyState);
+		DEF(GetKeyState);
 		ENDMOD();
 	}
 }
