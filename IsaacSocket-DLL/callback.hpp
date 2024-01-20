@@ -191,6 +191,13 @@ namespace callback {
 				}
 			}
 			break;
+		case WM_KEYDOWN:
+			MOD_CALLBACK(ISAAC_SOCKET_ON_KEY_DOWN, integer, wParam, !local.lua.lua_isnil(L, -1));
+			if (terminate)
+			{
+				result = 0;
+			}
+			break;
 		}
 		return result;
 	}
