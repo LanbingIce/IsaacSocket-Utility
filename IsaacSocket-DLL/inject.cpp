@@ -9,13 +9,13 @@ namespace inject {
 	static void InjectCode(LPCVOID ModuleBase, size_t offset, LPCVOID fuctionAddress, size_t paddingSize)
 	{
 		size_t opSize = 1 + 4; //操作码长度为1，操作数长度为4
-		char* injectAddress = (char*)ModuleBase + offset;
+		uint8_t* injectAddress = (uint8_t*)ModuleBase + offset;
 
 		DWORD oldProtect;
 		VirtualProtect(injectAddress, opSize + paddingSize, PAGE_EXECUTE_READWRITE, &oldProtect); //修改页保护
 
 		injectAddress[0] = 0xE9;//操作码：jmp
-		*(int32_t*)(injectAddress + 1) = (char*)fuctionAddress - injectAddress - opSize;//操作数：跳转到的地址
+		*(int32_t*)(injectAddress + 1) = (uint8_t*)fuctionAddress - injectAddress - opSize;//操作数：跳转到的地址
 
 		for (size_t i = 0; i < paddingSize; i++)
 		{
