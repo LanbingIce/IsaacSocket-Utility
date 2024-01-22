@@ -141,14 +141,6 @@ namespace callback {
 		}
 	}
 
-
-	// 收到键盘输入，返回true则拦截此次消息
-	static bool OnCharInput(const char* text)
-	{
-		MOD_CALLBACK(ISAAC_SOCKET_ON_CHAR_INPUT, string, text, !local.lua.lua_isnil(L, -1));
-		return terminate;
-	}
-
 	// 窗口消息回调，返回0则拦截此次消息
 	static LRESULT OnWindowMessage(LPCVOID _, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
@@ -175,9 +167,14 @@ namespace callback {
 				len = utils::U16ToU8(u16.data());
 				vector<char> u8(len);
 				utils::U16ToU8(u16.data(), u8.data(), len);
-				if (OnCharInput(u8.data()))
 				{
-					result = 0;
+					//兼容旧版名称，下个版本删除
+					MOD_CALLBACK(ISAAC_SOCKET_ON_CHAR_INPUT, string, u8.data(), !local.lua.lua_isnil(L, -1));
+					result = terminate ? 0 : result;
+				}
+				{
+					MOD_CALLBACK(ISMC_PRE_CHAR_INPUT, string, u8.data(), !local.lua.lua_isnil(L, -1));
+					result = terminate ? 0 : result;
 				}
 				buffer[0] = 0;
 				buffer[1] = 0;
@@ -185,19 +182,31 @@ namespace callback {
 			else
 			{
 				buffer[0] = wParam;
-				if (buffer[0] >= 0 && OnCharInput(buffer))
+				if (buffer[0] >= 0)
 				{
-					result = 0;
+					{
+						//兼容旧版名称，下个版本删除
+						MOD_CALLBACK(ISAAC_SOCKET_ON_CHAR_INPUT, string, buffer, !local.lua.lua_isnil(L, -1));
+						result = terminate ? 0 : result;
+					}
+					{
+						MOD_CALLBACK(ISMC_PRE_CHAR_INPUT, string, buffer, !local.lua.lua_isnil(L, -1));
+						result = terminate ? 0 : result;
+					}
 				}
 			}
 			break;
 		case WM_KEYDOWN:
+		{
+			//兼容旧版名称，下个版本删除
 			MOD_CALLBACK(ISAAC_SOCKET_ON_KEY_DOWN, integer, wParam, !local.lua.lua_isnil(L, -1));
-			if (terminate)
-			{
-				result = 0;
-			}
-			break;
+			result = terminate ? 0 : result;
+		}
+		{
+			MOD_CALLBACK(ISMC_PRE_KEY_DOWN, integer, wParam, !local.lua.lua_isnil(L, -1));
+			result = terminate ? 0 : result;
+		}
+		break;
 		}
 		return result;
 	}
