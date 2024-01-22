@@ -150,7 +150,7 @@ namespace callback {
 			return 1;
 		}
 		int result = 1;
-		char* buffer = state::charsBuffer;
+		char* buffer = local.charsInputBuffer;
 		switch (uMsg)
 		{
 		case WM_CHAR:

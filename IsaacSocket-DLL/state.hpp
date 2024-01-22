@@ -36,6 +36,7 @@ namespace state {
 		bool needReload = false;
 		bool needReloadDll = false;
 		bool useSharedMemory;
+		char charsInputBuffer[3];
 		isaac::IsaacImage* isaac;
 		lua::Lua lua;
 		uint32_t MTRandomLockedValue = 0;
@@ -44,9 +45,6 @@ namespace state {
 
 	inline state::_GlobalState* global;
 	inline state::_LocalState local;
-	inline char charsBuffer[3];
-
-
 }
 
 using state::global;
