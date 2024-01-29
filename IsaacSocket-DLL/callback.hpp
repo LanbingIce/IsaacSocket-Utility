@@ -149,7 +149,6 @@ namespace callback {
 		{
 			return 1;
 		}
-		int result = 1;
 		char* buffer = local.charsInputBuffer;
 		switch (uMsg)
 		{
@@ -167,17 +166,15 @@ namespace callback {
 				len = utils::U16ToU8(u16.data());
 				vector<char> u8(len);
 				utils::U16ToU8(u16.data(), u8.data(), len);
-				{
-					//兼容旧版名称，下个版本删除
-					MOD_CALLBACK(ISAAC_SOCKET_ON_CHAR_INPUT, string, u8.data(), !local.lua.lua_isnil(L, -1));
-					result = terminate ? 0 : result;
-				}
-				{
-					MOD_CALLBACK(ISMC_PRE_CHAR_INPUT, string, u8.data(), !local.lua.lua_isnil(L, -1));
-					result = terminate ? 0 : result;
-				}
 				buffer[0] = 0;
 				buffer[1] = 0;
+				{
+					//兼容旧版名称，下个版本删除
+					MOD_CALLBACK(ISAAC_SOCKET_ON_CHAR_INPUT, string, u8.data());
+				}
+				{
+					MOD_CALLBACK(ISMC_PRE_CHAR_INPUT, string, u8.data());
+				}
 			}
 			else
 			{
@@ -186,12 +183,10 @@ namespace callback {
 				{
 					{
 						//兼容旧版名称，下个版本删除
-						MOD_CALLBACK(ISAAC_SOCKET_ON_CHAR_INPUT, string, buffer, !local.lua.lua_isnil(L, -1));
-						result = terminate ? 0 : result;
+						MOD_CALLBACK(ISAAC_SOCKET_ON_CHAR_INPUT, string, buffer);
 					}
 					{
-						MOD_CALLBACK(ISMC_PRE_CHAR_INPUT, string, buffer, !local.lua.lua_isnil(L, -1));
-						result = terminate ? 0 : result;
+						MOD_CALLBACK(ISMC_PRE_CHAR_INPUT, string, buffer);
 					}
 				}
 			}
@@ -199,15 +194,13 @@ namespace callback {
 		case WM_KEYDOWN:
 		{
 			//兼容旧版名称，下个版本删除
-			MOD_CALLBACK(ISAAC_SOCKET_ON_KEY_DOWN, integer, wParam, !local.lua.lua_isnil(L, -1));
-			result = terminate ? 0 : result;
+			MOD_CALLBACK(ISAAC_SOCKET_ON_KEY_DOWN, integer, wParam);
 		}
 		{
-			MOD_CALLBACK(ISMC_PRE_KEY_DOWN, integer, wParam, !local.lua.lua_isnil(L, -1));
-			result = terminate ? 0 : result;
+			MOD_CALLBACK(ISMC_PRE_KEY_DOWN, integer, wParam);
 		}
 		break;
 		}
-		return result;
+		return 1;
 	}
 }
