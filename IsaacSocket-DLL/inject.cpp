@@ -111,7 +111,10 @@ namespace inject {
 			call local.callbacks.OnExecuteCommand
 			add esp, 0x0C
 			pop ecx
-			push ebp
+			test eax, eax
+			jne flag
+			ret 0x0C
+			flag : push ebp
 			mov ebp, esp
 			push - 0x01
 			mov eax, local.isaac

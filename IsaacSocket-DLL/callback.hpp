@@ -88,14 +88,23 @@ namespace callback {
 		}
 	}
 
-	// 执行控制台指令回调，时机在执行控制台指令函数的起始位置
-	static void OnExecuteCommand(const string& text, int unknow, LPCVOID unknow_point_guess)
+	// 执行控制台指令回调，时机在执行控制台指令函数的起始位置，返回true则拦截此次消息
+	static bool OnExecuteCommand(string& text, int unknow, LPCVOID unknow_point_guess)
 	{
-		if (!local.initialized) return;
+		if (!local.initialized) return true;
 		if (local.useSharedMemory && global->connectionState != state::CONNECTED)
 		{
-			return;
+			return true;
 		}
+
+		_MOD_CALLBACK(ISMC_PRE_EXECUTE_CMD);
+		local.lua.lua_pushlstring(L, text.c_str(), text.size());
+		local.lua.lua_pcall(L, 2, 1, 0);
+		if (local.lua.lua_isstring(L, -1))
+		{
+			text = local.lua.lua_tolstring(L, -1, nullptr);
+		}
+		else _MOD_CALLBACK_END();
 
 		if (text == "test")
 		{
@@ -129,6 +138,7 @@ namespace callback {
 				PostMessageA(hwnd, WM_CLOSE, 0, 0);
 			}
 		}
+		return true;
 	}
 
 	// 控制台输出回调，时机在控制台输出函数的起始位置
