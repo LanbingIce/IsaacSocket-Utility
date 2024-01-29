@@ -98,7 +98,7 @@ namespace callback {
 		}
 	}
 
-	// 执行控制台指令回调，时机在执行控制台指令函数的起始位置，返回true则拦截此次消息
+	// 执行控制台指令回调，时机在执行控制台指令函数的起始位置，返回false则取消此次指令
 	static bool OnExecuteCommand(string& text, int unknow, LPCVOID unknow_point_guess)
 	{
 		if (!local.initialized) return true;
