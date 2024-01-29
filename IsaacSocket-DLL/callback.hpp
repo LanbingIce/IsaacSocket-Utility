@@ -119,7 +119,7 @@ namespace callback {
 
 		if (text == "luadll")
 		{
-			local.needReloadDll = true;
+			//local.needReloadDll = true;
 		}
 
 		if (text == "ac")
