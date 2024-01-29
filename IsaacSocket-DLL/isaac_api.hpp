@@ -245,6 +245,11 @@ namespace isaac_api {
 		RET_TABLE_END();
 	}
 
+	//获取FPS
+	static int GetFPS(lua_State* L) {
+		RET(integer, local.fps);
+	}
+
 	static void Init() {
 		DEFMOD(IsaacAPI);
 
@@ -287,6 +292,8 @@ namespace isaac_api {
 		DEF(SetGreedDonationCount);
 
 		DEF(GetItemIds);
+
+		DEF(GetFPS);
 
 		ENDMOD();
 	}

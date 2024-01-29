@@ -14,6 +14,16 @@ namespace callback {
 	// 渲染回调，时机在渲染函数的起始位置，只要游戏进程存在就一直触发
 	static void OnRender()
 	{
+		time_t currentTime;
+		time(&currentTime);
+		if (currentTime != local.lastTime)
+		{
+			local.lastTime = currentTime;
+			local.fps = local.frameCounter;
+			local.frameCounter = 0;
+		}
+		local.frameCounter++;
+
 		if (local.useSharedMemory) {
 			if (global->connectionState == state::DISCONNECTED)
 			{
