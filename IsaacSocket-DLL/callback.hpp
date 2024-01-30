@@ -151,14 +151,28 @@ namespace callback {
 		return true;
 	}
 
-	// 控制台输出回调，时机在控制台输出函数的起始位置
-	static void OnConsoleOutput(const string& text, uint32_t color, int32_t type)
+	// 控制台输出回调，时机在控制台输出函数的起始位置，返回false则取消此次输出
+	static bool OnConsoleOutput(string& text, uint32_t color, int32_t type)
 	{
-		if (!local.initialized) return;
+		if (!local.initialized) return true;
 		if (local.useSharedMemory && global->connectionState != state::CONNECTED)
 		{
-			return;
+			return true;
 		}
+
+		_MOD_CALLBACK(ISMC_PRE_CONSOLE_OUTPUT);
+		local.lua.lua_pushlstring(L, text.c_str(), text.size());
+		local.lua.lua_pushinteger(L, color);
+
+		local.lua.lua_pcall(L, 3, 1, 0);
+
+		if (local.lua.lua_isstring(L, -1))
+		{
+			text = local.lua.lua_tolstring(L, -1, nullptr);
+		}
+		else _MOD_CALLBACK_END();
+
+		return true;
 	}
 
 	// 窗口消息回调，返回0则拦截此次消息
