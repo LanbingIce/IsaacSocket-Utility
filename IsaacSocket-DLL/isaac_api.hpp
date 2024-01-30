@@ -250,6 +250,22 @@ namespace isaac_api {
 		RET(integer, local.fps);
 	}
 
+	//控制台输出
+	static int ConsoleOutput(lua_State* L) {
+		const char* text;
+		size_t len;
+		if (local.lua.lua_isstring(L, 1)) {
+			text = local.lua.lua_tolstring(L, 1, &len);
+		}
+		else {
+			return local.lua.luaL_error(L, "bad argument #1: text should be string");
+		}
+		ARG_DEF(2, integer, uint32_t, color, 0xFFD3D3D3);
+		string str = string(text, len);
+		function::ConsoleOutput(str, color);
+		return 0;
+	}
+
 	static void Init() {
 		DEFMOD(IsaacAPI);
 
@@ -294,6 +310,8 @@ namespace isaac_api {
 		DEF(GetItemIds);
 
 		DEF(GetFPS);
+
+		DEF(ConsoleOutput);
 
 		ENDMOD();
 	}
