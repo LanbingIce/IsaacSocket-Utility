@@ -58,34 +58,39 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="callback.hpp" />
-    <ClInclude Include="framework.h" />
-    <ClInclude Include="function.hpp" />
-    <ClInclude Include="inject.hpp" />
-    <ClInclude Include="reload.hpp" />
-    <ClInclude Include="module.hpp" />
-    <ClInclude Include="isaac.hpp" />
-    <ClInclude Include="isaac_api.hpp" />
-    <ClInclude Include="_isaac_socket.hpp" />
-    <ClInclude Include="main.hpp" />
-    <ClInclude Include="lua.hpp" />
-    <ClInclude Include="memory.hpp" />
-    <ClInclude Include="opengl.hpp" />
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="state.hpp" />
-    <ClInclude Include="system_.hpp" />
-    <ClInclude Include="utils.hpp" />
-    <ClInclude Include="win_api.hpp" />
-    <ClInclude Include="handle.hpp" />
+    <ClInclude Include="include\callback.hpp" />
+    <ClInclude Include="include\framework.h" />
+    <ClInclude Include="include\function.hpp" />
+    <ClInclude Include="include\gnucompat.hpp" />
+    <ClInclude Include="include\handle.hpp" />
+    <ClInclude Include="include\inject.hpp" />
+    <ClInclude Include="include\isaac.hpp" />
+    <ClInclude Include="include\isaac_api.hpp" />
+    <ClInclude Include="include\lua.hpp" />
+    <ClInclude Include="include\main.hpp" />
+    <ClInclude Include="include\memory.hpp" />
+    <ClInclude Include="include\module.hpp" />
+    <ClInclude Include="include\opengl.hpp" />
+    <ClInclude Include="include\pch.h" />
+    <ClInclude Include="include\reload.hpp" />
+    <ClInclude Include="include\state.hpp" />
+    <ClInclude Include="include\system_.hpp" />
+    <ClInclude Include="include\utils.hpp" />
+    <ClInclude Include="include\win_api.hpp" />
+    <ClInclude Include="include\_isaac_socket.hpp" />
+    <ClInclude Include="libs\glad\glad.h" />
+    <ClInclude Include="libs\KHR\khrplatform.h" />
+    <ClInclude Include="libs\stbi\stb_image.h" />
+    <ClInclude Include="libs\stbi\stb_image_write.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="glad.cpp" />
-    <ClCompile Include="inject.cpp" />
-    <ClCompile Include="reload.cpp" />
+    <ClCompile Include="libs\glad\glad.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\dllmain.cpp" />
+    <ClCompile Include="src\inject.cpp" />
+    <ClCompile Include="src\reload.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
