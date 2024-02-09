@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "utils.hpp"
 #include <fstream>
 #include <ostream>
