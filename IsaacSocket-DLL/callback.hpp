@@ -185,38 +185,20 @@ namespace callback {
 				utils::U16ToU8(u16.data(), u8.data(), len);
 				buffer[0] = 0;
 				buffer[1] = 0;
-				{
-					//兼容旧版名称，下个版本删除
-					MOD_CALLBACK(ISAAC_SOCKET_ON_CHAR_INPUT, string, u8.data());
-				}
-				{
-					MOD_CALLBACK(ISMC_PRE_CHAR_INPUT, string, u8.data());
-				}
+				MOD_CALLBACK(ISMC_PRE_CHAR_INPUT, string, u8.data());
 			}
 			else
 			{
 				buffer[0] = wParam;
 				if (buffer[0] >= 0)
 				{
-					{
-						//兼容旧版名称，下个版本删除
-						MOD_CALLBACK(ISAAC_SOCKET_ON_CHAR_INPUT, string, buffer);
-					}
-					{
-						MOD_CALLBACK(ISMC_PRE_CHAR_INPUT, string, buffer);
-					}
+					MOD_CALLBACK(ISMC_PRE_CHAR_INPUT, string, buffer);
 				}
 			}
 			break;
 		case WM_KEYDOWN:
-		{
-			//兼容旧版名称，下个版本删除
-			MOD_CALLBACK(ISAAC_SOCKET_ON_KEY_DOWN, integer, wParam);
-		}
-		{
 			MOD_CALLBACK(ISMC_PRE_KEY_DOWN, integer, wParam);
-		}
-		break;
+			break;
 		}
 		return 1;
 	}
