@@ -20,12 +20,6 @@ namespace function {
 		inject::GameUpdate(local.isaac->game);
 	}
 
-	// 进行一次“渲染”
-	static void Render()
-	{
-		inject::Render();
-	}
-
 	// 进行一次 “控制台输出”
 	static void ConsoleOutput(const string& text, uint32_t color = 0xFFD3D3D3)
 	{

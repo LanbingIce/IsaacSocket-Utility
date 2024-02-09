@@ -56,16 +56,21 @@ namespace inject {
 		}
 	}
 
-	// 渲染函数
-	__declspec(naked) void Render()
+	//SwapBuffers
+	__declspec(naked) void SwapBuffers()
 	{
 		__asm {
-			call local.callbacks.OnRender
-			push ebp
-			mov ebp, esp
-			and esp, -0x08
+			call local.callbacks.PreSwapBuffers
+			test eax, eax
+			je flag_r0
+			call edi
+			jmp flag_r1
+			flag_r0 : add esp, 0x04
+			flag_r1 : pop edi
+			pop esi
+			mov esp, ebp
 			mov eax, local.isaac
-			add eax, 0x4B0606
+			add eax, 0x4B107C
 			jmp eax
 		}
 	}
@@ -190,8 +195,8 @@ namespace inject {
 		/* if (!local.isaac) MessageBoxW(NULL, L"以撒句柄 local.isaac 为空2！", L"错误", MB_OK); */
 
 #define INJECT(offset, name, padding) InjectCode(local.isaac, offset, (LPCVOID)name, padding)
-		// 渲染
-		INJECT(0x4B0600, Render, 1);
+		// SwapBuffers
+		INJECT(0x4B1076, SwapBuffers, 1);
 		// 执行控制台指令
 		INJECT(0x2655C0, ExecuteCommand, 0);
 		// 控制台输出

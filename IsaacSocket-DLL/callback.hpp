@@ -12,8 +12,8 @@ using utils::cw;
 #define CHECK_STATE()if (!local.initialized) return 1;if (local.useSharedMemory && global->connectionState != state::CONNECTED)return 1
 namespace callback {
 
-	// 渲染回调，时机在渲染函数的起始位置，只要游戏进程存在就一直触发
-	static int OnRender()
+	// SwapBuffers之前，只要游戏进程存在就一直触发
+	static int PreSwapBuffers(HDC hdc)
 	{
 		if (local.useSharedMemory) {
 			if (global->connectionState == state::DISCONNECTED)
@@ -75,6 +75,10 @@ namespace callback {
 			function::ReloadLuaWithoutDeleteRoom();
 			return 1;
 		}
+
+		MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
+		MOD_CALLBACK_CALL();
+		MOD_CALLBACK_END();
 
 		return 1;
 	}

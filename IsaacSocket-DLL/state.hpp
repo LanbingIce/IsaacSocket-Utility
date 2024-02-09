@@ -24,7 +24,7 @@ namespace state {
 	{
 		struct
 		{
-			LPCVOID OnRender;
+			LPCVOID PreSwapBuffers;
 			LPCVOID OnGameUpdate;
 			LPCVOID OnSpecialUpdate;
 			LPCVOID OnExecuteCommand;

@@ -4,7 +4,7 @@
 
 namespace inject {
 	void LogPrintf(int level, const char* format, ...);
-	void Render();
+	void SwapBuffers();
 	void FASTCALL GameUpdate(isaac::Game* gamePtr);
 	void SpecialUpdate();
 	void FASTCALL ExecuteCommand(isaac::Console& console, LPCVOID _, const string& text, int unknow, int unknow_point_guess);

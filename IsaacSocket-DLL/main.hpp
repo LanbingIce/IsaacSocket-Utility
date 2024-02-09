@@ -30,7 +30,7 @@ namespace main {
 		/* if (!local.hOpenGL) MessageBoxW(NULL, L"OpenGL 句柄 local.hOpenGL 为空！", L"错误", MB_OK); */
 
 		local.callbacks = {
-			(LPCVOID)callback::OnRender,
+			(LPCVOID)callback::PreSwapBuffers,
 			(LPCVOID)callback::OnGameUpdate,
 			(LPCVOID)callback::OnSpecialUpdate,
 			(LPCVOID)callback::OnExecuteCommand,
