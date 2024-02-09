@@ -98,14 +98,14 @@ namespace callback {
 	{
 		CHECK_STATE();
 
-		_MOD_CALLBACK(ISMC_PRE_EXECUTE_CMD);
-		local.lua.lua_pushlstring(L, text.c_str(), text.size());
-		local.lua.lua_pcall(L, 2, 1, 0);
+		MOD_CALLBACK_BEGIN(ISMC_PRE_EXECUTE_CMD);
+		MOD_CALLBACK_ARG(lstring, text.c_str(), text.size());
+		MOD_CALLBACK_CALL();
 		if (local.lua.lua_isstring(L, -1))
 		{
 			text = local.lua.lua_tolstring(L, -1, nullptr);
 		}
-		else _MOD_CALLBACK_END();
+		else MOD_CALLBACK_END();
 
 		if (text == "test")
 		{
@@ -147,17 +147,16 @@ namespace callback {
 	{
 		CHECK_STATE();
 
-		_MOD_CALLBACK(ISMC_PRE_CONSOLE_OUTPUT);
-		local.lua.lua_pushlstring(L, text.c_str(), text.size());
-		local.lua.lua_pushinteger(L, color);
-
-		local.lua.lua_pcall(L, 3, 1, 0);
+		MOD_CALLBACK_BEGIN(ISMC_PRE_CONSOLE_OUTPUT);
+		MOD_CALLBACK_ARG(lstring, text.c_str(), text.size());
+		MOD_CALLBACK_ARG(integer, color);
+		MOD_CALLBACK_CALL();
 
 		if (local.lua.lua_isstring(L, -1))
 		{
 			text = local.lua.lua_tolstring(L, -1, nullptr);
 		}
-		else _MOD_CALLBACK_END();
+		else MOD_CALLBACK_END();
 
 		return 1;
 	}
@@ -185,19 +184,28 @@ namespace callback {
 				utils::U16ToU8(u16.data(), u8.data(), len);
 				buffer[0] = 0;
 				buffer[1] = 0;
-				MOD_CALLBACK(ISMC_PRE_CHAR_INPUT, string, u8.data());
+				MOD_CALLBACK_BEGIN(ISMC_PRE_CHAR_INPUT);
+				MOD_CALLBACK_ARG(string, u8.data());
+				MOD_CALLBACK_CALL();
+				MOD_CALLBACK_END();
 			}
 			else
 			{
 				buffer[0] = wParam;
 				if (buffer[0] >= 0)
 				{
-					MOD_CALLBACK(ISMC_PRE_CHAR_INPUT, string, buffer);
+					MOD_CALLBACK_BEGIN(ISMC_PRE_CHAR_INPUT);
+					MOD_CALLBACK_ARG(string, buffer);
+					MOD_CALLBACK_CALL();
+					MOD_CALLBACK_END();
 				}
 			}
 			break;
 		case WM_KEYDOWN:
-			MOD_CALLBACK(ISMC_PRE_KEY_DOWN, integer, wParam);
+			MOD_CALLBACK_BEGIN(ISMC_PRE_KEY_DOWN);
+			MOD_CALLBACK_ARG(integer, wParam);
+			MOD_CALLBACK_CALL();
+			MOD_CALLBACK_END();
 			break;
 		}
 		return 1;
