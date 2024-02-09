@@ -136,11 +136,11 @@ namespace callback {
 
 		if (text == "fc")
 		{
-			HWND hwnd = GetConsoleWindow();
-			if (hwnd)
+			HWND hWnd = GetConsoleWindow();
+			if (hWnd)
 			{
 				FreeConsole();
-				PostMessageA(hwnd, WM_CLOSE, 0, 0);
+				PostMessageA(hWnd, WM_CLOSE, 0, 0);
 			}
 		}
 		return 1;
