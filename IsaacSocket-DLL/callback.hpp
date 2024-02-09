@@ -9,24 +9,16 @@
 
 using utils::cw;
 
+#define CHECK_STATE()if (!local.initialized) return 1;if (local.useSharedMemory && global->connectionState != state::CONNECTED)return 1
 namespace callback {
 
 	// 渲染回调，时机在渲染函数的起始位置，只要游戏进程存在就一直触发
-	static void OnRender()
+	static int OnRender()
 	{
-		auto currentTime = std::chrono::system_clock::now();
-		if (std::chrono::duration_cast<std::chrono::seconds>(currentTime - local.lastTime).count() != 0)
-		{
-			local.lastTime = currentTime;
-			local.fps = local.frameCounter;
-			local.frameCounter = 0;
-		}
-		local.frameCounter++;
-
 		if (local.useSharedMemory) {
 			if (global->connectionState == state::DISCONNECTED)
 			{
-				return;
+				return 1;
 			}
 			if (global->connectionState == state::CONNECTING)
 			{
@@ -62,49 +54,49 @@ namespace callback {
 			}
 		}
 #endif
+		auto currentTime = std::chrono::system_clock::now();
+		if (std::chrono::duration_cast<std::chrono::seconds>(currentTime - local.lastTime).count() != 0)
+		{
+			local.lastTime = currentTime;
+			local.fps = local.frameCounter;
+			local.frameCounter = 0;
+		}
+		local.frameCounter++;
 		if (local.needReloadDll)
 		{
 			reloadLibraryMain("IsaacSocket.dll");
 			local.needReloadDll = false;
-			return;
+			return 1;
 		}
 
 		if (local.needReload)
 		{
 			local.needReload = false;
 			function::ReloadLuaWithoutDeleteRoom();
+			return 1;
 		}
 
+		return 1;
 	}
 
 	// 额外更新回调，时机在额外更新函数的起始位置
-	static void OnSpecialUpdate()
+	static int OnSpecialUpdate()
 	{
-		if (!local.initialized) return;
-		if (local.useSharedMemory && global->connectionState != state::CONNECTED)
-		{
-			return;
-		}
+		CHECK_STATE();
+		return 1;
 	}
 
 	// 游戏更新回调，时机在游戏更新函数的起始位置
-	static void OnGameUpdate()
+	static int OnGameUpdate()
 	{
-		if (!local.initialized) return;
-		if (local.useSharedMemory && global->connectionState != state::CONNECTED)
-		{
-			return;
-		}
+		CHECK_STATE();
+		return 1;
 	}
 
 	// 执行控制台指令回调，时机在执行控制台指令函数的起始位置，返回false则取消此次指令
-	static bool OnExecuteCommand(string& text, int unknow, LPCVOID unknow_point_guess)
+	static int OnExecuteCommand(string& text, int unknow, LPCVOID unknow_point_guess)
 	{
-		if (!local.initialized) return true;
-		if (local.useSharedMemory && global->connectionState != state::CONNECTED)
-		{
-			return true;
-		}
+		CHECK_STATE();
 
 		_MOD_CALLBACK(ISMC_PRE_EXECUTE_CMD);
 		local.lua.lua_pushlstring(L, text.c_str(), text.size());
@@ -147,17 +139,13 @@ namespace callback {
 				PostMessageA(hwnd, WM_CLOSE, 0, 0);
 			}
 		}
-		return true;
+		return 1;
 	}
 
-	// 控制台输出回调，时机在控制台输出函数的起始位置，返回false则取消此次输出
-	static bool OnConsoleOutput(string& text, uint32_t color, int32_t type)
+	// 控制台输出回调，时机在控制台输出函数的起始位置，返回0则取消此次输出
+	static int OnConsoleOutput(string& text, uint32_t color, int32_t type)
 	{
-		if (!local.initialized) return true;
-		if (local.useSharedMemory && global->connectionState != state::CONNECTED)
-		{
-			return true;
-		}
+		CHECK_STATE();
 
 		_MOD_CALLBACK(ISMC_PRE_CONSOLE_OUTPUT);
 		local.lua.lua_pushlstring(L, text.c_str(), text.size());
@@ -171,17 +159,13 @@ namespace callback {
 		}
 		else _MOD_CALLBACK_END();
 
-		return true;
+		return 1;
 	}
 
 	// 窗口消息回调，返回0则拦截此次消息
 	static LRESULT OnWindowMessage(LPCVOID _, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
-		if (!local.initialized) return 1;
-		if (local.useSharedMemory && global->connectionState != state::CONNECTED)
-		{
-			return 1;
-		}
+		CHECK_STATE();
 		char* buffer = local.charsInputBuffer;
 		switch (uMsg)
 		{
@@ -237,3 +221,4 @@ namespace callback {
 		return 1;
 	}
 }
+#undef CHECK_STATE
