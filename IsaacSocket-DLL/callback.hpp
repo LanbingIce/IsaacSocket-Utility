@@ -26,6 +26,7 @@ namespace callback {
 				{
 					gladLoadGL();
 					function::SetGLFWCharacter();
+					local.hWnd = WindowFromDC(hdc);
 					local.initialized = true;
 				}
 				global->connectionState = state::CONNECTED;
@@ -130,8 +131,7 @@ namespace callback {
 		if (text == "ac")
 		{
 			AllocConsole();
-			HWND hwnd = FindWindowA("GLFW30", "Binding of Isaac: Repentance");
-			SetForegroundWindow(hwnd);
+			SetForegroundWindow(local.hWnd);
 		}
 
 		if (text == "fc")

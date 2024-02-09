@@ -31,7 +31,7 @@ namespace state {
 			LPCVOID OnConsoleOutput;
 			LPCVOID PreWndProc;
 		} callbacks;
-
+		HWND hWnd;
 		bool initialized = false;
 		bool needReload = false;
 		bool needReloadDll = false;
