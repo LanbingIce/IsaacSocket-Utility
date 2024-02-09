@@ -20,7 +20,6 @@
 #include <cmath>
 #include <unordered_map>
 #include <unordered_set>
-#include <glad/glad.h>
 
 #ifdef _MSC_VER
 #define FASTCALL __fastcall

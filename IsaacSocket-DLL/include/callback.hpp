@@ -7,7 +7,15 @@
 #include "modules/_isaac_socket.hpp"
 #include "reload.hpp"
 
+#include "imgui/imgui.h"
+
+#include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_impl_win32.h"
+
 using utils::cw;
+
+// Forward declare message handler from imgui_impl_win32.cpp
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 #define CHECK_STATE()if (!local.initialized) return 1;if (local.useSharedMemory && global->connectionState != state::CONNECTED)return 1
 namespace callback {
@@ -27,6 +35,10 @@ namespace callback {
 					gladLoadGL();
 					function::SetGLFWCharacter();
 					local.hWnd = WindowFromDC(hdc);
+					ImGui::CreateContext();
+					ImGui_ImplWin32_Init(local.hWnd);
+					ImGui_ImplOpenGL3_Init();
+					ImGui::StyleColorsDark();
 					local.initialized = true;
 				}
 				global->connectionState = state::CONNECTED;
@@ -76,6 +88,19 @@ namespace callback {
 			function::ReloadLuaWithoutDeleteRoom();
 			return 1;
 		}
+
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+
+		//ImGui::ShowDemoWindow();
+
+		ImGui::Render();
+
+		// Draw the overlay
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 
 		MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
 		MOD_CALLBACK_CALL();
@@ -155,6 +180,8 @@ namespace callback {
 	static int PreWndProc(LPCVOID _, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		CHECK_STATE();
+		if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
+			return true;
 		char* buffer = local.charsInputBuffer;
 		switch (uMsg)
 		{

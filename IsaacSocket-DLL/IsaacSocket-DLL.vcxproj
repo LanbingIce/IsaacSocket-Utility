@@ -79,12 +79,28 @@
     <ClInclude Include="include\state.hpp" />
     <ClInclude Include="include\utils.hpp" />
     <ClInclude Include="libs\glad\glad.h" />
+    <ClInclude Include="libs\imgui\imconfig.h" />
+    <ClInclude Include="libs\imgui\imgui.h" />
+    <ClInclude Include="libs\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="libs\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="libs\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="libs\imgui\imgui_internal.h" />
+    <ClInclude Include="libs\imgui\imstb_rectpack.h" />
+    <ClInclude Include="libs\imgui\imstb_textedit.h" />
+    <ClInclude Include="libs\imgui\imstb_truetype.h" />
     <ClInclude Include="libs\KHR\khrplatform.h" />
     <ClInclude Include="libs\stbi\stb_image.h" />
     <ClInclude Include="libs\stbi\stb_image_write.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libs\glad\glad.cpp" />
+    <ClCompile Include="libs\imgui\imgui.cpp" />
+    <ClCompile Include="libs\imgui\imgui_demo.cpp" />
+    <ClCompile Include="libs\imgui\imgui_draw.cpp" />
+    <ClCompile Include="libs\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="libs\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="libs\imgui\imgui_tables.cpp" />
+    <ClCompile Include="libs\imgui\imgui_widgets.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>

@@ -3,6 +3,7 @@
 #include "module.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 #include <stbi/stb_image.h>
+#include <glad/glad.h>
 
 using utils::cw;
 

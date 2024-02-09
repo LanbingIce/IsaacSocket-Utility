@@ -28,6 +28,9 @@
     <Filter Include="头文件\modules">
       <UniqueIdentifier>{46aa8285-5255-4bdb-9c01-01f3f2a98dad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libs\imgui">
+      <UniqueIdentifier>{d626c85d-7fa2-4a9b-bcf6-fe3af7b67f9f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp">
@@ -44,6 +47,27 @@
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui.cpp">
+      <Filter>libs\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_demo.cpp">
+      <Filter>libs\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_draw.cpp">
+      <Filter>libs\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_tables.cpp">
+      <Filter>libs\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_widgets.cpp">
+      <Filter>libs\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_impl_opengl3.cpp">
+      <Filter>libs\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_impl_win32.cpp">
+      <Filter>libs\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +142,33 @@
     </ClInclude>
     <ClInclude Include="include\modules\win_api.hpp">
       <Filter>头文件\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imconfig.h">
+      <Filter>libs\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imgui.h">
+      <Filter>libs\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imgui_internal.h">
+      <Filter>libs\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imstb_rectpack.h">
+      <Filter>libs\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imstb_textedit.h">
+      <Filter>libs\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imstb_truetype.h">
+      <Filter>libs\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imgui_impl_opengl3.h">
+      <Filter>libs\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imgui_impl_opengl3_loader.h">
+      <Filter>libs\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imgui_impl_win32.h">
+      <Filter>libs\imgui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
