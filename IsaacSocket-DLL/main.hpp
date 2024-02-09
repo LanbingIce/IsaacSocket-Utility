@@ -31,8 +31,6 @@ namespace main {
 
 		local.callbacks = {
 			(LPCVOID)callback::PreSwapBuffers,
-			(LPCVOID)callback::OnGameUpdate,
-			(LPCVOID)callback::OnSpecialUpdate,
 			(LPCVOID)callback::OnExecuteCommand,
 			(LPCVOID)callback::OnConsoleOutput,
 			(LPCVOID)callback::PreWndProc,

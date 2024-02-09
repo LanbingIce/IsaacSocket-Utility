@@ -8,18 +8,6 @@
 
 namespace function {
 
-	// 进行一次 “额外更新”，即人物更新之类的每秒额外30次更新
-	static void SpecialUpdate()
-	{
-		inject::SpecialUpdate();
-	}
-
-	// 进行一次 “游戏更新”
-	static void GameUpdate()
-	{
-		inject::GameUpdate(local.isaac->game);
-	}
-
 	// 进行一次 “控制台输出”
 	static void ConsoleOutput(const string& text, uint32_t color = 0xFFD3D3D3)
 	{

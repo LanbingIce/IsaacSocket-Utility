@@ -84,20 +84,6 @@ namespace callback {
 		return 1;
 	}
 
-	// 额外更新回调，时机在额外更新函数的起始位置
-	static int OnSpecialUpdate()
-	{
-		CHECK_STATE();
-		return 1;
-	}
-
-	// 游戏更新回调，时机在游戏更新函数的起始位置
-	static int OnGameUpdate()
-	{
-		CHECK_STATE();
-		return 1;
-	}
-
 	// 执行控制台指令回调，时机在执行控制台指令函数的起始位置，返回false则取消此次指令
 	static int OnExecuteCommand(string& text, int unknow, LPCVOID unknow_point_guess)
 	{
