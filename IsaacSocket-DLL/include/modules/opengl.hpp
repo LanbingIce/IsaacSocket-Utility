@@ -58,8 +58,8 @@ namespace opengl
 			// ((x + 0.5f) / width * 2.0f - 1.0f, (y + 0.5f) / height * 2.0f - 1.0f, 0.0f)
 			float sx = 1.0f / local.isaac->window->width;
 			float sy = 1.0f / local.isaac->window->height;
-			glTranslatef(sx - 1.0f, sy - 1.0f, 0.01f);
-			glScalef(2.0f * sx, 2.0f * sy, 1.0f);
+			glTranslatef(sx - 1.0f, 1.0f - sy, 0.01f);
+			glScalef(2.0f * sx, -2.0f * sy, 1.0f);
 		}
 
 		~GLStateGuard() {
