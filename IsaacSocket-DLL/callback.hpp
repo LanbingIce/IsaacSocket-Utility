@@ -162,7 +162,7 @@ namespace callback {
 	}
 
 	// 窗口消息回调，返回0则拦截此次消息
-	static LRESULT PreWndProc(LPCVOID _, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	static int PreWndProc(LPCVOID _, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		CHECK_STATE();
 		char* buffer = local.charsInputBuffer;
