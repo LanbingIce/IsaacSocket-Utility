@@ -25,6 +25,9 @@
     <Filter Include="libs\stbi">
       <UniqueIdentifier>{72d4eced-7b28-43b5-96d6-9ef96d22860c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\modules">
+      <UniqueIdentifier>{46aa8285-5255-4bdb-9c01-01f3f2a98dad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp">
@@ -44,9 +47,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\_isaac_socket.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\callback.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -65,22 +65,10 @@
     <ClInclude Include="include\isaac.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\isaac_api.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\lua.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\main.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\memory.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\module.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\opengl.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\reload.hpp">
@@ -89,13 +77,7 @@
     <ClInclude Include="include\state.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\system_.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\utils.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\win_api.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="libs\glad\glad.h">
@@ -115,6 +97,27 @@
     </ClInclude>
     <ClInclude Include="libs\KHR\khrplatform.h">
       <Filter>libs\KHR</Filter>
+    </ClInclude>
+    <ClInclude Include="include\modules\_isaac_socket.hpp">
+      <Filter>头文件\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="include\modules\isaac_api.hpp">
+      <Filter>头文件\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="include\modules\memory.hpp">
+      <Filter>头文件\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="include\modules\module.hpp">
+      <Filter>头文件\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="include\modules\opengl.hpp">
+      <Filter>头文件\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="include\modules\system_.hpp">
+      <Filter>头文件\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="include\modules\win_api.hpp">
+      <Filter>头文件\modules</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

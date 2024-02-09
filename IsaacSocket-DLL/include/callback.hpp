@@ -4,7 +4,7 @@
 #include "state.hpp"
 #include "utils.hpp"
 #include "function.hpp"
-#include "_isaac_socket.hpp"
+#include "modules/_isaac_socket.hpp"
 #include "reload.hpp"
 
 using utils::cw;
