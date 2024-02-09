@@ -158,10 +158,10 @@ namespace inject {
 	}
 
 	//窗口过程回调函数
-	__declspec(naked) LRESULT WINAPI Wndproc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	__declspec(naked) LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		__asm {
-			call local.callbacks.OnWindowMessage
+			call local.callbacks.PreWndProc
 			test eax, eax
 			je flag
 			push ebp
@@ -205,7 +205,7 @@ namespace inject {
 		// MT19937随机数生成
 		INJECT(0x2C3EA8, MTRandom, 1);
 		// 窗口消息
-		INJECT(0x5971D0, Wndproc, 1);
+		INJECT(0x5971D0, WndProc, 1);
 #undef INJECT
 	}
 }

@@ -35,7 +35,7 @@ namespace main {
 			(LPCVOID)callback::OnSpecialUpdate,
 			(LPCVOID)callback::OnExecuteCommand,
 			(LPCVOID)callback::OnConsoleOutput,
-			(LPCVOID)callback::OnWindowMessage,
+			(LPCVOID)callback::PreWndProc,
 		};
 		/* if (!local.isaac) MessageBoxW(NULL, L"以撒句柄 local.isaac 为空1！", L"错误", MB_OK); */
 

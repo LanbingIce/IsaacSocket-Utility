@@ -29,7 +29,7 @@ namespace state {
 			LPCVOID OnSpecialUpdate;
 			LPCVOID OnExecuteCommand;
 			LPCVOID OnConsoleOutput;
-			LPCVOID OnWindowMessage;
+			LPCVOID PreWndProc;
 		} callbacks;
 
 		bool initialized = false;
