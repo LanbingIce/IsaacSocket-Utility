@@ -63,10 +63,21 @@ namespace function {
 	static void IsaacSocketFirstTimeInit() {
 		gladLoadGL();
 		function::SetGLFWCharacter();
+
+		// Setup Dear ImGui context
+		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
-		ImGui_ImplWin32_Init(local.hWnd);
-		ImGui_ImplOpenGL3_Init();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;   // Enable Keyboard Controls
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;    // Enable Gamepad Controls
+
+		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
+		//ImGui::StyleColorsClassic();
+
+		// Setup Platform/Renderer backends
+		ImGui_ImplWin32_InitForOpenGL(local.hWnd);
+		ImGui_ImplOpenGL3_Init();
 	}
 
 	static void IsaacSocketUpdate() {
