@@ -62,9 +62,9 @@ namespace inject {
 			call local.callbacks.PreSwapBuffers
 			test eax, eax
 			je flag_r0
-			call edi
+			add esp, 0x04
 			jmp flag_r1
-			flag_r0 : add esp, 0x04
+			flag_r0 : call edi
 			flag_r1 : pop edi
 			pop esi
 			mov esp, ebp
@@ -87,13 +87,13 @@ namespace inject {
 			pop ecx
 			test eax, eax
 			jne flag
-			ret 0x0C
-			flag : push ebp
+			push ebp
 			mov ebp, esp
 			push - 0x01
 			mov eax, local.isaac
 			add eax, 0x2655C5
 			jmp eax
+			flag : ret 0x0C
 		}
 	}
 
@@ -108,12 +108,15 @@ namespace inject {
 			call local.callbacks.OnConsoleOutput
 			add esp, 0x0C
 			pop ecx
+			test eax, eax
+			jne flag
 			push ebp
 			mov ebp, esp
 			push - 0x01
 			mov eax, local.isaac
 			add eax, 0x26AEC5
 			jmp eax
+			flag : ret 0x0C
 		}
 	}
 
@@ -137,7 +140,7 @@ namespace inject {
 		__asm {
 			call local.callbacks.PreWndProc
 			test eax, eax
-			je flag
+			jne flag
 			push ebp
 			mov ebp, esp
 			and esp, -0x40
@@ -177,5 +180,5 @@ namespace inject {
 		// 窗口消息
 		INJECT(0x5971D0, WndProc, 1);
 #undef INJECT
-	}
+}
 }

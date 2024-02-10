@@ -17,16 +17,16 @@ using utils::cw;
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-#define CHECK_STATE()if (!local.initialized) return 1;if (local.useSharedMemory && global->connectionState != state::CONNECTED)return 1
+#define CHECK_STATE()if (!local.initialized) return 0;if (local.useSharedMemory && global->connectionState != state::CONNECTED)return 0
 namespace callback {
 
-	// SwapBuffers之前，只要游戏进程存在就一直触发
+	// SwapBuffers之前，只要游戏进程存在就一直触发，返回1则取消此次交换
 	static int PreSwapBuffers(HDC hdc)
 	{
 		if (local.useSharedMemory) {
 			if (global->connectionState == state::DISCONNECTED)
 			{
-				return 1;
+				return 0;
 			}
 			if (global->connectionState == state::CONNECTING)
 			{
@@ -79,14 +79,14 @@ namespace callback {
 		{
 			reloadLibraryMain("IsaacSocket.dll");
 			local.needReloadDll = false;
-			return 1;
+			return 0;
 		}
 
 		if (local.needReload)
 		{
 			local.needReload = false;
 			function::ReloadLuaWithoutDeleteRoom();
-			return 1;
+			return 0;
 		}
 
 
@@ -106,10 +106,10 @@ namespace callback {
 		MOD_CALLBACK_CALL();
 		MOD_CALLBACK_END();
 
-		return 1;
+		return 0;
 	}
 
-	// 执行控制台指令回调，时机在执行控制台指令函数的起始位置，返回false则取消此次指令
+	// 执行控制台指令回调，时机在执行控制台指令函数的起始位置，返回1则取消此次指令
 	static int OnExecuteCommand(string& text, int unknow, LPCVOID unknow_point_guess)
 	{
 		CHECK_STATE();
@@ -154,10 +154,10 @@ namespace callback {
 				PostMessageA(hWnd, WM_CLOSE, 0, 0);
 			}
 		}
-		return 1;
+		return 0;
 	}
 
-	// 控制台输出回调，时机在控制台输出函数的起始位置，返回0则取消此次输出
+	// 控制台输出回调，时机在控制台输出函数的起始位置，返回1则取消此次输出
 	static int OnConsoleOutput(string& text, uint32_t color, int32_t type)
 	{
 		CHECK_STATE();
@@ -173,15 +173,17 @@ namespace callback {
 		}
 		else MOD_CALLBACK_END();
 
-		return 1;
+		return 0;
 	}
 
-	// 窗口消息回调，返回0则拦截此次消息
+	// 窗口消息回调，返回1则拦截此次消息
 	static int PreWndProc(LPCVOID _, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		CHECK_STATE();
 		if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
-			return true;
+		{
+			return 1;
+		}
 		char* buffer = local.charsInputBuffer;
 		switch (uMsg)
 		{
@@ -225,7 +227,7 @@ namespace callback {
 			MOD_CALLBACK_END();
 			break;
 		}
-		return 1;
+		return 0;
 	}
 }
 #undef CHECK_STATE
