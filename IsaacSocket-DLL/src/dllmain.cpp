@@ -8,12 +8,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 	switch (ul_reason_for_call)
 	{
 	case DLL_PROCESS_ATTACH:
-		/* MessageBoxW(NULL, L"IsaacSocket 注入成功", L"喜报", MB_OK); */
-#ifdef _MSC_VER
-		main::Init(true);
-#else
-		main::Init(!getenv("IsaacSocketDoNotUseSharedMemory"));
-#endif //_MSC_VER
+		main::Init();
 		break;
 	case DLL_THREAD_ATTACH:
 	case DLL_THREAD_DETACH:

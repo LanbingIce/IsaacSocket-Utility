@@ -13,7 +13,7 @@
 namespace _isaac_socket
 {
 	static int Disconnect(lua_State* L) {
-		if (local.useSharedMemory) global->connectionState = state::DISCONNECTED;
+		global->connectionState = state::DISCONNECTED;
 		local.MTRandomLockedValue = 0;
 		local.needReload = false;
 		local.needReloadDll = false;
@@ -45,28 +45,6 @@ namespace _isaac_socket
 	}
 
 	static void Init() {
-		//_cprintf("IsaacSocket initializing...\n");
-		/* MessageBoxW(NULL, L"IsaacSocket 正在初始化", L"喜报", MB_OK); */
-
-		if (!local.useSharedMemory) {
-			lua_State* L = local.isaac->luaVM->L;
-			int top = local.lua.lua_gettop(L);
-			// _ISAAC_SOCKET = {}
-			local.lua.lua_newtable(L);
-			local.lua.lua_setglobal(L, "_ISAAC_SOCKET");
-			// _ISAAC_SOCKET.IsaacSocket = {}
-			local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
-			local.lua.lua_pushstring(L, "IsaacSocket");
-			local.lua.lua_newtable(L);
-			local.lua.lua_settable(L, -3);
-			// IsaacSocket = _ISAAC_SOCKET.IsaacSocket
-			local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
-			local.lua.lua_pushstring(L, "IsaacSocket");
-			local.lua.lua_gettable(L, -2);
-			local.lua.lua_setglobal(L, "IsaacSocket");
-			local.lua.lua_settop(L, top);
-		}
-
 		isaac_api::Init();
 		memory::Init();
 		win_api::Init();

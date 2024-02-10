@@ -17,44 +17,34 @@ using utils::cw;
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-#define CHECK_STATE()if (!local.initialized) return 0;if (local.useSharedMemory && global->connectionState != state::CONNECTED)return 0
+#define CHECK_STATE()if (!local.initialized) return 0;if (global->connectionState != state::CONNECTED)return 0
 namespace callback {
 
 	// SwapBuffers之前，只要游戏进程存在就一直触发，返回1则取消此次交换
 	static int PreSwapBuffers(HDC hdc)
 	{
-		if (local.useSharedMemory) {
-			if (global->connectionState == state::DISCONNECTED)
-			{
-				return 0;
-			}
-			if (global->connectionState == state::CONNECTING)
-			{
-				if (!local.initialized)
-				{
-					gladLoadGL();
-					function::SetGLFWCharacter();
-					local.hWnd = WindowFromDC(hdc);
-					ImGui::CreateContext();
-					ImGui_ImplWin32_Init(local.hWnd);
-					ImGui_ImplOpenGL3_Init();
-					ImGui::StyleColorsDark();
-					local.initialized = true;
-				}
-				global->connectionState = state::CONNECTED;
-				_isaac_socket::Init();
-			}
-		}
-		else {
 
-			if (!local.initialized && _isaac_socket::LuaReady())
+		if (global->connectionState == state::DISCONNECTED)
+		{
+			return 0;
+		}
+		if (global->connectionState == state::CONNECTING)
+		{
+			if (!local.initialized)
 			{
 				gladLoadGL();
 				function::SetGLFWCharacter();
-				_isaac_socket::Init();
+				local.hWnd = WindowFromDC(hdc);
+				ImGui::CreateContext();
+				ImGui_ImplWin32_Init(local.hWnd);
+				ImGui_ImplOpenGL3_Init();
+				ImGui::StyleColorsDark();
 				local.initialized = true;
 			}
+			global->connectionState = state::CONNECTED;
+			_isaac_socket::Init();
 		}
+
 #ifdef __MINGW32__
 		if (getenv("IsaacSocketAutoReloadDll")) {
 			static int counter = 0;
@@ -107,7 +97,7 @@ namespace callback {
 		MOD_CALLBACK_END();
 
 		return 0;
-	}
+			}
 
 	// 执行控制台指令回调，时机在执行控制台指令函数的起始位置，返回1则取消此次指令
 	static int OnExecuteCommand(string& text, int unknow, LPCVOID unknow_point_guess)
@@ -225,5 +215,5 @@ namespace callback {
 		return 0;
 #undef _
 	}
-}
+		}
 #undef CHECK_STATE
