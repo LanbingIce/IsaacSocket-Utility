@@ -5,12 +5,8 @@
 #include "utils.hpp"
 #include "function.hpp"
 #include "modules/_isaac_socket.hpp"
-#include "reload.hpp"
 
-#include "imgui/imgui.h"
-
-#include "imgui/imgui_impl_opengl3.h"
-#include "imgui/imgui_impl_win32.h"
+#include <imgui/imgui.h>
 
 using utils::cw;
 
@@ -23,81 +19,38 @@ namespace callback {
 	// SwapBuffers之前，只要游戏进程存在就一直触发，返回1则取消此次交换
 	static int PreSwapBuffers(HDC hdc)
 	{
-
-		if (global->connectionState == state::DISCONNECTED)
-		{
-			return 0;
-		}
-		if (global->connectionState == state::CONNECTING)
-		{
+		switch (global->connectionState) {
+		case state::CONNECTING:
 			if (!local.initialized)
 			{
-				gladLoadGL();
-				function::SetGLFWCharacter();
 				local.hWnd = WindowFromDC(hdc);
-				ImGui::CreateContext();
-				ImGui_ImplWin32_Init(local.hWnd);
-				ImGui_ImplOpenGL3_Init();
-				ImGui::StyleColorsDark();
+				function::IsaacSocketFirstTimeInit();
 				local.initialized = true;
 			}
-			global->connectionState = state::CONNECTED;
 			_isaac_socket::Init();
+			global->connectionState = state::CONNECTED;
+			break;
+		case state::CONNECTED:
+			function::IsaacSocketUpdate();
+
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui_ImplWin32_NewFrame();
+			ImGui::NewFrame();
+
+			//ImGui::ShowDemoWindow();
+
+			ImGui::Render();
+
+			// Draw the overlay
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+			MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
+			MOD_CALLBACK_CALL();
+			MOD_CALLBACK_END();
+			break;
 		}
-
-#ifdef __MINGW32__
-		if (getenv("IsaacSocketAutoReloadDll")) {
-			static int counter = 0;
-			counter++;
-			if (counter % 30) {
-				if (reloadLibraryMain("IsaacSocket.dll", true)) {
-					_cprintf("auto reloaded dll\n");
-					return;
-				}
-			}
-		}
-#endif
-		auto currentTime = std::chrono::system_clock::now();
-		if (std::chrono::duration_cast<std::chrono::seconds>(currentTime - local.lastTime).count() != 0)
-		{
-			local.lastTime = currentTime;
-			local.fps = local.frameCounter;
-			local.frameCounter = 0;
-		}
-		local.frameCounter++;
-		if (local.needReloadDll)
-		{
-			reloadLibraryMain("IsaacSocket.dll");
-			local.needReloadDll = false;
-			return 0;
-		}
-
-		if (local.needReload)
-		{
-			local.needReload = false;
-			function::ReloadLuaWithoutDeleteRoom();
-			return 0;
-		}
-
-
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
-
-		//ImGui::ShowDemoWindow();
-
-		ImGui::Render();
-
-		// Draw the overlay
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-
-		MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
-		MOD_CALLBACK_CALL();
-		MOD_CALLBACK_END();
-
 		return 0;
-			}
+	}
 
 	// 执行控制台指令回调，时机在执行控制台指令函数的起始位置，返回1则取消此次指令
 	static int OnExecuteCommand(string& text, int unknow, LPCVOID unknow_point_guess)
@@ -215,5 +168,5 @@ namespace callback {
 		return 0;
 #undef _
 	}
-		}
+}
 #undef CHECK_STATE

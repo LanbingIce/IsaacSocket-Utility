@@ -5,6 +5,12 @@
 #include "state.hpp"
 #include "utils.hpp"
 #include "inject.hpp"
+#include "reload.hpp"
+
+#include <glad/glad.h>
+
+#include <imgui/imgui_impl_opengl3.h>
+#include <imgui/imgui_impl_win32.h>
 
 namespace function {
 
@@ -52,5 +58,39 @@ namespace function {
 	// 设置GLFW的接收字符回调，使得直接设置控制台state的方式打开控制台也可以输入字符
 	static void SetGLFWCharacter() {
 		local.isaac->window->character = (char*)local.isaac + 0x25ECE0;
+	}
+
+	static void IsaacSocketFirstTimeInit() {
+		gladLoadGL();
+		function::SetGLFWCharacter();
+		ImGui::CreateContext();
+		ImGui_ImplWin32_Init(local.hWnd);
+		ImGui_ImplOpenGL3_Init();
+		ImGui::StyleColorsDark();
+	}
+
+	static void IsaacSocketUpdate() {
+		auto currentTime = std::chrono::system_clock::now();
+		if (std::chrono::duration_cast<std::chrono::seconds>(currentTime - local.lastTime).count() != 0)
+		{
+			local.lastTime = currentTime;
+			local.fps = local.frameCounter;
+			local.frameCounter = 0;
+		}
+		local.frameCounter++;
+
+		if (local.needReloadDll)
+		{
+			reloadLibraryMain("IsaacSocket.dll");
+			local.needReloadDll = false;
+			return;
+		}
+
+		if (local.needReload)
+		{
+			local.needReload = false;
+			function::ReloadLuaWithoutDeleteRoom();
+			return;
+		}
 	}
 }
