@@ -37,7 +37,8 @@ namespace callback {
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
 
-			//ImGui::ShowDemoWindow();
+			FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_RENDER);
+			FAST_MOD_CALLBACK_END();
 
 			ImGui::Render();
 
