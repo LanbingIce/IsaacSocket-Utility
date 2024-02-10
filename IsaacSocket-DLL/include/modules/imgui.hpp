@@ -26,8 +26,8 @@ namespace imgui {
 	}
 
 	static int Text(lua_State* L) {
-		ARG(1, string, const char*, label);
-		ImGui::Text("%s", label);
+		ARG(1, string, const char*, text);
+		ImGui::Text("%s", text);
 		return 0;
 	}
 
