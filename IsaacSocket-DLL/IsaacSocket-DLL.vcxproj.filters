@@ -170,5 +170,8 @@
     <ClInclude Include="libs\imgui\imgui_impl_win32.h">
       <Filter>libs\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="include\modules\imgui.hpp">
+      <Filter>头文件\modules</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

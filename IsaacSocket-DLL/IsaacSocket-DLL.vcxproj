@@ -67,6 +67,7 @@
     <ClInclude Include="include\isaac.hpp" />
     <ClInclude Include="include\lua.hpp" />
     <ClInclude Include="include\main.hpp" />
+    <ClInclude Include="include\modules\imgui.hpp" />
     <ClInclude Include="include\modules\isaac_api.hpp" />
     <ClInclude Include="include\modules\memory.hpp" />
     <ClInclude Include="include\modules\module.hpp" />
