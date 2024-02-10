@@ -19,3 +19,5 @@
 #define MOD_CALLBACK_ARG(paramType,...)local.lua.lua_push##paramType(L, __VA_ARGS__);paramNum++
 #define MOD_CALLBACK_CALL()local.lua.lua_pcall(L, paramNum, 1, 0)
 #define MOD_CALLBACK_END()if(!local.lua.lua_isnil(L, -1)){terminate = true;break;}local.lua.lua_pop(L, 2);}local.lua.lua_settop(L, top);if(terminate){return 0;}
+#define FAST_MOD_CALLBACK_BEGIN(name){lua_State* L = local.isaac->luaVM->L;size_t top = local.lua.lua_gettop(L);local.lua.lua_getglobal(L, "Isaac");local.lua.lua_pushstring(L, "RunCallback");local.lua.lua_gettable(L, -2);local.lua.lua_pushstring(L, #name);size_t paramNum = 1
+#define FAST_MOD_CALLBACK_END()local.lua.lua_pcall(L, paramNum, 0, 0);local.lua.lua_settop(L, top);}
