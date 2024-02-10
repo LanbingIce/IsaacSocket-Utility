@@ -182,6 +182,7 @@ namespace callback {
 	// 窗口消息回调，返回1则拦截此次消息
 	static int PreWndProc(LPCVOID _, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
+#define _(name,paramType,...)MOD_CALLBACK_BEGIN(name);MOD_CALLBACK_ARG(paramType,__VA_ARGS__);MOD_CALLBACK_CALL();MOD_CALLBACK_END();
 		CHECK_STATE();
 		if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
 		{
@@ -206,31 +207,23 @@ namespace callback {
 				utils::U16ToU8(u16.data(), u8.data(), len);
 				buffer[0] = 0;
 				buffer[1] = 0;
-				MOD_CALLBACK_BEGIN(ISMC_PRE_CHAR_INPUT);
-				MOD_CALLBACK_ARG(string, u8.data());
-				MOD_CALLBACK_CALL();
-				MOD_CALLBACK_END();
+				_(ISMC_PRE_CHAR_INPUT, string, u8.data());
 			}
 			else
 			{
 				buffer[0] = wParam;
 				if (buffer[0] >= 0)
 				{
-					MOD_CALLBACK_BEGIN(ISMC_PRE_CHAR_INPUT);
-					MOD_CALLBACK_ARG(string, buffer);
-					MOD_CALLBACK_CALL();
-					MOD_CALLBACK_END();
+					_(ISMC_PRE_CHAR_INPUT, string, buffer);
 				}
 			}
 			break;
 		case WM_KEYDOWN:
-			MOD_CALLBACK_BEGIN(ISMC_PRE_KEY_DOWN);
-			MOD_CALLBACK_ARG(integer, wParam);
-			MOD_CALLBACK_CALL();
-			MOD_CALLBACK_END();
+			_(ISMC_PRE_KEY_DOWN, integer, wParam);
 			break;
 		}
 		return 0;
+#undef _
 	}
 }
 #undef CHECK_STATE
