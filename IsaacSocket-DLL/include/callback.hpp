@@ -122,7 +122,10 @@ namespace callback {
 			text = local.lua.lua_tolstring(L, -1, nullptr);
 		}
 		else MOD_CALLBACK_END();
-
+		if (text.size() == 0)
+		{
+			return 1;
+		}
 		if (text == "test")
 		{
 			//function::ExecuteCommand("g k1");
