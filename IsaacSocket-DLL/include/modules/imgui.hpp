@@ -56,8 +56,8 @@ namespace imgui {
 	static int SliderInt(lua_State* L) {
 		ARG(1, string, const char*, label);
 		ARG(2, integer, int, v);
-		ARG(3, number, float, v_min);
-		ARG(4, number, float, v_max);
+		ARG(3, integer, int, v_min);
+		ARG(4, integer, int, v_max);
 		ARG_DEF(5, string, const char*, format, "%d");
 		ARG_DEF(6, integer, int, flags, 0);
 
