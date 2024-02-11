@@ -82,15 +82,6 @@ namespace function {
 	}
 
 	static void IsaacSocketUpdate() {
-		auto currentTime = std::chrono::system_clock::now();
-		if (std::chrono::duration_cast<std::chrono::seconds>(currentTime - local.lastTime).count() != 0)
-		{
-			local.lastTime = currentTime;
-			local.fps = local.frameCounter;
-			local.frameCounter = 0;
-		}
-		local.frameCounter++;
-
 		if (local.needReloadDll)
 		{
 			reloadLibraryMain("IsaacSocket.dll");

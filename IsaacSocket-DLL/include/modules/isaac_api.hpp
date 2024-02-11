@@ -247,7 +247,7 @@ namespace isaac_api {
 
 	//获取FPS
 	static int GetFPS(lua_State* L) {
-		RET(integer, local.fps);
+		RET(number, ImGui::GetIO().Framerate);
 	}
 
 	//控制台输出

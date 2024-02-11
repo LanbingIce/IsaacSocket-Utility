@@ -38,9 +38,6 @@ namespace state {
 		lua::Lua lua;
 		uint32_t MTRandomLockedValue = 0;
 		HMODULE hOpenGL;
-		std::chrono::system_clock::time_point lastTime;
-		size_t frameCounter;
-		size_t fps;
 	};
 
 	inline state::_GlobalState* global;
