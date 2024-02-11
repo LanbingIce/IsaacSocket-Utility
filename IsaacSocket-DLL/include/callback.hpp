@@ -132,6 +132,13 @@ namespace callback {
 		{
 			return 1;
 		}
+
+		const ImGuiIO& io = ImGui::GetIO();
+
+		if (io.WantCaptureMouse && (uMsg == WM_LBUTTONDOWN || uMsg == WM_LBUTTONUP || uMsg == WM_RBUTTONDOWN || uMsg == WM_RBUTTONUP || uMsg == WM_MBUTTONDOWN || uMsg == WM_MBUTTONUP || uMsg == WM_MOUSEWHEEL || uMsg == WM_MOUSEMOVE)) {
+			return 1;
+		}
+
 		char* buffer = local.charsInputBuffer;
 		switch (uMsg)
 		{
