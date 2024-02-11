@@ -31,7 +31,14 @@ namespace imgui {
 		ImGui::Text("%s", text);
 		return 0;
 	}
+	static int Checkbox(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, boolean, bool, v);
 
+		local.lua.lua_pushboolean(L, ImGui::Checkbox(label, &v));
+		local.lua.lua_pushboolean(L, v);
+		return 2;
+	}
 
 	static void Init() {
 		DEFMOD(ImGui);
@@ -39,6 +46,7 @@ namespace imgui {
 		DEF(End);
 		DEF(Button);
 		DEF(Text);
+		DEF(Checkbox);
 		ENDMOD();
 	}
 }
