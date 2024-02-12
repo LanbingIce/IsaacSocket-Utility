@@ -6,6 +6,11 @@
 
 namespace imgui {
 
+	static int ShowDemoWindow(lua_State* L) {
+		ImGui::ShowDemoWindow();
+		return 0;
+	}
+
 	static int Begin(lua_State* L) {
 		ARG(1, string, const char*, name);
 		ARG_DEF(2, boolean, bool, p_open, true);
@@ -98,6 +103,7 @@ namespace imgui {
 
 	static void Init() {
 		DEFMOD(ImGui);
+		DEF(ShowDemoWindow);
 		DEF(Begin);
 		DEF(End);
 		DEF(Button);
