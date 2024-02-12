@@ -127,6 +127,32 @@ namespace callback {
 	{
 #define _(name,paramType,...)MOD_CALLBACK_BEGIN(name);MOD_CALLBACK_ARG(paramType,__VA_ARGS__);MOD_CALLBACK_CALL();MOD_CALLBACK_END();
 		CHECK_INIT();
+
+		char buffer[4];
+		char* u8 = buffer;
+
+		if (uMsg == WM_CHAR)
+		{
+			if (local.charsInputBuffer[0] < 0)
+			{
+				local.charsInputBuffer[1] = wParam;
+				wchar_t* u16 = (wchar_t*)&wParam;
+				utils::AnsiToU16(local.charsInputBuffer, u16, 2);
+				local.charsInputBuffer[0] = 0;
+				local.charsInputBuffer[1] = 0;
+				utils::U16ToU8(u16, u8, 4);
+			}
+			else
+			{
+				local.charsInputBuffer[0] = wParam;
+				if (local.charsInputBuffer[0] < 0)
+				{
+					return 1;
+				}
+				u8 = local.charsInputBuffer;
+			}
+		}
+
 		if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
 		{
 			return 1;
@@ -145,34 +171,12 @@ namespace callback {
 			return 1;
 		}
 
-		char* buffer = local.charsInputBuffer;
 		switch (uMsg)
 		{
 		case WM_CHAR:
-			if (std::iscntrl(wParam))
+			if (!std::iscntrl(wParam))
 			{
-				break;
-			}
-			if (buffer[0] < 0)
-			{
-				buffer[1] = wParam;
-				size_t len = utils::AnsiToU16(buffer);
-				vector<wchar_t> u16(len);
-				utils::AnsiToU16(buffer, u16.data(), len);
-				len = utils::U16ToU8(u16.data());
-				vector<char> u8(len);
-				utils::U16ToU8(u16.data(), u8.data(), len);
-				buffer[0] = 0;
-				buffer[1] = 0;
-				_(ISMC_PRE_CHAR_INPUT, string, u8.data());
-			}
-			else
-			{
-				buffer[0] = wParam;
-				if (buffer[0] >= 0)
-				{
-					_(ISMC_PRE_CHAR_INPUT, string, buffer);
-				}
+				_(ISMC_PRE_CHAR_INPUT, string, u8);
 			}
 			break;
 		case WM_KEYDOWN:
