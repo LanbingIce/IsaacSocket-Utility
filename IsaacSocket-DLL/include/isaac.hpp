@@ -7,6 +7,8 @@ namespace isaac {
 
 	struct lua_State;
 
+#pragma warning(disable: 4624)//禁用警告C4624: 已将析构函数隐式定义为“已删除”
+
 	//Lua虚拟机类
 	struct LuaVM
 	{
@@ -190,8 +192,6 @@ namespace isaac {
 			FIELD(0x214, LPCVOID, character);
 		};
 	};
-
-#pragma warning(disable: 4624)//禁用警告C4624: 已将析构函数隐式定义为“已删除”
 
 	// 控制台类
 	struct Console
