@@ -71,6 +71,8 @@ namespace function {
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;   // Enable Keyboard Controls
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;    // Enable Gamepad Controls
 		ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\msyh.ttc", 18.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+		io.IniFilename = nullptr;
+		io.LogFilename = nullptr;
 
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
