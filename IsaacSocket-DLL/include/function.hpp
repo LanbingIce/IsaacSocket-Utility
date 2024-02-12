@@ -26,6 +26,12 @@ namespace function {
 		inject::ExecuteCommand(local.isaac->game->console, NULL, commandText, 0, 0);
 	}
 
+	// 手动发送一条窗口过程消息
+	LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	{
+		return inject::WndProc(hWnd, uMsg, wParam, lParam);
+	}
+
 	// 重新载入lua环境
 	static void ReloadLuaWithoutDeleteRoom()
 	{
