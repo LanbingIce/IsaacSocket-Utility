@@ -2,6 +2,7 @@
 
 #include "module.hpp"
 #include <imgui/imgui.h>
+#include <imgui/imgui_stdlib.h>
 
 namespace imgui {
 
@@ -86,6 +87,15 @@ namespace imgui {
 		return 0;
 	}
 
+	static int InputText(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, string, string, str);
+		ARG_DEF(3, integer, ImGuiInputTextFlags, flags, 0);
+		local.lua.lua_pushboolean(L, ImGui::InputText(label, &str, flags));
+		local.lua.lua_pushstring(L, str.c_str());
+		return 2;
+	}
+
 	static void Init() {
 		DEFMOD(ImGui);
 		DEF(Begin);
@@ -97,6 +107,7 @@ namespace imgui {
 		DEF(SliderInt);
 		DEF(InputInt);
 		DEF(SameLine);
+		DEF(InputText);
 		ENDMOD();
 	}
 }
