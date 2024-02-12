@@ -142,6 +142,11 @@ namespace callback {
 			return 1;
 		}
 
+		if (io.WantCaptureKeyboard && (uMsg == WM_KEYDOWN || uMsg == WM_CHAR))
+		{
+			return 1;
+		}
+
 		char* buffer = local.charsInputBuffer;
 		switch (uMsg)
 		{
