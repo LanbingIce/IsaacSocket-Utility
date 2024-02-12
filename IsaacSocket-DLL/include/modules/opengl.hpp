@@ -5,8 +5,6 @@
 #include <stbi/stb_image.h>
 #include <glad/glad.h>
 
-using utils::cw;
-
 #define CHECK_GL(x) \
 do { \
     (x); \
