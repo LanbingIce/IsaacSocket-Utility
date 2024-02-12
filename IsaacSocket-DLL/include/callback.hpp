@@ -13,7 +13,8 @@ using utils::cw;
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-#define CHECK_STATE()if (!local.initialized) return 0;if (global->connectionState != state::CONNECTED)return 0
+#define CHECK_INIT()if (!local.initialized)return 0
+#define CHECK_STATE()if (global->connectionState != state::CONNECTED)return 0
 namespace callback {
 
 	// SwapBuffers之前，只要游戏进程存在就一直触发，返回1则取消此次交换
@@ -127,11 +128,13 @@ namespace callback {
 	static int PreWndProc(LPCVOID _, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 #define _(name,paramType,...)MOD_CALLBACK_BEGIN(name);MOD_CALLBACK_ARG(paramType,__VA_ARGS__);MOD_CALLBACK_CALL();MOD_CALLBACK_END();
-		CHECK_STATE();
+		CHECK_INIT();
 		if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
 		{
 			return 1;
 		}
+
+		CHECK_STATE();
 
 		const ImGuiIO& io = ImGui::GetIO();
 
@@ -178,3 +181,4 @@ namespace callback {
 	}
 }
 #undef CHECK_STATE
+#undef CHECK_INIT
