@@ -8,7 +8,7 @@
 namespace isaac { struct IsaacImage; }
 
 namespace state {
-
+#pragma warning(disable: 26495)//禁用警告C26495: 始终初始化成员变量
 	enum ConnectionState
 	{
 		DISCONNECTED = 0,
@@ -44,6 +44,7 @@ namespace state {
 
 	inline state::_GlobalState* global;
 	inline state::_LocalState local;
+#pragma warning(default: 26495)//重新启用警告	C26495
 }
 
 using state::global;
