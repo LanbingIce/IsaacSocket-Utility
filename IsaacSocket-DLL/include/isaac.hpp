@@ -244,6 +244,7 @@ namespace isaac {
 			FIELD(0x7FD674, LuaVM*, luaVM);
 			FIELD(0x7FD680, FileManager*, fileManager);
 			FIELD(0x7FD688, MainMenu*, mainMenu);
+			FIELD(0x7AA920, float, screenPointScale);
 		};
 	};
 }
