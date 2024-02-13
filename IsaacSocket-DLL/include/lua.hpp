@@ -41,6 +41,11 @@ typedef LUA_KCONTEXT lua_KContext;
 typedef int (*lua_KFunction) (lua_State* L, int status, lua_KContext ctx);
 typedef void* (*lua_Alloc) (void* ud, void* ptr, size_t osize, size_t nsize);
 
+typedef struct luaL_Reg {
+	const char* name;
+	lua_CFunction func;
+} luaL_Reg;
+
 namespace lua {
 
 #define _(ret,name,...) ret(*name)(__VA_ARGS__)=(decltype(name))GetProcAddress(hLuaModule, #name)
@@ -96,6 +101,8 @@ namespace lua {
 
 		_(void, lua_pushnil, lua_State* L);
 
+		_(void, lua_callk, lua_State* L, int nargs, int nresults, lua_KContext ctx, lua_KFunction k);
+
 		_(int, lua_pcallk, lua_State* L, int nargs, int nresults, int errfunc, lua_KContext ctx, lua_KFunction k);
 
 		_(int, luaL_getsubtable, lua_State* L, int idx, const char* fname);
@@ -103,6 +110,24 @@ namespace lua {
 		_(lua_Integer, luaL_len, lua_State* L, int idx);
 
 		_(int, lua_next, lua_State* L, int idx);
+
+		_(void*, lua_newuserdata, lua_State* L, size_t size);
+
+		_(int, luaL_newmetatable, lua_State* L, const char* tname);
+
+		_(void, luaL_setfuncs, lua_State* L, const luaL_Reg* l, int nup);
+
+		_(void, luaL_setmetatable, lua_State* L, const char* tname);
+
+		_(int, lua_isuserdata, lua_State* L, int idx);
+
+		_(void*, lua_touserdata, lua_State* L, int idx);
+
+		_(int, lua_setmetatable, lua_State* L, int objindex);
+
+		_(void*, luaL_testudata, lua_State* L, int ud, const char* tname);
+
+		_(void*, luaL_checkudata, lua_State* L, int ud, const char* tname);
 
 		const char* lua_tostring(lua_State* L, int i) const
 		{
@@ -142,6 +167,11 @@ namespace lua {
 		lua_Integer lua_tointeger(lua_State* L, int i) const
 		{
 			return lua_tointegerx(L, i, NULL);
+		}
+
+		void lua_call(lua_State* L, int n, int r) const
+		{
+			return lua_callk(L, n, r, 0, NULL);
 		}
 
 		int lua_pcall(lua_State* L, int n, int r, int f) const
