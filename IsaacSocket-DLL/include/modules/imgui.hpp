@@ -37,6 +37,13 @@ namespace imgui {
 		ImGui::Text("%s", text);
 		return 0;
 	}
+
+	static int TextWrapped(lua_State* L) {
+		ARG(1, string, const char*, text);
+		ImGui::TextWrapped("%s", text);
+		return 0;
+	}
+
 	static int Checkbox(lua_State* L) {
 		ARG(1, string, const char*, label);
 		ARG(2, boolean, bool, v);
@@ -108,6 +115,7 @@ namespace imgui {
 		DEF(End);
 		DEF(Button);
 		DEF(Text);
+		DEF(TextWrapped);
 		DEF(Checkbox);
 		DEF(SliderFloat);
 		DEF(SliderInt);
