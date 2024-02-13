@@ -139,7 +139,7 @@ namespace callback {
 #define _(name,paramType,...)MOD_CALLBACK_BEGIN(name);MOD_CALLBACK_ARG(paramType,__VA_ARGS__);MOD_CALLBACK_CALL();MOD_CALLBACK_END();
 		CHECK_INIT();
 
-		char buffer[4];
+		char buffer[4]{};
 		char* u8 = buffer;
 
 		if (uMsg == WM_CHAR)

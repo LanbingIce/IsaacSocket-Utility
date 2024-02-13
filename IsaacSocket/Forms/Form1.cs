@@ -7,8 +7,8 @@ namespace IsaacSocket.Forms;
 public partial class Form1 : Form
 {
     private bool silent;
-    private bool noUpdate;
-    private bool debugUpdate;
+    private readonly bool noUpdate;
+    private readonly bool debugUpdate;
     private readonly string dllPath;
     private readonly UpdateForm updateForm;
     private readonly ConcurrentQueue<string> logQueue1, logQueue2, logQueue3, logQueue4;
