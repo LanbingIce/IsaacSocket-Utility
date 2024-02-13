@@ -74,9 +74,13 @@ namespace function {
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.FontAllowUserScaling = true;
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;   // Enable Keyboard Controls
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;    // Enable Gamepad Controls
-		local.font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\msyh.ttc", 18.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+
+		std::filesystem::path fontPath = std::filesystem::temp_directory_path() / "IsaacSocket_Font" / "VonwaonBitmap-16px.ttf";
+		local.font = io.Fonts->AddFontFromFileTTF((const char*)fontPath.u8string().c_str(), 16.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+
 		io.IniFilename = nullptr;
 		io.LogFilename = nullptr;
 

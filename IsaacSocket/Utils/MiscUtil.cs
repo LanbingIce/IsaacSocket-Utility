@@ -57,6 +57,19 @@ namespace IsaacSocket.Utils
                 return tempDirectory;
             }
         }
+
+        internal static string GetPermanentDirectory()
+        {
+            string directory = Path.Combine(Path.GetTempPath(), "IsaacSocket_Font");
+
+            if (!File.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            return directory;
+        }
+
         internal static long GetCurrentTime()
         {
             return new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();

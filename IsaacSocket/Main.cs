@@ -478,6 +478,8 @@ namespace IsaacSocket
                 MiscUtil.ExtractFile("IsaacSocket.dll", tempDLLPath);
             }
 
+            MiscUtil.ExtractFile("VonwaonBitmap-16px.ttf", Path.Combine(MiscUtil.GetPermanentDirectory(), "VonwaonBitmap-16px.ttf"));
+
             Application.ApplicationExit += OnExit;
             sendMessagesBuffer = new();
             this.callback = callback;
