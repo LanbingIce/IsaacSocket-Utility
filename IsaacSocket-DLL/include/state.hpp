@@ -3,6 +3,7 @@
 #include "lua.hpp"
 #include "pch.h"
 #include "handle.hpp"
+#include <imgui/imgui.h>
 
 namespace isaac { struct IsaacImage; }
 
@@ -38,6 +39,7 @@ namespace state {
 		lua::Lua lua;
 		uint32_t MTRandomLockedValue = 0;
 		HMODULE hOpenGL;
+		ImFont* font;
 	};
 
 	inline state::_GlobalState* global;

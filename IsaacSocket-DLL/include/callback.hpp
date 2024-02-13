@@ -32,6 +32,7 @@ namespace callback {
 		case state::CONNECTED:
 			function::IsaacSocketUpdate();
 
+			local.font->Scale = local.isaac->screenPointScale;
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
