@@ -6,6 +6,32 @@
 
 namespace imgui {
 
+	static int ImVec2(lua_State* L) {
+		ARG(1, number, float, x);
+		ARG(2, number, float, y);
+		::ImVec2* vec = (::ImVec2*)local.lua.lua_newuserdata(L, sizeof(::ImVec2));
+		local.lua.luaL_newmetatable(L, "ImVec2");
+		local.lua.lua_setmetatable(L, -2);
+		vec->x = x;
+		vec->y = y;
+		return 1;
+	}
+
+	static int ImVec4(lua_State* L) {
+		ARG(1, number, float, x);
+		ARG(2, number, float, y);
+		ARG(3, number, float, z);
+		ARG(4, number, float, w);
+		::ImVec4* vec = (::ImVec4*)local.lua.lua_newuserdata(L, sizeof(::ImVec4));
+		local.lua.luaL_newmetatable(L, "ImVec4");
+		local.lua.lua_setmetatable(L, -2);
+		vec->x = x;
+		vec->y = y;
+		vec->z = z;
+		vec->w = w;
+		return 1;
+	}
+
 	static int ShowDemoWindow(lua_State* L) {
 		ImGui::ShowDemoWindow();
 		return 0;
@@ -36,6 +62,14 @@ namespace imgui {
 		ARG(1, string, const char*, text);
 		ImGui::Text("%s", text);
 		return 0;
+	}
+
+	static int TextColored(lua_State* L) {
+		ARG_UDATA(1, ImVec4, ::ImVec4*, col);
+		ARG(2, string, const char*, text);
+		ImGui::TextColored(*col, "%s", text);
+		return 0;
+
 	}
 
 	static int TextWrapped(lua_State* L) {
@@ -108,13 +142,28 @@ namespace imgui {
 		return 2;
 	}
 
+	static int InputTextMultiline(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, string, string, str);
+		ARG_UDATA(3, ImVec2, ::ImVec2*, size);
+		ARG_DEF(4, integer, ImGuiInputTextFlags, flags, 0);
+		local.lua.lua_pushboolean(L, ImGui::InputTextMultiline(label, &str, *size, flags));
+		local.lua.lua_pushstring(L, str.c_str());
+		return 2;
+	}
+
 	static void Init() {
 		DEFMOD(ImGui);
+
+		DEF(ImVec2);
+		DEF(ImVec4);
+
 		DEF(ShowDemoWindow);
 		DEF(Begin);
 		DEF(End);
 		DEF(Button);
 		DEF(Text);
+		DEF(TextColored);
 		DEF(TextWrapped);
 		DEF(Checkbox);
 		DEF(SliderFloat);
@@ -122,6 +171,7 @@ namespace imgui {
 		DEF(InputInt);
 		DEF(SameLine);
 		DEF(InputText);
+		DEF(InputTextMultiline);
 		ENDMOD();
 	}
 }
