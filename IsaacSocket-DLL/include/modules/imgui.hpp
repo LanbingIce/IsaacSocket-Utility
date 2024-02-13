@@ -154,8 +154,16 @@ namespace imgui {
 
 	static int PushStyleColor(lua_State* L) {
 		ARG(1, integer, ImGuiCol, idx);
-		ARG(2, integer, ImU32, col);
-		ImGui::PushStyleColor(idx, col);
+		if (local.lua.lua_isinteger(L, 2))
+		{
+			ARG(2, integer, int, col);
+			ImGui::PushStyleColor(idx, col);
+		}
+		else
+		{
+			ARG_UDATA(2, ImVec4, ::ImVec4*, col);
+			ImGui::PushStyleColor(idx, *col);
+		}
 		return 0;
 	}
 
