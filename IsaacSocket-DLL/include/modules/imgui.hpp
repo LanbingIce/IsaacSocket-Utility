@@ -160,7 +160,8 @@ namespace imgui {
 	}
 
 	static int PopStyleColor(lua_State* L) {
-		ImGui::PopStyleColor();
+		ARG_DEF(1, integer, int, count, 1);
+		ImGui::PopStyleColor(count);
 		return 0;
 	}
 
