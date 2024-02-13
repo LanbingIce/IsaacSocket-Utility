@@ -152,6 +152,24 @@ namespace imgui {
 		return 2;
 	}
 
+	static int PushStyleColor(lua_State* L) {
+		ARG(1, integer, ImGuiCol, idx);
+		ARG(2, integer, ImU32, col);
+		ImGui::PushStyleColor(idx, col);
+		return 0;
+	}
+
+	static int PopStyleColor(lua_State* L) {
+		ImGui::PopStyleColor();
+		return 0;
+	}
+
+	static int SetScrollHereY(lua_State* L) {
+		ARG_DEF(1, number, float, center_y_ratio, 0.5F);
+		ImGui::SetScrollHereY(center_y_ratio);
+		return 0;
+	}
+
 	static void Init() {
 		DEFMOD(ImGui);
 
@@ -172,6 +190,11 @@ namespace imgui {
 		DEF(SameLine);
 		DEF(InputText);
 		DEF(InputTextMultiline);
+
+		DEF(PushStyleColor);
+		DEF(PopStyleColor);
+		DEF(SetScrollHereY);
+
 		ENDMOD();
 	}
 }
