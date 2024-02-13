@@ -32,13 +32,23 @@ namespace callback {
 		case state::CONNECTED:
 			function::IsaacSocketUpdate();
 
-			local.font->Scale = local.isaac->screenPointScale;
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
 
+			bool font16 = local.isaac->screenPointScale == 1.0f;
+			if (font16)
+			{
+				ImGui::PushFont(local.font16);
+			}
+
 			FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_RENDER);
 			FAST_MOD_CALLBACK_END();
+
+			if (font16)
+			{
+				ImGui::PopFont();
+			}
 
 			ImGui::Render();
 

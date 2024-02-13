@@ -79,7 +79,8 @@ namespace function {
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;    // Enable Gamepad Controls
 
 		std::filesystem::path fontPath = std::filesystem::temp_directory_path() / "IsaacSocket_Font" / "VonwaonBitmap-16px.ttf";
-		local.font = io.Fonts->AddFontFromFileTTF((const char*)fontPath.u8string().c_str(), 16.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+		io.Fonts->AddFontFromFileTTF((const char*)fontPath.u8string().c_str(), 32.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+		local.font16 = io.Fonts->AddFontFromFileTTF((const char*)fontPath.u8string().c_str(), 16.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 
 		io.IniFilename = nullptr;
 		io.LogFilename = nullptr;

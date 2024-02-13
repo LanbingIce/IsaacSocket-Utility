@@ -39,7 +39,7 @@ namespace state {
 		lua::Lua lua;
 		uint32_t MTRandomLockedValue = 0;
 		HMODULE hOpenGL;
-		ImFont* font;
+		ImFont* font16;
 	};
 
 	inline state::_GlobalState* global;
