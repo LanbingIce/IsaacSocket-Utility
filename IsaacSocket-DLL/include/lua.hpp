@@ -129,6 +129,18 @@ namespace lua {
 
 		_(void*, luaL_checkudata, lua_State* L, int ud, const char* tname);
 
+		_(lua_Number, luaL_checknumber, lua_State* L, int arg);
+
+		_(lua_Number, luaL_optnumber, lua_State* L, int arg, lua_Number def);
+
+		_(lua_Integer, luaL_checkinteger, lua_State* L, int arg);
+
+		_(lua_Integer, luaL_optinteger, lua_State* L, int arg, lua_Integer def);
+
+		_(const char*, luaL_checklstring, lua_State* L, int arg, size_t* len);
+
+		_(const char*, luaL_optlstring, lua_State* L, int arg, const char* def, size_t* len);
+
 		const char* lua_tostring(lua_State* L, int i) const
 		{
 			return lua_tolstring(L, i, NULL);
@@ -192,6 +204,17 @@ namespace lua {
 		int lua_isnil(lua_State* L, int idx) const {
 			return lua_type(L, idx) == LUA_TNIL;
 		}
+
+		const char* luaL_checkstring(lua_State* L, int n) const
+		{
+			return luaL_checklstring(L, n, NULL);
+		}
+
+		const char* luaL_optstring(lua_State* L, int n, const char* d) const
+		{
+			return luaL_optlstring(L, n, d, NULL);
+		}
+
 	};
 #pragma warning(default: 6387)//重新启用警告C6387
 #undef _
