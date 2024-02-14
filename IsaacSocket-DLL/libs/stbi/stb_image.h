@@ -3409,11 +3409,13 @@ static stbi_uc *load_jpeg_image(stbi__jpeg *z, int *out_x, int *out_y, int *comp
                   out += n;
                }
          } else {
+#pragma warning(disable: 6011)//禁用警告C6011: 取消对 NULL 指针“y”的引用。
             stbi_uc *y = coutput[0];
             if (n == 1)
                for (i=0; i < z->s->img_x; ++i) out[i] = y[i];
             else
                for (i=0; i < z->s->img_x; ++i) *out++ = y[i], *out++ = 255;
+#pragma warning(default: 6011)//重新启用警告	C6011
          }
       }
       stbi__cleanup_jpeg(z);
@@ -3435,6 +3437,7 @@ static unsigned char *stbi__jpeg_load(stbi__context *s, int *x, int *y, int *com
    return result;
 }
 
+#pragma warning(disable: 6262)//禁用警告C6262: 函数使用堆叠的 "18200" 字节。请考虑将一些数据移动到堆
 static int stbi__jpeg_test(stbi__context *s)
 {
    int r;
@@ -3445,6 +3448,7 @@ static int stbi__jpeg_test(stbi__context *s)
    stbi__rewind(s);
    return r;
 }
+#pragma warning(default: 6262)//重新启用警告	C6262
 
 static int stbi__jpeg_info_raw(stbi__jpeg *j, int *x, int *y, int *comp)
 {
