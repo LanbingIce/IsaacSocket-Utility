@@ -111,12 +111,12 @@ namespace opengl
 		float a = (rgba & 0xFF) / 255.0f;
 		glColor4f(r, g, b, a);
 	}
-
+#pragma warning(disable: 26495)//禁用警告C26495: 始终初始化成员变量
 	struct Image {
 		std::vector<uint8_t> data;
 		int width, height, channels;
 	};
-
+#pragma warning(default: 26495)//重新启用警告	C26495
 	static std::unique_ptr<Image> create_image(const char* filename, int width, int height, int channels) {
 		auto img = std::make_unique<Image>();
 		img->width = width;
