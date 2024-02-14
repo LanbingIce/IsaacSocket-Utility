@@ -54,8 +54,8 @@ namespace imgui {
 
 	static int Button(lua_State* L) {
 		ARG(1, string, const char*, label);
-
-		RET(boolean, ImGui::Button(label));
+		ARG_UDATA(2, ImVec2, ::ImVec2*, size);
+		RET(boolean, ImGui::Button(label, *size));
 	}
 
 	static int Text(lua_State* L) {
