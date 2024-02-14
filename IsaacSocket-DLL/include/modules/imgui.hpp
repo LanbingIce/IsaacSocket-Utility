@@ -179,6 +179,21 @@ namespace imgui {
 		return 0;
 	}
 
+	static int StyleColorsClassic(lua_State* L) {
+		ImGui::StyleColorsClassic();
+		return 0;
+	}
+
+	static int StyleColorsLight(lua_State* L) {
+		ImGui::StyleColorsLight();
+		return 0;
+	}
+
+	static int StyleColorsDark(lua_State* L) {
+		ImGui::StyleColorsDark();
+		return 0;
+	}
+
 	static void Init() {
 		DEFMOD(ImGui);
 
@@ -203,6 +218,10 @@ namespace imgui {
 		DEF(PushStyleColor);
 		DEF(PopStyleColor);
 		DEF(SetScrollHereY);
+
+		DEF(StyleColorsClassic);
+		DEF(StyleColorsLight);
+		DEF(StyleColorsDark);
 
 		ENDMOD();
 	}
