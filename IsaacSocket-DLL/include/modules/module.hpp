@@ -27,4 +27,4 @@
 #define MOD_CALLBACK_END()if(!local.lua.lua_isnil(L, -1)){terminate = true;break;}local.lua.lua_pop(L, 2);}local.lua.lua_settop(L, top);if(terminate){return 1;}}
 
 #define FAST_MOD_CALLBACK_BEGIN(name){lua_State* L = local.isaac->luaVM->L;size_t top = local.lua.lua_gettop(L);local.lua.lua_getglobal(L, "Isaac");local.lua.lua_pushstring(L, "RunCallback");local.lua.lua_gettable(L, -2);local.lua.lua_pushstring(L, #name);size_t paramNum = 1
-#define FAST_MOD_CALLBACK_END()_LUA_PCALL(paramNum,0);local.lua.lua_settop(L, top);}
+#define FAST_MOD_CALLBACK_END()if(local.lua.lua_pcall(L, paramNum, 0, 0)!=LUA_OK){ARG_DEF(-1,string,string,_err,"unknow error!");_err.append("\n");function::ConsoleOutput(_err, 0xFFF08080);}local.lua.lua_settop(L, top);}
