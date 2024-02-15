@@ -78,12 +78,12 @@ namespace function {
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;   // Enable Keyboard Controls
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;    // Enable Gamepad Controls
 
-		std::filesystem::path fontPath = std::filesystem::temp_directory_path() / "IsaacSocket_Font" / "VonwaonBitmap-16px.ttf";
+		std::filesystem::path fontPath = utils::GetDataFilePath("VonwaonBitmap-16px.ttf");
 		io.Fonts->AddFontFromFileTTF((const char*)fontPath.u8string().c_str(), 32.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 		local.font16 = io.Fonts->AddFontFromFileTTF((const char*)fontPath.u8string().c_str(), 16.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 
-		io.IniFilename = nullptr;
-		io.LogFilename = nullptr;
+		io.IniFilename = local.iniFileName.c_str();
+		io.LogFilename = local.logFileName.c_str();
 
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();

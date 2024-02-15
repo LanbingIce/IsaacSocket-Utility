@@ -58,6 +58,8 @@ namespace state {
 		bool allocConsole = false;
 		MenuBarDisplayMode menuBarDisplayMode = NEVER;
 		ImGuiStyleColor styleColor = DARK;
+		const string iniFileName = utils::GetDataFilePath("imgui.ini");
+		const string logFileName = utils::GetDataFilePath("imgui_log.txt");
 	};
 
 	inline state::_GlobalState* global;

@@ -227,7 +227,7 @@ namespace IsaacSocket
         private readonly ConcurrentQueue<byte[]> sendMessagesBuffer;
         private int newSize;
         private readonly CancellationTokenSource cancellationTokenSource;
-        private readonly string tempDLLPath;
+        private readonly string dllPath;
 
         private async Task UpdateTask(CancellationToken cancellationToken)
         {
@@ -415,9 +415,9 @@ namespace IsaacSocket
             uint pExitCode = 0;
             try
             {
-                int nSize = Encoding.Unicode.GetByteCount(tempDLLPath);
+                int nSize = Encoding.Unicode.GetByteCount(dllPath);
                 pMem = (int)WinAPIUtil.VirtualAllocEx(isaacProcessHandle, 0, (uint)nSize, WinAPIUtil.AllocationType.COMMIT | WinAPIUtil.AllocationType.RESERVE, WinAPIUtil.MemoryProtection.EXECUTE_READWRITE);
-                WinAPIUtil.WriteProcessMemory(isaacProcessHandle, pMem, Encoding.Unicode.GetBytes(tempDLLPath), (uint)nSize, out _);
+                WinAPIUtil.WriteProcessMemory(isaacProcessHandle, pMem, Encoding.Unicode.GetBytes(dllPath), (uint)nSize, out _);
                 nint hModule = WinAPIUtil.GetModuleHandleA("Kernel32.dll");
                 nint funcAddress = WinAPIUtil.GetProcAddress(hModule, "LoadLibraryW");
                 hThread = WinAPIUtil.CreateRemoteThread(isaacProcessHandle, 0, 0, funcAddress, pMem, 0, 0);
@@ -470,15 +470,22 @@ namespace IsaacSocket
 
         internal Main(int dataSpaceSize, CallbackDelegate callback, string dllPath)
         {
-            tempDLLPath = dllPath;
-
-            if (tempDLLPath == "")
+            if (dllPath == "")
             {
-                tempDLLPath = Path.Combine(MiscUtil.GetTemporaryDirectory("IsaacSocket_"), "IsaacSocket.dll");
-                MiscUtil.ExtractFile("IsaacSocket.dll", tempDLLPath);
+                dllPath = MiscUtil.GetDataFilePath("IsaacSocket.dll");
+                MiscUtil.ExtractFile("IsaacSocket.dll", dllPath);
             }
 
-            MiscUtil.ExtractFile("VonwaonBitmap-16px.ttf", Path.Combine(MiscUtil.GetPermanentDirectory(), "VonwaonBitmap-16px.ttf"));
+            this.dllPath = dllPath;
+
+            MiscUtil.ExtractFile("VonwaonBitmap-16px.ttf", MiscUtil.GetDataFilePath("VonwaonBitmap-16px.ttf"));
+
+            string configFilePath = MiscUtil.GetDataFilePath("config.json");
+
+            if (!File.Exists(configFilePath))
+            {
+                File.WriteAllText(configFilePath, "{}");
+            }
 
             Application.ApplicationExit += OnExit;
             sendMessagesBuffer = new();
