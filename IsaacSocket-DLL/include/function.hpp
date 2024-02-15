@@ -108,5 +108,21 @@ namespace function {
 			function::ReloadLuaWithoutDeleteRoom();
 			return;
 		}
+
+		if (local.hConsole)
+		{
+			PostMessageA(local.hConsole, WM_CLOSE, 0, 0);
+			local.hConsole = 0;
+	}
+}
+
+	static void AllocConsole() {
+		::AllocConsole();
+		SetForegroundWindow(local.hWnd);
+	}
+
+	static void FreeConsole() {
+		local.hConsole = GetConsoleWindow();
+		::FreeConsole();
 	}
 }

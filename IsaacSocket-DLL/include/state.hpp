@@ -16,6 +16,20 @@ namespace state {
 		CONNECTED = 2
 	};
 
+	enum MenuBarDisplayMode
+	{
+		NEVER,
+		TAB_HOLD,
+		ALWAYS
+	};
+
+	enum ImGuiStyleColor
+	{
+		CLASSIC,
+		LIGHT,
+		DARK
+	};
+
 	struct _GlobalState
 	{
 		ConnectionState connectionState;
@@ -31,6 +45,7 @@ namespace state {
 			LPCVOID PreWndProc;
 		} callbacks;
 		HWND hWnd;
+		HWND hConsole = 0;
 		bool initialized = false;
 		bool needReload = false;
 		bool needReloadDll = false;
@@ -40,6 +55,9 @@ namespace state {
 		uint32_t MTRandomLockedValue = 0;
 		HMODULE hOpenGL;
 		ImFont* font16;
+		bool allocConsole = false;
+		MenuBarDisplayMode menuBarDisplayMode = NEVER;
+		ImGuiStyleColor styleColor = DARK;
 	};
 
 	inline state::_GlobalState* global;

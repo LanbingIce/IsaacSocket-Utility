@@ -1,16 +1,19 @@
 ﻿#pragma once
 
 #include "module.hpp"
+#include "state.hpp"
 #undef MessageBox
 
 namespace win_api
 {
 	static int AllocConsole(lua_State* L) {
+		local.allocConsole = true;
 		::AllocConsole();
 		return 0;
 	}
 
 	static int FreeConsole(lua_State* L) {
+		local.allocConsole = false;
 		::FreeConsole();
 		return 0;
 	}

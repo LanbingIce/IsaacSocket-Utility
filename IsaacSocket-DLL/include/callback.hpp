@@ -42,6 +42,37 @@ namespace callback {
 				ImGui::PushFont(local.font16);
 			}
 
+#define MENU_BEGIN(name)if (ImGui::BeginMenu(#name)){
+#define MENU_END()ImGui::EndMenu();}
+#define MENU_ITEM(name,selected,e)if (ImGui::MenuItem(#name, nullptr, selected)){e;}
+
+			if ((local.isaac->game->pauseMenu.state || local.menuBarDisplayMode == state::ALWAYS || local.menuBarDisplayMode == state::TAB_HOLD && GetAsyncKeyState(VK_TAB) & 0x8000) && ImGui::BeginMainMenuBar())
+			{
+				MENU_BEGIN(IsaacSockets管理);
+				MENU_ITEM(打开控制台, local.allocConsole, local.allocConsole = !local.allocConsole; if (local.allocConsole)function::AllocConsole(); else function::FreeConsole(););
+				MENU_END();
+				MENU_BEGIN(界面设置);
+				MENU_BEGIN(主菜单条显示方式);
+				MENU_ITEM(默认, local.menuBarDisplayMode == state::NEVER, local.menuBarDisplayMode = state::NEVER);
+				MENU_ITEM(按下Tab键时, local.menuBarDisplayMode == state::TAB_HOLD, local.menuBarDisplayMode = state::TAB_HOLD);
+				MENU_ITEM(总是显示, local.menuBarDisplayMode == state::ALWAYS, local.menuBarDisplayMode = state::ALWAYS);
+				MENU_END();
+				MENU_BEGIN(皮肤);
+				MENU_ITEM(默认, local.styleColor == state::CLASSIC, local.styleColor = state::CLASSIC; ImGui::StyleColorsClassic());
+				MENU_ITEM(深色, local.styleColor == state::DARK, local.styleColor = state::DARK; ImGui::StyleColorsDark());
+				MENU_ITEM(浅色, local.styleColor == state::LIGHT, local.styleColor = state::LIGHT; ImGui::StyleColorsLight());
+				MENU_END();
+				MENU_END();
+
+				FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_MAIN_MENU_BAR_RENDER);
+				FAST_MOD_CALLBACK_END();
+				ImGui::EndMainMenuBar();
+			}
+
+#undef MENU_BEGIN
+#undef MENU_END
+#undef MENU_ITEM
+
 			FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_RENDER);
 			FAST_MOD_CALLBACK_END();
 
@@ -96,21 +127,6 @@ namespace callback {
 			//local.needReloadDll = true;
 		}
 
-		if (text == "ac")
-		{
-			AllocConsole();
-			SetForegroundWindow(local.hWnd);
-		}
-
-		if (text == "fc")
-		{
-			HWND hWnd = GetConsoleWindow();
-			if (hWnd)
-			{
-				FreeConsole();
-				PostMessageA(hWnd, WM_CLOSE, 0, 0);
-			}
-		}
 		return 0;
 	}
 

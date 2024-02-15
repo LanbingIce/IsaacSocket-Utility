@@ -180,16 +180,19 @@ namespace imgui {
 	}
 
 	static int StyleColorsClassic(lua_State* L) {
+		local.styleColor = state::CLASSIC;
 		ImGui::StyleColorsClassic();
 		return 0;
 	}
 
 	static int StyleColorsLight(lua_State* L) {
+		local.styleColor = state::LIGHT;
 		ImGui::StyleColorsLight();
 		return 0;
 	}
 
 	static int StyleColorsDark(lua_State* L) {
+		local.styleColor = state::DARK;
 		ImGui::StyleColorsDark();
 		return 0;
 	}
