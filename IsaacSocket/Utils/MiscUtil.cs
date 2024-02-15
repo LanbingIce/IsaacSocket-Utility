@@ -45,12 +45,12 @@ namespace IsaacSocket.Utils
         }
 
         internal static string GetDataFilePath(string fileName)
-            {
-            string dirPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IsaacSocket");
+        {
+            string dirPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "IsaacSocket");
             string filePath = Path.Combine(dirPath, fileName);
 
             if (!File.Exists(dirPath))
-        {
+            {
                 Directory.CreateDirectory(dirPath);
             }
 

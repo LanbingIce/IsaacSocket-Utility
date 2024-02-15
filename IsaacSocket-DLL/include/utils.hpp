@@ -39,7 +39,7 @@ namespace utils {
 
 	static string GetDataFilePath(const char* fileName) {
 		wchar_t c_path[MAX_PATH];
-		GetEnvironmentVariableW(L"localappdata", c_path, MAX_PATH);
+		GetEnvironmentVariableW(L"APPDATA", c_path, MAX_PATH);
 		std::filesystem::path path = std::filesystem::path(c_path) / "IsaacSocket" / fileName;
 		return path.string();
 	}
