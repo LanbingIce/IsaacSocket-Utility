@@ -476,7 +476,11 @@ namespace IsaacSocket
             {
                 File.WriteAllText(configFilePath, "{}");
             }
-            MiscUtil.ExtractFile("IsaacSocket.dll", dllPath);
+            string dllPath = MiscUtil.GetDataFilePath("IsaacSocket.dll");
+            if (this.dllPath == dllPath)
+            {
+                MiscUtil.ExtractFile("IsaacSocket.dll", dllPath);
+            }
             MiscUtil.ExtractFile("VonwaonBitmap-16px.ttf", MiscUtil.GetDataFilePath("VonwaonBitmap-16px.ttf"));
         }
 
