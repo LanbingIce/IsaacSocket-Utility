@@ -21,6 +21,8 @@
 #include <cmath>
 #include <unordered_map>
 #include <unordered_set>
+#include <json/json.h>
+#include <fstream>
 
 #ifdef _MSC_VER
 #define FASTCALL __fastcall
