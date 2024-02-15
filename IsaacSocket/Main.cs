@@ -343,6 +343,7 @@ namespace IsaacSocket
                                 {
                                     try
                                     {
+                                        ExtractFile();
                                         using (MemoryMappedFile.OpenExisting("IsaacSocketSharedMemory")) { }
                                     }
                                     catch (FileNotFoundException)
@@ -468,24 +469,25 @@ namespace IsaacSocket
             }
         }
 
+        private void ExtractFile()
+        {
+            string configFilePath = MiscUtil.GetDataFilePath("config.json");
+            if (!File.Exists(configFilePath))
+            {
+                File.WriteAllText(configFilePath, "{}");
+            }
+            MiscUtil.ExtractFile("IsaacSocket.dll", dllPath);
+            MiscUtil.ExtractFile("VonwaonBitmap-16px.ttf", MiscUtil.GetDataFilePath("VonwaonBitmap-16px.ttf"));
+        }
+
         internal Main(int dataSpaceSize, CallbackDelegate callback, string dllPath)
         {
             if (dllPath == "")
             {
                 dllPath = MiscUtil.GetDataFilePath("IsaacSocket.dll");
-                MiscUtil.ExtractFile("IsaacSocket.dll", dllPath);
             }
 
             this.dllPath = dllPath;
-
-            MiscUtil.ExtractFile("VonwaonBitmap-16px.ttf", MiscUtil.GetDataFilePath("VonwaonBitmap-16px.ttf"));
-
-            string configFilePath = MiscUtil.GetDataFilePath("config.json");
-
-            if (!File.Exists(configFilePath))
-            {
-                File.WriteAllText(configFilePath, "{}");
-            }
 
             Application.ApplicationExit += OnExit;
             sendMessagesBuffer = new();
