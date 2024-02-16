@@ -37,11 +37,11 @@ namespace utils {
 		_cwprintf(L"%s", u16.data());
 	}
 
-	static string GetDataFilePath(const char* fileName) {
+	static u8string GetDataFilePath(const char* fileName) {
 		wchar_t c_path[MAX_PATH];
 		GetEnvironmentVariableW(L"APPDATA", c_path, MAX_PATH);
 		std::filesystem::path path = std::filesystem::path(c_path) / "IsaacSocket" / fileName;
-		return path.string();
+		return path.u8string();
 	}
 
 	// 折叠表达式打印可变参数列表

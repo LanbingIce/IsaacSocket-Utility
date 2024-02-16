@@ -29,6 +29,7 @@
 #endif //_MSC_VER
 
 using std::string;
+using std::u8string;
 using std::vector;
 
 #endif //PCH_H

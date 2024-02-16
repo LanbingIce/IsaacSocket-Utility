@@ -82,8 +82,8 @@ namespace function {
 		io.Fonts->AddFontFromFileTTF((const char*)fontPath.u8string().c_str(), 32.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 		local.font16 = io.Fonts->AddFontFromFileTTF((const char*)fontPath.u8string().c_str(), 16.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 
-		io.IniFilename = local.iniFileName.c_str();
-		io.LogFilename = local.logFileName.c_str();
+		io.IniFilename = (const char*)local.iniFileName.c_str();
+		io.LogFilename = (const char*)local.logFileName.c_str();
 
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
@@ -113,8 +113,8 @@ namespace function {
 		{
 			PostMessageA(local.hConsole, WM_CLOSE, 0, 0);
 			local.hConsole = 0;
+		}
 	}
-}
 
 	static void AllocConsole() {
 		::AllocConsole();
