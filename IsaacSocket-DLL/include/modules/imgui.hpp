@@ -39,11 +39,11 @@ namespace imgui {
 
 	static int Begin(lua_State* L) {
 		ARG(1, string, const char*, name);
-		ARG_DEF(2, boolean, bool, p_open, true);
+		ARG_DEF(2, boolean, bool, open, true);
 		ARG_DEF(3, integer, int, flags, 0);
 
-		local.lua.lua_pushboolean(L, ImGui::Begin(name, &p_open, flags));
-		local.lua.lua_pushboolean(L, p_open);
+		local.lua.lua_pushboolean(L, ImGui::Begin(name, &open, flags));
+		local.lua.lua_pushboolean(L, open);
 		return 2;
 	}
 
