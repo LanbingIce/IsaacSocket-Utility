@@ -228,6 +228,7 @@ namespace IsaacSocket
         private int newSize;
         private readonly CancellationTokenSource cancellationTokenSource;
         private readonly string dllPath;
+        private readonly string version;
 
         private async Task UpdateTask(CancellationToken cancellationToken)
         {
@@ -355,11 +356,28 @@ namespace IsaacSocket
                                     {
                                         using MemoryMappedFile mmf = MemoryMappedFile.OpenExisting("IsaacSocketSharedMemory");
                                         using MemoryMappedViewAccessor accessor = mmf.CreateViewAccessor();
-                                        accessor.Write(0, 1);
-                                        MemoryUtil.WriteToMemory(isaacProcessHandle, sendAddress, BitConverter.GetBytes(dataSpaceSize));
-                                        MemoryUtil.WriteToMemory(isaacProcessHandle, receiveAddress, BitConverter.GetBytes(1));
-                                        connectionState = ConnectionState.CONNECTING;
-                                        Connecting();
+
+                                        byte[] bytes = new byte[8];
+                                        accessor.ReadArray(4, bytes, 0, 8);
+                                        int nullIndex = Array.IndexOf(bytes, (byte)0);
+                                        string oldVersion = Encoding.ASCII.GetString(bytes, 0, nullIndex);
+
+                                        if (oldVersion != "" && oldVersion != version)
+                                        {
+                                            callback.Invoke(CallbackType.MESSAGE, "dll版本校验失败，请重启游戏 ");
+                                            await Task.Delay(3000, cancellationToken);
+                                        }
+                                        else
+                                        {
+                                            accessor.Write(0, 1);
+                                            bytes = Encoding.ASCII.GetBytes(version + '\0');
+                                            accessor.WriteArray(4, bytes, 0, bytes.Length);
+
+                                            MemoryUtil.WriteToMemory(isaacProcessHandle, sendAddress, BitConverter.GetBytes(dataSpaceSize));
+                                            MemoryUtil.WriteToMemory(isaacProcessHandle, receiveAddress, BitConverter.GetBytes(1));
+                                            connectionState = ConnectionState.CONNECTING;
+                                            Connecting();
+                                        }
                                     }
                                     catch (FileNotFoundException)
                                     {
@@ -484,8 +502,9 @@ namespace IsaacSocket
             MiscUtil.ExtractFile("VonwaonBitmap-16px.ttf", MiscUtil.GetDataFilePath("VonwaonBitmap-16px.ttf"));
         }
 
-        internal Main(int dataSpaceSize, CallbackDelegate callback, string dllPath)
+        internal Main(int dataSpaceSize, CallbackDelegate callback, string dllPath, string version)
         {
+            this.version = version;
             if (dllPath == "")
             {
                 dllPath = MiscUtil.GetDataFilePath("IsaacSocket.dll");

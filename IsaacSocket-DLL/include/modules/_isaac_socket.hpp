@@ -56,6 +56,9 @@ namespace _isaac_socket
 		lua_State* L = local.isaac->luaVM->L;
 		int top = local.lua.lua_gettop(L);
 		local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
+		local.lua.lua_pushstring(L, "version");
+		local.lua.lua_pushstring(L, global->version);
+		local.lua.lua_settable(L, -3);
 
 		DEF(Disconnect);
 		DEF(ReloadDLL);

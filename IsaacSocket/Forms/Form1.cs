@@ -39,7 +39,7 @@ public partial class Form1 : Form
         logQueue4 = new();
         size = 1024;
         updateForm = new();
-        main = new(size, Callback, dllPath);
+        main = new(size, Callback, dllPath, versionString);
         if (silent)
         {
             WindowState = FormWindowState.Minimized;

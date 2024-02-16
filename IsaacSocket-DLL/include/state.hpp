@@ -33,6 +33,7 @@ namespace state {
 	struct _GlobalState
 	{
 		ConnectionState connectionState;
+		const char version[8]{};
 	};
 
 	struct _LocalState
