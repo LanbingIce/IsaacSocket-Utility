@@ -32,7 +32,7 @@ namespace state {
 
 	struct _GlobalState
 	{
-		ConnectionState connectionState;
+		ConnectionState connectionState = DISCONNECTED;
 		const char version[8]{};
 	};
 
