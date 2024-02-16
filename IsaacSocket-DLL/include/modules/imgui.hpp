@@ -5,7 +5,7 @@
 #include <imgui/imgui_stdlib.h>
 
 namespace imgui {
-
+	static ::ImVec2 VEC2_0 = ::ImVec2(0, 0);
 	static int ImVec2(lua_State* L) {
 		ARG(1, number, float, x);
 		ARG(2, number, float, y);
@@ -54,7 +54,7 @@ namespace imgui {
 
 	static int Button(lua_State* L) {
 		ARG(1, string, const char*, label);
-		ARG_UDATA(2, ImVec2, ::ImVec2*, size);
+		ARG_UDATA_DEF(2, ImVec2, ::ImVec2*, size, &VEC2_0);
 		RET(boolean, ImGui::Button(label, *size));
 	}
 
@@ -145,7 +145,7 @@ namespace imgui {
 	static int InputTextMultiline(lua_State* L) {
 		ARG(1, string, const char*, label);
 		ARG(2, string, string, str);
-		ARG_UDATA(3, ImVec2, ::ImVec2*, size);
+		ARG_UDATA_DEF(3, ImVec2, ::ImVec2*, size, &VEC2_0);
 		ARG_DEF(4, integer, ImGuiInputTextFlags, flags, 0);
 		local.lua.lua_pushboolean(L, ImGui::InputTextMultiline(label, &str, *size, flags));
 		local.lua.lua_pushstring(L, str.c_str());
