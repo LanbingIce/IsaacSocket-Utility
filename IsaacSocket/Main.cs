@@ -355,7 +355,7 @@ namespace IsaacSocket
                                     {
                                         using MemoryMappedFile mmf = MemoryMappedFile.OpenExisting("IsaacSocketSharedMemory");
                                         using MemoryMappedViewAccessor accessor = mmf.CreateViewAccessor();
-                                        accessor.Write(0, true);
+                                        accessor.Write(0, 1);
                                         MemoryUtil.WriteToMemory(isaacProcessHandle, sendAddress, BitConverter.GetBytes(dataSpaceSize));
                                         MemoryUtil.WriteToMemory(isaacProcessHandle, receiveAddress, BitConverter.GetBytes(1));
                                         connectionState = ConnectionState.CONNECTING;
