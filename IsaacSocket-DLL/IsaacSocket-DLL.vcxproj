@@ -59,6 +59,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\callback.hpp" />
+    <ClInclude Include="include\config.hpp" />
     <ClInclude Include="include\framework.h" />
     <ClInclude Include="include\function.hpp" />
     <ClInclude Include="include\gnucompat.hpp" />

@@ -191,5 +191,8 @@
     <ClInclude Include="libs\json\json-forwards.h">
       <Filter>libs\json</Filter>
     </ClInclude>
+    <ClInclude Include="include\config.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

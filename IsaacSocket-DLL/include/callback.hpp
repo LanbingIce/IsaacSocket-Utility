@@ -5,6 +5,7 @@
 #include "utils.hpp"
 #include "function.hpp"
 #include "modules/_isaac_socket.hpp"
+#include "config.hpp"
 
 #include <imgui/imgui.h>
 
