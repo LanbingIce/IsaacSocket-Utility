@@ -119,9 +119,6 @@
     <ClInclude Include="include\pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\gnucompat.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="libs\stbi\stb_image_write.h">
       <Filter>libs\stbi</Filter>
     </ClInclude>

@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "pch.h"
 #include "utils.hpp"
-#include "gnucompat.hpp"
 
 namespace isaac {
 
@@ -21,11 +20,11 @@ namespace isaac {
 	struct ModEntry {
 		union
 		{
-			gnucompat::string dir;
-			FIELD(0x18, gnucompat::string, name);
-			FIELD(0xFC, gnucompat::string, isEnabled);
-			FIELD(0x120, gnucompat::string, version);
-			FIELD(0x144, gnucompat::string, id);
+			string dir;
+			FIELD(0x18, string, name);
+			FIELD(0xFC, string, isEnabled);
+			FIELD(0x120, string, version);
+			FIELD(0x144, string, id);
 		};
 	};
 
@@ -41,7 +40,7 @@ namespace isaac {
 
 	//游戏选项
 	struct Options {
-		gnucompat::string _optionsIniFilePath; // 0x0
+		string _optionsIniFilePath; // 0x0
 		float MusicVolume; // 0x18
 		float SFXVolume; // 0x1c
 		float MapOpacity; // 0x20
@@ -207,7 +206,7 @@ namespace isaac {
 	struct GlitchedItem
 	{
 		char pad_0x2C[0x2C];
-		gnucompat::vector<GlitchedEvent*> glitchedEvents;
+		vector<GlitchedEvent*> glitchedEvents;
 	};
 
 	//GLFW窗口类
@@ -230,7 +229,7 @@ namespace isaac {
 			//0:关闭 2:开启 4:正在关闭 小于0:强制暂停
 			FIELD(0x20, int32_t, state);
 			FIELD(0x30, float, offsetY);
-			FIELD(0x3C, gnucompat::string, consoleText);
+			FIELD(0x3C, string, consoleText);
 		};
 	};
 
@@ -242,7 +241,7 @@ namespace isaac {
 			FIELD(0x132C, Weapon*, weapon);
 			FIELD(0x14C4, Active, actives[4]);
 			FIELD(0x1745, uint8_t, canShoot);
-			FIELD(0x1D0C, gnucompat::vector<HistoryItem>, historyItems);
+			FIELD(0x1D0C, vector<HistoryItem>, historyItems);
 		};
 	};
 
@@ -251,12 +250,12 @@ namespace isaac {
 	{
 		union
 		{
-			FIELD(0x1BA50, gnucompat::vector<Player*>, players);
+			FIELD(0x1BA50, vector<Player*>, players);
 			FIELD(0x1BB04, Seeds, seeds);
 			FIELD(0x1BB60, Console, console);
 			FIELD(0x10203C, PauseMenu, pauseMenu);
 			FIELD(0x1C3164, uint32_t, debugFlag);
-			FIELD(0x283C20, gnucompat::vector<GlitchedItem*>, glitchedItems);
+			FIELD(0x283C20, vector<GlitchedItem*>, glitchedItems);
 		};
 	};
 

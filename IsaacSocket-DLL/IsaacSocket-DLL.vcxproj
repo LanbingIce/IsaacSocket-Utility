@@ -62,7 +62,6 @@
     <ClInclude Include="include\config.hpp" />
     <ClInclude Include="include\framework.h" />
     <ClInclude Include="include\function.hpp" />
-    <ClInclude Include="include\gnucompat.hpp" />
     <ClInclude Include="include\handle.hpp" />
     <ClInclude Include="include\inject.hpp" />
     <ClInclude Include="include\isaac.hpp" />
