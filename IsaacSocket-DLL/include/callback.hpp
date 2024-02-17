@@ -92,6 +92,9 @@ namespace callback {
 			MOD_CALLBACK_END();
 			break;
 		}
+		CHECK_INIT();
+		FAST_MOD_CALLBACK_BEGIN(_ISAAC_SOCKET_UPDATE);
+		FAST_MOD_CALLBACK_END();
 		return 0;
 	}
 
