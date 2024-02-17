@@ -149,6 +149,11 @@ namespace lua {
 			lua_createtable(L, 0, 0);
 		}
 
+		void lua_pushstdstring(lua_State* L, std::string const &s) const
+		{
+			lua_pushlstring(L, s.data(), s.size());
+		}
+
 		void lua_pushcfunction(lua_State* L, lua_CFunction f) const
 		{
 			lua_pushcclosure(L, f, 0);

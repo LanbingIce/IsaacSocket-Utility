@@ -12,7 +12,7 @@ endif()
 
 project(IsaacSocket LANGUAGES CXX ASM)
 
-file(GLOB files src/*.cpp libs/*/*.cpp *.S)
+file(GLOB files src/*.cpp libs/*/*.cpp src/*.S)
 add_library(IsaacSocket SHARED)
 set_target_properties(IsaacSocket PROPERTIES PREFIX "")
 target_sources(IsaacSocket PRIVATE ${files})

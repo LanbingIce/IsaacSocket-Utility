@@ -117,7 +117,7 @@ struct Image {
     int width, height, channels;
 };
 
-static std::unique_ptr<Image> create_image(const char* filename, int width, int height, int channels) {
+static std::unique_ptr<Image> create_image(int width, int height, int channels) {
     auto img = std::make_unique<Image>();
     img->width = width;
     img->height = height;
