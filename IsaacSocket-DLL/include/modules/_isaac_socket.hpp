@@ -30,11 +30,11 @@ namespace _isaac_socket
 	}
 
 	static bool LuaReady() {
-		isaac::LuaVM* luaVM = local.isaac->luaVM;
-		if (!luaVM) {
+		isaac::LuaEngine* luaEngine = local.isaac->luaEngine;
+		if (!luaEngine) {
 			return false;
 		}
-		lua_State* L = luaVM->L;
+		lua_State* L = luaEngine->L;
 		if (!L) {
 			return false;
 		}
@@ -53,7 +53,7 @@ namespace _isaac_socket
 		opengl::Init();
 		imgui::Init();
 
-		lua_State* L = local.isaac->luaVM->L;
+		lua_State* L = local.isaac->luaEngine->L;
 		int top = local.lua.lua_gettop(L);
 		local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
 		local.lua.lua_pushstring(L, "version");

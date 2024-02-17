@@ -3,7 +3,7 @@
 #include "lua.hpp"
 #include "state.hpp"
 
-#define DEFMOD(name) lua_State* L = local.isaac->luaVM->L; int top = local.lua.lua_gettop(L); local.lua.lua_getglobal(L, "_ISAAC_SOCKET"); local.lua.lua_pushstring(L, "IsaacSocket"); local.lua.lua_gettable(L, -2); local.lua.lua_pushstring(L, #name); local.lua.lua_newtable(L);
+#define DEFMOD(name) lua_State* L = local.isaac->luaEngine->L; int top = local.lua.lua_gettop(L); local.lua.lua_getglobal(L, "_ISAAC_SOCKET"); local.lua.lua_pushstring(L, "IsaacSocket"); local.lua.lua_gettable(L, -2); local.lua.lua_pushstring(L, #name); local.lua.lua_newtable(L);
 #define DEF(name) local.lua.lua_pushstring(L, #name);local.lua.lua_pushcfunction(L, name); local.lua.lua_settable(L, -3)
 #define ENDMOD() local.lua.lua_settable(L, -3); local.lua.lua_settop(L, top);
 
@@ -24,10 +24,10 @@
 #define RET_TABLE_KEY(keyType,key,valueType,value) local.lua.lua_push##keyType(L,key);local.lua.lua_push##valueType(L,value);local.lua.lua_settable(L,-3)
 #define RET_TABLE_END() return 1
 
-#define MOD_CALLBACK_BEGIN(name){lua_State* L = local.isaac->luaVM->L;size_t top = local.lua.lua_gettop(L);local.lua.lua_getglobal(L, "Isaac");local.lua.lua_pushstring(L, "GetCallbacks");local.lua.lua_gettable(L, -2);local.lua.lua_pushstring(L, #name);_LUA_PCALL(1, 1);bool terminate = false;local.lua.lua_pushnil(L);while(local.lua.lua_next(L, -2) != 0){local.lua.lua_pushstring(L, "Function");local.lua.lua_gettable(L, -2);local.lua.lua_pushstring(L, "Mod");local.lua.lua_gettable(L, -3);size_t paramNum = 1
+#define MOD_CALLBACK_BEGIN(name){lua_State* L = local.isaac->luaEngine->L;size_t top = local.lua.lua_gettop(L);local.lua.lua_getglobal(L, "Isaac");local.lua.lua_pushstring(L, "GetCallbacks");local.lua.lua_gettable(L, -2);local.lua.lua_pushstring(L, #name);_LUA_PCALL(1, 1);bool terminate = false;local.lua.lua_pushnil(L);while(local.lua.lua_next(L, -2) != 0){local.lua.lua_pushstring(L, "Function");local.lua.lua_gettable(L, -2);local.lua.lua_pushstring(L, "Mod");local.lua.lua_gettable(L, -3);size_t paramNum = 1
 #define MOD_CALLBACK_ARG(paramType,...)local.lua.lua_push##paramType(L, __VA_ARGS__);paramNum++
 #define MOD_CALLBACK_CALL()_LUA_PCALL(paramNum, 1)
 #define MOD_CALLBACK_END()if(!local.lua.lua_isnil(L, -1)){terminate = true;break;}local.lua.lua_pop(L, 2);}local.lua.lua_settop(L, top);if(terminate){return 1;}}
 
-#define FAST_MOD_CALLBACK_BEGIN(name){lua_State* L = local.isaac->luaVM->L;size_t top = local.lua.lua_gettop(L);local.lua.lua_getglobal(L, "Isaac");local.lua.lua_pushstring(L, "RunCallback");local.lua.lua_gettable(L, -2);local.lua.lua_pushstring(L, #name);size_t paramNum = 1
+#define FAST_MOD_CALLBACK_BEGIN(name){lua_State* L = local.isaac->luaEngine->L;size_t top = local.lua.lua_gettop(L);local.lua.lua_getglobal(L, "Isaac");local.lua.lua_pushstring(L, "RunCallback");local.lua.lua_gettable(L, -2);local.lua.lua_pushstring(L, #name);size_t paramNum = 1
 #define FAST_MOD_CALLBACK_END()if(local.lua.lua_pcall(L, paramNum, 0, 0)!=LUA_OK){ARG_DEF(-1,string,string,_err,"unknow error!");_err.append("\n");function::ConsoleOutput(_err, 0xFFF08080);}local.lua.lua_settop(L, top);}
