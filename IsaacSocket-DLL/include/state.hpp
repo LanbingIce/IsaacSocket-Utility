@@ -58,7 +58,7 @@ namespace state {
 		ImFont* font16;
 		bool allocConsole = false;
 		MenuBarDisplayMode menuBarDisplayMode = NEVER;
-		ImGuiStyleColor styleColor = DARK;
+		ImGuiStyleColor styleColor = CLASSIC;
 		const u8string configName = utils::GetDataFilePath("config.json");
 		const u8string iniFileName = utils::GetDataFilePath("imgui.ini");
 		const u8string logFileName = utils::GetDataFilePath("imgui_log.txt");

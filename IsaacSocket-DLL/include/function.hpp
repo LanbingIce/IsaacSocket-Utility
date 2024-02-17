@@ -85,9 +85,18 @@ namespace function {
 		io.IniFilename = (const char*)local.iniFileName.c_str();
 		io.LogFilename = (const char*)local.logFileName.c_str();
 
-		// Setup Dear ImGui style
-		ImGui::StyleColorsDark();
-		//ImGui::StyleColorsClassic();
+		switch (local.styleColor)
+		{
+		case state::LIGHT:
+			ImGui::StyleColorsLight();
+			break;
+		case state::DARK:
+			ImGui::StyleColorsDark();
+			break;
+		default:
+			ImGui::StyleColorsClassic();
+			break;
+		}
 
 		// Setup Platform/Renderer backends
 		ImGui_ImplWin32_InitForOpenGL(local.hWnd);
