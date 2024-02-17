@@ -40,7 +40,7 @@ namespace isaac {
 
 	//游戏选项
 	struct Options {
-		string _optionsIniFilePath; // 0x0
+		string OptionsIniFilePath; // 0x0
 		float MusicVolume; // 0x18
 		float SFXVolume; // 0x1c
 		float MapOpacity; // 0x20
