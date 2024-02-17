@@ -116,35 +116,35 @@ namespace memory
 	}
 
 	static void Init() {
-		DEFMOD(Memory);
+		MODULE_BEGIN(Memory);
 
-		DEF(ReadMemory);
-		DEF(ReadInt8);
-		DEF(ReadUInt8);
-		DEF(ReadInt16);
-		DEF(ReadUInt16);
-		DEF(ReadInt32);
-		DEF(ReadUInt32);
-		DEF(ReadInt64);
-		DEF(ReadUInt64);
-		DEF(ReadFloat);
-		DEF(ReadDouble);
+		MODULE_FUNC(ReadMemory);
+		MODULE_FUNC(ReadInt8);
+		MODULE_FUNC(ReadUInt8);
+		MODULE_FUNC(ReadInt16);
+		MODULE_FUNC(ReadUInt16);
+		MODULE_FUNC(ReadInt32);
+		MODULE_FUNC(ReadUInt32);
+		MODULE_FUNC(ReadInt64);
+		MODULE_FUNC(ReadUInt64);
+		MODULE_FUNC(ReadFloat);
+		MODULE_FUNC(ReadDouble);
 
-		DEF(WriteMemory);
-		DEF(WriteInt8);
-		DEF(WriteUInt8);
-		DEF(WriteInt16);
-		DEF(WriteUInt16);
-		DEF(WriteInt32);
-		DEF(WriteUInt32);
-		DEF(WriteInt64);
-		DEF(WriteUInt64);
-		DEF(WriteFloat);
-		DEF(WriteDouble);
+		MODULE_FUNC(WriteMemory);
+		MODULE_FUNC(WriteInt8);
+		MODULE_FUNC(WriteUInt8);
+		MODULE_FUNC(WriteInt16);
+		MODULE_FUNC(WriteUInt16);
+		MODULE_FUNC(WriteInt32);
+		MODULE_FUNC(WriteUInt32);
+		MODULE_FUNC(WriteInt64);
+		MODULE_FUNC(WriteUInt64);
+		MODULE_FUNC(WriteFloat);
+		MODULE_FUNC(WriteDouble);
 
-		DEF(GetImageBase);
-		DEF(CalcAddress);
+		MODULE_FUNC(GetImageBase);
+		MODULE_FUNC(CalcAddress);
 
-		ENDMOD();
+		MODULE_END();
 	}
 }

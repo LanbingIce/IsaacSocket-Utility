@@ -62,8 +62,8 @@ namespace _isaac_socket
 		local.lua.lua_pushstring(L, global->version);
 		local.lua.lua_settable(L, -3);
 
-		DEF(Disconnect);
-		DEF(ReloadDLL);
+		MODULE_FUNC(Disconnect);
+		MODULE_FUNC(ReloadDLL);
 
 		local.lua.lua_settop(L, top);
 

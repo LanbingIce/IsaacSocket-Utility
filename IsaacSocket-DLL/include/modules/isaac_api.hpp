@@ -268,52 +268,52 @@ namespace isaac_api {
 	}
 
 	static void Init() {
-		DEFMOD(IsaacAPI);
+		MODULE_BEGIN(IsaacAPI);
 
-		DEF(IsForcePaused);
-		DEF(ForcePause);
+		MODULE_FUNC(IsForcePaused);
+		MODULE_FUNC(ForcePause);
 
-		DEF(ReloadLua);
-		DEF(GetDebugFlag);
+		MODULE_FUNC(ReloadLua);
+		MODULE_FUNC(GetDebugFlag);
 
-		DEF(GetConsoleInput);
-		DEF(IsConsoleOpen);
+		MODULE_FUNC(GetConsoleInput);
+		MODULE_FUNC(IsConsoleOpen);
 
-		DEF(SetCanShoot);
+		MODULE_FUNC(SetCanShoot);
 
-		DEF(IsPauseMenuForceHidden);
-		DEF(ForceHidePauseMenu);
+		MODULE_FUNC(IsPauseMenuForceHidden);
+		MODULE_FUNC(ForceHidePauseMenu);
 
-		DEF(GetActive);
-		DEF(SetActive);
+		MODULE_FUNC(GetActive);
+		MODULE_FUNC(SetActive);
 
-		DEF(GetEdenTokens);
-		DEF(SetEdenTokens);
+		MODULE_FUNC(GetEdenTokens);
+		MODULE_FUNC(SetEdenTokens);
 
-		DEF(IsAchievementUnlocked);
-		DEF(UnlockAchievement);
+		MODULE_FUNC(IsAchievementUnlocked);
+		MODULE_FUNC(UnlockAchievement);
 
-		DEF(IsMTRandomLocked);
-		DEF(LockMTRandom);
+		MODULE_FUNC(IsMTRandomLocked);
+		MODULE_FUNC(LockMTRandom);
 
-		DEF(GetGlitchedItemTrigger);
-		DEF(GetGlitchedItemEffect);
+		MODULE_FUNC(GetGlitchedItemTrigger);
+		MODULE_FUNC(GetGlitchedItemEffect);
 
-		DEF(GetFrameInterval);
-		DEF(SetFrameInterval);
+		MODULE_FUNC(GetFrameInterval);
+		MODULE_FUNC(SetFrameInterval);
 
-		DEF(GetDonationCount);
-		DEF(SetDonationCount);
+		MODULE_FUNC(GetDonationCount);
+		MODULE_FUNC(SetDonationCount);
 
-		DEF(GetGreedDonationCount);
-		DEF(SetGreedDonationCount);
+		MODULE_FUNC(GetGreedDonationCount);
+		MODULE_FUNC(SetGreedDonationCount);
 
-		DEF(GetItemIds);
+		MODULE_FUNC(GetItemIds);
 
-		DEF(GetFPS);
+		MODULE_FUNC(GetFPS);
 
-		DEF(ConsoleOutput);
+		MODULE_FUNC(ConsoleOutput);
 
-		ENDMOD();
+		MODULE_END();
 	}
 }

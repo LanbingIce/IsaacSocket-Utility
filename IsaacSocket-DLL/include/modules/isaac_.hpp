@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "pch.h"
 #include "module.hpp"
@@ -11,85 +11,44 @@ using isaac::lua_State;
 
 namespace isaac_ {
 
-#define _(luaType,name)if(strcmp(key, #name) == 0){RET(luaType,local.isaac->manager->options.name);}
-	static int OptionsGet(lua_State* L) {
-		const char* key = local.lua.lua_tostring(L, 2);
-		_(integer, AnnouncerVoiceMode);
-		_(boolean, BulletVisibility);
-		_(integer, CameraStyle);
-		_(boolean, ChargeBars);
-		_(integer, ConsoleFont);
-		_(boolean, DebugConsoleEnabled);
-		_(boolean, DisplayPopups);
-		_(integer, ExtraHUDStyle);
-		_(boolean, FadedConsoleDisplay);
-		_(boolean, Filter);
-		_(boolean, FoundHUD);
-		_(boolean, Fullscreen);
-		_(number, Gamma);
-		_(number, HUDOffset);
-		//_(string, Language);
-		_(number, MapOpacity);
-		_(integer, MaxRenderScale);
-		_(integer, MaxScale);
-		_(boolean, MouseControl);
-		_(number, MusicVolume);
-		_(boolean, PauseOnFocusLost);
-		_(boolean, RumbleEnabled);
-		_(boolean, SaveCommandHistory);
-		_(number, SFXVolume);
-		_(boolean, UseBorderlessFullscreen);
-		_(boolean, VSync);
+	static int Options__index(lua_State* L) {
+		METATABLE_BEGIN(isaac::Options, local.isaac->manager->options);
 
-
-		_(integer, TouchMode);
-
-		return local.lua.luaL_error(L, "Invalid member access.");
+		METATABLE_INDEX(integer, AnnouncerVoiceMode, int);
+		METATABLE_INDEX(boolean, BulletVisibility, bool);
+		METATABLE_INDEX(integer, CameraStyle, int);
+		METATABLE_INDEX(boolean, ChargeBars, bool);
+		METATABLE_INDEX(integer, ConsoleFont, int);
+		METATABLE_INDEX(boolean, DebugConsoleEnabled, bool);
+		METATABLE_INDEX(boolean, DisplayPopups, bool);
+		METATABLE_INDEX(integer, ExtraHUDStyle, int);
+		METATABLE_INDEX(boolean, FadedConsoleDisplay, bool);
+		METATABLE_INDEX(boolean, Filter, bool);
+		METATABLE_INDEX(boolean, FoundHUD, bool);
+		METATABLE_INDEX(boolean, Fullscreen, bool);
+		METATABLE_INDEX(number, Gamma, float);
+		METATABLE_INDEX(number, HUDOffset, float);
+		//_(string, Language, const char*);这个项目不在这个类里
+		METATABLE_INDEX(number, MapOpacity, float);
+		METATABLE_INDEX(integer, MaxRenderScale, int);
+		METATABLE_INDEX(integer, MaxScale, int);
+		METATABLE_INDEX(boolean, MouseControl, bool);
+		METATABLE_INDEX(number, MusicVolume, float);
+		METATABLE_INDEX(boolean, PauseOnFocusLost, bool);
+		METATABLE_INDEX(boolean, RumbleEnabled, bool);
+		METATABLE_INDEX(boolean, SaveCommandHistory, bool);
+		METATABLE_INDEX(number, SFXVolume, float);
+		METATABLE_INDEX(boolean, UseBorderlessFullscreen, bool);
+		METATABLE_INDEX(boolean, VSync, bool);
+		//以上是官方API现有的项目
+		METATABLE_INDEX(integer, TouchMode, int);
+		METATABLE_END();
 	}
-#undef _
-#define _(luaType,name,type)if(strcmp(key, #name) == 0){ARG(3, luaType, type, name);local.isaac->manager->options.name = name;return 0;}
-	static int OptionsSet(lua_State* L) {
-		const char* key = local.lua.lua_tostring(L, 2);
-
-		_(integer, AnnouncerVoiceMode, int);
-		_(boolean, BulletVisibility, bool);
-		_(integer, CameraStyle, int);
-		_(boolean, ChargeBars, bool);
-		_(integer, ConsoleFont, int);
-		_(boolean, DebugConsoleEnabled, bool);
-		_(boolean, DisplayPopups, bool);
-		_(integer, ExtraHUDStyle, int);
-		_(boolean, FadedConsoleDisplay, bool);
-		_(boolean, Filter, bool);
-		_(boolean, FoundHUD, bool);
-		_(boolean, Fullscreen, bool);
-		_(number, Gamma, float);
-		_(number, HUDOffset, float);
-		//_(string, Language, const char*);
-		_(number, MapOpacity, float);
-		_(integer, MaxRenderScale, int);
-		_(integer, MaxScale, int);
-		_(boolean, MouseControl, bool);
-		_(number, MusicVolume, float);
-		_(boolean, PauseOnFocusLost, bool);
-		_(boolean, RumbleEnabled, bool);
-		_(boolean, SaveCommandHistory, bool);
-		_(number, SFXVolume, float);
-		_(boolean, UseBorderlessFullscreen, bool);
-		_(boolean, VSync, bool);
-
-
-		_(integer, TouchMode, int);
-		return local.lua.luaL_error(L, "Invalid member access.");
-	}
-#undef _
-
-#define MODULE_USERDATA(name)local.lua.lua_pushstring(L, #name);local.lua.lua_newuserdata(L, 0);local.lua.luaL_newmetatable(L, #name);luaL_Reg mt_##name[] = {{"__index", name##Get},{"__newindex", name##Set},{ NULL, NULL }};local.lua.luaL_setfuncs(L, mt_##name, 0);local.lua.lua_setmetatable(L, -2);local.lua.lua_settable(L, -3)
 
 	static void Init() {
 
-		DEFMOD(Isaac);
-		MODULE_USERDATA(Options);
-		ENDMOD();
+		MODULE_BEGIN(Isaac);
+		MODULE_UDATA(Options);
+		MODULE_END();
 	}
 }

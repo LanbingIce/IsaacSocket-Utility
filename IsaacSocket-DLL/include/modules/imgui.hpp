@@ -198,34 +198,34 @@ namespace imgui {
 	}
 
 	static void Init() {
-		DEFMOD(ImGui);
+		MODULE_BEGIN(ImGui);
 
-		DEF(ImVec2);
-		DEF(ImVec4);
+		MODULE_FUNC(ImVec2);
+		MODULE_FUNC(ImVec4);
 
-		DEF(ShowDemoWindow);
-		DEF(Begin);
-		DEF(End);
-		DEF(Button);
-		DEF(Text);
-		DEF(TextColored);
-		DEF(TextWrapped);
-		DEF(Checkbox);
-		DEF(SliderFloat);
-		DEF(SliderInt);
-		DEF(InputInt);
-		DEF(SameLine);
-		DEF(InputText);
-		DEF(InputTextMultiline);
+		MODULE_FUNC(ShowDemoWindow);
+		MODULE_FUNC(Begin);
+		MODULE_FUNC(End);
+		MODULE_FUNC(Button);
+		MODULE_FUNC(Text);
+		MODULE_FUNC(TextColored);
+		MODULE_FUNC(TextWrapped);
+		MODULE_FUNC(Checkbox);
+		MODULE_FUNC(SliderFloat);
+		MODULE_FUNC(SliderInt);
+		MODULE_FUNC(InputInt);
+		MODULE_FUNC(SameLine);
+		MODULE_FUNC(InputText);
+		MODULE_FUNC(InputTextMultiline);
 
-		DEF(PushStyleColor);
-		DEF(PopStyleColor);
-		DEF(SetScrollHereY);
+		MODULE_FUNC(PushStyleColor);
+		MODULE_FUNC(PopStyleColor);
+		MODULE_FUNC(SetScrollHereY);
 
-		DEF(StyleColorsClassic);
-		DEF(StyleColorsLight);
-		DEF(StyleColorsDark);
+		MODULE_FUNC(StyleColorsClassic);
+		MODULE_FUNC(StyleColorsLight);
+		MODULE_FUNC(StyleColorsDark);
 
-		ENDMOD();
+		MODULE_END();
 	}
 }

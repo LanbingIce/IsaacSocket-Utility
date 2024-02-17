@@ -408,23 +408,23 @@ namespace opengl
 	}
 
 	static void Init() {
-		DEFMOD(OpenGL);
-		DEF(PutPixel);
-		DEF(DrawLine);
-		DEF(DrawTriangle);
-		DEF(DrawRect);
+		MODULE_BEGIN(OpenGL);
+		MODULE_FUNC(PutPixel);
+		MODULE_FUNC(DrawLine);
+		MODULE_FUNC(DrawTriangle);
+		MODULE_FUNC(DrawRect);
 
-		DEF(ReadImage);
-		DEF(CreateEmptyImage);
-		DEF(GetImageSize);
-		DEF(ImageDuplicate);
-		DEF(ImageResize);
-		DEF(ImageGetPixel);
-		DEF(ImagePutPixel);
-		DEF(DrawImage);
-		DEF(FreeImage);
+		MODULE_FUNC(ReadImage);
+		MODULE_FUNC(CreateEmptyImage);
+		MODULE_FUNC(GetImageSize);
+		MODULE_FUNC(ImageDuplicate);
+		MODULE_FUNC(ImageResize);
+		MODULE_FUNC(ImageGetPixel);
+		MODULE_FUNC(ImagePutPixel);
+		MODULE_FUNC(DrawImage);
+		MODULE_FUNC(FreeImage);
 
-		ENDMOD();
+		MODULE_END();
 	}
 
 }

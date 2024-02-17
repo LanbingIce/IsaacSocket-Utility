@@ -46,12 +46,12 @@ namespace win_api
 	}
 
 	static void Init() {
-		DEFMOD(WinAPI);
-		DEF(AllocConsole);
-		DEF(FreeConsole);
-		DEF(GetAsyncKeyState);
-		DEF(GetKeyState);
-		DEF(MessageBox);
-		ENDMOD();
+		MODULE_BEGIN(WinAPI);
+		MODULE_FUNC(AllocConsole);
+		MODULE_FUNC(FreeConsole);
+		MODULE_FUNC(GetAsyncKeyState);
+		MODULE_FUNC(GetKeyState);
+		MODULE_FUNC(MessageBox);
+		MODULE_END();
 	}
 }

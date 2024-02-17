@@ -3,9 +3,10 @@
 #include "lua.hpp"
 #include "state.hpp"
 
-#define DEFMOD(name) lua_State* L = local.isaac->luaEngine->L; int top = local.lua.lua_gettop(L); local.lua.lua_getglobal(L, "_ISAAC_SOCKET"); local.lua.lua_pushstring(L, "IsaacSocket"); local.lua.lua_gettable(L, -2); local.lua.lua_pushstring(L, #name); local.lua.lua_newtable(L);
-#define DEF(name) local.lua.lua_pushstring(L, #name);local.lua.lua_pushcfunction(L, name); local.lua.lua_settable(L, -3)
-#define ENDMOD() local.lua.lua_settable(L, -3); local.lua.lua_settop(L, top);
+#define MODULE_BEGIN(name) lua_State* L = local.isaac->luaEngine->L; int top = local.lua.lua_gettop(L); local.lua.lua_getglobal(L, "_ISAAC_SOCKET"); local.lua.lua_pushstring(L, "IsaacSocket"); local.lua.lua_gettable(L, -2); local.lua.lua_pushstring(L, #name); local.lua.lua_newtable(L)
+#define MODULE_FUNC(name) local.lua.lua_pushstring(L, #name);local.lua.lua_pushcfunction(L, name); local.lua.lua_settable(L, -3)
+#define MODULE_UDATA(name)local.lua.lua_pushstring(L, #name);local.lua.lua_newuserdata(L, 0);local.lua.luaL_newmetatable(L, #name);luaL_Reg mt_##name[] = {{"__index", name##__index},{"__newindex", name##__index},{ NULL, NULL }};local.lua.luaL_setfuncs(L, mt_##name, 0);local.lua.lua_setmetatable(L, -2);local.lua.lua_settable(L, -3)
+#define MODULE_END() local.lua.lua_settable(L, -3); local.lua.lua_settop(L, top)
 
 #define _CHECK_ARG(index,luaType,type,name) if(local.lua.lua_is##luaType(L,index)){name = (type)local.lua.lua_to##luaType(L,index);}else{return local.lua.luaL_error(L, "bad argument #"#index": "#name" should be "#luaType);}
 #define ARG(index,luaType,type,name) type name; _CHECK_ARG(index,luaType,type,name)
@@ -31,3 +32,7 @@
 
 #define FAST_MOD_CALLBACK_BEGIN(name){lua_State* L = local.isaac->luaEngine->L;size_t top = local.lua.lua_gettop(L);local.lua.lua_getglobal(L, "Isaac");local.lua.lua_pushstring(L, "RunCallback");local.lua.lua_gettable(L, -2);local.lua.lua_pushstring(L, #name);size_t paramNum = 1
 #define FAST_MOD_CALLBACK_END()if(local.lua.lua_pcall(L, paramNum, 0, 0)!=LUA_OK){ARG_DEF(-1,string,string,_err,"unknow error!");_err.append("\n");function::ConsoleOutput(_err, 0xFFF08080);}local.lua.lua_settop(L, top);}
+
+#define METATABLE_BEGIN(type,object)type& _obj = object;const char* key = local.lua.lua_tostring(L, 2)
+#define METATABLE_INDEX(luaType,name,type)if(strcmp(key, #name) == 0){if(local.lua.lua_isnone(L,3)){RET(luaType,_obj.name);}else if(local.lua.lua_is##luaType(L,3)){_obj.name = (type)local.lua.lua_to##luaType(L,3);return 0;}else{return local.lua.luaL_error(L, "bad value, "#name" should be "#luaType);}}
+#define METATABLE_END()return local.lua.luaL_error(L, "Invalid member access.")
