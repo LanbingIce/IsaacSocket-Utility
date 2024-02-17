@@ -194,5 +194,8 @@
     <ClInclude Include="include\config.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\modules\isaac_.hpp">
+      <Filter>头文件\modules</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

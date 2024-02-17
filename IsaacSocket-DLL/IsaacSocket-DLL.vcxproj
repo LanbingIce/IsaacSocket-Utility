@@ -73,6 +73,7 @@
     <ClInclude Include="include\modules\memory.hpp" />
     <ClInclude Include="include\modules\module.hpp" />
     <ClInclude Include="include\modules\opengl.hpp" />
+    <ClInclude Include="include\modules\isaac_.hpp" />
     <ClInclude Include="include\modules\system_.hpp" />
     <ClInclude Include="include\modules\win_api.hpp" />
     <ClInclude Include="include\modules\_isaac_socket.hpp" />
