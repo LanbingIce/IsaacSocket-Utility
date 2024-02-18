@@ -64,6 +64,13 @@ namespace imgui {
 		return 0;
 	}
 
+	static int LabelText(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, string, const char*, text);
+		ImGui::LabelText(label, "%s", text);
+		return 0;
+	}
+
 	static int TextColored(lua_State* L) {
 		ARG_UDATA(1, ImVec4, ::ImVec4*, col);
 		ARG(2, string, const char*, text);
@@ -208,6 +215,7 @@ namespace imgui {
 		MODULE_FUNC(End);
 		MODULE_FUNC(Button);
 		MODULE_FUNC(Text);
+		MODULE_FUNC(LabelText);
 		MODULE_FUNC(TextColored);
 		MODULE_FUNC(TextWrapped);
 		MODULE_FUNC(Checkbox);
