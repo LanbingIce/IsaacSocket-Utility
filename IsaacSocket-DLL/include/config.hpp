@@ -5,38 +5,6 @@
 
 namespace config {
 
-	void WriteFile(const u8string& filePath, const string& body)
-	{
-		std::ofstream ofs(std::filesystem::path(filePath.c_str()));
-		if (!ofs)
-		{
-			return;
-		}
-		ofs << body;
-		ofs.close();
-	}
-
-	std::string ReadFile(const u8string& filePath, string defl = "{}") {
-
-		if (!std::filesystem::exists(filePath))
-		{
-			WriteFile(filePath, defl);
-		}
-
-		std::ifstream ifs(std::filesystem::path(filePath.c_str()));
-
-		if (!ifs)
-		{
-			return defl;
-		}
-
-		std::stringstream ss;
-		ss << ifs.rdbuf();
-		ifs.close();
-
-		return ss.str();
-	}
-
 	Json::Value ParseJson(const string& mystr)
 	{
 		Json::CharReaderBuilder crb;
@@ -55,17 +23,43 @@ namespace config {
 		return str;
 	}
 
-	int GetInt(const char* name) {
-		string s = ReadFile(local.configName);
-		Json::Value j = ParseJson(s);
-		return j[name].asInt();
+	int GetInt(const vector<const char*>& path) {
+		if (path.empty()) {
+			return 0;
+		}
+
+		string str = utils::ReadFile(local.configName);
+		Json::Value json = ParseJson(str);
+		Json::Value* p_json = &json;
+
+		for (const auto& p : path) {
+			if (!p_json->isMember(p))
+			{
+				return 0;
+			}
+			p_json = &(*p_json)[p];
+		}
+
+		return (*p_json).asInt();
 	}
 
-	void SetInt(const char* name, int value) {
-		string s = ReadFile(local.configName);
-		Json::Value j = ParseJson(s);
-		j[name] = value;
-		string str = Encode(j);
-		WriteFile(local.configName, str);
+	void SetInt(const vector<const char*>& path, int value) {
+		if (path.empty()) {
+			return;
+		}
+
+		string str = utils::ReadFile(local.configName);
+		Json::Value json = ParseJson(str);
+		Json::Value* p_json = &json;
+
+		for (const auto& p : path) {
+			if (!p_json->isMember(p) || !(*p_json)[p].isObject()) {
+				(*p_json)[p] = Json::Value();
+			}
+			p_json = &(*p_json)[p];
+		}
+
+		*p_json = value;
+		utils::WriteFile(local.configName, Encode(json));
 	}
 }
