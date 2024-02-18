@@ -94,6 +94,16 @@ namespace imgui {
 		return 2;
 	}
 
+	static int RadioButton(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, integer, int, v);
+		ARG(3, integer, int, v_button);
+
+		local.lua.lua_pushboolean(L, ImGui::RadioButton(label, &v, v_button));
+		local.lua.lua_pushinteger(L, v);
+		return 2;
+	}
+
 	static int SliderFloat(lua_State* L) {
 		ARG(1, string, const char*, label);
 		ARG(2, number, float, v);
@@ -219,6 +229,7 @@ namespace imgui {
 		MODULE_FUNC(TextColored);
 		MODULE_FUNC(TextWrapped);
 		MODULE_FUNC(Checkbox);
+		MODULE_FUNC(RadioButton);
 		MODULE_FUNC(SliderFloat);
 		MODULE_FUNC(SliderInt);
 		MODULE_FUNC(InputInt);
