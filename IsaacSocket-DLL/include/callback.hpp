@@ -50,7 +50,7 @@ namespace callback {
 			if ((local.isaac->game->pauseMenu.state || local.menuBarDisplayMode == state::ALWAYS || local.menuBarDisplayMode == state::TAB_HOLD && GetAsyncKeyState(VK_TAB) & 0x8000) && ImGui::BeginMainMenuBar())
 			{
 				MENU_BEGIN(IsaacSockets管理);
-				MENU_ITEM(打开控制台, local.allocConsole, local.allocConsole = !local.allocConsole; if (local.allocConsole)function::AllocConsole(); else function::FreeConsole(););
+				MENU_ITEM(启用系统控制台, local.allocConsole, local.allocConsole = !local.allocConsole; if (local.allocConsole)function::AllocConsole(); else function::FreeConsole(););
 				MENU_END();
 				MENU_BEGIN(界面设置);
 				MENU_BEGIN(主菜单条显示方式);

@@ -117,21 +117,17 @@ namespace function {
 			function::ReloadLuaWithoutDeleteRoom();
 			return;
 		}
-
-		if (local.hConsole)
-		{
-			PostMessageA(local.hConsole, WM_CLOSE, 0, 0);
-			local.hConsole = 0;
-		}
 	}
 
 	static void AllocConsole() {
 		::AllocConsole();
 		SetForegroundWindow(local.hWnd);
+		cw("已启用系统控制台！");
+		cw("如需关闭此窗口，请先禁用系统控制台！否则游戏也会退出");
 	}
 
 	static void FreeConsole() {
-		local.hConsole = GetConsoleWindow();
+		cw("已禁用系统控制台，请手动关闭此窗口");
 		::FreeConsole();
 	}
 }
