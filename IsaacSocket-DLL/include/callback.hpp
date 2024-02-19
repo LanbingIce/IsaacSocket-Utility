@@ -46,8 +46,8 @@ namespace callback {
 #define MENU_BEGIN(name)if (ImGui::BeginMenu(#name)){
 #define MENU_END()ImGui::EndMenu();}
 #define MENU_ITEM(name,selected,e)if (ImGui::MenuItem(#name, nullptr, selected)){e;}
-
-			if ((local.isaac->game->pauseMenu.state || local.menuBarDisplayMode == state::ALWAYS || local.menuBarDisplayMode == state::TAB_HOLD && GetAsyncKeyState(VK_TAB) & 0x8000) && ImGui::BeginMainMenuBar())
+			bool showMainMenuBar = (local.isaac->game->pauseMenu.state || local.menuBarDisplayMode == state::ALWAYS || local.menuBarDisplayMode == state::TAB_HOLD && GetAsyncKeyState(VK_TAB) & 0x8000) && ImGui::BeginMainMenuBar();
+			if (showMainMenuBar)
 			{
 				MENU_BEGIN(IsaacSockets管理);
 				MENU_ITEM(启用系统控制台, local.allocConsole, local.allocConsole = !local.allocConsole; if (local.allocConsole)function::AllocConsole(); else function::FreeConsole(););
@@ -68,8 +68,6 @@ namespace callback {
 				MENU_END();
 				MENU_END();
 
-				FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_MAIN_MENU_BAR_RENDER);
-				FAST_MOD_CALLBACK_END();
 				ImGui::EndMainMenuBar();
 			}
 
@@ -78,6 +76,7 @@ namespace callback {
 #undef MENU_ITEM
 
 			FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_RENDER);
+			MOD_CALLBACK_ARG(boolean, showMainMenuBar);
 			FAST_MOD_CALLBACK_END();
 
 			if (font16)
