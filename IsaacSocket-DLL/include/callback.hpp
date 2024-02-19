@@ -51,6 +51,9 @@ namespace callback {
 			{
 				MENU_BEGIN(IsaacSockets管理);
 				MENU_ITEM(启用系统控制台, local.allocConsole, local.allocConsole = !local.allocConsole; if (local.allocConsole)function::AllocConsole(); else function::FreeConsole(););
+				MENU_BEGIN(实验性功能);
+				MENU_ITEM(重载lua, false, local.needReload = true);
+				MENU_END();
 				MENU_END();
 				MENU_BEGIN(界面设置);
 				MENU_BEGIN(主菜单条显示方式);
@@ -117,7 +120,7 @@ namespace callback {
 		}
 		if (text == "test")
 		{
-		cw(	config::GetInt({"IsaacSocket","MenuBar"}));
+			cw(config::GetInt({ "IsaacSocket","MenuBar" }));
 			//function::ExecuteCommand("g k1");
 			//function::ConsoleOutput("test");
 		}
