@@ -214,6 +214,22 @@ namespace imgui {
 		return 0;
 	}
 
+	static int SetWindowPos(lua_State* L) {
+		if (local.lua.lua_isstring(L, 1))
+		{
+			ARG(1, string, const char*, name);
+			ARG_UDATA(2, ImVec2, ::ImVec2*, pos);
+			ARG(3, integer, ::ImGuiCond, cond);
+			ImGui::SetWindowPos(name, *pos, cond);
+		}
+		else {
+			ARG_UDATA(1, ImVec2, ::ImVec2*, pos);
+			ARG(2, integer, ::ImGuiCond, cond);
+			ImGui::SetWindowPos(*pos, cond);
+		}
+		return 0;
+	}
+
 	static void Init() {
 		MODULE_BEGIN(ImGui);
 
@@ -244,6 +260,8 @@ namespace imgui {
 		MODULE_FUNC(StyleColorsClassic);
 		MODULE_FUNC(StyleColorsLight);
 		MODULE_FUNC(StyleColorsDark);
+
+		MODULE_FUNC(SetWindowPos);
 
 		MODULE_END();
 	}
