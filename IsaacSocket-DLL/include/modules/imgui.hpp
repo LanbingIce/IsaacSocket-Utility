@@ -230,6 +230,59 @@ namespace imgui {
 		return 0;
 	}
 
+	static int SetWindowSize(lua_State* L) {
+		if (local.lua.lua_isstring(L, 1))
+		{
+			ARG(1, string, const char*, name);
+			ARG_UDATA(2, ImVec2, ::ImVec2*, size);
+			ARG(3, integer, ::ImGuiCond, cond);
+			ImGui::SetWindowSize(name, *size, cond);
+		}
+		else {
+			ARG_UDATA(1, ImVec2, ::ImVec2*, size);
+			ARG(2, integer, ::ImGuiCond, cond);
+			ImGui::SetWindowSize(*size, cond);
+		}
+		return 0;
+	}
+
+	static int BeginMainMenuBar(lua_State* L) {
+		RET(boolean, ImGui::BeginMainMenuBar());
+	}
+
+	static int EndMainMenuBar(lua_State* L) {
+		ImGui::EndMainMenuBar();
+		return 0;
+	}
+
+	static int BeginMenuBar(lua_State* L) {
+		RET(boolean, ImGui::BeginMenuBar());
+	}
+
+	static int EndMenuBar(lua_State* L) {
+		ImGui::EndMenuBar();
+		return 0;
+	}
+
+	static int BeginMenu(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG_DEF(2, boolean, bool, enabled, true);
+		RET(boolean, ImGui::BeginMenu(label, enabled));
+	}
+
+	static int EndMenu(lua_State* L) {
+		ImGui::EndMenu();
+		return 0;
+	}
+
+	static int MenuItem(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG_DEF(2, string, const char*, shortcut, (const char*)0);
+		ARG_DEF(3, boolean, bool, selected, false);
+		ARG_DEF(4, boolean, bool, enabled, true);
+		RET(boolean, ImGui::MenuItem(label, shortcut, selected, enabled));
+	}
+
 	static void Init() {
 		MODULE_BEGIN(ImGui);
 
@@ -262,6 +315,15 @@ namespace imgui {
 		MODULE_FUNC(StyleColorsDark);
 
 		MODULE_FUNC(SetWindowPos);
+		MODULE_FUNC(SetWindowSize);
+
+		MODULE_FUNC(BeginMainMenuBar);
+		MODULE_FUNC(EndMainMenuBar);
+		MODULE_FUNC(BeginMenuBar);
+		MODULE_FUNC(EndMenuBar);
+		MODULE_FUNC(BeginMenu);
+		MODULE_FUNC(EndMenu);
+		MODULE_FUNC(MenuItem);
 
 		MODULE_END();
 	}
