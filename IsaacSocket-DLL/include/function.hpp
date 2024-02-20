@@ -95,13 +95,6 @@ namespace function {
 	}
 
 	static void IsaacSocketUpdate() {
-		if (local.needReloadDll)
-		{
-			reloadLibraryMain("IsaacSocket.dll");
-			local.needReloadDll = false;
-			return;
-		}
-
 		if (local.needReload)
 		{
 			local.needReload = false;

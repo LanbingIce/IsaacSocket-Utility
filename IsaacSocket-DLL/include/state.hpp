@@ -33,7 +33,6 @@ namespace state {
 		HWND hWnd;
 		bool initialized = false;
 		bool needReload = false;
-		bool needReloadDll = false;
 		char charsInputBuffer[3];
 		isaac::IsaacImage* isaac;
 		lua::Lua lua;

@@ -8,6 +8,24 @@
 
 #include <imgui/imgui.h>
 
+// 小彭老师专用代码
+#ifndef __MINGW32__
+#define CHECK_PENG() // 不影响msvc
+#else
+#define CHECK_PENG() \
+    if (getenv("IsaacSocketFromClient")) { \
+        if (global->connectionState == state::DISCONNECTED)global->connectionState=state::CONNECTING; \
+        static int counter = 0; \
+        counter++; \
+        if (counter % 30) { \
+            if (reloadLibraryMain("IsaacSocket.dll", true)) { \
+                _cprintf("auto reloaded dll\n"); \
+                return 0; \
+            } \
+        } \
+    }
+#endif
+
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -18,7 +36,10 @@ namespace callback {
 	// SwapBuffers之前，只要游戏进程存在就一直触发，返回1则取消此次交换
 	static int PreSwapBuffers(HDC hdc)
 	{
+        CHECK_PENG();
 		switch (global->connectionState) {
+        default:
+            break;
 		case state::CONNECTING:
 			if (!local.initialized)
 			{
