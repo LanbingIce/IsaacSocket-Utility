@@ -6,10 +6,10 @@
 namespace http {
 
 static int RequestGet(lua_State* L) {
-    ARG(1, string, const char *, base);
-    ARG(2, string, const char *, uri);
-    ARG(3, string, const char *, headers_);
-    ARG(4, string, const char *, params_);
+    ARG(1, stdstring, std::string, base);
+    ARG(2, stdstring, std::string, uri);
+    ARG(3, stdstring, std::string, headers_);
+    ARG(4, stdstring, std::string, params_);
     httplib::Client cli(base);
     httplib::Headers headers;
     httplib::Params params;
@@ -24,11 +24,11 @@ static int RequestGet(lua_State* L) {
 }
 
 static int RequestPost(lua_State* L) {
-    ARG(1, string, const char *, base);
-    ARG(2, string, const char *, uri);
-    ARG(3, string, const char *, headers_);
-    ARG(4, string, const char *, content);
-    ARG(5, string, const char *, contentType);
+    ARG(1, stdstring, std::string, base);
+    ARG(2, stdstring, std::string, uri);
+    ARG(3, stdstring, std::string, headers_);
+    ARG(4, stdstring, std::string, content);
+    ARG(5, stdstring, std::string, contentType);
     httplib::Client cli(base);
     httplib::Headers headers;
     auto res = cli.Post(uri, headers, content, contentType);
@@ -42,9 +42,10 @@ static int RequestPost(lua_State* L) {
 }
 
 static void Init() {
-    DEFMOD(WinAPI);
-    DEF(RequestGet);
-    ENDMOD();
+    MODULE_BEGIN(Http);
+    MODULE_FUNC(RequestGet);
+    MODULE_FUNC(RequestPost);
+    MODULE_END();
 }
 
 }

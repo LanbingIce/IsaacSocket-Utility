@@ -171,6 +171,18 @@ namespace lua {
 			lua_pushcclosure(L, f, 0);
 		}
 
+        int lua_isstdstring(lua_State* L, int i) const
+        {
+            return lua_isstring(L, i);
+        }
+
+        std::string lua_tostdstring(lua_State* L, int i) const
+        {
+            size_t len = 0;
+            const char *str = lua_tolstring(L, i, &len);
+            return std::string(str, len);
+        }
+
 		lua_Number lua_tonumber(lua_State* L, int i) const
 		{
 			return	lua_tonumberx(L, i, NULL);
