@@ -11,9 +11,9 @@
 
 // 小彭老师专用代码开始
 #ifndef __MINGW32__
-#define CHECK_PENG() // 不影响msvc
+#define CHECK_RELOAD() // 不影响msvc
 #else
-#define CHECK_PENG() \
+#define CHECK_RELOAD() \
     if (getenv("IsaacSocketFromClient")) { \
         if (global->connectionState == state::DISCONNECTED)global->connectionState=state::CONNECTING; \
         static int reloadCounter = 0; \
@@ -38,9 +38,9 @@ namespace callback {
 	// SwapBuffers之前，只要游戏进程存在就一直触发，返回1则取消此次交换
 	static int PreSwapBuffers(HDC hdc)
 	{
-        CHECK_PENG();
+        CHECK_RELOAD();
 		switch (global->connectionState) {
-        default:
+		case state::DISCONNECTED:
             break;
 		case state::CONNECTING:
 			if (!local.initialized)
@@ -245,3 +245,4 @@ namespace callback {
 }
 #undef CHECK_STATE
 #undef CHECK_INIT
+#undef CHECK_RELOAD
