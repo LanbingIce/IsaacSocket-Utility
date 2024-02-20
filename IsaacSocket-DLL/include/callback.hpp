@@ -9,7 +9,7 @@
 
 #include <imgui/imgui.h>
 
-// 小彭老师专用代码
+// 小彭老师专用代码开始
 #ifndef __MINGW32__
 #define CHECK_PENG() // 不影响msvc
 #else

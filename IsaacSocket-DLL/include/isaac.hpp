@@ -2,6 +2,14 @@
 #include "pch.h"
 #include "utils.hpp"
 
+// 小彭老师专用代码开始
+#ifdef __MINGW32__
+#include "gnucompat.hpp"
+#define string ::gnucompat::string
+#define vector ::gnucompat::vector
+#endif
+// 小彭老师专用代码结束
+
 namespace isaac {
 
 	struct lua_State;
@@ -276,3 +284,10 @@ namespace isaac {
 		};
 	};
 }
+
+// 小彭老师专用代码开始
+#ifdef __MINGW32__
+#undef string
+#undef vector
+#endif
+// 小彭老师专用代码结束
