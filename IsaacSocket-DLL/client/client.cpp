@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
     LPCSTR game = argv[1];
     if (!game) return -1;
 
-    putenv("IsaacSocketFromClient=1");
+    SetEnvironmentVariableA("IsaacSocketFromClient", "1");
 
     std::cout << std::format("Launching {}", game) << std::endl;
     HANDLE hProcess = executeCommandA(game);

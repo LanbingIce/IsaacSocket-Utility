@@ -21,3 +21,5 @@ target_include_directories(IsaacSocket PRIVATE include libs)
 add_executable(IsaacSocketClient)
 target_sources(IsaacSocketClient PRIVATE client/client.cpp)
 target_include_directories(IsaacSocketClient PRIVATE include libs)
+
+add_dependencies(IsaacSocketClient IsaacSocket)
