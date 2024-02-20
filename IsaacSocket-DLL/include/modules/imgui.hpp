@@ -6,12 +6,47 @@
 
 namespace imgui {
 	static ::ImVec2 VEC2_0 = ::ImVec2(0, 0);
+
+	static int p_ImVec2__index(lua_State* L) {
+		ARG_UDATA(1, p_ImVec2, ::ImVec2**, pp_vec);
+		METATABLE_BEGIN(::ImVec2, **pp_vec);
+		METATABLE_INDEX(number, x, float);
+		METATABLE_INDEX(number, y, float);
+		METATABLE_END();
+	}
+
+	static int ImVec2__index(lua_State* L) {
+		ARG_UDATA(1, ImVec2, ::ImVec2*, p_vec);
+		METATABLE_BEGIN(::ImVec2, *p_vec);
+		METATABLE_INDEX(number, x, float);
+		METATABLE_INDEX(number, y, float);
+		METATABLE_END();
+	}
+
+	static int ImVec4__index(lua_State* L) {
+		ARG_UDATA(1, ImVec4, ::ImVec4*, p_vec);
+		METATABLE_BEGIN(::ImVec4, *p_vec);
+		METATABLE_INDEX(number, x, float);
+		METATABLE_INDEX(number, y, float);
+		METATABLE_INDEX(number, z, float);
+		METATABLE_INDEX(number, w, float);
+		METATABLE_END();
+	}
+
+	static int p_ImGuiIO__index(lua_State* L) {
+		ARG_UDATA(1, p_ImGuiIO, ImGuiIO**, pp_io);
+		METATABLE_BEGIN(::ImGuiIO, **pp_io);
+		METATABLE_INDEX(number, DeltaTime, float);
+		METATABLE_INDEX_UDATA_P(p_ImVec2, DisplaySize, ::ImVec2*);
+
+		METATABLE_END();
+	}
+
 	static int ImVec2(lua_State* L) {
 		ARG(1, number, float, x);
 		ARG(2, number, float, y);
 		::ImVec2* vec = (::ImVec2*)local.lua.lua_newuserdata(L, sizeof(::ImVec2));
-		local.lua.luaL_newmetatable(L, "ImVec2");
-		local.lua.lua_setmetatable(L, -2);
+		SET_METATABLE(ImVec2);
 		vec->x = x;
 		vec->y = y;
 		return 1;
@@ -23,8 +58,7 @@ namespace imgui {
 		ARG(3, number, float, z);
 		ARG(4, number, float, w);
 		::ImVec4* vec = (::ImVec4*)local.lua.lua_newuserdata(L, sizeof(::ImVec4));
-		local.lua.luaL_newmetatable(L, "ImVec4");
-		local.lua.lua_setmetatable(L, -2);
+		SET_METATABLE(ImVec4);
 		vec->x = x;
 		vec->y = y;
 		vec->z = z;
@@ -61,6 +95,13 @@ namespace imgui {
 	static int Text(lua_State* L) {
 		ARG(1, string, const char*, text);
 		ImGui::Text("%s", text);
+		return 0;
+	}
+
+	static int TextUnformatted(lua_State* L) {
+		ARG(1, string, const char*, text);
+		ARG_DEF(2, string, const char*, text_end, (const char*)0);
+		ImGui::TextUnformatted(text);
 		return 0;
 	}
 
@@ -190,12 +231,6 @@ namespace imgui {
 		return 0;
 	}
 
-	static int SetScrollHereY(lua_State* L) {
-		ARG_DEF(1, number, float, center_y_ratio, 0.5F);
-		ImGui::SetScrollHereY(center_y_ratio);
-		return 0;
-	}
-
 	static int StyleColorsClassic(lua_State* L) {
 		local.styleColor = state::CLASSIC;
 		ImGui::StyleColorsClassic();
@@ -212,6 +247,27 @@ namespace imgui {
 		local.styleColor = state::DARK;
 		ImGui::StyleColorsDark();
 		return 0;
+	}
+
+	static int GetItemRectSize(lua_State* L) {
+		::ImVec2* p_vec = (::ImVec2*)local.lua.lua_newuserdata(L, sizeof(::ImVec2));
+		SET_METATABLE(ImVec2);
+		*p_vec = ImGui::GetItemRectSize();
+		return 1;
+	}
+
+	static int GetWindowPos(lua_State* L) {
+		::ImVec2* p_vec = (::ImVec2*)local.lua.lua_newuserdata(L, sizeof(::ImVec2));
+		SET_METATABLE(ImVec2);
+		*p_vec = ImGui::GetWindowPos();
+		return 1;
+	}
+
+	static int GetWindowSize(lua_State* L) {
+		::ImVec2* p_vec = (::ImVec2*)local.lua.lua_newuserdata(L, sizeof(::ImVec2));
+		SET_METATABLE(ImVec2);
+		*p_vec = ImGui::GetWindowSize();
+		return 1;
 	}
 
 	static int SetWindowPos(lua_State* L) {
@@ -283,6 +339,49 @@ namespace imgui {
 		RET(boolean, ImGui::MenuItem(label, shortcut, selected, enabled));
 	}
 
+	static int GetIO(lua_State* L) {
+		ImGuiIO** p_io = (ImGuiIO**)local.lua.lua_newuserdata(L, sizeof(ImGuiIO*));
+		SET_METATABLE(p_ImGuiIO);
+		*p_io = &ImGui::GetIO();
+		return 1;
+	}
+
+	static int SetScrollX(lua_State* L) {
+		ARG(1, number, float, scroll_x);
+		ImGui::SetScrollX(scroll_x);
+		return 0;
+	}
+
+	static int SetScrollY(lua_State* L) {
+		ARG(1, number, float, scroll_y);
+		ImGui::SetScrollY(scroll_y);
+		return 0;
+	}
+
+	static int SetScrollHereX(lua_State* L) {
+		ARG_DEF(1, number, float, center_x_ratio, 0.5F);
+		ImGui::SetScrollHereX(center_x_ratio);
+		return 0;
+	}
+
+	static int SetScrollHereY(lua_State* L) {
+		ARG_DEF(1, number, float, center_y_ratio, 0.5F);
+		ImGui::SetScrollHereY(center_y_ratio);
+		return 0;
+	}
+
+
+	static int CalcTextSize(lua_State* L) {
+		ARG(1, string, const char*, text);
+		ARG_DEF(2, string, const char*, text_end, (const char*)0);
+		ARG_DEF(3, boolean, bool, hide_text_after_double_hash, false);
+		ARG_DEF(4, number, float, wrap_width, -1.0F);
+		::ImVec2* p_vec = (::ImVec2*)local.lua.lua_newuserdata(L, sizeof(::ImVec2));
+		SET_METATABLE(ImVec2);
+		*p_vec = ImGui::CalcTextSize(text, text_end, hide_text_after_double_hash, wrap_width);
+		return 1;
+	}
+
 	static void Init() {
 		MODULE_BEGIN(ImGui);
 
@@ -294,6 +393,7 @@ namespace imgui {
 		MODULE_FUNC(End);
 		MODULE_FUNC(Button);
 		MODULE_FUNC(Text);
+		MODULE_FUNC(TextUnformatted);
 		MODULE_FUNC(LabelText);
 		MODULE_FUNC(TextColored);
 		MODULE_FUNC(TextWrapped);
@@ -308,7 +408,6 @@ namespace imgui {
 
 		MODULE_FUNC(PushStyleColor);
 		MODULE_FUNC(PopStyleColor);
-		MODULE_FUNC(SetScrollHereY);
 
 		MODULE_FUNC(StyleColorsClassic);
 		MODULE_FUNC(StyleColorsLight);
@@ -316,6 +415,9 @@ namespace imgui {
 
 		MODULE_FUNC(SetWindowPos);
 		MODULE_FUNC(SetWindowSize);
+		MODULE_FUNC(GetWindowSize);
+		MODULE_FUNC(GetWindowSize);
+		MODULE_FUNC(GetItemRectSize);
 
 		MODULE_FUNC(BeginMainMenuBar);
 		MODULE_FUNC(EndMainMenuBar);
@@ -324,6 +426,15 @@ namespace imgui {
 		MODULE_FUNC(BeginMenu);
 		MODULE_FUNC(EndMenu);
 		MODULE_FUNC(MenuItem);
+
+		MODULE_FUNC(GetIO);
+
+		MODULE_FUNC(SetScrollX);
+		MODULE_FUNC(SetScrollY);
+		MODULE_FUNC(SetScrollHereX);
+		MODULE_FUNC(SetScrollHereY);
+
+		MODULE_FUNC(CalcTextSize);
 
 		MODULE_END();
 	}
