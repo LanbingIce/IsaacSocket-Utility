@@ -1,0 +1,27 @@
+
+struct Texture {
+    GLuint texture;
+
+    Texture(GLuint texture) noexcept : texture(texture) {}
+    Texture(Texture &&) noexcept : texture(std::exchange(texture, 0)) {}
+    Texture &operator=(Texture &&that) noexcept {
+        std::swap(texture, that.texture);
+        return *this;
+    }
+    Texture(const Texture &) = delete;
+    Texture &operator=(const Texture &) = delete;
+
+    GLuint get_id() const noexcept {
+        return texture;
+    }
+
+    operator GLuint() const noexcept {
+        return texture;
+    }
+
+    ~Texture() {
+        if (texture)
+            glDeleteTextures(1, &texture);
+    }
+};
+

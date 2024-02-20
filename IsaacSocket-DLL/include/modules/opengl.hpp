@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "module.hpp"
+#include <utility>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stbi/stb_image.h>
 #include <glad/glad.h>
@@ -42,7 +43,7 @@ static void opengl_check_error(const char* filename, int lineno, const char* exp
 }
 
 struct GLStateGuard {
-    GLStateGuard() {
+    GLStateGuard() { // 保护游戏状态，直到该对象析构
         clear_gl_error();
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glUseProgram(0);
@@ -133,7 +134,7 @@ static std::unique_ptr<Image> load_image(const char* filename, int channels = 0)
         return nullptr;
     }
     uint8_t* p = stbi_load_from_file(fp, &img->width, &img->height, &img->channels, channels);
-if (!p) [[unlikely]] {
+    if (!p) [[unlikely]] {
         return nullptr;
     }
     img->data.assign(p, p + img->width * img->height * img->channels);
@@ -158,6 +159,34 @@ inline auto* image_handles() {
 inline auto* image_cache() {
     static KVCache<std::string, Handle> table;
     return &table;
+}
+
+static int ImageToTexture(lua_State* L) {
+    ARG_DEF(1, integer, Handle, imageHandle, NULL_HANDLE);
+
+    if (auto image = image_handles()->find(imageHandle)) {
+        GLStateGuard _; // 在当前 {} 范围内保护游戏的 GL 状态
+        GLuint texture = 0;
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        // https://zhuanlan.zhihu.com/p/103881133
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        static const GLenum formatTable[] = { GL_LUMINANCE, GL_LUMINANCE_ALPHA, GL_RGB, GL_RGBA };
+        glTexImage2D(GL_TEXTURE_2D, 0, formatTable[image->channels - 1], image->width, image->height, 0, formatTable[image->channels - 1], GL_UNSIGNED_BYTE, image->data.data());
+        RET(integer, texture);
+    }
+    return 0;
+}
+
+static int DeleteTexture(lua_State* L) {
+    ARG_DEF(1, integer, GLuint, texture, 0);
+    if (texture)
+        glDeleteTextures(1, &texture);
+    return 0;
 }
 
 static int CreateEmptyImage(lua_State* L) {
@@ -192,7 +221,7 @@ static int ReadImage(lua_State* L) {
 }
 
 static int GetImageSize(lua_State* L) {
-    ARG_DEF(3, integer, Handle, imageHandle, NULL_HANDLE);
+    ARG_DEF(1, integer, Handle, imageHandle, NULL_HANDLE);
 
     if (auto image = image_handles()->find(imageHandle)) {
         RET_TABLE();
@@ -207,7 +236,7 @@ static int GetImageSize(lua_State* L) {
 }
 
 static int ImageDuplicate(lua_State* L) {
-    ARG_DEF(3, integer, Handle, imageHandle, NULL_HANDLE);
+    ARG_DEF(1, integer, Handle, imageHandle, NULL_HANDLE);
 
     Handle imageHandle2 = NULL_HANDLE;
     if (auto image = image_handles()->find(imageHandle)) {
