@@ -15,9 +15,9 @@
 #define CHECK_PENG() \
     if (getenv("IsaacSocketFromClient")) { \
         if (global->connectionState == state::DISCONNECTED)global->connectionState=state::CONNECTING; \
-        static int counter = 0; \
-        counter++; \
-        if (counter % 30) { \
+        static int reloadCounter = 0; \
+        reloadCounter++; \
+        if (reloadCounter % 30 == 0) { \
             if (reloadLibraryMain("IsaacSocket.dll", true)) { \
                 _cprintf("auto reloaded dll\n"); \
                 return 0; \
@@ -25,6 +25,7 @@
         } \
     }
 #endif
+// 小彭老师专用代码结束
 
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
