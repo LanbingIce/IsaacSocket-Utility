@@ -6,6 +6,9 @@
 
 namespace imgui {
 	static ::ImVec2 VEC2_0 = ::ImVec2(0, 0);
+	static ::ImVec4 VEC4_0 = ::ImVec4(0, 0, 0, 0);
+	static ::ImVec2 VEC2_1 = ::ImVec2(1, 1);
+	static ::ImVec4 VEC4_1 = ::ImVec4(1, 1, 1, 1);
 
 	static int p_ImVec2__index(lua_State* L) {
 		ARG_UDATA(1, p_ImVec2, ::ImVec2**, pp_vec);
@@ -66,6 +69,12 @@ namespace imgui {
 		return 1;
 	}
 
+	static int ArrowButton(lua_State* L) {
+		ARG(1, string, const char*, str_id);
+		ARG(2, integer, ImGuiDir, dir);
+		RET(boolean, ImGui::ArrowButton(str_id, dir));
+	}
+
 	static int Begin(lua_State* L) {
 		ARG(1, string, const char*, name);
 		ARG_DEF(2, boolean, bool, open, true);
@@ -76,14 +85,19 @@ namespace imgui {
 		return 2;
 	}
 
-	static int BeginMenu(lua_State* L) {
-		ARG(1, string, const char*, label);
-		ARG_DEF(2, boolean, bool, enabled, true);
-		RET(boolean, ImGui::BeginMenu(label, enabled));
+	static int BeginGroup(lua_State* L) {
+		ImGui::BeginGroup();
+		return 0;
 	}
 
 	static int BeginMainMenuBar(lua_State* L) {
 		RET(boolean, ImGui::BeginMainMenuBar());
+	}
+
+	static int BeginMenu(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG_DEF(2, boolean, bool, enabled, true);
+		RET(boolean, ImGui::BeginMenu(label, enabled));
 	}
 
 	static int BeginMenuBar(lua_State* L) {
@@ -121,13 +135,18 @@ namespace imgui {
 		return 0;
 	}
 
-	static int EndMenu(lua_State* L) {
-		ImGui::EndMenu();
+	static int EndGroup(lua_State* L) {
+		ImGui::EndGroup();
 		return 0;
 	}
 
 	static int EndMainMenuBar(lua_State* L) {
 		ImGui::EndMainMenuBar();
+		return 0;
+	}
+
+	static int EndMenu(lua_State* L) {
+		ImGui::EndMenu();
 		return 0;
 	}
 
@@ -154,6 +173,14 @@ namespace imgui {
 		return 1;
 	}
 
+	static int GetTime(lua_State* L) {
+		RET(number, ImGui::GetTime());
+	}
+
+	static int GetVersion(lua_State* L) {
+		RET(string, ImGui::GetVersion());
+	}
+
 	static int GetWindowPos(lua_State* L) {
 		::ImVec2* p_vec = (::ImVec2*)local.lua.lua_newuserdata(L, sizeof(::ImVec2));
 		SET_METATABLE(ImVec2);
@@ -166,6 +193,17 @@ namespace imgui {
 		SET_METATABLE(ImVec2);
 		*p_vec = ImGui::GetWindowSize();
 		return 1;
+	}
+
+	static int Image(lua_State* L) {
+		ARG(1, integer, ImTextureID, user_texture_id);
+		ARG_UDATA(2, ImVec2, ::ImVec2*, image_size);
+		ARG_UDATA_DEF(3, ImVec2, ::ImVec2*, uv0, &VEC2_0);
+		ARG_UDATA_DEF(4, ImVec2, ::ImVec2*, uv1, &VEC2_1);
+		ARG_UDATA_DEF(5, ImVec4, ::ImVec4*, tint_col, &VEC4_1);
+		ARG_UDATA_DEF(6, ImVec4, ::ImVec4*, border_col, &VEC4_0);
+		ImGui::Image(user_texture_id, *image_size, *uv0, *uv1, *tint_col, *border_col);
+		return 0;
 	}
 
 	static int InputInt(lua_State* L) {
@@ -315,8 +353,25 @@ namespace imgui {
 		return 0;
 	}
 
+	static int ShowAboutWindow(lua_State* L) {
+		ImGui::ShowAboutWindow();
+		return 0;
+	}
+
+	static int ShowDebugLogWindow(lua_State* L) {
+		ARG_DEF(1, boolean, bool, open, false);
+		ImGui::ShowDebugLogWindow(&open);
+		RET(boolean, open);
+	}
+
 	static int ShowDemoWindow(lua_State* L) {
-		ImGui::ShowDemoWindow();
+		ARG_DEF(1, boolean, bool, open, false);
+		ImGui::ShowDemoWindow(&open);
+		RET(boolean, open);
+	}
+
+	static int ShowUserGuide(lua_State* L) {
+		ImGui::ShowUserGuide();
 		return 0;
 	}
 
@@ -400,7 +455,7 @@ namespace imgui {
 
 		// MODULE_FUNC(AcceptDragDropPayload);
 		// MODULE_FUNC(AlignTextToFramePadding);
-		// MODULE_FUNC(ArrowButton);
+		MODULE_FUNC(ArrowButton);
 		MODULE_FUNC(Begin);
 		// MODULE_FUNC(BeginChild);
 		// MODULE_FUNC(BeginChildFrame);
@@ -408,7 +463,7 @@ namespace imgui {
 		// MODULE_FUNC(BeginDisabled);
 		// MODULE_FUNC(BeginDragDropSource);
 		// MODULE_FUNC(BeginDragDropTarget);
-		// MODULE_FUNC(BeginGroup);
+		MODULE_FUNC(BeginGroup);
 		// MODULE_FUNC(BeginItemTooltip);
 		// MODULE_FUNC(BeginListBox);
 		MODULE_FUNC(BeginMainMenuBar);
@@ -446,12 +501,12 @@ namespace imgui {
 		// MODULE_FUNC(ColorPicker4);
 		// MODULE_FUNC(Columns);
 		// MODULE_FUNC(Combo);
-		// MODULE_FUNC(CreateContext);
+		// MODULE_FUNC(CreateContext);		//在c++中已调用
 		// MODULE_FUNC(DebugCheckVersionAndDataLayout);
 		// MODULE_FUNC(DebugFlashStyleColor);
 		// MODULE_FUNC(DebugTextEncoding);
 		// MODULE_FUNC(DestroyContext);
-		// MODULE_FUNC(DragFloat);
+		// MODULE_FUNC(DragFloat);	
 		// MODULE_FUNC(DragFloat2);
 		// MODULE_FUNC(DragFloat3);
 		// MODULE_FUNC(DragFloat4);
@@ -472,7 +527,7 @@ namespace imgui {
 		// MODULE_FUNC(EndDragDropSource);
 		// MODULE_FUNC(EndDragDropTarget);
 		// MODULE_FUNC(EndFrame);
-		// MODULE_FUNC(EndGroup);
+		MODULE_FUNC(EndGroup);
 		// MODULE_FUNC(EndListBox);
 		MODULE_FUNC(EndMainMenuBar);
 		MODULE_FUNC(EndMenu);
@@ -533,9 +588,9 @@ namespace imgui {
 		// MODULE_FUNC(GetStyleColorVec4);
 		// MODULE_FUNC(GetTextLineHeight);
 		// MODULE_FUNC(GetTextLineHeightWithSpacing);
-		// MODULE_FUNC(GetTime);
+		MODULE_FUNC(GetTime);
 		// MODULE_FUNC(GetTreeNodeToLabelSpacing);
-		// MODULE_FUNC(GetVersion);
+		MODULE_FUNC(GetVersion);
 		// MODULE_FUNC(GetWindowContentRegionMax);
 		// MODULE_FUNC(GetWindowContentRegionMin);
 		// MODULE_FUNC(GetWindowDrawList);
@@ -543,7 +598,7 @@ namespace imgui {
 		MODULE_FUNC(GetWindowPos);
 		MODULE_FUNC(GetWindowSize);
 		// MODULE_FUNC(GetWindowWidth);
-		// MODULE_FUNC(Image);
+		MODULE_FUNC(Image);
 		// MODULE_FUNC(ImageButton);
 		// MODULE_FUNC(Indent);
 		// MODULE_FUNC(InputDouble);
@@ -604,10 +659,10 @@ namespace imgui {
 		// MODULE_FUNC(LogToClipboard);
 		// MODULE_FUNC(LogToFile);
 		// MODULE_FUNC(LogToTTY);
-		// MODULE_FUNC(MemAlloc);
-		// MODULE_FUNC(MemFree);
+		// MODULE_FUNC(MemAlloc);	//可能会造成内存泄漏，不暴露给lua
+		// MODULE_FUNC(MemFree);	//可能会造成内存泄漏，不暴露给lua
 		MODULE_FUNC(MenuItem);
-		// MODULE_FUNC(NewFrame);
+		// MODULE_FUNC(NewFrame);	//在c++中已调用
 		// MODULE_FUNC(NewLine);
 		// MODULE_FUNC(NextColumn);
 		// MODULE_FUNC(OpenPopup);
@@ -689,8 +744,8 @@ namespace imgui {
 		// MODULE_FUNC(SetWindowFontScale);
 		MODULE_FUNC(SetWindowPos);
 		MODULE_FUNC(SetWindowSize);
-		// MODULE_FUNC(ShowAboutWindow);
-		// MODULE_FUNC(ShowDebugLogWindow);
+		MODULE_FUNC(ShowAboutWindow);
+		MODULE_FUNC(ShowDebugLogWindow);
 		MODULE_FUNC(ShowDemoWindow);
 		// MODULE_FUNC(ShowFontSelector);
 		// MODULE_FUNC(ShowIDStackToolWindow);
@@ -698,7 +753,7 @@ namespace imgui {
 		// MODULE_FUNC(ShowStackToolWindow);
 		// MODULE_FUNC(ShowStyleEditor);
 		// MODULE_FUNC(ShowStyleSelector);
-		// MODULE_FUNC(ShowUserGuide);
+		MODULE_FUNC(ShowUserGuide);
 		// MODULE_FUNC(SliderAngle);
 		MODULE_FUNC(SliderFloat);
 		// MODULE_FUNC(SliderFloat2);
