@@ -227,7 +227,8 @@ namespace IsaacSocket
         private readonly ConcurrentQueue<byte[]> sendMessagesBuffer;
         private int newSize;
         private readonly CancellationTokenSource cancellationTokenSource;
-        private readonly string tempDLLPath;
+        private readonly string dllPath;
+        private readonly string version;
 
         private async Task UpdateTask(CancellationToken cancellationToken)
         {
@@ -343,6 +344,7 @@ namespace IsaacSocket
                                 {
                                     try
                                     {
+                                        ExtractFile();
                                         using (MemoryMappedFile.OpenExisting("IsaacSocketSharedMemory")) { }
                                     }
                                     catch (FileNotFoundException)
@@ -354,11 +356,28 @@ namespace IsaacSocket
                                     {
                                         using MemoryMappedFile mmf = MemoryMappedFile.OpenExisting("IsaacSocketSharedMemory");
                                         using MemoryMappedViewAccessor accessor = mmf.CreateViewAccessor();
-                                        accessor.Write(0, true);
-                                        MemoryUtil.WriteToMemory(isaacProcessHandle, sendAddress, BitConverter.GetBytes(dataSpaceSize));
-                                        MemoryUtil.WriteToMemory(isaacProcessHandle, receiveAddress, BitConverter.GetBytes(1));
-                                        connectionState = ConnectionState.CONNECTING;
-                                        Connecting();
+
+                                        byte[] bytes = new byte[8];
+                                        accessor.ReadArray(4, bytes, 0, 8);
+                                        int nullIndex = Array.IndexOf(bytes, (byte)0);
+                                        string oldVersion = Encoding.ASCII.GetString(bytes, 0, nullIndex);
+
+                                        if (oldVersion != "" && oldVersion != version)
+                                        {
+                                            callback.Invoke(CallbackType.MESSAGE, "dll版本校验失败，请重启游戏 ");
+                                            await Task.Delay(3000, cancellationToken);
+                                        }
+                                        else
+                                        {
+                                            accessor.Write(0, 1);
+                                            bytes = Encoding.ASCII.GetBytes(version + '\0');
+                                            accessor.WriteArray(4, bytes, 0, bytes.Length);
+
+                                            MemoryUtil.WriteToMemory(isaacProcessHandle, sendAddress, BitConverter.GetBytes(dataSpaceSize));
+                                            MemoryUtil.WriteToMemory(isaacProcessHandle, receiveAddress, BitConverter.GetBytes(1));
+                                            connectionState = ConnectionState.CONNECTING;
+                                            Connecting();
+                                        }
                                     }
                                     catch (FileNotFoundException)
                                     {
@@ -415,9 +434,9 @@ namespace IsaacSocket
             uint pExitCode = 0;
             try
             {
-                int nSize = Encoding.Unicode.GetByteCount(tempDLLPath);
+                int nSize = Encoding.Unicode.GetByteCount(dllPath);
                 pMem = (int)WinAPIUtil.VirtualAllocEx(isaacProcessHandle, 0, (uint)nSize, WinAPIUtil.AllocationType.COMMIT | WinAPIUtil.AllocationType.RESERVE, WinAPIUtil.MemoryProtection.EXECUTE_READWRITE);
-                WinAPIUtil.WriteProcessMemory(isaacProcessHandle, pMem, Encoding.Unicode.GetBytes(tempDLLPath), (uint)nSize, out _);
+                WinAPIUtil.WriteProcessMemory(isaacProcessHandle, pMem, Encoding.Unicode.GetBytes(dllPath), (uint)nSize, out _);
                 nint hModule = WinAPIUtil.GetModuleHandleA("Kernel32.dll");
                 nint funcAddress = WinAPIUtil.GetProcAddress(hModule, "LoadLibraryW");
                 hThread = WinAPIUtil.CreateRemoteThread(isaacProcessHandle, 0, 0, funcAddress, pMem, 0, 0);
@@ -468,17 +487,30 @@ namespace IsaacSocket
             }
         }
 
-        internal Main(int dataSpaceSize, CallbackDelegate callback, string dllPath)
+        private void ExtractFile()
         {
-            tempDLLPath = dllPath;
-
-            if (tempDLLPath == "")
+            string configFilePath = MiscUtil.GetDataFilePath("config.json");
+            if (!File.Exists(configFilePath))
             {
-                tempDLLPath = Path.Combine(MiscUtil.GetTemporaryDirectory("IsaacSocket_"), "IsaacSocket.dll");
-                MiscUtil.ExtractFile("IsaacSocket.dll", tempDLLPath);
+                File.WriteAllText(configFilePath, "{}");
+            }
+            string dllPath = MiscUtil.GetDataFilePath("IsaacSocket.dll");
+            if (this.dllPath == dllPath)
+            {
+                MiscUtil.ExtractFile("IsaacSocket.dll", dllPath);
+            }
+            MiscUtil.ExtractFile("VonwaonBitmap-16px.ttf", MiscUtil.GetDataFilePath("VonwaonBitmap-16px.ttf"));
+        }
+
+        internal Main(int dataSpaceSize, CallbackDelegate callback, string dllPath, string version)
+        {
+            this.version = version;
+            if (dllPath == "")
+            {
+                dllPath = MiscUtil.GetDataFilePath("IsaacSocket.dll");
             }
 
-            MiscUtil.ExtractFile("VonwaonBitmap-16px.ttf", Path.Combine(MiscUtil.GetPermanentDirectory(), "VonwaonBitmap-16px.ttf"));
+            this.dllPath = dllPath;
 
             Application.ApplicationExit += OnExit;
             sendMessagesBuffer = new();

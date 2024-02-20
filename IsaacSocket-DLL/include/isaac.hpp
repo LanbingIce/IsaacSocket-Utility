@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "pch.h"
 #include "utils.hpp"
-#include "gnucompat.hpp"
 
 namespace isaac {
 
@@ -9,97 +8,125 @@ namespace isaac {
 
 #pragma warning(disable: 4624)//禁用警告C4624: 已将析构函数隐式定义为“已删除”
 
-	//Lua虚拟机类
-	struct LuaVM
+	// Lua虚拟机类
+	struct LuaEngine
 	{
 		char pad_0x18[0x18];
 		lua_State* L;
 		bool luaDebug;
 	};
 
-	//可能的Mod管理器类，还未研究完毕
-	struct ModManager {};
-
-	//游戏选项
-	struct Options {
-		gnucompat::string _optionsIniFilePath; // 0x0
-		float _musicVolume; // 0x18
-		float _sfxVolume; // 0x1c
-		float _mapOpacity; // 0x20
-		bool _isFullscreen; // 0x24
-		bool _filterEnabled; // 0x25
-		bool field6_0x26; // 0x26
-		bool field7_0x27; // 0x27
-		float _gamma; // 0x28
-		float _exposure; // 0x2c
-		float _brightness; // 0x30
-		float _contrast; // 0x34
-		bool _controlHotplugEnabled; // 0x38
-		bool _popupsEnabled; // 0x39
-		bool _enableFoundHUD; // 0x3a
-		bool field15_0x3b; // 0x3b
-		int _cameraStyle; // 0x3c
-		int _historyHudMode; // 0x40
-		float _hudOffset; // 0x44
-		bool _tryImportSave; // 0x48
-		bool _enableMods; // 0x49
-		bool _enableRumble; // 0x4a
-		bool _enableChargeBars; // 0x4b
-		bool _enableBulletVisibility; // 0x4c
-		bool _enableAimLock; // 0x4d
-		bool field25_0x4e; // 0x4e
-		bool field26_0x4f; // 0x4f
-		int _touchMode; // 0x50
-		bool _enableDebugConsole; // 0x54
-		bool _enableVSync; // 0x55
-		bool _enableSteamCloud; // 0x56
-		bool _enablePauseOnFocusLost; // 0x57
-		bool _enableMouseControl; // 0x58
-		bool field33_0x59; // 0x59
-		bool field34_0x5a; // 0x5a
-		bool field35_0x5b; // 0x5b
-		int _maxScale; // 0x5c
-		int _maxRenderScale; // 0x60
-		int _windowWidth; // 0x64
-		int _windowHeight; // 0x68
-		int _windowPosX; // 0x6c
-		int _windowPosY; // 0x70
-		int _consoleFont; // 0x74
-		bool _enableFadedConsoleDisplay; // 0x78
-		bool _enableSaveCommandHistory; // 0x79
-		bool _enableBorderlessFullscreen; // 0x7a
-		bool _enableInterpolation; // 0x7b
-		bool _enableColorCorrection; // 0x7c
-		bool _enableLighting; // 0x7d
-		bool _enableShockwave; // 0x7e
-		bool _enableCaustics; // 0x7f
-		bool _enableFilter; // 0x80
-		bool _enablePixelation; // 0x81
-		bool _enableBloom; // 0x82
-		bool _enableWaterSurface; // 0x83
-		bool _getsSetToEnableWaterSurface; // 0x84
-		bool _enableColorModifier; // 0x85
-		bool _bossHpOnBottom; // 0x86
-		bool field58_0x87; // 0x87
-		int _announcerVoiceMode; // 0x88
-		char pad0[0x1]; // 0x8c
-	}; // 0x8d
-
-	//可能的文件管理器类
-	struct FileManager
-	{
+	// Mod类
+	struct ModEntry {
 		union
 		{
-			FIELD(0x4C, uint8_t, achievements[638]);
-			FIELD(0x31C, int32_t, donationCount);
-			FIELD(0x320, uint32_t, edenTokens);
-			FIELD(0x498, int32_t, greedDonationCount);
-			FIELD(0x29DF8, Options, options);
-			FIELD(0x29FD8, ModManager, modManager);
+			string dir;
+			FIELD(0x18, string, name);
+			FIELD(0xFC, string, isEnabled);
+			FIELD(0x120, string, version);
+			FIELD(0x144, string, id);
 		};
 	};
 
-	//主菜单
+	// Mod管理器类
+	struct ModManager {
+		vector<ModEntry*> mods;
+	};
+
+	// 多语言文本类
+	struct StringTable {
+		uint32_t language;
+	};
+
+	//游戏选项
+	struct Options {
+		string OptionsIniFilePath; // 0x0
+		float MusicVolume; // 0x18
+		float SFXVolume; // 0x1c
+		float MapOpacity; // 0x20
+		bool Fullscreen; // 0x24
+		bool FilterEnabled; // 0x25
+		bool field6_0x26; // 0x26
+		bool field7_0x27; // 0x27
+		float Gamma; // 0x28
+		float Exposure; // 0x2c
+		float Brightness; // 0x30
+		float Contrast; // 0x34
+		bool ControlHotplugEnabled; // 0x38
+		bool DisplayPopups; // 0x39
+		bool FoundHUD; // 0x3a
+		bool field15_0x3b; // 0x3b
+		int CameraStyle; // 0x3c
+		int ExtraHUDStyle; // 0x40
+		float HUDOffset; // 0x44
+		bool TryImportSave; // 0x48
+		bool EnableMods; // 0x49
+		bool RumbleEnabled; // 0x4a
+		bool ChargeBars; // 0x4b
+		bool BulletVisibility; // 0x4c
+		bool EnableAimLock; // 0x4d
+		bool field25_0x4e; // 0x4e
+		bool field26_0x4f; // 0x4f
+		int TouchMode; // 0x50
+		bool DebugConsoleEnabled; // 0x54
+		bool VSync; // 0x55
+		bool EnableSteamCloud; // 0x56
+		bool PauseOnFocusLost; // 0x57
+		bool MouseControl; // 0x58
+		bool field33_0x59; // 0x59
+		bool field34_0x5a; // 0x5a
+		bool field35_0x5b; // 0x5b
+		int MaxScale; // 0x5c
+		int MaxRenderScale; // 0x60
+		int WindowWidth; // 0x64
+		int WindowHeight; // 0x68
+		int WindowPosX; // 0x6c
+		int WindowPosY; // 0x70
+		int ConsoleFont; // 0x74
+		bool FadedConsoleDisplay; // 0x78
+		bool SaveCommandHistory; // 0x79
+		bool UseBorderlessFullscreen; // 0x7a
+		bool EnableInterpolation; // 0x7b
+		bool EnableColorCorrection; // 0x7c
+		bool EnableLighting; // 0x7d
+		bool EnableShockwave; // 0x7e
+		bool EnableCaustics; // 0x7f
+		bool Filter; // 0x80
+		bool EnablePixelation; // 0x81
+		bool EnableBloom; // 0x82
+		bool EnableWaterSurface; // 0x83
+		bool GetsSetToEnableWaterSurface; // 0x84
+		bool EnableColorModifier; // 0x85
+		bool BossHpOnBottom; // 0x86
+		bool field58_0x87; // 0x87
+		int AnnouncerVoiceMode; // 0x88
+		char pad0[0x1]; // 0x8c
+	}; // 0x8d
+
+	// 存档类
+	struct PersistentGameData {
+		union
+		{
+			FIELD(0x38, uint8_t, achievements[638]);
+			FIELD(0x308, int32_t, donationCount);
+			FIELD(0x30C, uint32_t, edenTokens);
+			FIELD(0x484, int32_t, greedDonationCount);
+		};
+	};
+
+	// 管理器类
+	struct Manager
+	{
+		union
+		{
+			FIELD(0x14, PersistentGameData, persistentGameData);
+			FIELD(0x29DF8, Options, options);
+			FIELD(0x29FD8, ModManager, modManager);
+			FIELD(0x4A234, StringTable, stringTable);
+		};
+	};
+
+	// 主菜单
 	struct MainMenu
 	{
 		struct
@@ -130,16 +157,17 @@ namespace isaac {
 		int32_t varData;
 	};
 
-	// 被动道具类，未研究完毕
-	struct Passive
+	// 角色身上的道具(饰品)类
+	struct HistoryItem
 	{
-		uint32_t pickTime;
-		char name_guess[4];
+		uint32_t time;
+		bool isTrinket;
+		char name_guess[3];
 		int32_t item;
-		uint32_t pickStage;
-		uint32_t pickStageVariat;
-		uint32_t pickRoomType;
-		uint32_t itemPool;
+		uint32_t levelStage;
+		uint32_t stageType;
+		uint32_t roomType;
+		uint32_t itemPoolType;
 	};
 
 	// 武器类，未研究完毕
@@ -178,7 +206,7 @@ namespace isaac {
 	struct GlitchedItem
 	{
 		char pad_0x2C[0x2C];
-		gnucompat::vector<GlitchedEvent*> glitchedEvents;
+		vector<GlitchedEvent*> glitchedEvents;
 	};
 
 	//GLFW窗口类
@@ -201,7 +229,7 @@ namespace isaac {
 			//0:关闭 2:开启 4:正在关闭 小于0:强制暂停
 			FIELD(0x20, int32_t, state);
 			FIELD(0x30, float, offsetY);
-			FIELD(0x3C, gnucompat::string, consoleText);
+			FIELD(0x3C, string, consoleText);
 		};
 	};
 
@@ -213,7 +241,7 @@ namespace isaac {
 			FIELD(0x132C, Weapon*, weapon);
 			FIELD(0x14C4, Active, actives[4]);
 			FIELD(0x1745, uint8_t, canShoot);
-			FIELD(0x1D0C, gnucompat::vector<Passive>, passives);
+			FIELD(0x1D0C, vector<HistoryItem>, historyItems);
 		};
 	};
 
@@ -222,12 +250,12 @@ namespace isaac {
 	{
 		union
 		{
-			FIELD(0x1BA50, gnucompat::vector<Player*>, players);
+			FIELD(0x1BA50, vector<Player*>, players);
 			FIELD(0x1BB04, Seeds, seeds);
 			FIELD(0x1BB60, Console, console);
 			FIELD(0x10203C, PauseMenu, pauseMenu);
 			FIELD(0x1C3164, uint32_t, debugFlag);
-			FIELD(0x283C20, gnucompat::vector<GlitchedItem*>, glitchedItems);
+			FIELD(0x283C20, vector<GlitchedItem*>, glitchedItems);
 		};
 	};
 
@@ -241,8 +269,8 @@ namespace isaac {
 			FIELD(0x76A658, double, FrameInterval);
 			FIELD(0x7C7B08, _GLFWwindow*, window);
 			FIELD(0x7FD65C, Game*, game);
-			FIELD(0x7FD674, LuaVM*, luaVM);
-			FIELD(0x7FD680, FileManager*, fileManager);
+			FIELD(0x7FD674, LuaEngine*, luaEngine);
+			FIELD(0x7FD680, Manager*, manager);
 			FIELD(0x7FD688, MainMenu*, mainMenu);
 			FIELD(0x7AA920, float, screenPointScale);
 		};

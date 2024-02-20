@@ -6,6 +6,7 @@
 #include "lua.hpp"
 #include "state.hpp"
 #include "utils.hpp"
+#include "function.hpp"
 
 using isaac::lua_State;
 
@@ -28,8 +29,8 @@ namespace isaac_api {
 
 	//重新加载lua
 	static int ReloadLua(lua_State* L) {
-		ARG_DEF(1, boolean, bool, luaDebug, local.isaac->luaVM->luaDebug);
-		local.isaac->luaVM->luaDebug = luaDebug;
+		ARG_DEF(1, boolean, bool, luaDebug, local.isaac->luaEngine->luaDebug);
+		local.isaac->luaEngine->luaDebug = luaDebug;
 		local.needReload = true;
 		return 0;
 	}
@@ -135,18 +136,18 @@ namespace isaac_api {
 	//解锁成就
 	static int UnlockAchievement(lua_State* L) {
 		ARG(1, integer, uint32_t, achievementId);
-		ARG_RANGE(achievementId, std::size(local.isaac->fileManager->achievements));
+		ARG_RANGE(achievementId, std::size(local.isaac->manager->persistentGameData.achievements));
 		ARG_DEF(2, boolean, bool, unlock, true);
 		if (achievementId == 0)
 		{
-			for (size_t i = 1; i < std::size(local.isaac->fileManager->achievements); i++)
+			for (size_t i = 1; i < std::size(local.isaac->manager->persistentGameData.achievements); i++)
 			{
-				local.isaac->fileManager->achievements[i] = unlock;
+				local.isaac->manager->persistentGameData.achievements[i] = unlock;
 			}
 		}
 		else
 		{
-			local.isaac->fileManager->achievements[achievementId] = unlock;
+			local.isaac->manager->persistentGameData.achievements[achievementId] = unlock;
 		}
 		return 0;
 	}
@@ -154,30 +155,30 @@ namespace isaac_api {
 	//成就是否已解锁
 	static int IsAchievementUnlocked(lua_State* L) {
 		ARG_DEF(1, integer, uint32_t, achievementId, 0);
-		ARG_RANGE(achievementId, std::size(local.isaac->fileManager->achievements));
+		ARG_RANGE(achievementId, std::size(local.isaac->manager->persistentGameData.achievements));
 		if (achievementId == 0)
 		{
-			for (size_t i = 1; i < std::size(local.isaac->fileManager->achievements); i++)
+			for (size_t i = 1; i < std::size(local.isaac->manager->persistentGameData.achievements); i++)
 			{
-				if (!local.isaac->fileManager->achievements[i])
+				if (!local.isaac->manager->persistentGameData.achievements[i])
 				{
 					RET(boolean, false);
 				}
 			}
 			RET(boolean, true);
 		}
-		RET(boolean, local.isaac->fileManager->achievements[achievementId]);
+		RET(boolean, local.isaac->manager->persistentGameData.achievements[achievementId]);
 	}
 
 	//获取伊甸币
 	static int GetEdenTokens(lua_State* L) {
-		RET(integer, local.isaac->fileManager->edenTokens);
+		RET(integer, local.isaac->manager->persistentGameData.edenTokens);
 	}
 
 	//设置伊甸币
 	static int SetEdenTokens(lua_State* L) {
 		ARG(1, integer, uint32_t, tokens);
-		local.isaac->fileManager->edenTokens = tokens;
+		local.isaac->manager->persistentGameData.edenTokens = tokens;
 		return 0;
 	}
 
@@ -207,25 +208,25 @@ namespace isaac_api {
 
 	//获取捐款机计数
 	static int GetDonationCount(lua_State* L) {
-		RET(integer, local.isaac->fileManager->donationCount);
+		RET(integer, local.isaac->manager->persistentGameData.donationCount);
 	}
 
 	//设置捐款机计数
 	static int SetDonationCount(lua_State* L) {
 		ARG(1, integer, int32_t, count);
-		local.isaac->fileManager->donationCount = count;
+		local.isaac->manager->persistentGameData.donationCount = count;
 		return 0;
 	}
 
 	//获取贪婪捐款机计数
 	static int GetGreedDonationCount(lua_State* L) {
-		RET(integer, local.isaac->fileManager->greedDonationCount);
+		RET(integer, local.isaac->manager->persistentGameData.greedDonationCount);
 	}
 
 	//设置贪婪捐款机计数
 	static int SetGreedDonationCount(lua_State* L) {
 		ARG(1, integer, int32_t, count);
-		local.isaac->fileManager->greedDonationCount = count;
+		local.isaac->manager->persistentGameData.greedDonationCount = count;
 		return 0;
 	}
 
@@ -234,12 +235,12 @@ namespace isaac_api {
 		ARG_DEF(1, integer, uint32_t, playerId, 0);
 		ARG_RANGE(playerId, local.isaac->game->players.size());
 
-		vector<isaac::Passive>& passives = local.isaac->game->players[playerId]->passives;
+		vector<isaac::HistoryItem>& historyItems = local.isaac->game->players[playerId]->historyItems;
 
 		RET_TABLE();
 
-		for (size_t i = 0; i < passives.size(); i++) {
-			RET_TABLE_KEY(integer, i + 1, integer, passives[i].item);
+		for (size_t i = 0; i < historyItems.size(); i++) {
+			RET_TABLE_KEY(integer, i + 1, integer, historyItems[i].item);
 		}
 
 		RET_TABLE_END();
@@ -267,52 +268,52 @@ namespace isaac_api {
 	}
 
 	static void Init() {
-		DEFMOD(IsaacAPI);
+		MODULE_BEGIN(IsaacAPI);
 
-		DEF(IsForcePaused);
-		DEF(ForcePause);
+		MODULE_FUNC(IsForcePaused);
+		MODULE_FUNC(ForcePause);
 
-		DEF(ReloadLua);
-		DEF(GetDebugFlag);
+		MODULE_FUNC(ReloadLua);
+		MODULE_FUNC(GetDebugFlag);
 
-		DEF(GetConsoleInput);
-		DEF(IsConsoleOpen);
+		MODULE_FUNC(GetConsoleInput);
+		MODULE_FUNC(IsConsoleOpen);
 
-		DEF(SetCanShoot);
+		MODULE_FUNC(SetCanShoot);
 
-		DEF(IsPauseMenuForceHidden);
-		DEF(ForceHidePauseMenu);
+		MODULE_FUNC(IsPauseMenuForceHidden);
+		MODULE_FUNC(ForceHidePauseMenu);
 
-		DEF(GetActive);
-		DEF(SetActive);
+		MODULE_FUNC(GetActive);
+		MODULE_FUNC(SetActive);
 
-		DEF(GetEdenTokens);
-		DEF(SetEdenTokens);
+		MODULE_FUNC(GetEdenTokens);
+		MODULE_FUNC(SetEdenTokens);
 
-		DEF(IsAchievementUnlocked);
-		DEF(UnlockAchievement);
+		MODULE_FUNC(IsAchievementUnlocked);
+		MODULE_FUNC(UnlockAchievement);
 
-		DEF(IsMTRandomLocked);
-		DEF(LockMTRandom);
+		MODULE_FUNC(IsMTRandomLocked);
+		MODULE_FUNC(LockMTRandom);
 
-		DEF(GetGlitchedItemTrigger);
-		DEF(GetGlitchedItemEffect);
+		MODULE_FUNC(GetGlitchedItemTrigger);
+		MODULE_FUNC(GetGlitchedItemEffect);
 
-		DEF(GetFrameInterval);
-		DEF(SetFrameInterval);
+		MODULE_FUNC(GetFrameInterval);
+		MODULE_FUNC(SetFrameInterval);
 
-		DEF(GetDonationCount);
-		DEF(SetDonationCount);
+		MODULE_FUNC(GetDonationCount);
+		MODULE_FUNC(SetDonationCount);
 
-		DEF(GetGreedDonationCount);
-		DEF(SetGreedDonationCount);
+		MODULE_FUNC(GetGreedDonationCount);
+		MODULE_FUNC(SetGreedDonationCount);
 
-		DEF(GetItemIds);
+		MODULE_FUNC(GetItemIds);
 
-		DEF(GetFPS);
+		MODULE_FUNC(GetFPS);
 
-		DEF(ConsoleOutput);
+		MODULE_FUNC(ConsoleOutput);
 
-		ENDMOD();
+		MODULE_END();
 	}
 }

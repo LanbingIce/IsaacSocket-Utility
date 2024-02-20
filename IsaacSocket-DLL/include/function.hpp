@@ -39,26 +39,26 @@ namespace function {
 		// 输出日志
 		inject::LogPrintf(0, "Lua is resetting!\n");
 		// 卸载lua环境
-		FUNC(0x40AE00, void, FASTCALL, isaac::LuaVM*);
-		f_0x40AE00(isaac->luaVM);
+		FUNC(0x40AE00, void, FASTCALL, isaac::LuaEngine*);
+		f_0x40AE00(isaac->luaEngine);
 		// 加载lua环境
-		FUNC(0x3FCB00, void, FASTCALL, isaac::LuaVM*, LPCVOID, bool);
-		f_0x3FCB00(isaac->luaVM, NULL, isaac->luaVM->luaDebug);
+		FUNC(0x3FCB00, void, FASTCALL, isaac::LuaEngine*, LPCVOID, bool);
+		f_0x3FCB00(isaac->luaEngine, NULL, isaac->luaEngine->luaDebug);
 		// 清除mod列表
 		FUNC(0x4702F0, void, FASTCALL, isaac::ModManager&);
-		f_0x4702F0(isaac->fileManager->modManager);
+		f_0x4702F0(isaac->manager->modManager);
 		// 创建mod列表
 		FUNC(0x470B40, void, FASTCALL, isaac::ModManager&);
-		f_0x470B40(isaac->fileManager->modManager);
+		f_0x470B40(isaac->manager->modManager);
 		// 重新加载着色器
 		FUNC(0x46F2B0, void, FASTCALL, isaac::ModManager&);
-		f_0x46F2B0(isaac->fileManager->modManager);
+		f_0x46F2B0(isaac->manager->modManager);
 		// 重新加载精灵和字体
 		FUNC(0x4AF200, void, FASTCALL);
 		f_0x4AF200();
 		// 重新加载xml
 		FUNC(0x46DAE0, void, FASTCALL, isaac::ModManager&);
-		f_0x46DAE0(isaac->fileManager->modManager);
+		f_0x46DAE0(isaac->manager->modManager);
 	}
 
 	// 设置GLFW的接收字符回调，使得直接设置控制台state的方式打开控制台也可以输入字符
@@ -78,16 +78,25 @@ namespace function {
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;   // Enable Keyboard Controls
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;    // Enable Gamepad Controls
 
-		std::filesystem::path fontPath = std::filesystem::temp_directory_path() / "IsaacSocket_Font" / "VonwaonBitmap-16px.ttf";
-		io.Fonts->AddFontFromFileTTF((const char*)fontPath.u8string().c_str(), 32.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
-		local.font16 = io.Fonts->AddFontFromFileTTF((const char*)fontPath.u8string().c_str(), 16.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+		string path = utils::GetDataFilePath("VonwaonBitmap-16px.ttf");
+		io.Fonts->AddFontFromFileTTF(path.c_str(), 32.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+		local.font16 = io.Fonts->AddFontFromFileTTF(path.c_str(), 16.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 
-		io.IniFilename = nullptr;
-		io.LogFilename = nullptr;
+		io.IniFilename = local.iniFileName.c_str();
+		io.LogFilename = local.logFileName.c_str();
 
-		// Setup Dear ImGui style
-		ImGui::StyleColorsDark();
-		//ImGui::StyleColorsClassic();
+		switch (local.styleColor)
+		{
+		case state::LIGHT:
+			ImGui::StyleColorsLight();
+			break;
+		case state::DARK:
+			ImGui::StyleColorsDark();
+			break;
+		default:
+			ImGui::StyleColorsClassic();
+			break;
+		}
 
 		// Setup Platform/Renderer backends
 		ImGui_ImplWin32_InitForOpenGL(local.hWnd);
@@ -101,5 +110,17 @@ namespace function {
 			function::ReloadLuaWithoutDeleteRoom();
 			return;
 		}
+	}
+
+	static void AllocConsole() {
+		::AllocConsole();
+		SetForegroundWindow(local.hWnd);
+		cw("已启用系统控制台！");
+		cw("如需关闭此窗口，请先禁用系统控制台！否则游戏也会退出");
+	}
+
+	static void FreeConsole() {
+		cw("已禁用系统控制台，请手动关闭此窗口");
+		::FreeConsole();
 	}
 }

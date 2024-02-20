@@ -43,31 +43,18 @@ namespace IsaacSocket.Utils
 
             return -1;
         }
-        internal static string GetTemporaryDirectory(string prefix)
+
+        internal static string GetDataFilePath(string fileName)
         {
-            string tempDirectory = Path.Combine(Path.GetTempPath(), prefix + Path.GetRandomFileName());
+            string dirPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "IsaacSocket");
+            string filePath = Path.Combine(dirPath, fileName);
 
-            if (File.Exists(tempDirectory))
+            if (!File.Exists(dirPath))
             {
-                return GetTemporaryDirectory(prefix);
-            }
-            else
-            {
-                Directory.CreateDirectory(tempDirectory);
-                return tempDirectory;
-            }
-        }
-
-        internal static string GetPermanentDirectory()
-        {
-            string directory = Path.Combine(Path.GetTempPath(), "IsaacSocket_Font");
-
-            if (!File.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
+                Directory.CreateDirectory(dirPath);
             }
 
-            return directory;
+            return filePath;
         }
 
         internal static long GetCurrentTime()

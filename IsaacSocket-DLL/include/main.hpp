@@ -21,6 +21,8 @@ namespace main {
 		global = (state::_GlobalState*)MapViewOfFile(hMapFile, FILE_MAP_WRITE, 0, 0, 0);
 		local.isaac = (isaac::IsaacImage*)GetModuleHandleA(NULL);
 		local.hOpenGL = GetModuleHandleA("opengl32.dll");
+		local.styleColor = (state::ImGuiStyleColor)config::GetInt({ "IsaacSocket", "StyleColors" });
+		local.menuBarDisplayMode = (state::MenuBarDisplayMode)config::GetInt({ "IsaacSocket",  "MenuBar" });
 
 		local.callbacks = {
 			(LPCVOID)callback::PreSwapBuffers,

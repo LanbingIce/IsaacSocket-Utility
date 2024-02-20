@@ -16,9 +16,24 @@ namespace state {
 		CONNECTED = 2
 	};
 
+	enum MenuBarDisplayMode
+	{
+		NEVER,
+		TAB_HOLD,
+		ALWAYS
+	};
+
+	enum ImGuiStyleColor
+	{
+		CLASSIC,
+		LIGHT,
+		DARK
+	};
+
 	struct _GlobalState
 	{
-		ConnectionState connectionState;
+		ConnectionState connectionState = DISCONNECTED;
+		const char version[8]{};
 	};
 
 	struct _LocalState
@@ -39,6 +54,12 @@ namespace state {
 		uint32_t MTRandomLockedValue = 0;
 		HMODULE hOpenGL;
 		ImFont* font16;
+		bool allocConsole = false;
+		MenuBarDisplayMode menuBarDisplayMode = NEVER;
+		ImGuiStyleColor styleColor = CLASSIC;
+		const string configName = utils::GetDataFilePath("config.json");
+		const string iniFileName = utils::GetDataFilePath("imgui.ini");
+		const string logFileName = utils::GetDataFilePath("imgui_log.txt");
 	};
 
 	inline state::_GlobalState* global;

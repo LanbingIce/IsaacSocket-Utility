@@ -6,11 +6,7 @@
 #include <stbi/stb_image.h>
 #include <glad/glad.h>
 
-#define CHECK_GL(x) \
-do { \
-                      (x); \
-                      opengl_check_error(__FILE__, __LINE__, #x); \
-                                         } while (0)
+#define CHECK_GL(x) do { (x); opengl_check_error(__FILE__, __LINE__, #x); } while (0)
 
 
 namespace opengl
@@ -98,12 +94,6 @@ static void gl_set_border(float border, const char* stipple = nullptr) {
     }
 }
 
-/* static void glVertex2f(float x, float y) { */
-/* uint32_t width = local.isaac->window->width; */
-/* uint32_t height = local.isaac->window->height; */
-/* glVertex3f((x + 0.5f) / width * 2.0f - 1.0f, (y + 0.5f) / height * 2.0f - 1.0f, 1.0f); */
-/* } */
-
 static void gl_set_color(uint32_t rgba) {
     // 直接提取RGBA分量
     float r = ((rgba >> 24) & 0xFF) / 255.0f;
@@ -115,7 +105,7 @@ static void gl_set_color(uint32_t rgba) {
 
 struct Image {
     std::vector<uint8_t> data;
-    int width, height, channels;
+    int width = 0, height = 0, channels = 0;
 };
 
 static std::unique_ptr<Image> create_image(int width, int height, int channels) {
@@ -271,7 +261,7 @@ static int ImageResize(lua_State* L) {
                             }
                         }
                     }
-            };
+                };
             unroll.operator() < 1 > ();
             unroll.operator() < 2 > ();
             unroll.operator() < 3 > ();
@@ -321,7 +311,7 @@ static int ImageGetPixel(lua_State* L) {
         if (image->channels > 2) [[likely]]
             color |= pixel[2] << 8;
         if (image->channels > 3)
-        color |= pixel[3];
+            color |= pixel[3];
     }
 
     RET(integer, color);
@@ -436,23 +426,25 @@ static int DrawRect(lua_State* L) {
 }
 
 static void Init() {
-    DEFMOD(OpenGL);
-    DEF(PutPixel);
-    DEF(DrawLine);
-    DEF(DrawTriangle);
-    DEF(DrawRect);
+    MODULE_BEGIN(OpenGL);
+    MODULE_FUNC(PutPixel);
+    MODULE_FUNC(DrawLine);
+    MODULE_FUNC(DrawTriangle);
+    MODULE_FUNC(DrawRect);
 
-    DEF(ReadImage);
-    DEF(CreateEmptyImage);
-    DEF(GetImageSize);
-    DEF(ImageDuplicate);
-    DEF(ImageResize);
-    DEF(ImageGetPixel);
-    DEF(ImagePutPixel);
-    DEF(DrawImage);
-    DEF(FreeImage);
+    MODULE_FUNC(ReadImage);
+    MODULE_FUNC(CreateEmptyImage);
+    MODULE_FUNC(GetImageSize);
+    MODULE_FUNC(ImageDuplicate);
+    MODULE_FUNC(ImageResize);
+    MODULE_FUNC(ImageGetPixel);
+    MODULE_FUNC(ImagePutPixel);
+    MODULE_FUNC(DrawImage);
+    MODULE_FUNC(FreeImage);
+    MODULE_FUNC(ImageToTexture);
+    MODULE_FUNC(DeleteTexture);
 
-    ENDMOD();
+    MODULE_END();
 }
 
 }

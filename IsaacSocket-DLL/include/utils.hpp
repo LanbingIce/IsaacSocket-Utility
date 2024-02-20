@@ -37,6 +37,13 @@ namespace utils {
 		_cwprintf(L"%s", u16.data());
 	}
 
+	static string GetDataFilePath(const char* fileName) {
+		wchar_t c_path[MAX_PATH];
+		GetEnvironmentVariableW(L"APPDATA", c_path, MAX_PATH);
+		std::filesystem::path path = std::filesystem::path(c_path) / "IsaacSocket" / fileName;
+		return (const char*)path.u8string().c_str();
+	}
+
 	// 折叠表达式打印可变参数列表
 	template <typename... Args>
 	void cw(const Args&... args) {
@@ -48,6 +55,42 @@ namespace utils {
 			Utf8Cprintf(oss.str().c_str());
 		}
 	}
+
+	// 将文本写入指定文件
+	static void WriteFile(const string& filePath, const string& text)
+	{
+		std::ofstream ofs(std::filesystem::path((const char8_t*)filePath.c_str()));
+		if (!ofs)
+		{
+			return;
+		}
+		ofs << text;
+		ofs.close();
+	}
+
+	// 读取指定文件的文本
+	static std::string ReadFile(const string& filePath, const char* defaultText = "") {
+
+		if (!std::filesystem::exists(filePath))
+		{
+			WriteFile(filePath, defaultText);
+		}
+
+		std::ifstream ifs(std::filesystem::path((const char8_t*)filePath.c_str()));
+
+		if (!ifs)
+		{
+			return defaultText;
+		}
+
+		std::ostringstream oss;
+
+		oss << ifs.rdbuf();
+		ifs.close();
+
+		return oss.str();
+	}
+
 }
 
 #define FUNC(offset,ret,convention,...) auto f_##offset=(ret(convention*)(__VA_ARGS__))((char*)local.isaac+offset)
