@@ -11,8 +11,10 @@ using isaac::lua_State;
 
 namespace isaac_ {
 
-	static int Options__index(lua_State* L) {
-		METATABLE_BEGIN(isaac::Options, local.isaac->manager->options);
+	static int p_Options__index(lua_State* L) {
+
+		ARG_UDATA(1, p_Options, ::isaac::Options**, pp_options);
+		METATABLE_BEGIN(isaac::Options, **pp_options);
 
 		METATABLE_INDEX(integer, AnnouncerVoiceMode, int);
 		METATABLE_INDEX(boolean, BulletVisibility, bool);
@@ -82,7 +84,7 @@ namespace isaac_ {
 	static void Init() {
 
 		MODULE_BEGIN(Isaac);
-		MODULE_UDATA(Options);
+		MODULE_UDATA(Options, isaac::Options, local.isaac->manager->options);
 		MODULE_END();
 	}
 }
