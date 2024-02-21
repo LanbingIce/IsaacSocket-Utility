@@ -81,8 +81,7 @@ int main(int argc, char **argv) {
     LPCSTR game = argv[1];
     if (!game) return -1;
 
-    putenv("IsaacSocketDoNotUseSharedMemory=1");
-    putenv("IsaacSocketAutoReloadDll=1");
+    SetEnvironmentVariableA("IsaacSocketFromClient", "1");
 
     std::cout << std::format("Launching {}", game) << std::endl;
     HANDLE hProcess = executeCommandA(game);
@@ -102,8 +101,8 @@ int main(int argc, char **argv) {
     /*     return -1; */
     /* } */
 
-    std::cout << std::format("Waiting for 5 seconds before injection") << std::endl;
-    Sleep(5000);
+    std::cout << std::format("Waiting for 10 seconds before injection") << std::endl;
+    Sleep(10 * 1000);
     /* dllInjection(hProcess, L"libwinpthread-1.dll"); */
     /* dllInjection(hProcess, L"libgcc_s_dw2-1.dll"); */
     /* dllInjection(hProcess, L"libstdc++-6.dll"); */

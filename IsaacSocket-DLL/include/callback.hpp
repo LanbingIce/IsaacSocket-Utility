@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "async.hpp"
 #include "pch.h"
 #include "state.hpp"
 #include "utils.hpp"
@@ -8,6 +9,28 @@
 #include "config.hpp"
 
 #include <imgui/imgui.h>
+
+// 小彭老师专用代码开始
+#ifndef __MINGW32__
+#define CHECK_RELOAD() // 不影响msvc
+#else
+#define CHECK_RELOAD() \
+    static int reloadCounter = 0; \
+    ++reloadCounter; \
+    if (reloadCounter>30&&getenv("IsaacSocketFromClient")&&_isaac_socket::LuaReady()) { \
+        if (global->connectionState == state::DISCONNECTED) { \
+            _cprintf("auto ready\n"); \
+            global->connectionState=state::CONNECTING; \
+        } \
+        if (reloadCounter % 30 == 0) { \
+            if (reloadLibraryMain("IsaacSocket.dll", true)) { \
+                _cprintf("auto reloaded dll\n"); \
+                return 0; \
+            } \
+        } \
+    }
+#endif
+// 小彭老师专用代码结束
 
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -19,7 +42,10 @@ namespace callback {
 	// SwapBuffers之前，只要游戏进程存在就一直触发，返回1则取消此次交换
 	static int PreSwapBuffers(HDC hdc)
 	{
+        CHECK_RELOAD();
 		switch (global->connectionState) {
+		case state::DISCONNECTED:
+            break;
 		case state::CONNECTING:
 			if (!local.initialized)
 			{
@@ -32,6 +58,7 @@ namespace callback {
 			break;
 		case state::CONNECTED:
 			function::IsaacSocketUpdate();
+            async::luaPollPromises(local.isaac->luaEngine->L);
 
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplWin32_NewFrame();
@@ -223,3 +250,4 @@ namespace callback {
 }
 #undef CHECK_STATE
 #undef CHECK_INIT
+#undef CHECK_RELOAD

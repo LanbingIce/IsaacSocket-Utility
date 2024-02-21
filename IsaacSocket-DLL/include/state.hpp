@@ -2,7 +2,6 @@
 
 #include "lua.hpp"
 #include "pch.h"
-#include "handle.hpp"
 #include <imgui/imgui.h>
 
 namespace isaac { struct IsaacImage; }
@@ -48,7 +47,6 @@ namespace state {
 		HWND hWnd;
 		bool initialized = false;
 		bool needReload = false;
-		bool needReloadDll = false;
 		char charsInputBuffer[3];
 		isaac::IsaacImage* isaac;
 		lua::Lua lua;

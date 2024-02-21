@@ -1,5 +1,4 @@
-/include/
-/glad.cpp
+/libs/
 /build/
 /*.vcxproj
 /*.vcxproj.*
