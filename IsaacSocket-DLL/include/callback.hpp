@@ -38,13 +38,39 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 #define CHECK_STATE()if (global->connectionState != state::CONNECTED)return 0
 namespace callback {
 
+	static void ShowUserGuide(bool* p_open)
+	{
+		if (p_open)
+		{
+			ImGui::Begin("操作说明", p_open);
+			ImGuiIO& io = ImGui::GetIO();
+			ImGui::BulletText("双击标题栏可以折叠窗口。");
+			ImGui::BulletText(
+				"鼠标左键拖动窗口右下角可以改变尺寸\n"
+				"（双击右下角可以自动调节尺寸）。");
+			ImGui::BulletText("CTRL+单击鼠标左键 可以在滑动或拖动控件中直接输入值。");
+			ImGui::BulletText("使用 TAB / SHIFT+TAB 键在可键盘编辑的字段之间循环切换。");
+			if (io.FontAllowUserScaling)
+				ImGui::BulletText("CTRL+鼠标滚轮可以缩放窗口内容");
+			ImGui::BulletText("当你输入文本时：\n");
+			ImGui::Indent();
+			ImGui::BulletText("CTRL+左/右方向键可以进行单词跳转。");
+			ImGui::BulletText("CTRL+A 或者 双击鼠标左键可以全选。");
+			ImGui::BulletText("CTRL+X/C/V 可以进行剪切/复制/粘贴。");
+			ImGui::BulletText("CTRL+Z,CTRL+Y 可以进行 撤销/重做。");
+			ImGui::BulletText("ESC键：完全撤销本次编辑");
+			ImGui::Unindent();
+			ImGui::End();
+		}
+	}
+
 	// SwapBuffers之前，只要游戏进程存在就一直触发，返回1则取消此次交换
 	static int PreSwapBuffers(HDC hdc)
 	{
-        CHECK_RELOAD();
+		CHECK_RELOAD();
 		switch (global->connectionState) {
 		case state::DISCONNECTED:
-            break;
+			break;
 		case state::CONNECTING:
 			if (!local.initialized)
 			{
@@ -74,23 +100,31 @@ namespace callback {
 			bool showMainMenuBar = (local.isaac->game->pauseMenu.state || local.menuBarDisplayMode == state::ALWAYS || local.menuBarDisplayMode == state::TAB_HOLD && GetAsyncKeyState(VK_TAB) & 0x8000) && ImGui::BeginMainMenuBar();
 			if (showMainMenuBar)
 			{
-				MENU_BEGIN(IsaacSockets管理);
+				MENU_BEGIN(以撒插座);
 				MENU_ITEM(启用系统控制台, local.allocConsole, local.allocConsole = !local.allocConsole; if (local.allocConsole)function::AllocConsole(); else function::FreeConsole(););
 				MENU_BEGIN(实验性功能);
 				MENU_ITEM(重载lua, false, local.needReload = true);
 				MENU_END();
 				MENU_END();
-				MENU_BEGIN(界面设置);
-				MENU_BEGIN(主菜单条显示方式);
+				MENU_BEGIN(ImGui);
+				MENU_BEGIN(显示主菜单条);
 				MENU_ITEM(默认, local.menuBarDisplayMode == state::NEVER, local.menuBarDisplayMode = state::NEVER; config::SetInt({ "IsaacSocket", "MenuBar" }, 0));
 				MENU_ITEM(按下Tab键时, local.menuBarDisplayMode == state::TAB_HOLD, local.menuBarDisplayMode = state::TAB_HOLD; config::SetInt({ "IsaacSocket","MenuBar" }, 1));
 				MENU_ITEM(总是显示, local.menuBarDisplayMode == state::ALWAYS, local.menuBarDisplayMode = state::ALWAYS; config::SetInt({ "IsaacSocket", "MenuBar" }, 2));
 				MENU_END();
-				MENU_BEGIN(皮肤);
+				MENU_BEGIN(配色);
 				MENU_ITEM(默认, local.styleColor == state::CLASSIC, local.styleColor = state::CLASSIC; ImGui::StyleColorsClassic(); config::SetInt({ "IsaacSocket", "StyleColors" }, 0));
 				MENU_ITEM(浅色, local.styleColor == state::LIGHT, local.styleColor = state::LIGHT; ImGui::StyleColorsLight(); config::SetInt({ "IsaacSocket", "StyleColors" }, 1));
 				MENU_ITEM(深色, local.styleColor == state::DARK, local.styleColor = state::DARK; ImGui::StyleColorsDark(); config::SetInt({ "IsaacSocket","StyleColors" }, 2));
 				MENU_END();
+				ImGui::Separator();
+				MENU_BEGIN(调试工具);
+				MENU_ITEM(示例窗口, local.imgui.ShowDemoWindow, local.imgui.ShowDemoWindow = !local.imgui.ShowDemoWindow);
+				MENU_ITEM(调试日志, local.imgui.ShowDebugLogWindow, local.imgui.ShowDebugLogWindow = !local.imgui.ShowDebugLogWindow);
+				MENU_END();
+				ImGui::Separator();
+				MENU_ITEM(操作说明, local.imgui.ShowUserGuide, local.imgui.ShowUserGuide = !local.imgui.ShowUserGuide);
+				MENU_ITEM(关于ImGui, local.imgui.ShowAboutWindow, local.imgui.ShowAboutWindow = !local.imgui.ShowAboutWindow);
 				MENU_END();
 
 				ImGui::EndMainMenuBar();
@@ -99,6 +133,23 @@ namespace callback {
 #undef MENU_BEGIN
 #undef MENU_END
 #undef MENU_ITEM
+
+			if (local.imgui.ShowDemoWindow)
+			{
+				ImGui::ShowDemoWindow(&local.imgui.ShowDemoWindow);
+			}
+			if (local.imgui.ShowAboutWindow)
+			{
+				ImGui::ShowAboutWindow(&local.imgui.ShowAboutWindow);
+			}
+			if (local.imgui.ShowDebugLogWindow)
+			{
+				ImGui::ShowDebugLogWindow(&local.imgui.ShowDebugLogWindow);
+			}
+			if (local.imgui.ShowUserGuide)
+			{
+				ShowUserGuide(&local.imgui.ShowUserGuide);
+			}
 
 			FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_RENDER);
 			MOD_CALLBACK_ARG(boolean, showMainMenuBar);

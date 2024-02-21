@@ -59,6 +59,13 @@ namespace state {
 		const string configName = utils::GetDataFilePath("config.json");
 		const string iniFileName = utils::GetDataFilePath("imgui.ini");
 		const string logFileName = utils::GetDataFilePath("imgui_log.txt");
+		struct
+		{
+			bool ShowDemoWindow = false;
+			bool ShowAboutWindow = false;
+			bool ShowDebugLogWindow = false;
+			bool ShowUserGuide = false;
+		}imgui;
 	};
 
 	inline state::_GlobalState* global;
