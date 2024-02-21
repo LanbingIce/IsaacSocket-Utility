@@ -31,6 +31,14 @@ using isaac::lua_State;
 #define LUA_ERRGCMM		5
 #define LUA_ERRERR		6
 
+#define LUAI_IS32INT	((UINT_MAX >> 30) >= 3)
+#if LUAI_IS32INT
+#define LUAI_MAXSTACK		1000000
+#else
+#define LUAI_MAXSTACK		15000
+#endif
+#define LUA_REGISTRYINDEX	(-LUAI_MAXSTACK - 1000)
+
 //lua类型
 typedef LUA_INTEGER lua_Integer;
 typedef LUA_NUMBER lua_Number;
@@ -65,9 +73,11 @@ namespace lua {
 
 		_(void, lua_pushinteger, lua_State* L, lua_Integer n);
 
+		_(void, lua_pushvalue, lua_State* L, int idx);
+
 		_(void, lua_settable, lua_State* L, int idx);
 
-		_(int, lua_gettable, lua_State* L, int idx);
+		_(void, lua_gettable, lua_State* L, int idx);
 
 		_(lua_Number, lua_tonumberx, lua_State* L, int idx, int* pisnum);
 
@@ -105,6 +115,8 @@ namespace lua {
 
 		_(int, lua_pcallk, lua_State* L, int nargs, int nresults, int errfunc, lua_KContext ctx, lua_KFunction k);
 
+		_(void, lua_rotate, lua_State* L, int idx, int off);
+
 		_(int, luaL_getsubtable, lua_State* L, int idx, const char* fname);
 
 		_(lua_Integer, luaL_len, lua_State* L, int idx);
@@ -141,6 +153,17 @@ namespace lua {
 
 		_(const char*, luaL_optlstring, lua_State* L, int arg, const char* def, size_t* len);
 
+        void lua_remove(lua_State* L, int index)
+        {
+            lua_rotate(L, index, -1);
+            lua_pop(L, 1);
+        }
+
+        int lua_upvalueindex(int i) const
+        {
+            return LUA_REGISTRYINDEX - i;
+        }
+
 		const char* lua_tostring(lua_State* L, int i) const
 		{
 			return lua_tolstring(L, i, NULL);
@@ -166,6 +189,11 @@ namespace lua {
 			lua_pushlstring(L, s.data(), s.size());
 		}
 
+		void lua_pushstdstringview(lua_State* L, std::string_view s) const
+		{
+			lua_pushlstring(L, s.data(), s.size());
+		}
+
 		void lua_pushcfunction(lua_State* L, lua_CFunction f) const
 		{
 			lua_pushcclosure(L, f, 0);
@@ -176,11 +204,111 @@ namespace lua {
             return lua_isstring(L, i);
         }
 
+        int lua_isstdstringview(lua_State* L, int i) const
+        {
+            return lua_isstring(L, i);
+        }
+
         std::string lua_tostdstring(lua_State* L, int i) const
         {
             size_t len = 0;
             const char *str = lua_tolstring(L, i, &len);
             return std::string(str, len);
+        }
+
+        std::string_view lua_tostdstringview(lua_State* L, int i) const
+        {
+            size_t len = 0;
+            const char *str = lua_tolstring(L, i, &len);
+            return std::string_view(str, len);
+        }
+
+        template <class Map = std::map<std::string, std::string>>
+        void lua_pushmapstringstring(lua_State* L, std::type_identity_t<Map> const &m) const
+        {
+            lua_createtable(L, 0, m.size());
+            for (const auto& [key, value] : m) {
+                lua_pushstdstring(L, key);
+                lua_pushstdstring(L, value);
+                lua_settable(L, -3);
+            }
+        }
+
+        void lua_pushvectorstring(lua_State* L, std::vector<std::string> const &v) const
+        {
+            lua_createtable(L, v.size(), 0);
+            for (int i = 0; i < v.size(); i++) {
+                lua_pushinteger(L, i + 1);
+                lua_pushstdstring(L, v[i]);
+                lua_settable(L, -3);
+            }
+        }
+
+        void lua_pushvectorinteger(lua_State* L, std::vector<lua_Integer> const &v) const
+        {
+            lua_createtable(L, v.size(), 0);
+            for (int i = 0; i < v.size(); i++) {
+                lua_pushinteger(L, i + 1);
+                lua_pushinteger(L, v[i]);
+                lua_settable(L, -3);
+            }
+        }
+
+        template <class Map = std::map<std::string, std::string>>
+        int lua_ismapstringstring(lua_State* L, int i) const
+        {
+            return lua_istable(L, i);
+        }
+
+        int lua_isvectorstring(lua_State* L, int i) const
+        {
+            return lua_istable(L, i);
+        }
+
+        int lua_isvectorinteger(lua_State* L, int i) const
+        {
+            return lua_istable(L, i);
+        }
+
+        template <class Map = std::map<std::string, std::string>>
+        Map lua_tomapstringstring(lua_State* L, int i) const
+        {
+            Map ret;
+            lua_pushnil(L); // first key
+            while (lua_next(L, i) != 0) {
+                // uses 'key' (at index -2) and 'value' (at index -1)
+                ret.emplace(lua_tostdstring(L, -2), lua_tostdstring(L, -1));
+                // removes 'value'; keeps 'key' for next iteration
+                lua_pop(L, 1);
+            }
+            return ret;
+        }
+
+        std::vector<std::string> lua_tovectorstring(lua_State* L, int i) const
+        {
+            std::vector<std::string> ret;
+            lua_pushnil(L); // first key
+            while (lua_next(L, i) != 0) {
+                // uses 'key' (at index -2) and 'value' (at index -1)
+                ret.push_back(lua_tostdstring(L, -1));
+                // removes 'value'; keeps 'key' for next iteration
+                lua_pop(L, 1);
+            }
+            return ret;
+        }
+
+        std::vector<lua_Integer> lua_tovectorinteger(lua_State* L, int i) const
+        {
+            std::vector<lua_Integer> ret;
+            lua_pushnil(L); // first key
+            while (lua_next(L, i) != 0) {
+                // uses 'key' (at index -2) and 'value' (at index -1)
+                lua_Integer id = lua_tointeger(L, -1);
+                ret.push_back(id);
+                // removes 'value'; keeps 'key' for next iteration
+                lua_pop(L, 1);
+            }
+            return ret;
         }
 
 		lua_Number lua_tonumber(lua_State* L, int i) const

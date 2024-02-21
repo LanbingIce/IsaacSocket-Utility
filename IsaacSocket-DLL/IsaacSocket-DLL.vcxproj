@@ -73,11 +73,13 @@
     <ClInclude Include="include\modules\module.hpp" />
     <ClInclude Include="include\modules\opengl.hpp" />
     <ClInclude Include="include\modules\isaac_.hpp" />
+    <ClInclude Include="include\modules\http.hpp" />
     <ClInclude Include="include\modules\system_.hpp" />
     <ClInclude Include="include\modules\win_api.hpp" />
     <ClInclude Include="include\modules\_isaac_socket.hpp" />
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\reload.hpp" />
+    <ClInclude Include="include\async.hpp" />
     <ClInclude Include="include\state.hpp" />
     <ClInclude Include="include\utils.hpp" />
     <ClInclude Include="libs\glad\glad.h" />
@@ -114,6 +116,7 @@
     <ClCompile Include="src\dllmain.cpp" />
     <ClCompile Include="src\inject.cpp" />
     <ClCompile Include="src\reload.cpp" />
+    <ClInclude Include="src\async.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,8 +1,9 @@
 ﻿#pragma once
 
 #include "module.hpp"
-#include <utility>
+#include "handle.hpp"
 #define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_STATIC
 #include <stbi/stb_image.h>
 #include <glad/glad.h>
 
@@ -132,6 +133,17 @@ static std::unique_ptr<Image> load_image(const char* filename, int channels = 0)
     return img;
 }
 
+static std::unique_ptr<Image> load_image_from_memory(const char* data, size_t size, int channels = 0) {
+    auto img = std::make_unique<Image>();
+    uint8_t* p = stbi_load_from_memory((const stbi_uc *)data, size, &img->width, &img->height, &img->channels, channels);
+    if (!p) [[unlikely]] {
+        return nullptr;
+    }
+    img->data.assign(p, p + img->width * img->height * img->channels);
+    stbi_image_free(p);
+    return img;
+}
+
 static void gl_draw_image(const uint8_t* data, int width, int height, int channels) {
     if (channels < 1 || channels > 4) [[unlikely]] {
         return;
@@ -152,7 +164,7 @@ inline auto* image_cache() {
 }
 
 static int ImageToTexture(lua_State* L) {
-    ARG_DEF(1, integer, Handle, imageHandle, NULL_HANDLE);
+    ARG(1, integer, Handle, imageHandle);
 
     if (auto image = image_handles()->find(imageHandle)) {
         GLStateGuard _; // 在当前 {} 范围内保护游戏的 GL 状态
@@ -173,16 +185,16 @@ static int ImageToTexture(lua_State* L) {
 }
 
 static int DeleteTexture(lua_State* L) {
-    ARG_DEF(1, integer, GLuint, texture, 0);
+    ARG(1, integer, GLuint, texture);
     if (texture)
         glDeleteTextures(1, &texture);
     return 0;
 }
 
 static int CreateEmptyImage(lua_State* L) {
-    ARG_DEF(1, integer, int, width, 0);
-    ARG_DEF(2, integer, int, height, 0);
-    ARG_DEF(3, integer, int, channels, 0);
+    ARG(1, integer, int, width);
+    ARG(2, integer, int, height);
+    ARG(3, integer, int, channels);
     auto gen = [width, height, channels] {
         if (auto img = create_image(width, height, channels)) {
             return image_handles()->create(std::move(img));
@@ -194,12 +206,9 @@ static int CreateEmptyImage(lua_State* L) {
 }
 
 static int ReadImage(lua_State* L) {
-    ARG_DEF(1, string, const char*, path, nullptr);
+    ARG(1, string, const char*, path);
     ARG_DEF(2, integer, int, channels, 0);
     ARG_DEF(3, boolean, bool, useCached, true);
-    if (!path) [[unlikely]] {
-        return 0;
-    }
     auto gen = [path, channels] {
         if (auto img = load_image(path, channels)) {
             return image_handles()->create(std::move(img));
@@ -210,8 +219,21 @@ static int ReadImage(lua_State* L) {
     RET(integer, imageHandle);
 }
 
+static int ReadImageFromMemory(lua_State* L) {
+    ARG(1, stdstringview, std::string_view, data);
+    ARG_DEF(2, integer, int, channels, 0);
+    auto gen = [data, channels] {
+        if (auto img = load_image_from_memory(data.data(), data.size(), channels)) {
+            return image_handles()->create(std::move(img));
+        }
+        return NULL_HANDLE;
+    };
+    Handle imageHandle = gen();
+    RET(integer, imageHandle);
+}
+
 static int GetImageSize(lua_State* L) {
-    ARG_DEF(1, integer, Handle, imageHandle, NULL_HANDLE);
+    ARG(1, integer, Handle, imageHandle);
 
     if (auto image = image_handles()->find(imageHandle)) {
         RET_TABLE();
@@ -226,7 +248,7 @@ static int GetImageSize(lua_State* L) {
 }
 
 static int ImageDuplicate(lua_State* L) {
-    ARG_DEF(1, integer, Handle, imageHandle, NULL_HANDLE);
+    ARG(1, integer, Handle, imageHandle);
 
     Handle imageHandle2 = NULL_HANDLE;
     if (auto image = image_handles()->find(imageHandle)) {
@@ -237,7 +259,7 @@ static int ImageDuplicate(lua_State* L) {
 }
 
 static int ImageResize(lua_State* L) {
-    ARG_DEF(1, integer, Handle, imageHandle, NULL_HANDLE);
+    ARG(1, integer, Handle, imageHandle);
     ARG_DEF(2, number, uint32_t, width, 0);
     ARG_DEF(3, number, uint32_t, height, 0);
 
@@ -276,9 +298,9 @@ static int ImageResize(lua_State* L) {
 }
 
 static int ImagePutPixel(lua_State* L) {
-    ARG_DEF(3, integer, Handle, imageHandle, NULL_HANDLE);
-    ARG_DEF(1, number, uint32_t, x, 0);
-    ARG_DEF(2, number, uint32_t, y, 0);
+    ARG(1, integer, Handle, imageHandle);
+    ARG(2, number, uint32_t, x);
+    ARG(3, number, uint32_t, y);
     ARG_DEF(4, integer, uint32_t, color, 0xFFFFFFFF);
 
     if (auto image = image_handles()->find(imageHandle)) {
@@ -297,9 +319,9 @@ static int ImagePutPixel(lua_State* L) {
 }
 
 static int ImageGetPixel(lua_State* L) {
-    ARG_DEF(3, integer, Handle, imageHandle, NULL_HANDLE);
-    ARG_DEF(1, number, uint32_t, x, 0);
-    ARG_DEF(2, number, uint32_t, y, 0);
+    ARG(1, integer, Handle, imageHandle);
+    ARG(2, number, uint32_t, x);
+    ARG(3, number, uint32_t, y);
 
     uint32_t color = 0;
     if (auto image = image_handles()->find(imageHandle)) {
@@ -318,9 +340,9 @@ static int ImageGetPixel(lua_State* L) {
 }
 
 static int DrawImage(lua_State* L) {
-    ARG_DEF(1, number, float, x, 0);
-    ARG_DEF(2, number, float, y, 0);
-    ARG_DEF(3, integer, Handle, imageHandle, NULL_HANDLE);
+    ARG(1, number, float, x);
+    ARG(2, number, float, y);
+    ARG(3, integer, Handle, imageHandle);
     ARG_DEF(4, number, float, zoomX, 1);
     ARG_DEF(5, number, float, zoomY, 1);
 
@@ -335,14 +357,14 @@ static int DrawImage(lua_State* L) {
 }
 
 static int FreeImage(lua_State* L) {
-    ARG_DEF(1, integer, Handle, imageHandle, NULL_HANDLE);
+    ARG(1, integer, Handle, imageHandle);
     image_handles()->destroy(imageHandle);
     return 0;
 }
 
 static int PutPixel(lua_State* L) {
-    ARG_DEF(1, number, float, x, 0);
-    ARG_DEF(2, number, float, y, 0);
+    ARG(1, number, float, x);
+    ARG(2, number, float, y);
     ARG_DEF(3, integer, uint32_t, color, 0xFFFFFFFF);
     ARG_DEF(4, number, float, radius, 1);
 
@@ -357,10 +379,10 @@ static int PutPixel(lua_State* L) {
 }
 
 static int DrawLine(lua_State* L) {
-    ARG_DEF(1, number, float, x1, 0);
-    ARG_DEF(2, number, float, y1, 0);
-    ARG_DEF(3, number, float, x2, 0);
-    ARG_DEF(4, number, float, y2, 0);
+    ARG(1, number, float, x1);
+    ARG(2, number, float, y1);
+    ARG(3, number, float, x2);
+    ARG(4, number, float, y2);
     ARG_DEF(5, integer, uint32_t, color, 0xFFFFFFFF);
     ARG_DEF(6, number, float, border, 1);
     ARG_DEF(7, string, const char*, stipple, nullptr);
@@ -377,12 +399,12 @@ static int DrawLine(lua_State* L) {
 }
 
 static int DrawTriangle(lua_State* L) {
-    ARG_DEF(1, number, float, x1, 0);
-    ARG_DEF(2, number, float, y1, 0);
-    ARG_DEF(3, number, float, x2, 0);
-    ARG_DEF(4, number, float, y2, 0);
-    ARG_DEF(5, number, float, x3, 0);
-    ARG_DEF(6, number, float, y3, 0);
+    ARG(1, number, float, x1);
+    ARG(2, number, float, y1);
+    ARG(3, number, float, x2);
+    ARG(4, number, float, y2);
+    ARG(5, number, float, x3);
+    ARG(6, number, float, y3);
     ARG_DEF(7, integer, uint32_t, color, 0xFFFFFFFF);
     ARG_DEF(8, number, float, border, 0);
     ARG_DEF(9, string, const char*, stipple, nullptr);
@@ -400,10 +422,10 @@ static int DrawTriangle(lua_State* L) {
 }
 
 static int DrawRect(lua_State* L) {
-    ARG_DEF(1, number, float, x1, 0);
-    ARG_DEF(2, number, float, y1, 0);
-    ARG_DEF(3, number, float, x2, 0);
-    ARG_DEF(4, number, float, y2, 0);
+    ARG(1, number, float, x1);
+    ARG(2, number, float, y1);
+    ARG(3, number, float, x2);
+    ARG(4, number, float, y2);
     ARG_DEF(5, integer, uint32_t, color, 0xFFFFFFFF);
     ARG_DEF(6, number, float, border, 0);
     ARG_DEF(7, string, const char*, stipple, nullptr);
@@ -433,6 +455,7 @@ static void Init() {
     MODULE_FUNC(DrawRect);
 
     MODULE_FUNC(ReadImage);
+    MODULE_FUNC(ReadImageFromMemory);
     MODULE_FUNC(CreateEmptyImage);
     MODULE_FUNC(GetImageSize);
     MODULE_FUNC(ImageDuplicate);

@@ -110,7 +110,7 @@ __ZN6inject8MTRandomEv:
 __ZN6inject7WndProcEP6HWND__jjl@16:
     call [callbacks.PreWndProc]
     test eax, eax
-    je flag5
+    jne flag5
     push ebp
     mov ebp, esp
     and esp, -0x40

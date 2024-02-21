@@ -2,7 +2,6 @@
 
 #include "lua.hpp"
 #include "pch.h"
-#include "handle.hpp"
 #include <imgui/imgui.h>
 
 namespace isaac { struct IsaacImage; }

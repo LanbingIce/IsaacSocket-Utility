@@ -19,7 +19,7 @@
 #define ARG_UDATA(index,udataType,type,name)type name;_CHECK_ARG_UDATA(index,udataType,type,name)
 #define ARG_UDATA_DEF(index,udataType,type,name,def)type name;if(local.lua.lua_isnoneornil(L,index)){name=def;}else _CHECK_ARG_UDATA(index,udataType,type,name)
 
-#define _LUA_PCALL(paramNum,resultNum)if(local.lua.lua_pcall(L, paramNum, resultNum, 0)!=LUA_OK){ARG_DEF(-1,string,string,_err,"unknow error!");local.lua.lua_pop(L, 1);for(int i=0;i<resultNum;i++){local.lua.lua_pushnil(L);}_err.append("\n");function::ConsoleOutput(_err, 0xFFF08080);}
+#define _LUA_PCALL(paramNum,resultNum)if(local.lua.lua_pcall(L, paramNum, resultNum, 0)!=LUA_OK){ARG_DEF(-1,stdstring,string,_err,"unknow error!");local.lua.lua_pop(L, 1);for(int i=0;i<resultNum;i++){local.lua.lua_pushnil(L);}_err.append("\n");function::ConsoleOutput(_err, 0xFFF08080);}
 
 #define RET(type,value) local.lua.lua_push##type(L,value);return 1
 

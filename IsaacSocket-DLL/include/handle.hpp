@@ -35,11 +35,19 @@ public:
 	HandleTable() = default;
 	HandleTable(HandleTable&&) = delete;
 
+    auto &enumerate() {
+        return handles;
+    }
+
+    auto const &enumerate() const {
+        return handles;
+    }
+
 	Handle create(std::unique_ptr<T>&& handle) {
 		auto ptr = handle.get();
 		if (ptr) [[likely]] {
 			handles.insert(std::move(handle));
-			}
+		}
 		return Handle(reinterpret_cast<uintptr_t>(ptr));
 	}
 

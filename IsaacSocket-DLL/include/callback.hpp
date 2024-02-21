@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "async.hpp"
 #include "pch.h"
 #include "state.hpp"
 #include "utils.hpp"
@@ -14,10 +15,13 @@
 #define CHECK_RELOAD() // 不影响msvc
 #else
 #define CHECK_RELOAD() \
-    if (getenv("IsaacSocketFromClient")) { \
-        if (global->connectionState == state::DISCONNECTED)global->connectionState=state::CONNECTING; \
-        static int reloadCounter = 0; \
-        reloadCounter++; \
+    static int reloadCounter = 0; \
+    ++reloadCounter; \
+    if (reloadCounter>30&&getenv("IsaacSocketFromClient")&&_isaac_socket::LuaReady()) { \
+        if (global->connectionState == state::DISCONNECTED) { \
+            _cprintf("auto ready\n"); \
+            global->connectionState=state::CONNECTING; \
+        } \
         if (reloadCounter % 30 == 0) { \
             if (reloadLibraryMain("IsaacSocket.dll", true)) { \
                 _cprintf("auto reloaded dll\n"); \
@@ -54,6 +58,7 @@ namespace callback {
 			break;
 		case state::CONNECTED:
 			function::IsaacSocketUpdate();
+            async::luaPollPromises(local.isaac->luaEngine->L);
 
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplWin32_NewFrame();

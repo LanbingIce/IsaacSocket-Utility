@@ -9,6 +9,7 @@
 
 #include <glad/glad.h>
 
+/* #define IMGUI_IMPL_OPENGL_LOADER_CUSTOM */
 #include <imgui/imgui_impl_opengl3.h>
 #include <imgui/imgui_impl_win32.h>
 
@@ -27,7 +28,7 @@ namespace function {
 	}
 
 	// 手动发送一条窗口过程消息
-	LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	static LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		return inject::WndProc(hWnd, uMsg, wParam, lParam);
 	}
@@ -104,7 +105,7 @@ namespace function {
 	}
 
 	static void IsaacSocketUpdate() {
-		if (local.needReload)
+		if (local.needReload) [[unlikely]]
 		{
 			local.needReload = false;
 			function::ReloadLuaWithoutDeleteRoom();
