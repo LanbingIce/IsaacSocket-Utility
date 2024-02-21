@@ -237,7 +237,7 @@ namespace lua {
         void lua_pushvectorstring(lua_State* L, std::vector<std::string> const &v) const
         {
             lua_createtable(L, v.size(), 0);
-            for (int i = 0; i < v.size(); i++) {
+            for (size_t i = 0; i < v.size(); i++) {
                 lua_pushinteger(L, i + 1);
                 lua_pushstdstring(L, v[i]);
                 lua_settable(L, -3);
@@ -247,7 +247,7 @@ namespace lua {
         void lua_pushvectorinteger(lua_State* L, std::vector<lua_Integer> const &v) const
         {
             lua_createtable(L, v.size(), 0);
-            for (int i = 0; i < v.size(); i++) {
+            for (size_t i = 0; i < v.size(); i++) {
                 lua_pushinteger(L, i + 1);
                 lua_pushinteger(L, v[i]);
                 lua_settable(L, -3);
