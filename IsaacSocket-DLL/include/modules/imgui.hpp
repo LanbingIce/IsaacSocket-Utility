@@ -85,6 +85,13 @@ namespace imgui {
 		return 2;
 	}
 
+	static int BeginCombo(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, string, const char*, preview_value);
+		ARG_DEF(3, integer, int, flags, 0);
+		RET(boolean, ImGui::BeginCombo(label, preview_value, flags));
+	}
+
 	static int BeginGroup(lua_State* L) {
 		ImGui::BeginGroup();
 		return 0;
@@ -130,8 +137,39 @@ namespace imgui {
 		return 2;
 	}
 
+	static int Combo(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, integer, int, current_item);
+
+		if (local.lua.lua_isstring(L, 3))
+		{
+			ARG(3, string, const char*, items_separated_by_zeros);
+			ARG_DEF(4, integer, int, height_in_items, -1);
+			local.lua.lua_pushboolean(L, ImGui::Combo(label, &current_item, items_separated_by_zeros, height_in_items));
+		}
+		else
+		{
+			ARG(3, vectorcstring, vector<const char*>, items);
+			ARG(4, integer, size_t, items_count);
+			ARG_DEF(5, integer, int, height_in_items, -1);
+			if (items_count > items.size())
+			{
+				items_count = items.size();
+			}
+			const char** arr = items.data();
+			local.lua.lua_pushboolean(L, ImGui::Combo(label, &current_item, arr, items_count, height_in_items));
+		}
+		local.lua.lua_pushinteger(L, current_item);
+		return 2;
+	}
+
 	static int End(lua_State* L) {
 		ImGui::End();
+		return 0;
+	}
+
+	static int EndCombo(lua_State* L) {
+		ImGui::EndCombo();
 		return 0;
 	}
 
@@ -291,9 +329,24 @@ namespace imgui {
 		return 0;
 	}
 
+	static int Selectable(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, boolean, bool, selected);
+		ARG_DEF(3, integer, ImGuiSelectableFlags, flags, 0);
+		ARG_UDATA_DEF(4, ImVec2, ::ImVec2*, size_arg, &VEC2_0);
+		local.lua.lua_pushboolean(L, ImGui::Selectable(label, selected, flags, *size_arg));
+		local.lua.lua_pushinteger(L, selected);
+		return 2;
+	}
+
 	static int SetClipboardText(lua_State* L) {
 		ARG(1, string, const char*, text);
 		ImGui::SetClipboardText(text);
+		return 0;
+	}
+
+	static int SetItemDefaultFocus(lua_State* L) {
+		ImGui::SetItemDefaultFocus();
 		return 0;
 	}
 
@@ -459,7 +512,7 @@ namespace imgui {
 		MODULE_FUNC(Begin);
 		// MODULE_FUNC(BeginChild);
 		// MODULE_FUNC(BeginChildFrame);
-		// MODULE_FUNC(BeginCombo);
+		MODULE_FUNC(BeginCombo);
 		// MODULE_FUNC(BeginDisabled);
 		// MODULE_FUNC(BeginDragDropSource);
 		// MODULE_FUNC(BeginDragDropTarget);
@@ -500,7 +553,7 @@ namespace imgui {
 		// MODULE_FUNC(ColorPicker3);
 		// MODULE_FUNC(ColorPicker4);
 		// MODULE_FUNC(Columns);
-		// MODULE_FUNC(Combo);
+		MODULE_FUNC(Combo);		//重载2/3 未实现 bool ImGui::Combo(const char* label, int* current_item, const char* (*getter)(void* user_data, int idx), void* user_data, int items_count, int popup_max_height_in_items)
 		// MODULE_FUNC(CreateContext);		//在c++中已调用
 		// MODULE_FUNC(DebugCheckVersionAndDataLayout);
 		// MODULE_FUNC(DebugFlashStyleColor);
@@ -522,7 +575,7 @@ namespace imgui {
 		MODULE_FUNC(End);
 		// MODULE_FUNC(EndChild);
 		// MODULE_FUNC(EndChildFrame);
-		// MODULE_FUNC(EndCombo);
+		MODULE_FUNC(EndCombo);
 		// MODULE_FUNC(EndDisabled);
 		// MODULE_FUNC(EndDragDropSource);
 		// MODULE_FUNC(EndDragDropTarget);
@@ -696,7 +749,7 @@ namespace imgui {
 		MODULE_FUNC(SameLine);
 		// MODULE_FUNC(SaveIniSettingsToDisk);
 		// MODULE_FUNC(SaveIniSettingsToMemory);
-		// MODULE_FUNC(Selectable);
+		MODULE_FUNC(Selectable);
 		// MODULE_FUNC(Separator);
 		// MODULE_FUNC(SeparatorText);
 		// MODULE_FUNC(SetAllocatorFunctions);
@@ -711,7 +764,7 @@ namespace imgui {
 		// MODULE_FUNC(SetCursorScreenPos);
 		// MODULE_FUNC(SetDragDropPayload);
 		// MODULE_FUNC(SetItemAllowOverlap);
-		// MODULE_FUNC(SetItemDefaultFocus);
+		MODULE_FUNC(SetItemDefaultFocus);
 		// MODULE_FUNC(SetItemTooltip);
 		// MODULE_FUNC(SetItemTooltipV);
 		// MODULE_FUNC(SetKeyboardFocusHere);
