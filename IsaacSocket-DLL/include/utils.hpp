@@ -24,6 +24,24 @@ namespace utils {
 		return WideCharToMultiByte(CP_UTF8, 0, u16, -1, u8, len, nullptr, nullptr);
 	}
 
+    static std::wstring AnsiToU16(std::string const &ansi) {
+        std::wstring u16(utils::AnsiToU16(ansi.c_str()), L'\0');
+        utils::AnsiToU16(ansi.c_str(), u16.data(), u16.size());
+        return u16;
+    }
+
+    static std::wstring U8ToU16(std::string const &u8) {
+        std::wstring u16(utils::U8ToU16(u8.c_str()), L'\0');
+        utils::U8ToU16(u8.c_str(), u16.data(), u16.size());
+        return u16;
+    }
+
+	static std::string U16ToU8(std::wstring const &u16) {
+        std::string u8(utils::U16ToU8(u16.c_str()), '\0');
+        utils::U16ToU8(u16.c_str(), u8.data(), u8.size());
+        return u8;
+    }
+
 	static void Utf8Cprintf(const char* format, ...) {
 		va_list v;
 		va_start(v, format);

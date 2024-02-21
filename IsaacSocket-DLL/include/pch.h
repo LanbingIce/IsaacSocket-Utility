@@ -13,6 +13,9 @@
 #include <chrono>
 #include <utility>
 #include <conio.h>
+#include <process.h>
+#include <stdexcept>
+#include <regex>
 #include <iomanip>
 #include <sstream>
 #include <filesystem>

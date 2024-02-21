@@ -226,7 +226,7 @@ static int ReadImageFromMemory(lua_State* L) {
     ARG(1, stdstringview, std::string_view, data);
     ARG_DEF(2, integer, int, channels, 0);
     ARG_DEF(3, boolean, bool, flipOnLoad, true);
-    auto gen = [data, channels] {
+    auto gen = [data, channels, flipOnLoad] {
         if (auto img = load_image_from_memory(data.data(), data.size(), channels, flipOnLoad)) {
             return image_handles()->create(std::move(img));
         }
