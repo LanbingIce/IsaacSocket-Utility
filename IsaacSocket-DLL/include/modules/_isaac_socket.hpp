@@ -8,7 +8,6 @@
 #include "win_api.hpp"
 #include "system_.hpp"
 #include "opengl.hpp"
-#include "http.hpp"
 #include "utils.hpp"
 #include "imgui.hpp"
 #include "isaac_.hpp"
@@ -61,7 +60,6 @@ namespace _isaac_socket
 		opengl::Init();
 		imgui::Init();
 		isaac_::Init();
-		http::Init();
 
 		lua_State* L = local.isaac->luaEngine->L;
 		int top = local.lua.lua_gettop(L);

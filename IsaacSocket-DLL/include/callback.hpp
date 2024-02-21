@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "async.hpp"
 #include "pch.h"
 #include "state.hpp"
 #include "utils.hpp"
@@ -58,7 +57,6 @@ namespace callback {
 			break;
 		case state::CONNECTED:
 			function::IsaacSocketUpdate();
-            async::luaPollPromises(local.isaac->luaEngine->L);
 
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplWin32_NewFrame();
