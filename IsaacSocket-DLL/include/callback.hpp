@@ -8,6 +8,7 @@
 #include "modules/_isaac_socket.hpp"
 #include "config.hpp"
 
+#define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #include <imgui/imgui.h>
 
 // 小彭老师专用代码开始

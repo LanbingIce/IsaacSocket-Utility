@@ -80,10 +80,18 @@ static int RequestPost(lua_State* L) {
 
     ASYNC_BEGIN(=);
     httplib::Client cli(base);
-    auto res = cli.PostEx(method, uri, headers, content.data(), content.size(), contentType);
-    ASYNC_RET(&);
-    if (!res) [[unlikely]] return 0;
+    auto resp = std::make_shared<httplib::Result>(cli.PostEx(method, uri, headers, content.data(), content.size(), contentType));
+    ASYNC_RET(=);
+    auto &res = *resp;
+    if (!res) [[unlikely]] {
+        RET_TABLE();
+        RET_TABLE_KEY(string, "error", integer, (int)res.error());
+        RET_TABLE_KEY(string, "status", integer, 0);
+        RET_TABLE_KEY(string, "reason", string, httpErrorString(res.error()));
+        RET_TABLE_END();
+    }
     RET_TABLE();
+    RET_TABLE_KEY(string, "error", integer, 0);
     RET_TABLE_KEY(string, "status", integer, res->status);
     RET_TABLE_KEY(string, "body", stdstringview, res->body);
     RET_TABLE_KEY(string, "reason", stdstringview, res->reason);
