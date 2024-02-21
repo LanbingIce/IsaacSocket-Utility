@@ -73,7 +73,5 @@ namespace _isaac_socket
 		MODULE_FUNC(Disconnect);
 
 		local.lua.lua_settop(L, top);
-
-		//_cprintf("IsaacSocket initialized\n");
 	}
 }

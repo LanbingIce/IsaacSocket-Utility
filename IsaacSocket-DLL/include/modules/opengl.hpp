@@ -118,12 +118,13 @@ static std::unique_ptr<Image> create_image(int width, int height, int channels) 
     return img;
 }
 
-static std::unique_ptr<Image> load_image(const char* filename, int channels = 0) {
+static std::unique_ptr<Image> load_image(const char* filename, int channels = 0, bool flipOnLoad = false) {
     auto img = std::make_unique<Image>();
     FILE *fp;
     if (_wfopen_s(&fp, std::filesystem::path((const char8_t *)filename).c_str(), L"rb")) [[unlikely]] {
         return nullptr;
     }
+    stbi_set_flip_vertically_on_load(flipOnLoad);
     uint8_t* p = stbi_load_from_file(fp, &img->width, &img->height, &img->channels, channels);
     if (!p) [[unlikely]] {
         return nullptr;
@@ -133,8 +134,9 @@ static std::unique_ptr<Image> load_image(const char* filename, int channels = 0)
     return img;
 }
 
-static std::unique_ptr<Image> load_image_from_memory(const char* data, size_t size, int channels = 0) {
+static std::unique_ptr<Image> load_image_from_memory(const char* data, size_t size, int channels = 0, bool flipOnLoad = false) {
     auto img = std::make_unique<Image>();
+    stbi_set_flip_vertically_on_load(flipOnLoad);
     uint8_t* p = stbi_load_from_memory((const stbi_uc *)data, size, &img->width, &img->height, &img->channels, channels);
     if (!p) [[unlikely]] {
         return nullptr;
@@ -208,9 +210,10 @@ static int CreateEmptyImage(lua_State* L) {
 static int ReadImage(lua_State* L) {
     ARG(1, string, const char*, path);
     ARG_DEF(2, integer, int, channels, 0);
-    ARG_DEF(3, boolean, bool, useCached, true);
-    auto gen = [path, channels] {
-        if (auto img = load_image(path, channels)) {
+    ARG_DEF(3, boolean, bool, flipOnLoad, false);
+    ARG_DEF(4, boolean, bool, useCached, true);
+    auto gen = [path, channels, flipOnLoad] {
+        if (auto img = load_image(path, channels, flipOnLoad)) {
             return image_handles()->create(std::move(img));
         }
         return NULL_HANDLE;
@@ -222,8 +225,9 @@ static int ReadImage(lua_State* L) {
 static int ReadImageFromMemory(lua_State* L) {
     ARG(1, stdstringview, std::string_view, data);
     ARG_DEF(2, integer, int, channels, 0);
+    ARG_DEF(3, boolean, bool, flipOnLoad, true);
     auto gen = [data, channels] {
-        if (auto img = load_image_from_memory(data.data(), data.size(), channels)) {
+        if (auto img = load_image_from_memory(data.data(), data.size(), channels, flipOnLoad)) {
             return image_handles()->create(std::move(img));
         }
         return NULL_HANDLE;

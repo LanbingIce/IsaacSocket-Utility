@@ -57,8 +57,8 @@ int luaPromiseThen(lua_State *L) {
         local.lua.lua_pushvalue(L, -2);
         local.lua.lua_settable(L, -4);
     }
-    /* local.lua.lua_pushinteger(L, (lua_Integer)h); */
-    local.lua.lua_pushstdstring(L, std::to_string(h));
+    local.lua.lua_pushinteger(L, (lua_Integer)h);
+    /* local.lua.lua_pushstdstring(L, std::to_string(h)); */
     local.lua.lua_pushvalue(L, 2);
     local.lua.lua_settable(L, -3);
     local.lua.lua_settop(L, top);
@@ -67,7 +67,6 @@ int luaPromiseThen(lua_State *L) {
 }
 
 void luaPollPromises(lua_State *L) {
-
     std::vector<Handle> readyHandles;
     for (auto &p: promiseTable().enumerate()) {
         if (p->isReady()) {
@@ -94,9 +93,11 @@ void luaPollPromises(lua_State *L) {
             local.lua.lua_settable(L, -4);
         }
         local.lua.lua_remove(L, -2);
-        local.lua.lua_pushstdstring(L, std::to_string(h));
+        local.lua.lua_pushinteger(L, (lua_Integer)h);
+        /* local.lua.lua_pushstdstring(L, std::to_string(h)); */
         local.lua.lua_gettable(L, -2);
-        local.lua.lua_pushstdstring(L, std::to_string(h));
+        local.lua.lua_pushinteger(L, (lua_Integer)h);
+        /* local.lua.lua_pushstdstring(L, std::to_string(h)); */
         local.lua.lua_pushnil(L);
         local.lua.lua_settable(L, -4);
         local.lua.lua_remove(L, -2);
@@ -104,14 +105,14 @@ void luaPollPromises(lua_State *L) {
         try {
             n = p->getResult(L);
         } catch (std::exception const &e) {
-            _cprintf("Exception in async: %s\n", e.what());
+            cw("Exception in async function:", e.what());
             goto label;
         } catch (...) {
-            _cprintf("Exception in async: unknown exception\n");
+            cw("Exception in async function: unknown exception");
             goto label;
         }
         if (!local.lua.lua_isnoneornil(L, -1 - n)) [[likely]] {
-            if(local.lua.lua_pcall(L, n, 0, 0)!=LUA_OK){std::string _err="?";if(local.lua.lua_isstring(L,-1)){_err=local.lua.lua_tostring(L,-1);};local.lua.lua_pop(L, 1);_err.append("\n");function::ConsoleOutput(_err, 0xFFF08080);_cprintf("Error in async callback: %s",_err.c_str());}
+            if(local.lua.lua_pcall(L, n, 0, 0)!=LUA_OK){std::string _err="?";if(local.lua.lua_isstring(L,-1)){_err=local.lua.lua_tostring(L,-1);};local.lua.lua_pop(L, 1);_err.append("\n");function::ConsoleOutput(_err, 0xFFF08080);cw("Error in async callback:", _err.c_str());}
         }
     label:
         local.lua.lua_settop(L, top);

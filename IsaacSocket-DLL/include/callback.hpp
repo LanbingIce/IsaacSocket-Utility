@@ -8,7 +8,6 @@
 #include "modules/_isaac_socket.hpp"
 #include "config.hpp"
 
-#define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #include <imgui/imgui.h>
 
 // 小彭老师专用代码开始
@@ -20,12 +19,12 @@
     ++reloadCounter; \
     if (reloadCounter>30&&getenv("IsaacSocketFromClient")&&_isaac_socket::LuaReady()) { \
         if (global->connectionState == state::DISCONNECTED) { \
-            _cprintf("auto ready\n"); \
+            cw("auto ready"); \
             global->connectionState=state::CONNECTING; \
         } \
         if (reloadCounter % 30 == 0) { \
             if (reloadLibraryMain("IsaacSocket.dll", true)) { \
-                _cprintf("auto reloaded dll\n"); \
+                cw("auto reloaded dll"); \
                 return 0; \
             } \
         } \
