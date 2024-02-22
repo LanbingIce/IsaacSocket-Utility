@@ -244,12 +244,32 @@ namespace lua {
 			}
 		}
 
+		void lua_pushvectorint(lua_State* L, std::vector<int> const& v) const
+		{
+			lua_createtable(L, v.size(), 0);
+			for (size_t i = 0; i < v.size(); i++) {
+				lua_pushinteger(L, i + 1);
+				lua_pushinteger(L, v[i]);
+				lua_settable(L, -3);
+			}
+		}
+
 		void lua_pushvectorinteger(lua_State* L, std::vector<lua_Integer> const& v) const
 		{
 			lua_createtable(L, v.size(), 0);
 			for (size_t i = 0; i < v.size(); i++) {
 				lua_pushinteger(L, i + 1);
 				lua_pushinteger(L, v[i]);
+				lua_settable(L, -3);
+			}
+		}
+
+		void lua_pushvectorfloat(lua_State* L, std::vector<float> const& v) const
+		{
+			lua_createtable(L, v.size(), 0);
+			for (size_t i = 0; i < v.size(); i++) {
+				lua_pushinteger(L, i + 1);
+				lua_pushnumber(L, v[i]);
 				lua_settable(L, -3);
 			}
 		}
@@ -270,7 +290,17 @@ namespace lua {
 			return lua_istable(L, i);
 		}
 
+		int lua_isvectorint(lua_State* L, int i) const
+		{
+			return lua_istable(L, i);
+		}
+
 		int lua_isvectorinteger(lua_State* L, int i) const
+		{
+			return lua_istable(L, i);
+		}
+
+		int lua_isvectorfloat(lua_State* L, int i) const
 		{
 			return lua_istable(L, i);
 		}
@@ -315,6 +345,19 @@ namespace lua {
 			return ret;
 		}
 
+		std::vector<int> lua_tovectorint(lua_State* L, int i) const
+		{
+			std::vector<int> ret;
+			lua_pushnil(L); // first key
+			while (lua_next(L, i) != 0) {
+				// uses 'key' (at index -2) and 'value' (at index -1)
+				ret.push_back((int)lua_tointeger(L, -1));
+				// removes 'value'; keeps 'key' for next iteration
+				lua_pop(L, 1);
+			}
+			return ret;
+		}
+
 		std::vector<lua_Integer> lua_tovectorinteger(lua_State* L, int i) const
 		{
 			std::vector<lua_Integer> ret;
@@ -323,6 +366,19 @@ namespace lua {
 				// uses 'key' (at index -2) and 'value' (at index -1)
 				lua_Integer id = lua_tointeger(L, -1);
 				ret.push_back(id);
+				// removes 'value'; keeps 'key' for next iteration
+				lua_pop(L, 1);
+			}
+			return ret;
+		}
+
+		std::vector<float> lua_tovectorfloat(lua_State* L, int i) const
+		{
+			std::vector<float> ret;
+			lua_pushnil(L); // first key
+			while (lua_next(L, i) != 0) {
+				// uses 'key' (at index -2) and 'value' (at index -1)
+				ret.push_back((float)lua_tonumber(L, -1));
 				// removes 'value'; keeps 'key' for next iteration
 				lua_pop(L, 1);
 			}

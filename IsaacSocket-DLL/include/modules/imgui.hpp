@@ -5,10 +5,11 @@
 #include <imgui/imgui_stdlib.h>
 
 namespace imgui {
-	static ::ImVec2 VEC2_0 = ::ImVec2(0, 0);
-	static ::ImVec4 VEC4_0 = ::ImVec4(0, 0, 0, 0);
-	static ::ImVec2 VEC2_1 = ::ImVec2(1, 1);
-	static ::ImVec4 VEC4_1 = ::ImVec4(1, 1, 1, 1);
+	static const ::ImVec2 VEC2_0 = ::ImVec2(0, 0);
+	static const ::ImVec4 VEC4_0 = ::ImVec4(0, 0, 0, 0);
+	static const ::ImVec2 VEC2_1 = ::ImVec2(1, 1);
+	static const ::ImVec4 VEC4_1 = ::ImVec4(1, 1, 1, 1);
+	static const ::ImVec2 VEC2_NEG_MIN_0 = ::ImVec2(-FLT_MIN, 0);
 
 	static int p_ImVec2__index(lua_State* L) {
 		ARG_UDATA(1, p_ImVec2, ::ImVec2**, pp_vec);
@@ -78,7 +79,7 @@ namespace imgui {
 	static int Begin(lua_State* L) {
 		ARG(1, string, const char*, name);
 		ARG_DEF(2, boolean, bool, open, true);
-		ARG_DEF(3, integer, int, flags, 0);
+		ARG_DEF(3, integer, ImGuiWindowFlags, flags, 0);
 
 		local.lua.lua_pushboolean(L, ImGui::Begin(name, &open, flags));
 		local.lua.lua_pushboolean(L, open);
@@ -88,7 +89,7 @@ namespace imgui {
 	static int BeginCombo(lua_State* L) {
 		ARG(1, string, const char*, label);
 		ARG(2, string, const char*, preview_value);
-		ARG_DEF(3, integer, int, flags, 0);
+		ARG_DEF(3, integer, ImGuiComboFlags, flags, 0);
 		RET(boolean, ImGui::BeginCombo(label, preview_value, flags));
 	}
 
@@ -111,17 +112,32 @@ namespace imgui {
 		RET(boolean, ImGui::BeginMenuBar());
 	}
 
+	static int BeginTabBar(lua_State* L) {
+		ARG(1, string, const char*, str_id);
+		ARG_DEF(2, integer, ImGuiTabBarFlags, flags,0);
+		RET(boolean, ImGui::BeginTabBar(str_id, flags));
+	}
+
+	static int BeginTabItem(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG_DEF(2, boolean, bool, open, true);
+		ARG_DEF(3, integer, ImGuiTabItemFlags, flags, 0);
+		local.lua.lua_pushboolean(L, ImGui::BeginTabItem(label, &open, flags));
+		local.lua.lua_pushboolean(L, open);
+		return 2;
+	}
+
 	static int Button(lua_State* L) {
 		ARG(1, string, const char*, label);
-		ARG_UDATA_DEF(2, ImVec2, ::ImVec2*, size, &VEC2_0);
+		ARG_UDATA_DEF(2, ImVec2, const ::ImVec2*, size, &VEC2_0);
 		RET(boolean, ImGui::Button(label, *size));
 	}
 
 	static int CalcTextSize(lua_State* L) {
 		ARG(1, string, const char*, text);
-		ARG_DEF(2, string, const char*, text_end, (const char*)0);
+		ARG_DEF(2, string, const char*, text_end, NULL);
 		ARG_DEF(3, boolean, bool, hide_text_after_double_hash, false);
-		ARG_DEF(4, number, float, wrap_width, -1.0F);
+		ARG_DEF(4, number, float, wrap_width, -1.0f);
 		::ImVec2* p_vec = (::ImVec2*)local.lua.lua_newuserdata(L, sizeof(::ImVec2));
 		SET_METATABLE(ImVec2);
 		*p_vec = ImGui::CalcTextSize(text, text_end, hide_text_after_double_hash, wrap_width);
@@ -193,6 +209,16 @@ namespace imgui {
 		return 0;
 	}
 
+	static int EndTabBar(lua_State* L) {
+		ImGui::EndTabBar();
+		return 0;
+	}
+
+	static int EndTabItem(lua_State* L) {
+		ImGui::EndTabItem();
+		return 0;
+	}
+
 	static int GetClipboardText(lua_State* L) {
 		RET(string, ImGui::GetClipboardText());
 	}
@@ -236,10 +262,10 @@ namespace imgui {
 	static int Image(lua_State* L) {
 		ARG(1, integer, ImTextureID, user_texture_id);
 		ARG_UDATA(2, ImVec2, ::ImVec2*, image_size);
-		ARG_UDATA_DEF(3, ImVec2, ::ImVec2*, uv0, &VEC2_0);
-		ARG_UDATA_DEF(4, ImVec2, ::ImVec2*, uv1, &VEC2_1);
-		ARG_UDATA_DEF(5, ImVec4, ::ImVec4*, tint_col, &VEC4_1);
-		ARG_UDATA_DEF(6, ImVec4, ::ImVec4*, border_col, &VEC4_0);
+		ARG_UDATA_DEF(3, ImVec2, const ::ImVec2*, uv0, &VEC2_0);
+		ARG_UDATA_DEF(4, ImVec2, const ::ImVec2*, uv1, &VEC2_1);
+		ARG_UDATA_DEF(5, ImVec4, const ::ImVec4*, tint_col, &VEC4_1);
+		ARG_UDATA_DEF(6, ImVec4, const ::ImVec4*, border_col, &VEC4_0);
 		ImGui::Image(user_texture_id, *image_size, *uv0, *uv1, *tint_col, *border_col);
 		return 0;
 	}
@@ -256,6 +282,36 @@ namespace imgui {
 		return 2;
 	}
 
+	static int InputInt2(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorint, vector<int>, v);
+		ARG_DEF(3, integer, ImGuiInputTextFlags, flags, 0);
+		v.resize(2);
+		local.lua.lua_pushboolean(L, ImGui::InputInt2(label, v.data(), flags));
+		local.lua.lua_pushvectorint(L, v);
+		return 2;
+	}
+
+	static int InputInt3(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorint, vector<int>, v);
+		ARG_DEF(3, integer, ImGuiInputTextFlags, flags, 0);
+		v.resize(3);
+		local.lua.lua_pushboolean(L, ImGui::InputInt3(label, v.data(), flags));
+		local.lua.lua_pushvectorint(L, v);
+		return 2;
+	}
+
+	static int InputInt4(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorint, vector<int>, v);
+		ARG_DEF(3, integer, ImGuiInputTextFlags, flags, 0);
+		v.resize(4);
+		local.lua.lua_pushboolean(L, ImGui::InputInt4(label, v.data(), flags));
+		local.lua.lua_pushvectorint(L, v);
+		return 2;
+	}
+
 	static int InputText(lua_State* L) {
 		ARG(1, string, const char*, label);
 		ARG(2, string, string, str);
@@ -268,7 +324,7 @@ namespace imgui {
 	static int InputTextMultiline(lua_State* L) {
 		ARG(1, string, const char*, label);
 		ARG(2, string, string, str);
-		ARG_UDATA_DEF(3, ImVec2, ::ImVec2*, size, &VEC2_0);
+		ARG_UDATA_DEF(3, ImVec2, const ::ImVec2*, size, &VEC2_0);
 		ARG_DEF(4, integer, ImGuiInputTextFlags, flags, 0);
 		local.lua.lua_pushboolean(L, ImGui::InputTextMultiline(label, &str, *size, flags));
 		local.lua.lua_pushstring(L, str.c_str());
@@ -284,15 +340,28 @@ namespace imgui {
 
 	static int MenuItem(lua_State* L) {
 		ARG(1, string, const char*, label);
-		ARG_DEF(2, string, const char*, shortcut, (const char*)0);
+		ARG_DEF(2, string, const char*, shortcut, NULL);
 		ARG_DEF(3, boolean, bool, selected, false);
 		ARG_DEF(4, boolean, bool, enabled, true);
 		RET(boolean, ImGui::MenuItem(label, shortcut, selected, enabled));
 	}
 
+	static int NewLine(lua_State* L) {
+		ImGui::NewLine();
+		return 0;
+	}
+
 	static int PopStyleColor(lua_State* L) {
 		ARG_DEF(1, integer, int, count, 1);
 		ImGui::PopStyleColor(count);
+		return 0;
+	}
+
+	static int ProgressBar(lua_State* L) {
+		ARG(1, number, float, fraction);
+		ARG_UDATA_DEF(2, ImVec2, const ::ImVec2*, size_arg, &VEC2_NEG_MIN_0);
+		ARG_DEF(3, string, const char*, overlay, NULL);
+		ImGui::ProgressBar(fraction, *size_arg, overlay);
 		return 0;
 	}
 
@@ -322,8 +391,8 @@ namespace imgui {
 	}
 
 	static int SameLine(lua_State* L) {
-		ARG_DEF(1, number, float, offset_from_start_x, 0.0F);
-		ARG_DEF(2, number, float, spacing_w, -1.0F);
+		ARG_DEF(1, number, float, offset_from_start_x, 0.0f);
+		ARG_DEF(2, number, float, spacing_w, -1.0f);
 
 		ImGui::SameLine(offset_from_start_x, spacing_w);
 		return 0;
@@ -333,10 +402,21 @@ namespace imgui {
 		ARG(1, string, const char*, label);
 		ARG(2, boolean, bool, selected);
 		ARG_DEF(3, integer, ImGuiSelectableFlags, flags, 0);
-		ARG_UDATA_DEF(4, ImVec2, ::ImVec2*, size_arg, &VEC2_0);
+		ARG_UDATA_DEF(4, ImVec2, const ::ImVec2*, size_arg, &VEC2_0);
 		local.lua.lua_pushboolean(L, ImGui::Selectable(label, selected, flags, *size_arg));
 		local.lua.lua_pushinteger(L, selected);
 		return 2;
+	}
+
+	static int Separator(lua_State* L) {
+		ImGui::Separator();
+		return 0;
+	}
+
+	static int SeparatorText(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ImGui::SeparatorText(label);
+		return 0;
 	}
 
 	static int SetClipboardText(lua_State* L) {
@@ -351,13 +431,13 @@ namespace imgui {
 	}
 
 	static int SetScrollHereX(lua_State* L) {
-		ARG_DEF(1, number, float, center_x_ratio, 0.5F);
+		ARG_DEF(1, number, float, center_x_ratio, 0.5f);
 		ImGui::SetScrollHereX(center_x_ratio);
 		return 0;
 	}
 
 	static int SetScrollHereY(lua_State* L) {
-		ARG_DEF(1, number, float, center_y_ratio, 0.5F);
+		ARG_DEF(1, number, float, center_y_ratio, 0.5f);
 		ImGui::SetScrollHereY(center_y_ratio);
 		return 0;
 	}
@@ -412,20 +492,61 @@ namespace imgui {
 	}
 
 	static int ShowDebugLogWindow(lua_State* L) {
-		ARG_DEF(1, boolean, bool, open, false);
+		ARG_DEF(1, boolean, bool, open, true);
 		ImGui::ShowDebugLogWindow(&open);
 		RET(boolean, open);
 	}
 
 	static int ShowDemoWindow(lua_State* L) {
-		ARG_DEF(1, boolean, bool, open, false);
+		ARG_DEF(1, boolean, bool, open, true);
 		ImGui::ShowDemoWindow(&open);
 		RET(boolean, open);
+	}
+
+	static int ShowFontSelector(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ImGui::ShowFontSelector(label);
+		return 0;
+	}
+
+	static int ShowIDStackToolWindow(lua_State* L) {
+		ARG_DEF(1, boolean, bool, open, true);
+		ImGui::ShowIDStackToolWindow(&open);
+		RET(boolean, open);
+	}
+
+	static int ShowMetricsWindow(lua_State* L) {
+		ARG_DEF(1, boolean, bool, open, true);
+		ImGui::ShowMetricsWindow(&open);
+		RET(boolean, open);
+	}
+
+	static int ShowStackToolWindow(lua_State* L) {
+		ARG_DEF(1, boolean, bool, open, true);
+		ImGui::ShowStackToolWindow(&open);
+		RET(boolean, open);
+	}
+
+	static int ShowStyleSelector(lua_State* L) {
+		ARG(1, string, const char*, label);
+		RET(boolean, ImGui::ShowStyleSelector(label));
 	}
 
 	static int ShowUserGuide(lua_State* L) {
 		ImGui::ShowUserGuide();
 		return 0;
+	}
+
+	static int SliderAngle(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, number, float, v_rad);
+		ARG_DEF(3, number, float, v_degrees_min, -360.0f);
+		ARG_DEF(4, number, float, v_degrees_max, +360.0f);
+		ARG_DEF(5, string, const char*, format, "%.0f deg");
+		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
+		local.lua.lua_pushboolean(L, ImGui::SliderAngle(label, &v_rad, v_degrees_min, v_degrees_max, format, flags));
+		local.lua.lua_pushnumber(L, v_rad);
+		return 2;
 	}
 
 	static int SliderFloat(lua_State* L) {
@@ -434,10 +555,49 @@ namespace imgui {
 		ARG(3, number, float, v_min);
 		ARG(4, number, float, v_max);
 		ARG_DEF(5, string, const char*, format, "%.3f");
-		ARG_DEF(6, integer, int, flags, 0);
+		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
 
 		local.lua.lua_pushboolean(L, ImGui::SliderFloat(label, &v, v_min, v_max, format, flags));
 		local.lua.lua_pushnumber(L, v);
+		return 2;
+	}
+
+	static int SliderFloat2(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorfloat, vector<float>, v);
+		ARG(3, number, float, v_min);
+		ARG(4, number, float, v_max);
+		ARG_DEF(5, string, const char*, format, "%.3f");
+		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
+		v.resize(2);
+		local.lua.lua_pushboolean(L, ImGui::SliderFloat2(label, v.data(), v_min, v_max, format, flags));
+		local.lua.lua_pushvectorfloat(L, v);
+		return 2;
+	}
+
+	static int SliderFloat3(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorfloat, vector<float>, v);
+		ARG(3, number, float, v_min);
+		ARG(4, number, float, v_max);
+		ARG_DEF(5, string, const char*, format, "%.3f");
+		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
+		v.resize(3);
+		local.lua.lua_pushboolean(L, ImGui::SliderFloat3(label, v.data(), v_min, v_max, format, flags));
+		local.lua.lua_pushvectorfloat(L, v);
+		return 2;
+	}
+
+	static int SliderFloat4(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorfloat, vector<float>, v);
+		ARG(3, number, float, v_min);
+		ARG(4, number, float, v_max);
+		ARG_DEF(5, string, const char*, format, "%.3f");
+		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
+		v.resize(4);
+		local.lua.lua_pushboolean(L, ImGui::SliderFloat4(label, v.data(), v_min, v_max, format, flags));
+		local.lua.lua_pushvectorfloat(L, v);
 		return 2;
 	}
 
@@ -447,10 +607,49 @@ namespace imgui {
 		ARG(3, integer, int, v_min);
 		ARG(4, integer, int, v_max);
 		ARG_DEF(5, string, const char*, format, "%d");
-		ARG_DEF(6, integer, int, flags, 0);
+		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
 
 		local.lua.lua_pushboolean(L, ImGui::SliderInt(label, &v, v_min, v_max, format, flags));
 		local.lua.lua_pushinteger(L, v);
+		return 2;
+	}
+
+	static int SliderInt2(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorint, vector<int>, v);
+		ARG(3, integer, int, v_min);
+		ARG(4, integer, int, v_max);
+		ARG_DEF(5, string, const char*, format, "%d");
+		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
+		v.resize(2);
+		local.lua.lua_pushboolean(L, ImGui::SliderInt2(label, v.data(), v_min, v_max, format, flags));
+		local.lua.lua_pushvectorint(L, v);
+		return 2;
+	}
+
+	static int SliderInt3(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorint, vector<int>, v);
+		ARG(3, integer, int, v_min);
+		ARG(4, integer, int, v_max);
+		ARG_DEF(5, string, const char*, format, "%d");
+		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
+		v.resize(3);
+		local.lua.lua_pushboolean(L, ImGui::SliderInt3(label, v.data(), v_min, v_max, format, flags));
+		local.lua.lua_pushvectorint(L, v);
+		return 2;
+	}
+
+	static int SliderInt4(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorint, vector<int>, v);
+		ARG(3, integer, int, v_min);
+		ARG(4, integer, int, v_max);
+		ARG_DEF(5, string, const char*, format, "%d");
+		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
+		v.resize(4);
+		local.lua.lua_pushboolean(L, ImGui::SliderInt4(label, v.data(), v_min, v_max, format, flags));
+		local.lua.lua_pushvectorint(L, v);
 		return 2;
 	}
 
@@ -480,7 +679,7 @@ namespace imgui {
 
 	static int TextUnformatted(lua_State* L) {
 		ARG(1, string, const char*, text);
-		ARG_DEF(2, string, const char*, text_end, (const char*)0);
+		ARG_DEF(2, string, const char*, text_end, NULL);
 		ImGui::TextUnformatted(text);
 		return 0;
 	}
@@ -527,8 +726,8 @@ namespace imgui {
 		// MODULE_FUNC(BeginPopupContextVoid);
 		// MODULE_FUNC(BeginPopupContextWindow);
 		// MODULE_FUNC(BeginPopupModal);
-		// MODULE_FUNC(BeginTabBar);
-		// MODULE_FUNC(BeginTabItem);
+		MODULE_FUNC(BeginTabBar);
+		MODULE_FUNC(BeginTabItem);
 		// MODULE_FUNC(BeginTable);
 		// MODULE_FUNC(BeginTooltip);
 		// MODULE_FUNC(Bullet);
@@ -558,7 +757,7 @@ namespace imgui {
 		// MODULE_FUNC(DebugCheckVersionAndDataLayout);
 		// MODULE_FUNC(DebugFlashStyleColor);
 		// MODULE_FUNC(DebugTextEncoding);
-		// MODULE_FUNC(DestroyContext);
+		// MODULE_FUNC(DestroyContext);		//只能在c++中调用
 		// MODULE_FUNC(DragFloat);	
 		// MODULE_FUNC(DragFloat2);
 		// MODULE_FUNC(DragFloat3);
@@ -586,8 +785,8 @@ namespace imgui {
 		MODULE_FUNC(EndMenu);
 		MODULE_FUNC(EndMenuBar);
 		// MODULE_FUNC(EndPopup);
-		// MODULE_FUNC(EndTabBar);
-		// MODULE_FUNC(EndTabItem);
+		MODULE_FUNC(EndTabBar);
+		MODULE_FUNC(EndTabItem);
 		// MODULE_FUNC(EndTable);
 		// MODULE_FUNC(EndTooltip);
 		// MODULE_FUNC(GetAllocatorFunctions);
@@ -660,9 +859,9 @@ namespace imgui {
 		// MODULE_FUNC(InputFloat3);
 		// MODULE_FUNC(InputFloat4);
 		MODULE_FUNC(InputInt);
-		// MODULE_FUNC(InputInt2);
-		// MODULE_FUNC(InputInt3);
-		// MODULE_FUNC(InputInt4);
+		MODULE_FUNC(InputInt2);
+		MODULE_FUNC(InputInt3);
+		MODULE_FUNC(InputInt4);
 		// MODULE_FUNC(InputScalar);
 		// MODULE_FUNC(InputScalarN);
 		MODULE_FUNC(InputText);		//不完全实现：最后两个参数 callback 和 user_data 参数无效
@@ -716,7 +915,7 @@ namespace imgui {
 		// MODULE_FUNC(MemFree);	//可能会造成内存泄漏，不暴露给lua
 		MODULE_FUNC(MenuItem);
 		// MODULE_FUNC(NewFrame);	//在c++中已调用
-		// MODULE_FUNC(NewLine);
+		MODULE_FUNC(NewLine);
 		// MODULE_FUNC(NextColumn);
 		// MODULE_FUNC(OpenPopup);
 		// MODULE_FUNC(OpenPopupOnItemClick);
@@ -732,7 +931,7 @@ namespace imgui {
 		// MODULE_FUNC(PopStyleVar);
 		// MODULE_FUNC(PopTabStop);
 		// MODULE_FUNC(PopTextWrapPos);
-		// MODULE_FUNC(ProgressBar);
+		MODULE_FUNC(ProgressBar);
 		// MODULE_FUNC(PushAllowKeyboardFocus);
 		// MODULE_FUNC(PushButtonRepeat);
 		// MODULE_FUNC(PushClipRect);
@@ -750,8 +949,8 @@ namespace imgui {
 		// MODULE_FUNC(SaveIniSettingsToDisk);
 		// MODULE_FUNC(SaveIniSettingsToMemory);
 		MODULE_FUNC(Selectable);
-		// MODULE_FUNC(Separator);
-		// MODULE_FUNC(SeparatorText);
+		MODULE_FUNC(Separator);
+		MODULE_FUNC(SeparatorText);
 		// MODULE_FUNC(SetAllocatorFunctions);
 		MODULE_FUNC(SetClipboardText);
 		// MODULE_FUNC(SetColorEditOptions);
@@ -800,22 +999,22 @@ namespace imgui {
 		MODULE_FUNC(ShowAboutWindow);
 		MODULE_FUNC(ShowDebugLogWindow);
 		MODULE_FUNC(ShowDemoWindow);
-		// MODULE_FUNC(ShowFontSelector);
-		// MODULE_FUNC(ShowIDStackToolWindow);
-		// MODULE_FUNC(ShowMetricsWindow);
-		// MODULE_FUNC(ShowStackToolWindow);
+		MODULE_FUNC(ShowFontSelector);
+		MODULE_FUNC(ShowIDStackToolWindow);
+		MODULE_FUNC(ShowMetricsWindow);
+		MODULE_FUNC(ShowStackToolWindow);
 		// MODULE_FUNC(ShowStyleEditor);
-		// MODULE_FUNC(ShowStyleSelector);
+		MODULE_FUNC(ShowStyleSelector);
 		MODULE_FUNC(ShowUserGuide);
-		// MODULE_FUNC(SliderAngle);
+		MODULE_FUNC(SliderAngle);
 		MODULE_FUNC(SliderFloat);
-		// MODULE_FUNC(SliderFloat2);
-		// MODULE_FUNC(SliderFloat3);
-		// MODULE_FUNC(SliderFloat4);
+		MODULE_FUNC(SliderFloat2);
+		MODULE_FUNC(SliderFloat3);
+		MODULE_FUNC(SliderFloat4);
 		MODULE_FUNC(SliderInt);
-		// MODULE_FUNC(SliderInt2);
-		// MODULE_FUNC(SliderInt3);
-		// MODULE_FUNC(SliderInt4);
+		MODULE_FUNC(SliderInt2);
+		MODULE_FUNC(SliderInt3);
+		MODULE_FUNC(SliderInt4);
 		// MODULE_FUNC(SliderScalar);
 		// MODULE_FUNC(SliderScalarN);
 		// MODULE_FUNC(SmallButton);
