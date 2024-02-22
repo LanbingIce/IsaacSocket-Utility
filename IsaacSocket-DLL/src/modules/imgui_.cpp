@@ -1,6 +1,4 @@
-﻿#pragma once
-
-#include "module.hpp"
+﻿#include "module.hpp"
 #include <imgui/imgui.h>
 #include <imgui/imgui_stdlib.h>
 
@@ -114,7 +112,7 @@ namespace imgui {
 
 	static int BeginTabBar(lua_State* L) {
 		ARG(1, string, const char*, str_id);
-		ARG_DEF(2, integer, ImGuiTabBarFlags, flags,0);
+		ARG_DEF(2, integer, ImGuiTabBarFlags, flags, 0);
 		RET(boolean, ImGui::BeginTabBar(str_id, flags));
 	}
 
@@ -697,7 +695,7 @@ namespace imgui {
 		return 0;
 	}
 
-	static void Init() {
+	static RegisterModule Init = [] {
 		MODULE_BEGIN(ImGui);
 
 		MODULE_FUNC(ImVec2);
@@ -1061,5 +1059,5 @@ namespace imgui {
 		// MODULE_FUNC(VSliderScalar);
 
 		MODULE_END();
-	}
+		};
 }
