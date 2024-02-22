@@ -14,7 +14,7 @@ project(IsaacSocket LANGUAGES CXX ASM)
 
 # link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
-file(GLOB files src/*.cpp libs/*/*.cpp src/*.S)
+file(GLOB files src/*.cpp src/*/*.cpp libs/*/*.cpp src/*.S)
 add_library(IsaacSocket SHARED)
 set_target_properties(IsaacSocket PROPERTIES PREFIX "")
 target_sources(IsaacSocket PRIVATE ${files})

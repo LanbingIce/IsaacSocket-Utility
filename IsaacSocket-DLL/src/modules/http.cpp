@@ -247,7 +247,7 @@ static void Init() {
 
 /* example:
 if IsaacSocket and Input.IsButtonTriggered(Keyboard.KEY_A, 0) then
-    local job = IsaacSocket.Http.RequestGet("https://www.lua.org", "/manual/5.2/manual.html"):Then(function (res)
+    local job = IsaacSocket.Http.Request("https://www.lua.org/manual/5.2/manual.html", "GET", {key = "val"}):Then(function (res)
         if res.status == 200 then
             print(res.body)
         end
