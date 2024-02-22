@@ -9,7 +9,7 @@
 
 #include <glad/glad.h>
 
-/* #define IMGUI_IMPL_OPENGL_LOADER_CUSTOM */
+#define IMGUI_IMPL_OPENGL_LOADER_CUSTOM // 解决 GL 函数重定义问题
 #include <imgui/imgui_impl_opengl3.h>
 #include <imgui/imgui_impl_win32.h>
 

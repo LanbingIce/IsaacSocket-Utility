@@ -14,17 +14,27 @@ project(IsaacSocket LANGUAGES CXX ASM)
 
 # link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
-file(GLOB files src/*.cpp libs/*/*.cpp src/*.S)
+file(GLOB files src/*.cpp src/*/*.cpp libs/*/*.cpp src/*.S)
 add_library(IsaacSocket SHARED)
 set_target_properties(IsaacSocket PROPERTIES PREFIX "")
 target_sources(IsaacSocket PRIVATE ${files})
 target_include_directories(IsaacSocket PRIVATE include libs)
 
-if (UNIX)
-    find_package(OpenSSL REQUIRED COMPONENTS Crypto SSL REQUIRED)
-    target_link_libraries(main PRIVATE OpenSSL::Crypto OpenSSL::SSL)
-elseif (WIN32)
-    # target_link_libraries(IsaacSocket PRIVATE WS2_32 WSock32 crypt32 ssl_mingw32 crypto_mingw32)
+# find_package(OpenSSL COMPONENTS Crypto SSL)
+# if (NOT OPENSSL_FOUND)
+#     include(FetchContent)
+#     message(STATUS "Not using system OpenSSL, using built-in OpenSSL project instead.")
+#     set(MAKE make CACHE STRING "" FORCE)
+#     FetchContent_Declare(
+#         OpenSSL
+#             GIT_REPOSITORY https://github.com/jimmy-park/openssl-cmake
+#             GIT_TAG        main
+#             USES_TERMINAL_DOWNLOAD TRUE)
+#     FetchContent_MakeAvailable(OpenSSL)
+# endif()
+# target_link_libraries(IsaacSocket PRIVATE OpenSSL::Crypto OpenSSL::SSL)
+
+if (WIN32)
     target_link_libraries(IsaacSocket PRIVATE ws2_32 crypt32)
 endif()
 

@@ -4,10 +4,16 @@
 #include "state.hpp"
 #include "utils.hpp"
 #include "function.hpp"
-#include "modules/_isaac_socket.hpp"
 #include "config.hpp"
-
+#include "isaac_socket.hpp"
 #include <imgui/imgui.h>
+
+// Forward declare message handler from imgui_impl_win32.cpp
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+#define CHECK_INIT()if (!local.initialized)return 0
+#define CHECK_STATE()if (global->connectionState != state::CONNECTED)return 0
+namespace callback {
 
 // 小彭老师专用代码开始
 #ifndef __MINGW32__
@@ -16,27 +22,46 @@
 #define CHECK_RELOAD() \
     static int reloadCounter = 0; \
     ++reloadCounter; \
-    if (reloadCounter>30&&getenv("IsaacSocketFromClient")&&_isaac_socket::LuaReady()) { \
+    if (reloadCounter>30&&getenv("IsaacSocketFromClient")&&LuaReady()) { \
         if (global->connectionState == state::DISCONNECTED) { \
-            _cprintf("auto ready\n"); \
+            cw("auto ready"); \
             global->connectionState=state::CONNECTING; \
         } \
         if (reloadCounter % 30 == 0) { \
             if (reloadLibraryMain("IsaacSocket.dll", true)) { \
-                _cprintf("auto reloaded dll\n"); \
+                cw("auto reloaded dll"); \
                 return 0; \
             } \
         } \
     }
+static bool LuaReady() {
+    isaac::LuaEngine* luaEngine = local.isaac->luaEngine;
+    if (!luaEngine) {
+        return false;
+    }
+    lua_State* L = luaEngine->L;
+    if (!L) {
+        return false;
+    }
+    int top = local.lua.lua_gettop(L);
+    local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
+    bool ok = !local.lua.lua_isnoneornil(L, -1);
+    if (ok) {
+        local.lua.lua_pushstring(L, "IsaacSocket");
+        local.lua.lua_gettable(L, -2);
+        ok = !local.lua.lua_isnoneornil(L, -1);
+        if (ok) {
+            local.lua.lua_setglobal(L, "IsaacSocket");
+        }
+    }
+    local.lua.lua_settop(L, top);
+    return ok;
+}
 #endif
 // 小彭老师专用代码结束
 
-// Forward declare message handler from imgui_impl_win32.cpp
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 #define CHECK_INIT()if (!local.initialized)return 0
 #define CHECK_STATE()if (global->connectionState != state::CONNECTED)return 0
-namespace callback {
 
 	static void ShowUserGuide(bool* p_open)
 	{
@@ -78,7 +103,7 @@ namespace callback {
 				function::IsaacSocketFirstTimeInit();
 				local.initialized = true;
 			}
-			_isaac_socket::Init();
+			isaac_socket::Init();
 			global->connectionState = state::CONNECTED;
 			break;
 		case state::CONNECTED:
