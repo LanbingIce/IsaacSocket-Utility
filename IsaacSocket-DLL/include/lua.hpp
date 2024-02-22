@@ -153,6 +153,26 @@ namespace lua {
 
 		_(const char*, luaL_optlstring, lua_State* L, int arg, const char* def, size_t* len);
 
+    template <class T>
+    T *luaCPP_getuserdata(lua_State *L, int i) {
+        return reinterpret_cast<T *>(luaL_checkudata(L, i, typeid(T).name()));
+    }
+
+    template <class T>
+    T *luaCPP_newuserdata(lua_State *L, lua_CFunction index, lua_CFunction gc = nullptr) {
+        void *p = lua_newuserdata(L, sizeof(T));
+        luaL_newmetatable(L, typeid(T).name());
+        const luaL_Reg meta[] = {
+            {"__index",index},
+            {"__newindex",index},
+            {gc?"__gc":nullptr,gc},
+            {nullptr,nullptr},
+        };
+        luaL_setfuncs(L, meta, 0);
+        lua_setmetatable(L, -2);
+        return reinterpret_cast<T *>(p);
+    }
+
         void lua_remove(lua_State* L, int index)
         {
             lua_rotate(L, index, -1);
