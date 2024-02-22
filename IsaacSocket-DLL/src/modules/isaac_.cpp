@@ -1,6 +1,4 @@
-﻿#pragma once
-
-#include "pch.h"
+﻿#include "pch.h"
 #include "module.hpp"
 #include "isaac.hpp"
 #include "lua.hpp"
@@ -81,10 +79,9 @@ namespace isaac_ {
 		METATABLE_END();
 	}
 
-	static void Init() {
-
+    static RegisterModule Init = [] {
 		MODULE_BEGIN(Isaac);
 		MODULE_UDATA(Options, isaac::Options, local.isaac->manager->options);
 		MODULE_END();
-	}
+	};
 }

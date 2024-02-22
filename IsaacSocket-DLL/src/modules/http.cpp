@@ -1,6 +1,4 @@
-﻿#pragma once
-
-#include "module.hpp"
+﻿#include "module.hpp"
 #include "handle.hpp"
 #include "async.hpp"
 
@@ -239,12 +237,6 @@ static int Request(lua_State* L) {
     /* ASYNC_END(); */
 }
 
-static void Init() {
-    MODULE_BEGIN(Http);
-    MODULE_FUNC(Request);
-    MODULE_END();
-}
-
 /* example:
 if IsaacSocket and Input.IsButtonTriggered(Keyboard.KEY_A, 0) then
     local job = IsaacSocket.Http.Request("https://www.lua.org/manual/5.2/manual.html", "GET", {key = "val"}):Then(function (res)
@@ -255,5 +247,11 @@ if IsaacSocket and Input.IsButtonTriggered(Keyboard.KEY_A, 0) then
     -- you may optionally call job:Cancel() to try cancel the job
 end
 */
+
+static RegisterModule Init = [] {
+    MODULE_BEGIN(Http);
+    MODULE_FUNC(Request);
+    MODULE_END();
+};
 
 }

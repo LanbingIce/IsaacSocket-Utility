@@ -1,6 +1,4 @@
-﻿#pragma once
-
-#include "module.hpp"
+﻿#include "module.hpp"
 #include "state.hpp"
 #undef MessageBox
 
@@ -45,7 +43,7 @@ namespace win_api
 		RET(integer, MessageBoxW(hWnd, u16_t.data(), u16_c.data(), uType));
 	}
 
-	static void Init() {
+    static RegisterModule Init = [] {
 		MODULE_BEGIN(WinAPI);
 		MODULE_FUNC(AllocConsole);
 		MODULE_FUNC(FreeConsole);
@@ -53,5 +51,5 @@ namespace win_api
 		MODULE_FUNC(GetKeyState);
 		MODULE_FUNC(MessageBox);
 		MODULE_END();
-	}
+	};
 }

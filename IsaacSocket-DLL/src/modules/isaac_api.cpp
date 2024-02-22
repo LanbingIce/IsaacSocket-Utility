@@ -1,6 +1,4 @@
-﻿#pragma once
-
-#include "pch.h"
+﻿#include "pch.h"
 #include "module.hpp"
 #include "isaac.hpp"
 #include "lua.hpp"
@@ -267,7 +265,7 @@ namespace isaac_api {
 		return 0;
 	}
 
-	static void Init() {
+    static RegisterModule Init = [] {
 		MODULE_BEGIN(IsaacAPI);
 
 		MODULE_FUNC(IsForcePaused);
@@ -315,5 +313,5 @@ namespace isaac_api {
 		MODULE_FUNC(ConsoleOutput);
 
 		MODULE_END();
-	}
+	};
 }

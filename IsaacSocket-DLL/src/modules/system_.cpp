@@ -1,6 +1,4 @@
-﻿#pragma once
-
-#include "module.hpp"
+﻿#include "module.hpp"
 
 namespace system_
 {
@@ -27,11 +25,11 @@ namespace system_
 		return 0;
 	}
 
-	static void Init() {
+    static RegisterModule Init = [] {
 		MODULE_BEGIN(System);
 		MODULE_FUNC(ConsoleOutput);
 		MODULE_FUNC(GetClipboard);
 		MODULE_FUNC(SetClipboard);
 		MODULE_END();
-	}
+	};
 };

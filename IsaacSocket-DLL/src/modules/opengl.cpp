@@ -1,6 +1,4 @@
-﻿#pragma once
-
-#include "module.hpp"
+﻿#include "module.hpp"
 #include "handle.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_STATIC
@@ -451,7 +449,7 @@ static int DrawRect(lua_State* L) {
     return 0;
 }
 
-static void Init() {
+static RegisterModule Init = [] {
     MODULE_BEGIN(OpenGL);
     MODULE_FUNC(PutPixel);
     MODULE_FUNC(DrawLine);
@@ -472,6 +470,6 @@ static void Init() {
     MODULE_FUNC(DeleteTexture);
 
     MODULE_END();
-}
+};
 
 }

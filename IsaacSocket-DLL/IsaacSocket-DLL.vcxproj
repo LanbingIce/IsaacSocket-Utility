@@ -76,7 +76,7 @@
     <ClInclude Include="src\modules\http.cpp" />
     <ClInclude Include="src\modules\system_.cpp" />
     <ClInclude Include="src\modules\win_api.cpp" />
-    <ClInclude Include="src\modules\_isaac_socket.cpp" />
+    <ClInclude Include="include/_isaac_socket.hpp" />
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\reload.hpp" />
     <ClInclude Include="include\async.hpp" />

@@ -46,3 +46,17 @@
 
 #define METATABLE_INDEX_STRING(name)_METATABLE_INDEX(string,name,string,_obj.name.c_str())
 #define METATABLE_END()return local.lua.luaL_error(L, "Invalid member access.")
+
+struct RegisterModule {
+    inline static std::vector<std::function<void()>> initCallbacks;
+
+    RegisterModule(auto &&f) {
+        initCallbacks.emplace_back(std::move(f));
+    }
+
+    static void InitAllModules() {
+        for (auto const &callback: initCallbacks) {
+            callback();
+        }
+    }
+};

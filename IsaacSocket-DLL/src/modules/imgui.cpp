@@ -1,6 +1,4 @@
-﻿#pragma once
-
-#include "module.hpp"
+﻿#include "module.hpp"
 #include <imgui/imgui.h>
 #include <imgui/imgui_stdlib.h>
 
@@ -445,7 +443,7 @@ namespace imgui {
 		return 0;
 	}
 
-	static void Init() {
+    static RegisterModule Init = [] {
 		MODULE_BEGIN(ImGui);
 
 		MODULE_FUNC(ImVec2);
@@ -809,5 +807,5 @@ namespace imgui {
 		// MODULE_FUNC(VSliderScalar);
 
 		MODULE_END();
-	}
+	};
 }
