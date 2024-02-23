@@ -215,6 +215,7 @@
     <ClCompile Include="src\dllmain.cpp" />
     <ClCompile Include="src\inject.cpp" />
     <ClCompile Include="src\modules\http.cpp" />
+    <ClCompile Include="src\modules\image.cpp" />
     <ClCompile Include="src\modules\imgui_.cpp" />
     <ClCompile Include="src\modules\isaac_.cpp" />
     <ClCompile Include="src\modules\isaac_api.cpp" />

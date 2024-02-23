@@ -1,7 +1,4 @@
 ﻿#include "module.hpp"
-#define STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_STATIC
-#include <stbi/stb_image.h>
 #include <glad/glad.h>
 
 #define CHECK_GL(x) do { (x); opengl_check_error(__FILE__, __LINE__, #x); } while (0)
@@ -64,20 +61,7 @@ namespace opengl
 		GLStateGuard(GLStateGuard&&) = delete;
 	};
 
-	struct FileGuard
-	{
-		FILE* fp;
-		FileGuard(const char* filename) {
-			_wfopen_s(&fp, std::filesystem::path((const char8_t*)filename).c_str(), L"rb");
-		}
 
-		~FileGuard() {
-			if (fp)
-			{
-				fclose(fp);
-			}
-		}
-	};
 
 	static void gl_set_border(float border, const char* stipple = nullptr) {
 		// border=0: fill, border>0: stroke
@@ -116,19 +100,6 @@ namespace opengl
 		glColor4f(r, g, b, a);
 	}
 
-	struct Image {
-		std::vector<uint8_t> data;
-		int width = 0, height = 0, channels = 0;
-
-		static int lua_index(lua_State* L) {
-			ARG_CPPDATA(1, Image, image);
-			METATABLE_BEGIN(Image, *image);
-			METATABLE_INDEX(integer, width, int);
-			METATABLE_INDEX(integer, height, int);
-			METATABLE_INDEX(integer, channels, int);
-			METATABLE_END();
-		}
-	};
 
 	struct Texture {
 		GLuint textureId = 0;
@@ -149,38 +120,7 @@ namespace opengl
 		}
 	};
 
-	static void create_image(Image* img, int width, int height, int channels) {
-		img->width = width;
-		img->height = height;
-		img->channels = channels;
-		img->data.resize(img->width * img->height * img->channels);
-	}
 
-	static bool load_image(Image* img, const char* filename, int channels = 0, bool flipOnLoad = false) {
-		FileGuard fileGuard(filename);
-		if (!fileGuard.fp) [[unlikely]] {
-			return false;
-			}
-		stbi_set_flip_vertically_on_load(flipOnLoad);
-		uint8_t* p = stbi_load_from_file(fileGuard.fp, &img->width, &img->height, &img->channels, channels);
-		if (!p) [[unlikely]] {
-			return false;
-			}
-		img->data.assign(p, p + img->width * img->height * img->channels);
-		stbi_image_free(p);
-		return true;
-	}
-
-	static bool load_image_from_memory(Image* img, const char* data, size_t size, int channels = 0, bool flipOnLoad = false) {
-		stbi_set_flip_vertically_on_load(flipOnLoad);
-		uint8_t* p = stbi_load_from_memory((const stbi_uc*)data, size, &img->width, &img->height, &img->channels, channels);
-		if (!p) [[unlikely]] {
-			return false;
-			}
-		img->data.assign(p, p + img->width * img->height * img->channels);
-		stbi_image_free(p);
-		return true;
-	}
 
 	static void gl_draw_image(const uint8_t* data, int width, int height, int channels) {
 		if (channels < 1 || channels > 4) [[unlikely]] {
@@ -212,131 +152,10 @@ namespace opengl
 		return 1;
 	}
 
-	static int CreateEmptyImage(lua_State* L) {
-		ARG(1, integer, int, width);
-		ARG(2, integer, int, height);
-		ARG(3, integer, int, channels);
-		auto img = NEW_CPPDATA(Image);
-		create_image(img, width, height, channels);
-		return 1;
-	}
 
-	static int ReadImage(lua_State* L) {
-		ARG(1, string, const char*, path);
-		ARG_DEF(2, integer, int, channels, 0);
-		ARG_DEF(3, boolean, bool, flipOnLoad, false);
-		ARG_DEF(4, boolean, bool, useCached, true);
-		auto img = NEW_CPPDATA(Image);
-		if (!load_image(img, path, channels, flipOnLoad)) {
-			local.lua.lua_pop(L, 1);
-			return 0;
-		}
-		return 1;
-	}
 
-	static int ReadImageFromMemory(lua_State* L) {
-		ARG(1, stdstringview, std::string_view, data);
-		ARG_DEF(2, integer, int, channels, 0);
-		ARG_DEF(3, boolean, bool, flipOnLoad, true);
-		auto img = NEW_CPPDATA(Image);
-		if (!load_image_from_memory(img, data.data(), data.size(), channels, flipOnLoad)) {
-			local.lua.lua_pop(L, 1);
-			return 0;
-		}
-		return 1;
-	}
 
-	static int GetImageSize(lua_State* L) {
-		ARG_CPPDATA(1, Image, image);
 
-		RET_TABLE();
-		RET_TABLE_KEY(string, "width", integer, image->width);
-		RET_TABLE_KEY(string, "height", integer, image->height);
-		RET_TABLE_KEY(string, "channels", integer, image->channels);
-		RET_TABLE_KEY(string, "data_address", integer, reinterpret_cast<uintptr_t>(image->data.data()));
-		RET_TABLE_END();
-	}
-
-	static int ImageDuplicate(lua_State* L) {
-		ARG_CPPDATA(1, Image, image);
-		*NEW_CPPDATA(Image) = *image;
-		return 1;
-	}
-
-	static int ImageResize(lua_State* L) {
-		ARG_CPPDATA(1, Image, image);
-		ARG_DEF(2, number, uint32_t, width, 0);
-		ARG_DEF(3, number, uint32_t, height, 0);
-
-		if (width == 0) width = image->width;
-		if (height == 0) height = image->height;
-		if (width != image->width || height != image->height) {
-			std::vector<uint8_t> newData(width * height * image->channels);
-			auto unroll = [image, width, height,
-				scaleWidth = (float)image->width / width, scaleHeight = (float)image->height / height,
-				oldData = image->data.data(), newData = newData.data()] <int channels> {
-				if (image->channels == channels) {
-					for (size_t y = 0; y < height; y++) {
-						uint8_t* oldLine = oldData + (uint32_t)(y * scaleHeight) * image->width * image->channels;
-						uint8_t* newLine = newData + y * width * image->channels;
-						for (size_t x = 0; x < width; x++) {
-							uint32_t oldX = (uint32_t)(x * scaleWidth);
-							uint8_t* oldPixel = oldLine + oldX * image->channels;
-							uint8_t* newPixel = newLine + x * image->channels;
-							memcpy(newPixel, oldPixel, channels * sizeof(uint8_t));
-						}
-					}
-				}
-			};
-			unroll.operator() < 1 > ();
-			unroll.operator() < 2 > ();
-			unroll.operator() < 3 > ();
-			unroll.operator() < 4 > ();
-			image->data = std::move(newData);
-			image->width = width;
-			image->height = height;
-		}
-
-		return 0;
-	}
-
-	static int ImagePutPixel(lua_State* L) {
-		ARG_CPPDATA(1, Image, image);
-		ARG(2, number, uint32_t, x);
-		ARG(3, number, uint32_t, y);
-		ARG_DEF(4, integer, uint32_t, color, 0xFFFFFFFF);
-
-		uint8_t* pixel = image->data.data() + (y * image->width + x) * image->channels;
-		if (image->channels > 0) [[likely]]
-			pixel[0] = (color >> 24) & 0xFF;
-			if (image->channels > 1) [[likely]]
-				pixel[1] = (color >> 16) & 0xFF;
-				if (image->channels > 2) [[likely]]
-					pixel[2] = (color >> 8) & 0xFF;
-					if (image->channels > 3)
-						pixel[3] = color & 0xFF;
-
-					return 0;
-	}
-
-	static int ImageGetPixel(lua_State* L) {
-		ARG_CPPDATA(1, Image, image);
-		ARG(2, number, uint32_t, x);
-		ARG(3, number, uint32_t, y);
-
-		uint32_t color = 0;
-		uint8_t const* pixel = image->data.data() + (y * image->width + x) * image->channels;
-		if (image->channels > 0) [[likely]]
-			color |= pixel[0] << 24;
-			if (image->channels > 1) [[likely]]
-				color |= pixel[1] << 16;
-				if (image->channels > 2) [[likely]]
-					color |= pixel[2] << 8;
-					if (image->channels > 3)
-						color |= pixel[3];
-
-					RET(integer, color);
-	}
 
 	static int DrawImage(lua_State* L) {
 		ARG(1, number, float, x);
@@ -445,14 +264,6 @@ namespace opengl
 		MODULE_FUNC(DrawTriangle);
 		MODULE_FUNC(DrawRect);
 
-		MODULE_FUNC(ReadImage);
-		MODULE_FUNC(ReadImageFromMemory);
-		MODULE_FUNC(CreateEmptyImage);
-		MODULE_FUNC(GetImageSize);
-		MODULE_FUNC(ImageDuplicate);
-		MODULE_FUNC(ImageResize);
-		MODULE_FUNC(ImageGetPixel);
-		MODULE_FUNC(ImagePutPixel);
 		MODULE_FUNC(DrawImage);
 		MODULE_FUNC(ImageTexture);
 
