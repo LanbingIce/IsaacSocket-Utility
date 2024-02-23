@@ -64,6 +64,21 @@ struct GLStateGuard {
     GLStateGuard(GLStateGuard&&) = delete;
 };
 
+struct FileGuard
+{
+    FILE* fp;
+    FileGuard(const char * filename) {
+        _wfopen_s(&fp, std::filesystem::path((const char8_t*)filename).c_str(), L"rb");
+    }
+
+    ~FileGuard() {
+        if (fp)
+        {
+            fclose(fp);
+        }
+    }
+};
+
 static void gl_set_border(float border, const char* stipple = nullptr) {
     // border=0: fill, border>0: stroke
     if (border > 0) {
@@ -142,12 +157,12 @@ static void create_image(Image *img, int width, int height, int channels) {
 }
 
 static bool load_image(Image *img, const char* filename, int channels = 0, bool flipOnLoad = false) {
-    FILE *fp;
-    if (_wfopen_s(&fp, std::filesystem::path((const char8_t *)filename).c_str(), L"rb")) [[unlikely]] {
+    FileGuard fileGuard(filename);
+    if (!fileGuard.fp) [[unlikely]] {
         return false;
     }
     stbi_set_flip_vertically_on_load(flipOnLoad);
-    uint8_t* p = stbi_load_from_file(fp, &img->width, &img->height, &img->channels, channels);
+    uint8_t* p = stbi_load_from_file(fileGuard.fp, &img->width, &img->height, &img->channels, channels);
     if (!p) [[unlikely]] {
         return false;
     }
