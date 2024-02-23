@@ -96,6 +96,12 @@ namespace imgui {
 		return 0;
 	}
 
+	static int BeginListBox(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG_UDATA_DEF(2, ImVec2, const ::ImVec2*, size, &VEC2_0);
+		RET(boolean, ImGui::BeginListBox(label, *size));
+	}
+
 	static int BeginMainMenuBar(lua_State* L) {
 		RET(boolean, ImGui::BeginMainMenuBar());
 	}
@@ -192,6 +198,11 @@ namespace imgui {
 		return 0;
 	}
 
+	static int EndListBox(lua_State* L) {
+		ImGui::EndListBox();
+		return 0;
+	}
+
 	static int EndMainMenuBar(lua_State* L) {
 		ImGui::EndMainMenuBar();
 		return 0;
@@ -268,6 +279,74 @@ namespace imgui {
 		return 0;
 	}
 
+	static int ImageButton(lua_State* L) {
+		ARG(1, string, const char*, str_id);
+		ARG(2, integer, ImTextureID, user_texture_id);
+		ARG_UDATA_DEF(3, ImVec2, const ::ImVec2*, image_size, &VEC2_0);
+		ARG_UDATA_DEF(4, ImVec2, const ::ImVec2*, uv0, &VEC2_0);
+		ARG_UDATA_DEF(5, ImVec2, const ::ImVec2*, uv1, &VEC2_1);
+		ARG_UDATA_DEF(6, ImVec4, const ::ImVec4*, bg_col, &VEC4_0);
+		ARG_UDATA_DEF(7, ImVec4, const ::ImVec4*, tint_col, &VEC4_1);
+		RET(boolean, ImGui::ImageButton(str_id, user_texture_id, *image_size, *uv0, *uv1, *bg_col, *tint_col));
+	}
+
+	static int InputDouble(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, number, double, v);
+		ARG_DEF(3, number, double, step, 0.0);
+		ARG_DEF(4, number, double, step_fast, 0.0);
+		ARG_DEF(5, string, const char*, format, "%.6f");
+		ARG_DEF(6, integer, ImGuiInputTextFlags, flags, 0);
+		local.lua.lua_pushboolean(L, ImGui::InputDouble(label, &v, step, step_fast, format, flags));
+		local.lua.lua_pushnumber(L, v);
+		return 2;
+	}
+
+	static int InputFloat(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, number, float, v);
+		ARG_DEF(3, number, float, step, 0.0f);
+		ARG_DEF(4, number, float, step_fast, 0.0f);
+		ARG_DEF(5, string, const char*, format, "%.3f");
+		ARG_DEF(6, integer, ImGuiInputTextFlags, flags, 0);
+		local.lua.lua_pushboolean(L, ImGui::InputFloat(label, &v, step, step_fast, format, flags));
+		local.lua.lua_pushnumber(L, v);
+		return 2;
+	}
+
+	static int InputFloat2(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorfloat, vector<float>, v);
+		ARG_DEF(3, string, const char*, format, "%.3f");
+		ARG_DEF(4, integer, ImGuiInputTextFlags, flags, 0);
+		v.resize(2);
+		local.lua.lua_pushboolean(L, ImGui::InputFloat2(label, v.data(), format, flags));
+		local.lua.lua_pushvectorfloat(L, v);
+		return 2;
+	}
+
+	static int InputFloat3(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorfloat, vector<float>, v);
+		ARG_DEF(3, string, const char*, format, "%.3f");
+		ARG_DEF(4, integer, ImGuiInputTextFlags, flags, 0);
+		v.resize(3);
+		local.lua.lua_pushboolean(L, ImGui::InputFloat3(label, v.data(), format, flags));
+		local.lua.lua_pushvectorfloat(L, v);
+		return 2;
+	}
+
+	static int InputFloat4(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorfloat, vector<float>, v);
+		ARG_DEF(3, string, const char*, format, "%.3f");
+		ARG_DEF(4, integer, ImGuiInputTextFlags, flags, 0);
+		v.resize(4);
+		local.lua.lua_pushboolean(L, ImGui::InputFloat4(label, v.data(), format, flags));
+		local.lua.lua_pushvectorfloat(L, v);
+		return 2;
+	}
+
 	static int InputInt(lua_State* L) {
 		ARG(1, string, const char*, label);
 		ARG(2, integer, int, v);
@@ -336,6 +415,18 @@ namespace imgui {
 		return 0;
 	}
 
+	static int ListBox(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, integer, int, current_item);
+		ARG(3, vectorcstring, vector<const char* >, items);
+		ARG(4, integer, int, items_count);
+		ARG_DEF(5, integer, int, height_in_items, -1);
+		items.resize(items_count);
+		local.lua.lua_pushboolean(L, ImGui::ListBox(label, &current_item, items.data(), items_count, height_in_items));
+		local.lua.lua_pushinteger(L, current_item);
+		return 2;
+	}
+
 	static int MenuItem(lua_State* L) {
 		ARG(1, string, const char*, label);
 		ARG_DEF(2, string, const char*, shortcut, NULL);
@@ -402,7 +493,7 @@ namespace imgui {
 		ARG_DEF(3, integer, ImGuiSelectableFlags, flags, 0);
 		ARG_UDATA_DEF(4, ImVec2, const ::ImVec2*, size_arg, &VEC2_0);
 		local.lua.lua_pushboolean(L, ImGui::Selectable(label, selected, flags, *size_arg));
-		local.lua.lua_pushinteger(L, selected);
+		local.lua.lua_pushboolean(L, selected);
 		return 2;
 	}
 
@@ -516,12 +607,6 @@ namespace imgui {
 	static int ShowMetricsWindow(lua_State* L) {
 		ARG_DEF(1, boolean, bool, open, true);
 		ImGui::ShowMetricsWindow(&open);
-		RET(boolean, open);
-	}
-
-	static int ShowStackToolWindow(lua_State* L) {
-		ARG_DEF(1, boolean, bool, open, true);
-		ImGui::ShowStackToolWindow(&open);
 		RET(boolean, open);
 	}
 
@@ -715,7 +800,7 @@ namespace imgui {
 		// MODULE_FUNC(BeginDragDropTarget);
 		MODULE_FUNC(BeginGroup);
 		// MODULE_FUNC(BeginItemTooltip);
-		// MODULE_FUNC(BeginListBox);
+		MODULE_FUNC(BeginListBox);
 		MODULE_FUNC(BeginMainMenuBar);
 		MODULE_FUNC(BeginMenu);
 		MODULE_FUNC(BeginMenuBar);
@@ -751,7 +836,7 @@ namespace imgui {
 		// MODULE_FUNC(ColorPicker4);
 		// MODULE_FUNC(Columns);
 		MODULE_FUNC(Combo);		//重载2/3 未实现 bool ImGui::Combo(const char* label, int* current_item, const char* (*getter)(void* user_data, int idx), void* user_data, int items_count, int popup_max_height_in_items)
-		// MODULE_FUNC(CreateContext);		//在c++中已调用
+		// MODULE_FUNC(CreateContext);		//只能在c++中调用
 		// MODULE_FUNC(DebugCheckVersionAndDataLayout);
 		// MODULE_FUNC(DebugFlashStyleColor);
 		// MODULE_FUNC(DebugTextEncoding);
@@ -776,9 +861,9 @@ namespace imgui {
 		// MODULE_FUNC(EndDisabled);
 		// MODULE_FUNC(EndDragDropSource);
 		// MODULE_FUNC(EndDragDropTarget);
-		// MODULE_FUNC(EndFrame);
+		// MODULE_FUNC(EndFrame);	//只能在c++中调用
 		MODULE_FUNC(EndGroup);
-		// MODULE_FUNC(EndListBox);
+		MODULE_FUNC(EndListBox);
 		MODULE_FUNC(EndMainMenuBar);
 		MODULE_FUNC(EndMenu);
 		MODULE_FUNC(EndMenuBar);
@@ -849,13 +934,13 @@ namespace imgui {
 		MODULE_FUNC(GetWindowSize);
 		// MODULE_FUNC(GetWindowWidth);
 		MODULE_FUNC(Image);
-		// MODULE_FUNC(ImageButton);
+		MODULE_FUNC(ImageButton);
 		// MODULE_FUNC(Indent);
-		// MODULE_FUNC(InputDouble);
-		// MODULE_FUNC(InputFloat);
-		// MODULE_FUNC(InputFloat2);
-		// MODULE_FUNC(InputFloat3);
-		// MODULE_FUNC(InputFloat4);
+		MODULE_FUNC(InputDouble);
+		MODULE_FUNC(InputFloat);
+		MODULE_FUNC(InputFloat2);
+		MODULE_FUNC(InputFloat3);
+		MODULE_FUNC(InputFloat4);
 		MODULE_FUNC(InputInt);
 		MODULE_FUNC(InputInt2);
 		MODULE_FUNC(InputInt3);
@@ -898,8 +983,8 @@ namespace imgui {
 		// MODULE_FUNC(IsWindowFocused);
 		// MODULE_FUNC(IsWindowHovered);
 		MODULE_FUNC(LabelText);
-		// MODULE_FUNC(LabelTextV);
-		// MODULE_FUNC(ListBox);
+		// MODULE_FUNC(LabelTextV);		//va_list，无法暴露给lua
+		MODULE_FUNC(ListBox);
 		// MODULE_FUNC(LoadIniSettingsFromDisk);
 		// MODULE_FUNC(LoadIniSettingsFromMemory);
 		// MODULE_FUNC(LogButtons);
@@ -941,7 +1026,7 @@ namespace imgui {
 		// MODULE_FUNC(PushTabStop);
 		// MODULE_FUNC(PushTextWrapPos);
 		MODULE_FUNC(RadioButton);
-		// MODULE_FUNC(Render);
+		// MODULE_FUNC(Render);			//只能在c++中调用
 		// MODULE_FUNC(ResetMouseDragDelta);
 		MODULE_FUNC(SameLine);
 		// MODULE_FUNC(SaveIniSettingsToDisk);
@@ -1000,7 +1085,7 @@ namespace imgui {
 		MODULE_FUNC(ShowFontSelector);
 		MODULE_FUNC(ShowIDStackToolWindow);
 		MODULE_FUNC(ShowMetricsWindow);
-		MODULE_FUNC(ShowStackToolWindow);
+		// MODULE_FUNC(ShowStackToolWindow);		过时方法
 		// MODULE_FUNC(ShowStyleEditor);
 		MODULE_FUNC(ShowStyleSelector);
 		MODULE_FUNC(ShowUserGuide);
