@@ -107,7 +107,10 @@ namespace callback {
 			global->connectionState = state::CONNECTED;
 			break;
 		case state::CONNECTED:
-			function::IsaacSocketUpdate();
+			if (function::IsaacSocketUpdate())
+			{
+				break;
+			}
 
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplWin32_NewFrame();
