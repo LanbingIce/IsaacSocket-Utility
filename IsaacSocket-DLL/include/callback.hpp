@@ -76,14 +76,14 @@ namespace callback {
 			ImGui::BulletText("CTRL+单击鼠标左键 可以在滑动或拖动控件中直接输入值。");
 			ImGui::BulletText("使用 TAB / SHIFT+TAB 键在可键盘编辑的字段之间循环切换。");
 			if (io.FontAllowUserScaling)
-				ImGui::BulletText("CTRL+鼠标滚轮可以缩放窗口内容");
+				ImGui::BulletText("CTRL+鼠标滚轮可以缩放窗口内容。");
 			ImGui::BulletText("当你输入文本时：\n");
 			ImGui::Indent();
 			ImGui::BulletText("CTRL+左/右方向键可以进行单词跳转。");
 			ImGui::BulletText("CTRL+A 或者 双击鼠标左键可以全选。");
 			ImGui::BulletText("CTRL+X/C/V 可以进行剪切/复制/粘贴。");
 			ImGui::BulletText("CTRL+Z,CTRL+Y 可以进行 撤销/重做。");
-			ImGui::BulletText("ESC键：完全撤销本次编辑");
+			ImGui::BulletText("ESC键：完全撤销本次编辑。");
 			ImGui::Unindent();
 			ImGui::End();
 		}
