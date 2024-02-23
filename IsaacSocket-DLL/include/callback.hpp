@@ -123,6 +123,7 @@ namespace callback {
 		MENU_ITEM(操作说明, local.imgui.ShowUserGuide, local.imgui.ShowUserGuide = !local.imgui.ShowUserGuide);
 		MENU_ITEM(关于ImGui, local.imgui.ShowAboutWindow, local.imgui.ShowAboutWindow = !local.imgui.ShowAboutWindow);
 		MENU_END();
+		return 0;
 	}
 
 #undef MENU_BEGIN
@@ -257,7 +258,7 @@ namespace callback {
 		}
 		if (text == "test")
 		{
-		
+
 		}
 
 		if (text == "lualua")
