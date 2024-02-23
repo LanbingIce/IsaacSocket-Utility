@@ -20,8 +20,6 @@ namespace image
 		}
 	};
 
-
-
 	static void create_image(Image* img, int width, int height, int channels) {
 		img->width = width;
 		img->height = height;
@@ -55,7 +53,7 @@ namespace image
 		return true;
 	}
 
-	static int ReadImage(lua_State* L) {
+	static int LoadFromFile(lua_State* L) {
 		ARG(1, string, const char*, path);
 		ARG_DEF(2, integer, int, channels, 0);
 		ARG_DEF(3, boolean, bool, flipOnLoad, false);
@@ -68,7 +66,7 @@ namespace image
 		return 1;
 	}
 
-	static int CreateEmptyImage(lua_State* L) {
+	static int Create(lua_State* L) {
 		ARG(1, integer, int, width);
 		ARG(2, integer, int, height);
 		ARG(3, integer, int, channels);
@@ -77,9 +75,7 @@ namespace image
 		return 1;
 	}
 
-
-
-	static int ReadImageFromMemory(lua_State* L) {
+	static int LoadFromMemory(lua_State* L) {
 		ARG(1, stdstringview, std::string_view, data);
 		ARG_DEF(2, integer, int, channels, 0);
 		ARG_DEF(3, boolean, bool, flipOnLoad, true);
@@ -91,24 +87,13 @@ namespace image
 		return 1;
 	}
 
-	static int GetImageSize(lua_State* L) {
-		ARG_CPPDATA(1, Image, image);
-
-		RET_TABLE();
-		RET_TABLE_KEY(string, "width", integer, image->width);
-		RET_TABLE_KEY(string, "height", integer, image->height);
-		RET_TABLE_KEY(string, "channels", integer, image->channels);
-		RET_TABLE_KEY(string, "data_address", integer, reinterpret_cast<uintptr_t>(image->data.data()));
-		RET_TABLE_END();
-	}
-
-	static int ImageDuplicate(lua_State* L) {
+	static int Duplicate(lua_State* L) {
 		ARG_CPPDATA(1, Image, image);
 		*NEW_CPPDATA(Image) = *image;
 		return 1;
 	}
 
-	static int ImageResize(lua_State* L) {
+	static int Resize(lua_State* L) {
 		ARG_CPPDATA(1, Image, image);
 		ARG_DEF(2, number, uint32_t, width, 0);
 		ARG_DEF(3, number, uint32_t, height, 0);
@@ -146,7 +131,7 @@ namespace image
 	}
 
 
-	static int ImagePutPixel(lua_State* L) {
+	static int PutPixel(lua_State* L) {
 		ARG_CPPDATA(1, Image, image);
 		ARG(2, number, uint32_t, x);
 		ARG(3, number, uint32_t, y);
@@ -165,7 +150,7 @@ namespace image
 					return 0;
 	}
 
-	static int ImageGetPixel(lua_State* L) {
+	static int GetPixel(lua_State* L) {
 		ARG_CPPDATA(1, Image, image);
 		ARG(2, number, uint32_t, x);
 		ARG(3, number, uint32_t, y);
@@ -188,15 +173,13 @@ namespace image
 	static RegisterModule Init = [] {
 		MODULE_BEGIN(Image);
 
-		MODULE_FUNC(ReadImage);
-		MODULE_FUNC(ReadImageFromMemory);
-		MODULE_FUNC(CreateEmptyImage);
-		MODULE_FUNC(GetImageSize);
-		MODULE_FUNC(ImageDuplicate);
-		MODULE_FUNC(ImageResize);
-		MODULE_FUNC(ImageGetPixel);
-		MODULE_FUNC(ImagePutPixel);
-
+		MODULE_FUNC(LoadFromFile);
+		MODULE_FUNC(LoadFromMemory);
+		MODULE_FUNC(Create);
+		MODULE_FUNC(Duplicate);
+		MODULE_FUNC(Resize);
+		MODULE_FUNC(GetPixel);
+		MODULE_FUNC(PutPixel);
 
 		MODULE_END();
 		};
