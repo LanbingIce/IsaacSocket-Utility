@@ -113,7 +113,7 @@ namespace memory
 		RET(integer, (uint32_t)local.isaac);
 	}
 
-    static RegisterModule Init = [] {
+	static RegisterModule Init = [] {
 		MODULE_BEGIN(Memory);
 
 		MODULE_FUNC(ReadMemory);
@@ -144,5 +144,5 @@ namespace memory
 		MODULE_FUNC(CalcAddress);
 
 		MODULE_END();
-	};
+		};
 }

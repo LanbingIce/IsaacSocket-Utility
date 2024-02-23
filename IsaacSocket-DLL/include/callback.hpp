@@ -15,7 +15,7 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 #define CHECK_STATE()if (global->connectionState != state::CONNECTED)return 0
 namespace callback {
 
-// 小彭老师专用代码开始
+	// 小彭老师专用代码开始
 #ifndef __MINGW32__
 #define CHECK_RELOAD() // 不影响msvc
 #else
@@ -34,31 +34,31 @@ namespace callback {
             } \
         } \
     }
-static bool LuaReady() {
-    isaac::LuaEngine* luaEngine = local.isaac->luaEngine;
-    if (!luaEngine) {
-        return false;
-    }
-    lua_State* L = luaEngine->L;
-    if (!L) {
-        return false;
-    }
-    int top = local.lua.lua_gettop(L);
-    local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
-    bool ok = !local.lua.lua_isnoneornil(L, -1);
-    if (ok) {
-        local.lua.lua_pushstring(L, "IsaacSocket");
-        local.lua.lua_gettable(L, -2);
-        ok = !local.lua.lua_isnoneornil(L, -1);
-        if (ok) {
-            local.lua.lua_setglobal(L, "IsaacSocket");
-        }
-    }
-    local.lua.lua_settop(L, top);
-    return ok;
-}
+	static bool LuaReady() {
+		isaac::LuaEngine* luaEngine = local.isaac->luaEngine;
+		if (!luaEngine) {
+			return false;
+		}
+		lua_State* L = luaEngine->L;
+		if (!L) {
+			return false;
+		}
+		int top = local.lua.lua_gettop(L);
+		local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
+		bool ok = !local.lua.lua_isnoneornil(L, -1);
+		if (ok) {
+			local.lua.lua_pushstring(L, "IsaacSocket");
+			local.lua.lua_gettable(L, -2);
+			ok = !local.lua.lua_isnoneornil(L, -1);
+			if (ok) {
+				local.lua.lua_setglobal(L, "IsaacSocket");
+			}
+		}
+		local.lua.lua_settop(L, top);
+		return ok;
+	}
 #endif
-// 小彭老师专用代码结束
+	// 小彭老师专用代码结束
 
 #define CHECK_INIT()if (!local.initialized)return 0
 #define CHECK_STATE()if (global->connectionState != state::CONNECTED)return 0

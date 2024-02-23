@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "lua.hpp"
 #include "state.hpp"
@@ -7,12 +7,12 @@ namespace lua {
 #define NEW_CPPDATA(type) new (local.lua.luaCPP_newuserdata<type>(L, type::lua_index, lua::lua_cppdata_gc<type>)) type
 #define ARG_CPPDATA(index,type,name) type *name = local.lua.luaCPP_getuserdata<type>(L, index)
 
-template <class T>
-static int lua_cppdata_gc(lua_State *L) {
-    T *p = local.lua.luaCPP_getuserdata<T>(L, 1);
-    p->~T();
-    return 0;
-}
+	template <class T>
+	static int lua_cppdata_gc(lua_State* L) {
+		T* p = local.lua.luaCPP_getuserdata<T>(L, 1);
+		p->~T();
+		return 0;
+	}
 }
 
 #define SET_METATABLE(name) local.lua.luaL_newmetatable(L, #name);luaL_Reg mt_##name[] = { { "__index", name##__index },{ "__newindex", name##__index },{ NULL, NULL } };local.lua.luaL_setfuncs(L, mt_##name, 0);local.lua.lua_setmetatable(L, -2)
@@ -60,15 +60,15 @@ static int lua_cppdata_gc(lua_State *L) {
 #define METATABLE_END()return local.lua.luaL_error(L, "Invalid member access.")
 
 struct RegisterModule {
-    inline static std::vector<std::function<void()>> initCallbacks;
+	inline static std::vector<std::function<void()>> initCallbacks;
 
-    RegisterModule(auto &&f) {
-        initCallbacks.emplace_back(std::move(f));
-    }
+	RegisterModule(auto&& f) {
+		initCallbacks.emplace_back(std::move(f));
+	}
 
-    static void InitAllModules() {
-        for (auto const &callback: initCallbacks) {
-            callback();
-        }
-    }
+	static void InitAllModules() {
+		for (auto const& callback : initCallbacks) {
+			callback();
+		}
+	}
 };

@@ -106,11 +106,11 @@ namespace function {
 
 	static void IsaacSocketUpdate() {
 		if (local.needReload) [[unlikely]]
-		{
-			local.needReload = false;
-			function::ReloadLuaWithoutDeleteRoom();
-			return;
-		}
+			{
+				local.needReload = false;
+				function::ReloadLuaWithoutDeleteRoom();
+				return;
+			}
 	}
 
 	static void AllocConsole() {

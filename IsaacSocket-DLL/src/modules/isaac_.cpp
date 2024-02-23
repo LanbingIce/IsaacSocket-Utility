@@ -79,9 +79,9 @@ namespace isaac_ {
 		METATABLE_END();
 	}
 
-    static RegisterModule Init = [] {
+	static RegisterModule Init = [] {
 		MODULE_BEGIN(Isaac);
 		MODULE_UDATA(Options, isaac::Options, local.isaac->manager->options);
 		MODULE_END();
-	};
+		};
 }
