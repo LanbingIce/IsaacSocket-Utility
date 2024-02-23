@@ -89,6 +89,124 @@ namespace callback {
 		}
 	}
 
+#define MENU_BEGIN(name)if (ImGui::BeginMenu(#name)){
+#define MENU_END()ImGui::EndMenu();}
+#define MENU_ITEM(name,selected,e)if (ImGui::MenuItem(#name, nullptr, selected)){e;}
+
+	static int ImGuiMainMenuBarRender() {
+
+		MENU_BEGIN(IsaacSocket);
+		MENU_ITEM(启用系统控制台, local.allocConsole, local.allocConsole = !local.allocConsole; if (local.allocConsole)function::AllocConsole(); else function::FreeConsole(););
+		MENU_BEGIN(实验性功能);
+		MENU_ITEM(重载lua, false, local.needReload = true);
+		MENU_END();
+		ImGui::Separator();
+		MENU_ITEM(关于 IsaacSocket, false, local.imgui.ShowISAbout = true);
+		MENU_END();
+		MENU_BEGIN(ImGui);
+		MENU_BEGIN(显示主菜单条);
+		MENU_ITEM(默认, local.menuBarDisplayMode == state::NEVER, local.menuBarDisplayMode = state::NEVER; config::SetInt({ "IsaacSocket", "MenuBar" }, 0));
+		MENU_ITEM(按下Tab键时, local.menuBarDisplayMode == state::TAB_HOLD, local.menuBarDisplayMode = state::TAB_HOLD; config::SetInt({ "IsaacSocket","MenuBar" }, 1));
+		MENU_ITEM(总是显示, local.menuBarDisplayMode == state::ALWAYS, local.menuBarDisplayMode = state::ALWAYS; config::SetInt({ "IsaacSocket", "MenuBar" }, 2));
+		MENU_END();
+		MENU_BEGIN(配色);
+		MENU_ITEM(默认, local.styleColor == state::CLASSIC, local.styleColor = state::CLASSIC; ImGui::StyleColorsClassic(); config::SetInt({ "IsaacSocket", "StyleColors" }, 0));
+		MENU_ITEM(浅色, local.styleColor == state::LIGHT, local.styleColor = state::LIGHT; ImGui::StyleColorsLight(); config::SetInt({ "IsaacSocket", "StyleColors" }, 1));
+		MENU_ITEM(深色, local.styleColor == state::DARK, local.styleColor = state::DARK; ImGui::StyleColorsDark(); config::SetInt({ "IsaacSocket","StyleColors" }, 2));
+		MENU_END();
+		ImGui::Separator();
+		MENU_BEGIN(调试工具);
+		MENU_ITEM(示例窗口, local.imgui.ShowDemoWindow, local.imgui.ShowDemoWindow = !local.imgui.ShowDemoWindow);
+		MENU_ITEM(调试日志, local.imgui.ShowDebugLogWindow, local.imgui.ShowDebugLogWindow = !local.imgui.ShowDebugLogWindow);
+		MENU_END();
+		ImGui::Separator();
+		MENU_ITEM(操作说明, local.imgui.ShowUserGuide, local.imgui.ShowUserGuide = !local.imgui.ShowUserGuide);
+		MENU_ITEM(关于ImGui, local.imgui.ShowAboutWindow, local.imgui.ShowAboutWindow = !local.imgui.ShowAboutWindow);
+		MENU_END();
+	}
+
+#undef MENU_BEGIN
+#undef MENU_END
+#undef MENU_ITEM
+
+	static int ImGuiWindowRender() {
+		if (local.imgui.ShowDemoWindow)
+		{
+			ImGui::ShowDemoWindow(&local.imgui.ShowDemoWindow);
+		}
+		if (local.imgui.ShowAboutWindow)
+		{
+			ImGui::ShowAboutWindow(&local.imgui.ShowAboutWindow);
+		}
+		if (local.imgui.ShowDebugLogWindow)
+		{
+			ImGui::ShowDebugLogWindow(&local.imgui.ShowDebugLogWindow);
+		}
+		if (local.imgui.ShowUserGuide)
+		{
+			ShowUserGuide(&local.imgui.ShowUserGuide);
+		}
+		if (local.imgui.ShowISAbout)
+		{
+			ImGuiWindowFlags flags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings;
+			if (ImGui::Begin("关于 IsaacSocket", &local.imgui.ShowISAbout, flags))
+			{
+				lua_State* L = local.isaac->luaEngine->L;
+				size_t top = local.lua.lua_gettop(L);
+				local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
+				local.lua.lua_pushstring(L, "modVersion");
+				local.lua.lua_gettable(L, -2);
+				ARG_DEF(-1, string, const char*, ver, "1.0");
+				local.lua.lua_settop(L, top);
+				ImGui::Text("IsaacSocket");
+				ImGui::Text("版本号：%s-%s", global->version, ver);
+				ImGui::End();
+			}
+		}
+		return 0;
+	}
+
+	static int ImGuiRender() {
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+
+		bool font16 = local.isaac->screenPointScale == 1.0f;
+		if (font16)
+		{
+			ImGui::PushFont(local.font16);
+		}
+
+		if ((local.isaac->game->pauseMenu.state || local.menuBarDisplayMode == state::ALWAYS || local.menuBarDisplayMode == state::TAB_HOLD && ImGui::IsKeyDown(ImGuiKey_Tab)) && ImGui::BeginMainMenuBar())
+		{
+			ImGuiMainMenuBarRender();
+			FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_MAIN_MENU_BAR_RENDER);
+			FAST_MOD_CALLBACK_END();
+			ImGui::EndMainMenuBar();
+		}
+
+		ImGuiWindowRender();
+
+		FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_RENDER);
+		FAST_MOD_CALLBACK_END();
+
+		if (font16)
+		{
+			ImGui::PopFont();
+		}
+
+		ImGui::Render();
+
+		// Draw the overlay
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+		MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
+		MOD_CALLBACK_CALL();
+		MOD_CALLBACK_END();
+		return 0;
+	}
+
 	// SwapBuffers之前，只要游戏进程存在就一直触发，返回1则取消此次交换
 	static int PreSwapBuffers(HDC hdc)
 	{
@@ -111,93 +229,7 @@ namespace callback {
 			{
 				break;
 			}
-
-			ImGui_ImplOpenGL3_NewFrame();
-			ImGui_ImplWin32_NewFrame();
-			ImGui::NewFrame();
-
-			bool font16 = local.isaac->screenPointScale == 1.0f;
-			if (font16)
-			{
-				ImGui::PushFont(local.font16);
-			}
-
-#define MENU_BEGIN(name)if (ImGui::BeginMenu(#name)){
-#define MENU_END()ImGui::EndMenu();}
-#define MENU_ITEM(name,selected,e)if (ImGui::MenuItem(#name, nullptr, selected)){e;}
-			bool showMainMenuBar = (local.isaac->game->pauseMenu.state || local.menuBarDisplayMode == state::ALWAYS || local.menuBarDisplayMode == state::TAB_HOLD && ImGui::IsKeyDown(ImGuiKey_Tab)) && ImGui::BeginMainMenuBar();
-			if (showMainMenuBar)
-			{
-				MENU_BEGIN(以撒插座);
-				MENU_ITEM(启用系统控制台, local.allocConsole, local.allocConsole = !local.allocConsole; if (local.allocConsole)function::AllocConsole(); else function::FreeConsole(););
-				MENU_BEGIN(实验性功能);
-				MENU_ITEM(重载lua, false, local.needReload = true);
-				MENU_END();
-				MENU_END();
-				MENU_BEGIN(ImGui);
-				MENU_BEGIN(显示主菜单条);
-				MENU_ITEM(默认, local.menuBarDisplayMode == state::NEVER, local.menuBarDisplayMode = state::NEVER; config::SetInt({ "IsaacSocket", "MenuBar" }, 0));
-				MENU_ITEM(按下Tab键时, local.menuBarDisplayMode == state::TAB_HOLD, local.menuBarDisplayMode = state::TAB_HOLD; config::SetInt({ "IsaacSocket","MenuBar" }, 1));
-				MENU_ITEM(总是显示, local.menuBarDisplayMode == state::ALWAYS, local.menuBarDisplayMode = state::ALWAYS; config::SetInt({ "IsaacSocket", "MenuBar" }, 2));
-				MENU_END();
-				MENU_BEGIN(配色);
-				MENU_ITEM(默认, local.styleColor == state::CLASSIC, local.styleColor = state::CLASSIC; ImGui::StyleColorsClassic(); config::SetInt({ "IsaacSocket", "StyleColors" }, 0));
-				MENU_ITEM(浅色, local.styleColor == state::LIGHT, local.styleColor = state::LIGHT; ImGui::StyleColorsLight(); config::SetInt({ "IsaacSocket", "StyleColors" }, 1));
-				MENU_ITEM(深色, local.styleColor == state::DARK, local.styleColor = state::DARK; ImGui::StyleColorsDark(); config::SetInt({ "IsaacSocket","StyleColors" }, 2));
-				MENU_END();
-				ImGui::Separator();
-				MENU_BEGIN(调试工具);
-				MENU_ITEM(示例窗口, local.imgui.ShowDemoWindow, local.imgui.ShowDemoWindow = !local.imgui.ShowDemoWindow);
-				MENU_ITEM(调试日志, local.imgui.ShowDebugLogWindow, local.imgui.ShowDebugLogWindow = !local.imgui.ShowDebugLogWindow);
-				MENU_END();
-				ImGui::Separator();
-				MENU_ITEM(操作说明, local.imgui.ShowUserGuide, local.imgui.ShowUserGuide = !local.imgui.ShowUserGuide);
-				MENU_ITEM(关于ImGui, local.imgui.ShowAboutWindow, local.imgui.ShowAboutWindow = !local.imgui.ShowAboutWindow);
-				MENU_END();
-
-				FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_MAIN_MENU_BAR_RENDER);
-				FAST_MOD_CALLBACK_END();
-
-				ImGui::EndMainMenuBar();
-			}
-
-#undef MENU_BEGIN
-#undef MENU_END
-#undef MENU_ITEM
-
-			if (local.imgui.ShowDemoWindow)
-			{
-				ImGui::ShowDemoWindow(&local.imgui.ShowDemoWindow);
-			}
-			if (local.imgui.ShowAboutWindow)
-			{
-				ImGui::ShowAboutWindow(&local.imgui.ShowAboutWindow);
-			}
-			if (local.imgui.ShowDebugLogWindow)
-			{
-				ImGui::ShowDebugLogWindow(&local.imgui.ShowDebugLogWindow);
-			}
-			if (local.imgui.ShowUserGuide)
-			{
-				ShowUserGuide(&local.imgui.ShowUserGuide);
-			}
-
-			FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_RENDER);
-			FAST_MOD_CALLBACK_END();
-
-			if (font16)
-			{
-				ImGui::PopFont();
-			}
-
-			ImGui::Render();
-
-			// Draw the overlay
-			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-			MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
-			MOD_CALLBACK_CALL();
-			MOD_CALLBACK_END();
+			ImGuiRender();
 			break;
 		}
 		CHECK_INIT();
@@ -225,9 +257,7 @@ namespace callback {
 		}
 		if (text == "test")
 		{
-			cw(config::GetInt({ "IsaacSocket","MenuBar" }));
-			//function::ExecuteCommand("g k1");
-			//function::ConsoleOutput("test");
+		
 		}
 
 		if (text == "lualua")

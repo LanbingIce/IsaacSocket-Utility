@@ -65,6 +65,7 @@ namespace state {
 			bool ShowAboutWindow = false;
 			bool ShowDebugLogWindow = false;
 			bool ShowUserGuide = false;
+			bool ShowISAbout= false;
 		}imgui;
 	};
 
