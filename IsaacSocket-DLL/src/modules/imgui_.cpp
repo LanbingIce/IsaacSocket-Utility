@@ -102,10 +102,6 @@ namespace imgui {
 		RET(boolean, ImGui::BeginListBox(label, *size));
 	}
 
-	static int BeginMainMenuBar(lua_State* L) {
-		RET(boolean, ImGui::BeginMainMenuBar());
-	}
-
 	static int BeginMenu(lua_State* L) {
 		ARG(1, string, const char*, label);
 		ARG_DEF(2, boolean, bool, enabled, true);
@@ -200,11 +196,6 @@ namespace imgui {
 
 	static int EndListBox(lua_State* L) {
 		ImGui::EndListBox();
-		return 0;
-	}
-
-	static int EndMainMenuBar(lua_State* L) {
-		ImGui::EndMainMenuBar();
 		return 0;
 	}
 
@@ -801,7 +792,7 @@ namespace imgui {
 		MODULE_FUNC(BeginGroup);
 		// MODULE_FUNC(BeginItemTooltip);
 		MODULE_FUNC(BeginListBox);
-		MODULE_FUNC(BeginMainMenuBar);
+		// MODULE_FUNC(BeginMainMenuBar);	//只能在C++中调用
 		MODULE_FUNC(BeginMenu);
 		MODULE_FUNC(BeginMenuBar);
 		// MODULE_FUNC(BeginPopup);
@@ -864,7 +855,7 @@ namespace imgui {
 		// MODULE_FUNC(EndFrame);	//只能在c++中调用
 		MODULE_FUNC(EndGroup);
 		MODULE_FUNC(EndListBox);
-		MODULE_FUNC(EndMainMenuBar);
+		//MODULE_FUNC(EndMainMenuBar);		//只能在C++中调用
 		MODULE_FUNC(EndMenu);
 		MODULE_FUNC(EndMenuBar);
 		// MODULE_FUNC(EndPopup);

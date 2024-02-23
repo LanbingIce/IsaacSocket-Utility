@@ -152,6 +152,9 @@ namespace callback {
 				MENU_ITEM(关于ImGui, local.imgui.ShowAboutWindow, local.imgui.ShowAboutWindow = !local.imgui.ShowAboutWindow);
 				MENU_END();
 
+				FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_MAIN_MENU_BAR_RENDER);
+				FAST_MOD_CALLBACK_END();
+
 				ImGui::EndMainMenuBar();
 			}
 
@@ -177,7 +180,6 @@ namespace callback {
 			}
 
 			FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_RENDER);
-			MOD_CALLBACK_ARG(boolean, showMainMenuBar);
 			FAST_MOD_CALLBACK_END();
 
 			if (font16)
