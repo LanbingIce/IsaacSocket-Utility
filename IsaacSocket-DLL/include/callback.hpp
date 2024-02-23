@@ -125,7 +125,7 @@ namespace callback {
 #define MENU_BEGIN(name)if (ImGui::BeginMenu(#name)){
 #define MENU_END()ImGui::EndMenu();}
 #define MENU_ITEM(name,selected,e)if (ImGui::MenuItem(#name, nullptr, selected)){e;}
-			bool showMainMenuBar = (local.isaac->game->pauseMenu.state || local.menuBarDisplayMode == state::ALWAYS || local.menuBarDisplayMode == state::TAB_HOLD && GetAsyncKeyState(VK_TAB) & 0x8000) && ImGui::BeginMainMenuBar();
+			bool showMainMenuBar = (local.isaac->game->pauseMenu.state || local.menuBarDisplayMode == state::ALWAYS || local.menuBarDisplayMode == state::TAB_HOLD && ImGui::IsKeyDown(ImGuiKey_Tab)) && ImGui::BeginMainMenuBar();
 			if (showMainMenuBar)
 			{
 				MENU_BEGIN(以撒插座);
