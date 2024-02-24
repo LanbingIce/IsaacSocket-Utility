@@ -202,9 +202,6 @@ namespace callback {
 		// Draw the overlay
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-		MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
-		MOD_CALLBACK_CALL();
-		MOD_CALLBACK_END();
 		return 0;
 	}
 
@@ -212,6 +209,11 @@ namespace callback {
 	static int PreSwapBuffers(HDC hdc)
 	{
 		CHECK_RELOAD();
+		if (local.initialized)
+		{
+			FAST_MOD_CALLBACK_BEGIN(_ISAAC_SOCKET_UPDATE);
+			FAST_MOD_CALLBACK_END();
+		}
 		switch (global->connectionState) {
 		case state::DISCONNECTED:
 			break;
@@ -231,11 +233,11 @@ namespace callback {
 				break;
 			}
 			ImGuiRender();
+			MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
+			MOD_CALLBACK_CALL();
+			MOD_CALLBACK_END();
 			break;
 		}
-		CHECK_INIT();
-		FAST_MOD_CALLBACK_BEGIN(_ISAAC_SOCKET_UPDATE);
-		FAST_MOD_CALLBACK_END();
 		return 0;
 	}
 
