@@ -1,5 +1,6 @@
 ﻿#include "module.hpp"
 #include "handle.hpp"
+#include "function.hpp"
 #include "async.hpp"
 
 namespace http {
@@ -19,28 +20,28 @@ struct TempFiles {
         }
     }
 
-    std::string createTempFile(std::string const &content = {}) {
+    std::string createTempFile(std::string const &content = {}, std::string const &suffix = {}) {
         wchar_t tmppath[MAX_PATH - 14]{};
         GetTempPathW(MAX_PATH - 13, tmppath);
-        wchar_t filename[MAX_PATH + 2]{};
+        wchar_t filename[MAX_PATH + 5]{};
         GetTempFileNameW(tmppath, L"tmp", 0, filename);
         std::wstring wres = filename;
-        auto res = utils::U16ToU8(wres);
-        if (res.empty()) [[unlikely]] {
-            cw("could not allocate a temp file");
-            throw std::runtime_error("could not allocate a temp file");
+        if (wres.empty()) [[unlikely]] {
+            throw std::runtime_error("could not allocate a temp file: " + std::to_string(GetLastError()));
         }
-        HANDLE h = CreateFileW(filename, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_TEMPORARY, NULL);
+        if (!suffix.empty()) {
+            wres += utils::U8ToU16(suffix);
+        }
+        auto res = utils::U16ToU8(wres);
+        HANDLE h = CreateFileW(wres.c_str(), GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_TEMPORARY, NULL);
         if (h == INVALID_HANDLE_VALUE) [[unlikely]] {
-            cw("could not create a temp file");
-            throw std::runtime_error("could not create a temp file");
+            throw std::runtime_error("could not create a temp file: " + std::to_string(GetLastError()));
         }
         files.emplace_back(std::move(wres));
         if (!content.empty()) {
             if (!WriteFile(h, content.data(), content.size(), NULL, NULL)) [[unlikely]] {
                 CloseHandle(h);
-                cw("could not write to the temp file");
-                throw std::runtime_error("could not write to the temp file");
+                throw std::runtime_error("could not write to the temp file: " + std::to_string(GetLastError()));
             }
         }
         CloseHandle(h);
@@ -49,51 +50,85 @@ struct TempFiles {
 
 };
 
+static HANDLE executeCommand(std::vector<std::string> const &args) {
+    BOOL bSuccess = FALSE;
+
+    PROCESS_INFORMATION piProcInfo; 
+    STARTUPINFOW siStartInfo;
+    ZeroMemory( &piProcInfo, sizeof(PROCESS_INFORMATION) );
+    ZeroMemory( &siStartInfo, sizeof(STARTUPINFO) );
+    siStartInfo.cb = sizeof(STARTUPINFO); 
+    siStartInfo.dwFlags |= STARTF_USESTDHANDLES;
+
+    std::ostringstream ss;
+    for (auto const &arg : args) {
+        ss << std::quoted(arg, '"', '"') << ' ';
+        /* ss << arg << ' '; */
+        /* _cprintf("%s\n", arg.c_str()); */
+        /* if (ss.str().size() < 10) continue; */
+        /* _cprintf("%s\n", ss.str().substr(ss.str().size() - 8).c_str()); */
+    }
+    cw("command >>>", ss.str());
+    /* _cprintf("%s\n", ss.str().c_str()); */
+    std::wstring cmdLine = utils::U8ToU16(ss.str());
+    bSuccess = CreateProcessW( utils::U8ToU16(args[0]).c_str(),
+    /* std::string cmdLine = utils::U16ToAnsi(utils::U8ToU16(ss.str())); */
+    /* bSuccess = CreateProcessA( utils::U16ToU8(utils::U8ToU16(args[0])).c_str(), */
+      cmdLine.data(),       // command line
+      NULL,                 // process security attributes
+      NULL,                 // primary thread security attributes
+      TRUE,                 // handles are inherited
+      0,                    // creation flags
+      NULL,                 // use parent's environment
+      NULL,                 // use parent's current directory
+      &siStartInfo,         // STARTUPINFO pointer
+      &piProcInfo );        // receives PROCESS_INFORMATION
+    if( !bSuccess ) return NULL;
+    CloseHandle(piProcInfo.hThread);
+    return piProcInfo.hProcess;
+}
+
 static int Request(lua_State* L) {
     auto temps = std::make_shared<TempFiles>();
 
-    ARG(1, stdstring, std::string, url);
-    ARG_DEF(2, stdstring, std::string, method, "GET");
-    std::string contentPlain;
-    std::map<std::string, std::string> contentUrlenc;
-    if (local.lua.lua_istable(L, 3)) {
-        ARG_DEF(3, mapstringstring, decltype(std::map<std::string, std::string>()), content, {});
-        contentUrlenc = std::move(content);
-    } else {
-        ARG_DEF(3, stdstring, std::string, content, {});
-        contentPlain = std::move(content);
-    }
+    ARG(1, stdstring, std::string, method);
+    ARG(2, stdstring, std::string, url);
+    ARG_DEF(3, stdstring, std::string, content, {});
     ARG_DEF(4, stdstring, std::string, contentType, {});
     ARG_DEF(5, mapstringstring, decltype(std::map<std::string, std::string>()), headers, {});
     ARG_DEF(6, mapstringstring, decltype(std::map<std::string, std::string>()), cookies, {});
     ARG_DEF(7, integer, int, timeout, 0);
+    ARG_DEF(8, stdstring, std::string, bodyFilePath, {});
 
     std::vector<std::string> args;
     args.reserve(8);
     const char *curlPath = "curl";
-#ifdef __MINGW32__
-    curlPath = "/home/bate/Codes/IsaacSocket-Utility/IsaacSocket-DLL/bin/curl.exe";
+#ifdef __MINGW32__ // 小彭老师专有路径
+    curlPath = "Z:\\home\\bate\\Codes\\IsaacSocket-Utility\\IsaacSocket-DLL\\bin\\curl.exe";
 #endif
     args.push_back(curlPath);
+    args.push_back(url);
     if (!method.empty()) {
-        args.push_back("-X");
-        args.push_back(method);
+        /* if (method == "GET") { */
+        /*     args.push_back("--get"); */
+        /* } else { */
+            args.push_back("-X");
+            args.push_back(method);
+        /* } */
     }
-    if (!contentPlain.empty()) {
-        auto tmpFile = temps->createTempFile(contentPlain);
+    auto outFile = bodyFilePath.empty() ? temps->createTempFile() : bodyFilePath;
+    auto hdrFile = temps->createTempFile();
+    args.push_back("--output");
+    args.push_back(outFile);
+    args.push_back("--dump-header");
+    args.push_back(hdrFile);
+    if (!content.empty()) {
+        auto tmpFile = temps->createTempFile(content);
         args.push_back("--data-binary");
         args.push_back("@" + tmpFile);
-        /* args.push_back("--data-raw"); */
-        /* args.push_back(contentPlain); */
-    }
-    if (!contentUrlenc.empty()) {
-        for (auto&& [k, v] : contentUrlenc) {
-            args.push_back("--data-urlencode");
-            args.push_back(k + "=" + v);
-        }
     }
     if (!cookies.empty()) {
-        for (auto&& [k,v] : cookies) {
+        for (auto const &[k, v] : cookies) {
             args.push_back("--cookie");
             args.push_back(k + "=" + v);
         }
@@ -103,7 +138,7 @@ static int Request(lua_State* L) {
         args.push_back("Content-Type: " + contentType);
     }
     if (!headers.empty()) {
-        for (auto&&[k,v] : headers) {
+        for (auto const &[k, v] : headers) {
             args.push_back("-H");
             args.push_back(k + ": " + v);
         }
@@ -112,32 +147,22 @@ static int Request(lua_State* L) {
         args.push_back("--max-time");
         args.push_back(std::to_string(timeout));
     }
-    auto outFile = temps->createTempFile();
-    auto hdrFile = temps->createTempFile();
-    args.push_back("--output");
-    args.push_back(outFile);
-    args.push_back("--dump-header");
-    args.push_back(hdrFile);
     args.push_back("--silent");
-    args.push_back(url);
+    args.push_back("--location");
 
-    ASYNC_BEGIN(args, temps, outFile, hdrFile);
-    std::vector<const char*> argptrs;
-    argptrs.reserve(args.size() + 1);
-    for (auto&& arg : args) {
-        argptrs.push_back(arg.c_str());
+    HANDLE hProc = executeCommand(args);
+    if (!hProc) [[unlikely]] {
+        throw std::runtime_error("could not spawn the child process: " + std::to_string(GetLastError()));
     }
-    argptrs.push_back(nullptr);
-    int ret;
-    intptr_t pid = _spawnv(_P_NOWAIT, argptrs[0], argptrs.data());
-    if (pid == -1) [[unlikely]] {
-        cw("_spawn error", errno);
-        throw std::runtime_error("could not spawn the child process");
+
+    ASYNC_BEGIN(hProc, temps, outFile, hdrFile);
+    DWORD ret = STATUS_PENDING;
+    GetExitCodeProcess(hProc, &ret);
+    if (ret == STATUS_PENDING) {
+        ASYNC_YIELD();
     }
-    if (_cwait(&ret, pid, _WAIT_CHILD) == -1) [[unlikely]] {
-        cw("_cwait error", errno);
-        throw std::runtime_error("could not wait the child process");
-    }
+    cw("exit", ret);
+    CloseHandle(hProc);
 
     struct Result {
         std::string body;
@@ -166,14 +191,16 @@ static int Request(lua_State* L) {
     } else {
         auto headers = std::move(res->headers);
         auto body = std::move(res->body);
+        cw(headers);
+        cw(body.size());
         if (headers.empty()) [[unlikely]] {
             RET_TABLE();
             RET_TABLE_KEY(string, "error", integer, -99);
             RET_TABLE_KEY(string, "status", integer, 0);
+            RET_TABLE_KEY(string, "body", stdstringview, body);
             RET_TABLE_END();
         }
         /* remove the first line */
-        cw(headers);
         std::istringstream iss(headers);
         std::string line;
         std::map<std::string, std::string> h;

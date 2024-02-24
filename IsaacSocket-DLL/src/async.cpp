@@ -4,8 +4,8 @@
 
 namespace async {
 
-HandleTable<PromiseThread> &promiseTable() {
-    static HandleTable<PromiseThread> table;
+HandleTable<Coroutine> &promiseTable() {
+    static HandleTable<Coroutine> table;
     return table;
 }
 
@@ -69,6 +69,8 @@ int luaPromiseThen(lua_State *L) {
 void luaPollPromises(lua_State *L) {
     std::vector<Handle> readyHandles;
     for (auto &p: promiseTable().enumerate()) {
+        /* cw("poll", reinterpret_cast<uintptr_t>(p.get())); */
+        p->pollState();
         if (p->isReady()) {
             Handle h = (Handle)reinterpret_cast<uintptr_t>(p.get());
             readyHandles.push_back(h);
@@ -106,15 +108,14 @@ void luaPollPromises(lua_State *L) {
             n = p->getResult(L);
         } catch (std::exception const &e) {
             cw("Exception in async function:", e.what());
-            goto label;
+            n = -1;
         } catch (...) {
             cw("Exception in async function: unknown exception");
-            goto label;
+            n = -1;
         }
-        if (!local.lua.lua_isnoneornil(L, -1 - n)) [[likely]] {
+        if (n >= 0 && !local.lua.lua_isnoneornil(L, -1 - n)) [[likely]] {
             if(local.lua.lua_pcall(L, n, 0, 0)!=LUA_OK){std::string _err="?";if(local.lua.lua_isstring(L,-1)){_err=local.lua.lua_tostring(L,-1);};local.lua.lua_pop(L, 1);_err.append("\n");function::ConsoleOutput(_err, 0xFFF08080);cw("Error in async callback:", _err.c_str());}
         }
-    label:
         local.lua.lua_settop(L, top);
         promiseTable().destroy(h);
     }

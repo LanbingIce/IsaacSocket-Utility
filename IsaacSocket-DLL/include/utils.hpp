@@ -20,25 +20,36 @@ namespace utils {
 	}
 
 	// 只能传入一个或三个参数，若传入一个参数，则返回转换后的长度(包括\0)
+	static size_t U16ToAnsi(const wchar_t* u16, char* u8 = nullptr, size_t len = 0) {
+		return WideCharToMultiByte(CP_ACP, 0, u16, -1, u8, len, nullptr, nullptr);
+	}
+
+	// 只能传入一个或三个参数，若传入一个参数，则返回转换后的长度(包括\0)
 	static size_t U16ToU8(const wchar_t* u16, char* u8 = nullptr, size_t len = 0) {
 		return WideCharToMultiByte(CP_UTF8, 0, u16, -1, u8, len, nullptr, nullptr);
 	}
 
+    static std::string U16ToAnsi(std::wstring const &u16) {
+        std::string ansi(utils::U16ToAnsi(u16.c_str()) - 1, '\0');
+        utils::U16ToAnsi(u16.c_str(), ansi.data(), ansi.size() + 1);
+        return ansi;
+    }
+
     static std::wstring AnsiToU16(std::string const &ansi) {
-        std::wstring u16(utils::AnsiToU16(ansi.c_str()), L'\0');
-        utils::AnsiToU16(ansi.c_str(), u16.data(), u16.size());
+        std::wstring u16(utils::AnsiToU16(ansi.c_str()) - 1, L'\0');
+        utils::AnsiToU16(ansi.c_str(), u16.data(), u16.size() + 1);
         return u16;
     }
 
     static std::wstring U8ToU16(std::string const &u8) {
-        std::wstring u16(utils::U8ToU16(u8.c_str()), L'\0');
-        utils::U8ToU16(u8.c_str(), u16.data(), u16.size());
+        std::wstring u16(utils::U8ToU16(u8.c_str()) - 1, L'\0');
+        utils::U8ToU16(u8.c_str(), u16.data(), u16.size() + 1);
         return u16;
     }
 
 	static std::string U16ToU8(std::wstring const &u16) {
-        std::string u8(utils::U16ToU8(u16.c_str()), '\0');
-        utils::U16ToU8(u16.c_str(), u8.data(), u8.size());
+        std::string u8(utils::U16ToU8(u16.c_str()) - 1, '\0');
+        utils::U16ToU8(u16.c_str(), u8.data(), u8.size() + 1);
         return u8;
     }
 

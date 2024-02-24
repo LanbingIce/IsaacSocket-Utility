@@ -274,6 +274,17 @@ namespace lua {
 			}
 		}
 
+        template <class Vec = std::vector<lua_Number>>
+		void lua_pushvectornumber(lua_State* L, std::type_identity_t<Vec> const& v) const
+		{
+			lua_createtable(L, v.size(), 0);
+			for (size_t i = 0; i < v.size(); i++) {
+				lua_pushinteger(L, i + 1);
+				lua_pushnumber(L, v[i]);
+				lua_settable(L, -3);
+			}
+		}
+
 		template <class Map = std::map<std::string, std::string>>
 		int lua_ismapstringstring(lua_State* L, int i) const
 		{
@@ -291,6 +302,12 @@ namespace lua {
 		}
 
 		int lua_isvectorinteger(lua_State* L, int i) const
+		{
+			return lua_istable(L, i);
+		}
+
+        template <class Vec = std::vector<lua_Number>>
+        int lua_isvectornumber(lua_State* L, int i) const
 		{
 			return lua_istable(L, i);
 		}
@@ -342,6 +359,21 @@ namespace lua {
 			while (lua_next(L, i) != 0) {
 				// uses 'key' (at index -2) and 'value' (at index -1)
 				lua_Integer id = lua_tointeger(L, -1);
+				ret.push_back(id);
+				// removes 'value'; keeps 'key' for next iteration
+				lua_pop(L, 1);
+			}
+			return ret;
+		}
+
+        template <class Vec = std::vector<lua_Number>>
+		Vec lua_tovectornumber(lua_State* L, int i) const
+		{
+			Vec ret;
+			lua_pushnil(L); // first key
+			while (lua_next(L, i) != 0) {
+				// uses 'key' (at index -2) and 'value' (at index -1)
+				lua_Number id = lua_tonumber(L, -1);
 				ret.push_back(id);
 				// removes 'value'; keeps 'key' for next iteration
 				lua_pop(L, 1);

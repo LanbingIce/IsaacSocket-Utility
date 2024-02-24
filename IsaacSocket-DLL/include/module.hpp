@@ -13,12 +13,28 @@ static int lua_cppdata_gc(lua_State *L) {
     p->~T();
     return 0;
 }
+
+template <int (*fp)(lua_State *)>
+static int (*lua_cppfunction())(lua_State *) {
+    return [] (lua_State *L) noexcept -> int {
+        try {
+            return fp(L);
+        } catch (std::exception const &e) {
+            cw("Exception in cpp function:", e.what());
+            return local.lua.luaL_error(L, "Exception in cpp function: %s", e.what());
+        } catch (...) {
+            cw("Exception in cpp function: unknown exception");
+            return local.lua.luaL_error(L, "Exception in cpp function: unknown exception");
+        }
+    };
+}
+
 }
 
 #define SET_METATABLE(name) local.lua.luaL_newmetatable(L, #name);luaL_Reg mt_##name[] = { { "__index", name##__index },{ "__newindex", name##__index },{ NULL, NULL } };local.lua.luaL_setfuncs(L, mt_##name, 0);local.lua.lua_setmetatable(L, -2)
 
 #define MODULE_BEGIN(name) lua_State* L = local.isaac->luaEngine->L; int top = local.lua.lua_gettop(L); local.lua.lua_getglobal(L, "_ISAAC_SOCKET"); local.lua.lua_pushstring(L, "IsaacSocket"); local.lua.lua_gettable(L, -2); local.lua.lua_pushstring(L, #name); local.lua.lua_newtable(L)
-#define MODULE_FUNC(name) local.lua.lua_pushstring(L, #name);local.lua.lua_pushcfunction(L, name); local.lua.lua_settable(L, -3)
+#define MODULE_FUNC(name) local.lua.lua_pushstring(L, #name);local.lua.lua_pushcfunction(L, lua::lua_cppfunction<name>()); local.lua.lua_settable(L, -3)
 #define MODULE_UDATA(name,type,value)local.lua.lua_pushstring(L, #name);type** pp_##name = (type**)local.lua.lua_newuserdata(L, sizeof(type*));SET_METATABLE(p_##name);*pp_##name = &value;local.lua.lua_settable(L, -3)
 #define MODULE_END() local.lua.lua_settable(L, -3); local.lua.lua_settop(L, top)
 

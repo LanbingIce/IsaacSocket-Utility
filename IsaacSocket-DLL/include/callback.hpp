@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "pch.h"
+#include "async.hpp"
 #include "state.hpp"
 #include "utils.hpp"
 #include "function.hpp"
@@ -189,6 +190,8 @@ static bool LuaReady() {
 
 			// Draw the overlay
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+            async::luaPollPromises(local.isaac->luaEngine->L);
 
 			MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
 			MOD_CALLBACK_CALL();
