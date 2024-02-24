@@ -17,7 +17,7 @@ namespace isaac_socket
 	}
 
 	static void Init() {
-        RegisterModule::InitAllModules();
+		RegisterModule::InitAllModules();
 
 		lua_State* L = local.isaac->luaEngine->L;
 		int top = local.lua.lua_gettop(L);

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "lua.hpp"
 #include "state.hpp"
@@ -75,16 +75,30 @@ static int (*lua_cppfunction())(lua_State *) {
 #define METATABLE_INDEX_STRING(name)_METATABLE_INDEX(string,name,string,_obj.name.c_str())
 #define METATABLE_END()return local.lua.luaL_error(L, "Invalid member access.")
 
+struct Image {
+	std::vector<uint8_t> data;
+	int width = 0, height = 0, channels = 0;
+
+	static int lua_index(lua_State* L) {
+		ARG_CPPDATA(1, Image, image);
+		METATABLE_BEGIN(Image, *image);
+		METATABLE_INDEX(integer, width, int);
+		METATABLE_INDEX(integer, height, int);
+		METATABLE_INDEX(integer, channels, int);
+		METATABLE_END();
+	}
+};
+
 struct RegisterModule {
-    inline static std::vector<std::function<void()>> initCallbacks;
+	inline static std::vector<std::function<void()>> initCallbacks;
 
-    RegisterModule(auto &&f) {
-        initCallbacks.emplace_back(std::move(f));
-    }
+	RegisterModule(auto&& f) {
+		initCallbacks.emplace_back(std::move(f));
+	}
 
-    static void InitAllModules() {
-        for (auto const &callback: initCallbacks) {
-            callback();
-        }
-    }
+	static void InitAllModules() {
+		for (auto const& callback : initCallbacks) {
+			callback();
+		}
+	}
 };

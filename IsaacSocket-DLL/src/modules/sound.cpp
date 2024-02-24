@@ -63,7 +63,7 @@ static int PcmToWav(lua_State* L) {
 }
 
 static int FloatArrayToPcm(lua_State* L) {
-    ARG(1, vectornumber<std::vector<float>>, std::vector<float>, data);
+    ARG(1, vectorfloat<std::vector<float>>, std::vector<float>, data);
     ARG_DEF(2, integer, int, bits, 16);
     ARG_DEF(3, integer, int, channels, 1);
     std::string pcmData;
@@ -101,7 +101,7 @@ static int PcmToFloatArray(lua_State* L) {
             data[i] = *ptr++ * (1.0f / 127.0f);
         }
     }
-    RET(vectornumber<std::vector<float>>, data);
+    RET(vectorfloat<std::vector<float>>, data);
     return 1;
 }
 

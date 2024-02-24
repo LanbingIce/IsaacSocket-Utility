@@ -265,7 +265,7 @@ namespace isaac_api {
 		return 0;
 	}
 
-    static RegisterModule Init = [] {
+	static RegisterModule Init = [] {
 		MODULE_BEGIN(IsaacAPI);
 
 		MODULE_FUNC(IsForcePaused);
@@ -313,5 +313,5 @@ namespace isaac_api {
 		MODULE_FUNC(ConsoleOutput);
 
 		MODULE_END();
-	};
+		};
 }

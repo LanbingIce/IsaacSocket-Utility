@@ -25,31 +25,25 @@
     <Filter Include="libs\stbi">
       <UniqueIdentifier>{72d4eced-7b28-43b5-96d6-9ef96d22860c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\modules">
-      <UniqueIdentifier>{46aa8285-5255-4bdb-9c01-01f3f2a98dad}</UniqueIdentifier>
-    </Filter>
     <Filter Include="libs\imgui">
       <UniqueIdentifier>{d626c85d-7fa2-4a9b-bcf6-fe3af7b67f9f}</UniqueIdentifier>
     </Filter>
     <Filter Include="libs\json">
       <UniqueIdentifier>{2d06c144-fe71-4340-8a36-eb99c3c881d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\modules">
+      <UniqueIdentifier>{d050df09-b033-421e-8c18-9cb48457927a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\openssl">
+      <UniqueIdentifier>{8fc941d2-7573-40b8-af69-20c4c25fb15a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\httplib">
+      <UniqueIdentifier>{54f14607-5c5b-40f0-8539-4f0ccbdae822}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\dllmain.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\inject.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\reload.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="libs\glad\glad.cpp">
       <Filter>libs\glad</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui.cpp">
       <Filter>libs\imgui</Filter>
@@ -78,46 +72,52 @@
     <ClCompile Include="libs\json\jsoncpp.cpp">
       <Filter>libs\json</Filter>
     </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\imgui_.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\isaac_.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\isaac_api.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\memory.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\opengl.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\system_.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\win_api.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\http.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\async.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dllmain.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\inject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reload.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\image.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\callback.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\framework.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\function.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\handle.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\inject.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\isaac.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lua.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\main.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\reload.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\state.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\utils.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="libs\glad\glad.h">
       <Filter>libs\glad</Filter>
-    </ClInclude>
-    <ClInclude Include="include\pch.h">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="libs\stbi\stb_image_write.h">
       <Filter>libs\stbi</Filter>
@@ -127,27 +127,6 @@
     </ClInclude>
     <ClInclude Include="libs\KHR\khrplatform.h">
       <Filter>libs\KHR</Filter>
-    </ClInclude>
-    <ClInclude Include="include\modules\_isaac_socket.hpp">
-      <Filter>头文件\modules</Filter>
-    </ClInclude>
-    <ClInclude Include="include\modules\isaac_api.hpp">
-      <Filter>头文件\modules</Filter>
-    </ClInclude>
-    <ClInclude Include="include\modules\memory.hpp">
-      <Filter>头文件\modules</Filter>
-    </ClInclude>
-    <ClInclude Include="include\modules\module.hpp">
-      <Filter>头文件\modules</Filter>
-    </ClInclude>
-    <ClInclude Include="include\modules\opengl.hpp">
-      <Filter>头文件\modules</Filter>
-    </ClInclude>
-    <ClInclude Include="include\modules\system_.hpp">
-      <Filter>头文件\modules</Filter>
-    </ClInclude>
-    <ClInclude Include="include\modules\win_api.hpp">
-      <Filter>头文件\modules</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imconfig.h">
       <Filter>libs\imgui</Filter>
@@ -176,9 +155,6 @@
     <ClInclude Include="libs\imgui\imgui_impl_win32.h">
       <Filter>libs\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="include\modules\imgui.hpp">
-      <Filter>头文件\modules</Filter>
-    </ClInclude>
     <ClInclude Include="libs\imgui\imgui_stdlib.h">
       <Filter>libs\imgui</Filter>
     </ClInclude>
@@ -188,11 +164,371 @@
     <ClInclude Include="libs\json\json-forwards.h">
       <Filter>libs\json</Filter>
     </ClInclude>
+    <ClInclude Include="include\async.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\callback.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="include\config.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\modules\isaac_.hpp">
-      <Filter>头文件\modules</Filter>
+    <ClInclude Include="include\framework.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\function.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gnucompat.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\handle.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\inject.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\isaac.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\isaac_socket.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lua.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\module.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\reload.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\state.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\httplib\httplib.h">
+      <Filter>libs\httplib</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\aes.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\asn1.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\asn1_mac.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\asn1err.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\asn1t.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\async.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\asyncerr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\bio.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\bioerr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\blowfish.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\bn.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\bnerr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\buffer.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\buffererr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\camellia.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\cast.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\cmac.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\cms.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\cmserr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\comp.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\comperr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\conf.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\conf_api.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\conferr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\crypto.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\cryptoerr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\ct.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\cterr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\des.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\dh.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\dherr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\dsa.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\dsaerr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\dtls1.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\e_os2.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\ebcdic.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\ec.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\ecdh.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\ecdsa.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\ecerr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\engine.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\engineerr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\err.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\evp.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\evperr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\hmac.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\idea.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\kdf.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\kdferr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\lhash.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\md2.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\md4.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\md5.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\mdc2.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\modes.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\obj_mac.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\objects.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\objectserr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\ocsp.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\ocsperr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\opensslconf.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\opensslv.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\ossl_typ.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\pem.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\pem2.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\pemerr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\pkcs7.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\pkcs7err.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\pkcs12.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\pkcs12err.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\rand.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\rand_drbg.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\randerr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\rc2.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\rc4.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\rc5.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\ripemd.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\rsa.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\rsaerr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\safestack.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\seed.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\sha.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\srp.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\srtp.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\ssl.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\ssl2.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\ssl3.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\sslerr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\stack.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\store.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\storeerr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\symhacks.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\tls1.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\ts.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\tserr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\txt_db.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\ui.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\uierr.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\whrlpool.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\x509.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\x509_vfy.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\x509err.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\x509v3.h">
+      <Filter>libs\openssl</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\openssl\x509v3err.h">
+      <Filter>libs\openssl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

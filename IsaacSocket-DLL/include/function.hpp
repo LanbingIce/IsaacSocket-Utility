@@ -104,13 +104,14 @@ namespace function {
 		ImGui_ImplOpenGL3_Init();
 	}
 
-	static void IsaacSocketUpdate() {
+	static int IsaacSocketUpdate() {
 		if (local.needReload) [[unlikely]]
-		{
-			local.needReload = false;
-			function::ReloadLuaWithoutDeleteRoom();
-			return;
-		}
+			{
+				local.needReload = false;
+				function::ReloadLuaWithoutDeleteRoom();
+				return 1;
+			}
+			return 0;
 	}
 
 	static void AllocConsole() {

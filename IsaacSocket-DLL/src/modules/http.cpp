@@ -5,20 +5,20 @@
 
 namespace http {
 
-struct TempFiles {
-    std::vector<std::wstring> files;
+	struct TempFiles {
+		std::vector<std::wstring> files;
 
-    TempFiles() = default;
-    TempFiles(TempFiles const &) = delete;
-    TempFiles &operator=(TempFiles const &) = delete;
-    TempFiles(TempFiles &&) = default;
-    TempFiles &operator=(TempFiles &&) = default;
+		TempFiles() = default;
+		TempFiles(TempFiles const&) = delete;
+		TempFiles& operator=(TempFiles const&) = delete;
+		TempFiles(TempFiles&&) = default;
+		TempFiles& operator=(TempFiles&&) = default;
 
-    ~TempFiles() {
-        for (auto&& f : files) {
-            DeleteFileW(f.c_str());
-        }
-    }
+		~TempFiles() {
+			for (auto&& f : files) {
+				DeleteFileW(f.c_str());
+			}
+		}
 
     std::string createTempFile(std::string const &content = {}, std::string const &suffix = {}) {
         wchar_t tmppath[MAX_PATH - 14]{};
@@ -48,7 +48,7 @@ struct TempFiles {
         return res;
     }
 
-};
+	};
 
 static HANDLE executeCommand(std::vector<std::string> const &args) {
     BOOL bSuccess = FALSE;
@@ -164,23 +164,23 @@ static int Request(lua_State* L) {
     cw("exit", ret);
     CloseHandle(hProc);
 
-    struct Result {
-        std::string body;
-        std::string headers;
-    };
+				struct Result {
+					std::string body;
+					std::string headers;
+				};
 
-    /* read the response from the temp file */
-    std::ifstream is(std::filesystem::path((const char8_t *)outFile.c_str()), std::ios::binary);
-    std::string body(std::istreambuf_iterator<char>(is), {});
-    is.close();
-    /* read the headers from the temp file */
-    std::ifstream isf(std::filesystem::path((const char8_t *)hdrFile.c_str()), std::ios::binary);
-    std::string headers(std::istreambuf_iterator<char>(isf), {});
-    isf.close();
+				/* read the response from the temp file */
+				std::ifstream is(std::filesystem::path((const char8_t*)outFile.c_str()), std::ios::binary);
+				std::string body(std::istreambuf_iterator<char>(is), {});
+				is.close();
+				/* read the headers from the temp file */
+				std::ifstream isf(std::filesystem::path((const char8_t*)hdrFile.c_str()), std::ios::binary);
+				std::string headers(std::istreambuf_iterator<char>(isf), {});
+				isf.close();
 
-    auto res = std::make_shared<Result>();
-    res->body = std::move(body);
-    res->headers = std::move(headers);
+				auto res = std::make_shared<Result>();
+				res->body = std::move(body);
+				res->headers = std::move(headers);
 
     ASYNC_RET(ret, res);
     if (ret != 0) [[unlikely]] {
@@ -242,43 +242,43 @@ static int Request(lua_State* L) {
     }
     ASYNC_END();
 
-    /* ASYNC_BEGIN(=); */
-    /* auto resp = std::make_shared<httplib::Result>(cli.PostEx(method, uri, headers, content.data(), content.size(), contentType)); */
-    /* ASYNC_RET(=); */
-    /* auto &res = *resp; */
-    /* if (!res) [[unlikely]] { */
-    /*     RET_TABLE(); */
-    /*     RET_TABLE_KEY(string, "error", integer, (int)res.error()); */
-    /*     RET_TABLE_KEY(string, "status", integer, 0); */
-    /*     RET_TABLE_KEY(string, "reason", string, httpErrorString(res.error())); */
-    /*     RET_TABLE_END(); */
-    /* } */
-    /* RET_TABLE(); */
-    /* RET_TABLE_KEY(string, "error", integer, 0); */
-    /* RET_TABLE_KEY(string, "status", integer, res->status); */
-    /* RET_TABLE_KEY(string, "body", stdstringview, res->body); */
-    /* RET_TABLE_KEY(string, "reason", stdstringview, res->reason); */
-    /* RET_TABLE_KEY(string, "location", stdstringview, res->location); */
-    /* RET_TABLE_KEY(string, "headers", mapstringstring<httplib::Headers>, res->headers); */
-    /* RET_TABLE_END(); */
-    /* ASYNC_END(); */
-}
+				/* ASYNC_BEGIN(=); */
+				/* auto resp = std::make_shared<httplib::Result>(cli.PostEx(method, uri, headers, content.data(), content.size(), contentType)); */
+				/* ASYNC_RET(=); */
+				/* auto &res = *resp; */
+				/* if (!res) [[unlikely]] { */
+				/*     RET_TABLE(); */
+				/*     RET_TABLE_KEY(string, "error", integer, (int)res.error()); */
+				/*     RET_TABLE_KEY(string, "status", integer, 0); */
+				/*     RET_TABLE_KEY(string, "reason", string, httpErrorString(res.error())); */
+				/*     RET_TABLE_END(); */
+				/* } */
+				/* RET_TABLE(); */
+				/* RET_TABLE_KEY(string, "error", integer, 0); */
+				/* RET_TABLE_KEY(string, "status", integer, res->status); */
+				/* RET_TABLE_KEY(string, "body", stdstringview, res->body); */
+				/* RET_TABLE_KEY(string, "reason", stdstringview, res->reason); */
+				/* RET_TABLE_KEY(string, "location", stdstringview, res->location); */
+				/* RET_TABLE_KEY(string, "headers", mapstringstring<httplib::Headers>, res->headers); */
+				/* RET_TABLE_END(); */
+				/* ASYNC_END(); */
+	}
 
-/* example:
-if IsaacSocket and Input.IsButtonTriggered(Keyboard.KEY_A, 0) then
-    local job = IsaacSocket.Http.Request("https://www.lua.org/manual/5.2/manual.html", "GET", {key = "val"}):Then(function (res)
-        if res.status == 200 then
-            print(res.body)
-        end
-    end)
-    -- you may optionally call job:Cancel() to try cancel the job
-end
-*/
+	/* example:
+	if IsaacSocket and Input.IsButtonTriggered(Keyboard.KEY_A, 0) then
+		local job = IsaacSocket.Http.Request("https://www.lua.org/manual/5.2/manual.html", "GET", {key = "val"}):Then(function (res)
+			if res.status == 200 then
+				print(res.body)
+			end
+		end)
+		-- you may optionally call job:Cancel() to try cancel the job
+	end
+	*/
 
-static RegisterModule Init = [] {
-    MODULE_BEGIN(Http);
-    MODULE_FUNC(Request);
-    MODULE_END();
-};
+	static RegisterModule Init = [] {
+		MODULE_BEGIN(Http);
+		MODULE_FUNC(Request);
+		MODULE_END();
+		};
 
 }

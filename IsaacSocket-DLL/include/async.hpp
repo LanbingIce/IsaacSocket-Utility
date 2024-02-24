@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "handle.hpp"
 #include "lua.hpp"
