@@ -88,7 +88,7 @@ static int PcmToFloatArray(lua_State* L) {
     ARG_DEF(2, integer, int, bits, 16);
     ARG_DEF(3, integer, int, channels, 1);
     std::vector<float> data;
-    size_t count = pcmData.size() / (std::max(8, bits) / 8);
+    size_t count = pcmData.size() / (max(8, bits) / 8);
     data.resize(count);
     if (bits == 16) {
         auto ptr = (short const*)pcmData.data();

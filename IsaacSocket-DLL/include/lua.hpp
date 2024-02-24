@@ -401,8 +401,7 @@ namespace lua {
 			lua_pushnil(L); // first key
 			while (lua_next(L, i) != 0) {
 				// uses 'key' (at index -2) and 'value' (at index -1)
-				lua_Number id = lua_tonumber(L, -1);
-				ret.push_back(id);
+				ret.push_back((float)lua_tonumber(L, -1));
 				// removes 'value'; keeps 'key' for next iteration
 				lua_pop(L, 1);
 			}
