@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "pch.h"
+#include "async.hpp"
 #include "state.hpp"
 #include "utils.hpp"
 #include "function.hpp"
@@ -232,6 +233,7 @@ namespace callback {
 			{
 				break;
 			}
+            async::luaPollPromises(local.isaac->luaEngine->L);
 			ImGuiRender();
 			MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
 			MOD_CALLBACK_CALL();

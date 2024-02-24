@@ -88,16 +88,17 @@ HMODULE reloadLibraryMain(const char* libraryName, bool checkTimestamp)
 {
     auto targetMod = GetModuleHandleA(libraryName);
     wchar_t targetName[MAX_PATH + 1];
-    if (!GetModuleFileNameW(targetMod, targetName, sizeof(targetName) / sizeof(wchar_t)))
+    if (!GetModuleFileNameW(targetMod, targetName, sizeof(targetName) / sizeof(wchar_t))) [[unlikely]] {
         return nullptr;
+    }
 
     if (checkTimestamp) { // check if the file is newer than last write time
         FILETIME writeTime;
         HANDLE hFile = CreateFileW(targetName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-        if (hFile == INVALID_HANDLE_VALUE) {
+        if (hFile == INVALID_HANDLE_VALUE) [[unlikely]] {
             return nullptr;
         }
-        if (!GetFileTime(hFile, NULL, NULL, &writeTime)) {
+        if (!GetFileTime(hFile, NULL, NULL, &writeTime)) [[unlikely]] {
             return nullptr;
         }
         auto it = libraryLoadTime.find(libraryName);
@@ -115,12 +116,14 @@ HMODULE reloadLibraryMain(const char* libraryName, bool checkTimestamp)
 
     // make a copy of it in the temp directory
     std::wstring newdllname;
-    if (!getTemporaryFileName(newdllname))
+    if (!getTemporaryFileName(newdllname)) [[unlikely]] {
         return nullptr;
+    }
 
     copyFile(targetName, newdllname);
-    if (!fileExists(newdllname))
+    if (!fileExists(newdllname)) [[unlikely]] {
         return nullptr;
+    }
 
     // load new library
     auto newMod = LoadLibraryW(newdllname.c_str());

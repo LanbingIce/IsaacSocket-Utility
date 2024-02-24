@@ -284,7 +284,8 @@ namespace lua {
 			}
 		}
 
-		void lua_pushvectorfloat(lua_State* L, std::vector<float> const& v) const
+        template <class Vec = std::vector<float>>
+		void lua_pushvectorfloat(lua_State* L, std::type_identity_t<Vec> const& v) const
 		{
 			lua_createtable(L, v.size(), 0);
 			for (size_t i = 0; i < v.size(); i++) {
@@ -320,7 +321,8 @@ namespace lua {
 			return lua_istable(L, i);
 		}
 
-		int lua_isvectorfloat(lua_State* L, int i) const
+        template <class Vec = std::vector<float>>
+        int lua_isvectorfloat(lua_State* L, int i) const
 		{
 			return lua_istable(L, i);
 		}
@@ -392,13 +394,15 @@ namespace lua {
 			return ret;
 		}
 
-		std::vector<float> lua_tovectorfloat(lua_State* L, int i) const
+        template <class Vec = std::vector<float>>
+		Vec lua_tovectorfloat(lua_State* L, int i) const
 		{
-			std::vector<float> ret;
+			Vec ret;
 			lua_pushnil(L); // first key
 			while (lua_next(L, i) != 0) {
 				// uses 'key' (at index -2) and 'value' (at index -1)
-				ret.push_back((float)lua_tonumber(L, -1));
+				lua_Number id = lua_tonumber(L, -1);
+				ret.push_back(id);
 				// removes 'value'; keeps 'key' for next iteration
 				lua_pop(L, 1);
 			}
