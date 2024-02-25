@@ -111,6 +111,10 @@ namespace opengl
 			METATABLE_END();
 		}
 
+		static int lua_newindex(lua_State* L) {
+			METATABLE_END();
+		}
+
 		Texture& operator=(Texture&&) = delete;
 		~Texture() {
 			if (textureId) {

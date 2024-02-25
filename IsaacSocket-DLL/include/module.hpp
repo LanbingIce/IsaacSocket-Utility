@@ -4,30 +4,32 @@
 #include "state.hpp"
 
 namespace lua {
-#define NEW_CPPDATA(type) new (local.lua.luaCPP_newuserdata<type>(L, type::lua_index, lua::lua_cppdata_gc<type>)) type
+#define NEW_CPPDATA(type) new (local.lua.luaCPP_newuserdata<type>(L, type::lua_index,type::lua_newindex, lua::lua_cppdata_gc<type>)) type
 #define ARG_CPPDATA(index,type,name) type *name = local.lua.luaCPP_getuserdata<type>(L, index)
 
-template <class T>
-static int lua_cppdata_gc(lua_State *L) {
-    T *p = local.lua.luaCPP_getuserdata<T>(L, 1);
-    p->~T();
-    return 0;
-}
+	template <class T>
+	static int lua_cppdata_gc(lua_State* L) {
+		T* p = local.lua.luaCPP_getuserdata<T>(L, 1);
+		p->~T();
+		return 0;
+	}
 
-template <int (*fp)(lua_State *)>
-static int (*lua_cppfunction())(lua_State *) {
-    return [] (lua_State *L) noexcept -> int {
-        try {
-            return fp(L);
-        } catch (std::exception const &e) {
-            cw("Exception in cpp function:", e.what());
-            return local.lua.luaL_error(L, "Exception in cpp function: %s", e.what());
-        } catch (...) {
-            cw("Exception in cpp function: unknown exception");
-            return local.lua.luaL_error(L, "Exception in cpp function: unknown exception");
-        }
-    };
-}
+	template <int (*fp)(lua_State*)>
+	static int (*lua_cppfunction())(lua_State*) {
+		return [](lua_State* L) noexcept -> int {
+			try {
+				return fp(L);
+			}
+			catch (std::exception const& e) {
+				cw("Exception in cpp function:", e.what());
+				return local.lua.luaL_error(L, "Exception in cpp function: %s", e.what());
+			}
+			catch (...) {
+				cw("Exception in cpp function: unknown exception");
+				return local.lua.luaL_error(L, "Exception in cpp function: unknown exception");
+			}
+			};
+	}
 
 }
 
@@ -85,6 +87,10 @@ struct Image {
 		METATABLE_INDEX(integer, width, int);
 		METATABLE_INDEX(integer, height, int);
 		METATABLE_INDEX(integer, channels, int);
+		METATABLE_END();
+	}
+
+	static int lua_newindex(lua_State* L) {
 		METATABLE_END();
 	}
 };

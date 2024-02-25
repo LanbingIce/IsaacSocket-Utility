@@ -159,21 +159,24 @@ namespace lua {
 		}
 
 		template <class T>
-		T* luaCPP_newuserdata(lua_State* L, lua_CFunction index, lua_CFunction gc = nullptr) {
+		T* luaCPP_newuserdata(lua_State* L, lua_CFunction index, lua_CFunction newindex, lua_CFunction gc = nullptr) {
 			void* p = lua_newuserdata(L, sizeof(T));
-			luaL_newmetatable(L, typeid(T).name());
-			const luaL_Reg meta[] = {
-				{"__index",index},
-				{"__newindex",index},
-				{gc ? "__gc" : nullptr,gc},
-				{nullptr,nullptr},
-			};
-			luaL_setfuncs(L, meta, 0);
+			//如果元表已经注册过，不会创建新的元表，而是推送现有的元表到栈上，并返回0
+			if (luaL_newmetatable(L, typeid(T).name()))
+			{
+				const luaL_Reg meta[] = {
+					{"__index",index},
+					{"__newindex",newindex},
+					{gc ? "__gc" : nullptr,gc},
+					{nullptr,nullptr},
+				};
+				luaL_setfuncs(L, meta, 0);
+			}
 			lua_setmetatable(L, -2);
 			return reinterpret_cast<T*>(p);
 		}
 
-		void lua_remove(lua_State* L, int index)
+		void lua_remove(lua_State* L, int index) const
 		{
 			lua_rotate(L, index, -1);
 			lua_pop(L, 1);
@@ -284,7 +287,7 @@ namespace lua {
 			}
 		}
 
-        template <class Vec = std::vector<float>>
+		template <class Vec = std::vector<float>>
 		void lua_pushvectorfloat(lua_State* L, std::type_identity_t<Vec> const& v) const
 		{
 			lua_createtable(L, v.size(), 0);
@@ -321,8 +324,8 @@ namespace lua {
 			return lua_istable(L, i);
 		}
 
-        template <class Vec = std::vector<float>>
-        int lua_isvectorfloat(lua_State* L, int i) const
+		template <class Vec = std::vector<float>>
+		int lua_isvectorfloat(lua_State* L, int i) const
 		{
 			return lua_istable(L, i);
 		}
@@ -394,7 +397,7 @@ namespace lua {
 			return ret;
 		}
 
-        template <class Vec = std::vector<float>>
+		template <class Vec = std::vector<float>>
 		Vec lua_tovectorfloat(lua_State* L, int i) const
 		{
 			Vec ret;
