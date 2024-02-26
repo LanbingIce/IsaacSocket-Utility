@@ -10,7 +10,7 @@
 namespace main {
 	// 初始化，共享内存和注入
 	static void Init() {
-
+		setlocale(LC_ALL, ".UTF8");
 		HANDLE hMapFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(*global), "IsaacSocketSharedMemory");
 
 		if (!hMapFile)
