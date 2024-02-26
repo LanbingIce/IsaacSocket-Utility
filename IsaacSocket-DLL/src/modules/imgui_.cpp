@@ -1,5 +1,6 @@
 ﻿#include "module.hpp"
 #include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 #include <imgui/imgui_stdlib.h>
 
 namespace imgui {
@@ -397,6 +398,82 @@ namespace imgui {
 		local.lua.lua_pushboolean(L, ImGui::InputTextMultiline(label, &str, *size, flags));
 		local.lua.lua_pushstring(L, str.c_str());
 		return 2;
+	}
+
+	static int IsAnyMouseDown(lua_State* L) {
+		RET(boolean, ImGui::IsAnyMouseDown());
+	}
+
+	static int IsMouseClicked(lua_State* L) {
+		ARG(1, integer, ImGuiMouseButton, button);
+		if (local.lua.lua_isboolean(L, 2))
+		{
+			ARG_DEF(2, boolean, bool, repeat, false);
+			RET(boolean, ImGui::IsMouseClicked(button, repeat));
+		}
+		else
+		{
+			ARG(2, integer, ImGuiID, owner_id);
+			ARG_DEF(3, integer, ImGuiInputFlags, flags, 0);
+			RET(boolean, ImGui::IsMouseClicked(button, owner_id, flags));
+		}
+	}
+
+	static int IsMouseDoubleClicked(lua_State* L) {
+		ARG(1, integer, ImGuiMouseButton, button);
+		if (local.lua.lua_isnoneornil(L, 2))
+		{
+			RET(boolean, ImGui::IsMouseDoubleClicked(button));
+		}
+		else
+		{
+			ARG(2, integer, ImGuiID, owner_id);
+			RET(boolean, ImGui::IsMouseDoubleClicked(button, owner_id));
+		}
+	}
+
+	static int IsMouseDown(lua_State* L) {
+		ARG(1, integer, ImGuiMouseButton, button);
+		if (local.lua.lua_isnoneornil(L, 2))
+		{
+			RET(boolean, ImGui::IsMouseDown(button));
+		}
+		else
+		{
+			ARG(2, integer, ImGuiID, owner_id);
+			RET(boolean, ImGui::IsMouseDown(button, owner_id));
+		}
+	}
+
+	static int IsMouseDragging(lua_State* L) {
+		ARG(1, integer, ImGuiMouseButton, button);
+		ARG_DEF(2, number, float, lock_threshold, -1.0f);
+		RET(boolean, ImGui::IsMouseDragging(button, lock_threshold));
+	}
+
+	static int IsMouseHoveringRect(lua_State* L) {
+		ARG_UDATA(1, ImVec2, const ::ImVec2*, r_min);
+		ARG_UDATA(2, ImVec2, const ::ImVec2*, r_max);
+		ARG_DEF(3, boolean, bool, clip, true);
+		RET(boolean, ImGui::IsMouseHoveringRect(*r_min, *r_max, clip));
+	}
+
+	static int IsMousePosValid(lua_State* L) {
+		ARG_UDATA_DEF(1, ImVec2, const ::ImVec2*, mouse_pos, nullptr);
+		RET(boolean, ImGui::IsMousePosValid(mouse_pos));
+	}
+		
+	static int IsMouseReleased(lua_State* L) {
+		ARG(1, integer, ImGuiMouseButton, button);
+		if (local.lua.lua_isnoneornil(L, 2))
+		{
+			RET(boolean, ImGui::IsMouseDown(button));
+		}
+		else
+		{
+			ARG(2, integer, ImGuiID, owner_id);
+			RET(boolean, ImGui::IsMouseReleased(button, owner_id));
+		}
 	}
 
 	static int LabelText(lua_State* L) {
@@ -945,7 +1022,7 @@ namespace imgui {
 		// MODULE_FUNC(IsAnyItemActive);
 		// MODULE_FUNC(IsAnyItemFocused);
 		// MODULE_FUNC(IsAnyItemHovered);
-		// MODULE_FUNC(IsAnyMouseDown);
+		MODULE_FUNC(IsAnyMouseDown);
 		// MODULE_FUNC(IsItemActivated);
 		// MODULE_FUNC(IsItemActive);
 		// MODULE_FUNC(IsItemClicked);
@@ -960,13 +1037,13 @@ namespace imgui {
 		// MODULE_FUNC(IsKeyDown);
 		// MODULE_FUNC(IsKeyPressed);
 		// MODULE_FUNC(IsKeyReleased);
-		// MODULE_FUNC(IsMouseClicked);
-		// MODULE_FUNC(IsMouseDoubleClicked);
-		// MODULE_FUNC(IsMouseDown);
-		// MODULE_FUNC(IsMouseDragging);
-		// MODULE_FUNC(IsMouseHoveringRect);
-		// MODULE_FUNC(IsMousePosValid);
-		// MODULE_FUNC(IsMouseReleased);
+		MODULE_FUNC(IsMouseClicked);
+		MODULE_FUNC(IsMouseDoubleClicked);
+		MODULE_FUNC(IsMouseDown);
+		MODULE_FUNC(IsMouseDragging);
+		MODULE_FUNC(IsMouseHoveringRect);
+		MODULE_FUNC(IsMousePosValid);
+		MODULE_FUNC(IsMouseReleased);
 		// MODULE_FUNC(IsPopupOpen);
 		// MODULE_FUNC(IsRectVisible);
 		// MODULE_FUNC(IsWindowAppearing);
