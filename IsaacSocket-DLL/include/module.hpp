@@ -66,9 +66,12 @@ namespace lua {
 #define FAST_MOD_CALLBACK_END()if(local.lua.lua_pcall(L, paramNum, 0, 0)!=LUA_OK){ARG_DEF(-1,string,string,_err,"unknow error!");_err.append("\n");function::ConsoleOutput(_err, 0xFFF08080);}local.lua.lua_settop(L, top);}
 
 #define _METATABLE_ERROR(luaType,name)else{return local.lua.luaL_error(L, "bad value, "#name" should be "#luaType);}}
-#define _METATABLE_INDEX(luaType,name,type,result)if(strcmp(key, #name) == 0){if(local.lua.lua_isnone(L,3)){RET(luaType,result);}else if(local.lua.lua_is##luaType(L,3)){_obj.name = (type)local.lua.lua_to##luaType(L,3);return 0;}_METATABLE_ERROR(luaType,name)
+#define _METATABLE_INDEX(luaType,name,type,result)if(strcmp(key, #name) == 0){RET(luaType,result);}
+#define _METATABLE_NEWINDEX(luaType,name,type,result)if(strcmp(key, #name) == 0){if(local.lua.lua_is##luaType(L,3)){_obj.name = (type)local.lua.lua_to##luaType(L,3);return 0;}_METATABLE_ERROR(luaType,name)
+
 #define METATABLE_BEGIN(type,object)type& _obj = object;const char* key = local.lua.lua_tostring(L, 2)
 #define METATABLE_INDEX(luaType,name,type)_METATABLE_INDEX(luaType,name,type,_obj.name)
+#define METATABLE_NEWINDEX(luaType,name,type)_METATABLE_NEWINDEX(luaType,name,type,_obj.name)
 
 #define _METATABLE_INDEX_UDATA(udataType,name,type,and_,star) if (strcmp(key,#name) == 0) {if (local.lua.lua_isnone(L, 3)) {type* p_##name = (type*)local.lua.lua_newuserdata(L, sizeof(type));SET_METATABLE(udataType);*p_##name = and_ _obj.name;return 1;}else { type* _value = (type*)local.lua.luaL_testudata(L,3,#udataType); if(_value){_obj.name =star *_value;return 0;}}}
 #define METATABLE_INDEX_UDATA(udataType,name,type) _METATABLE_INDEX_UDATA(udataType,name,type)

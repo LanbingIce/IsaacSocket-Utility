@@ -212,6 +212,12 @@ namespace lua {
 			lua_pushlstring(L, s.data(), s.size());
 		}
 
+		void lua_pushstdwstring(lua_State* L, std::wstring const& s) const
+		{
+			std::string u8 = utils::U16ToU8(s);
+			lua_pushlstring(L, u8.c_str(), u8.size());
+		}
+
 		void lua_pushstdstringview(lua_State* L, std::string_view s) const
 		{
 			lua_pushlstring(L, s.data(), s.size());
@@ -226,6 +232,10 @@ namespace lua {
 		{
 			return lua_isstring(L, i);
 		}
+			int lua_isstdwstring(lua_State * L, int i) const
+			{
+				return lua_isstring(L, i);
+			}
 
 		int lua_isstdstringview(lua_State* L, int i) const
 		{
@@ -237,6 +247,13 @@ namespace lua {
 			size_t len = 0;
 			const char* str = lua_tolstring(L, i, &len);
 			return std::string(str, len);
+		}
+
+		std::wstring lua_tostdwstring(lua_State* L, int n) const
+		{
+			string u8 = lua_tolstring(L, n, NULL);
+			std::wstring u16 = utils::U8ToU16(u8);
+			return u16;
 		}
 
 		std::string_view lua_tostdstringview(lua_State* L, int i) const
