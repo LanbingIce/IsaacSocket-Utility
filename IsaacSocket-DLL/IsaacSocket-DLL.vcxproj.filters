@@ -533,5 +533,8 @@
     <ClInclude Include="libs\openssl\x509v3err.h">
       <Filter>libs\openssl</Filter>
     </ClInclude>
+    <ClInclude Include="libs\stbi\stb_image_resize2.h">
+      <Filter>libs\stbi</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

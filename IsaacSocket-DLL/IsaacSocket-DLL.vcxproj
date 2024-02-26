@@ -195,6 +195,7 @@
     <ClInclude Include="libs\openssl\x509v3err.h" />
     <ClInclude Include="libs\openssl\x509_vfy.h" />
     <ClInclude Include="libs\stbi\stb_image.h" />
+    <ClInclude Include="libs\stbi\stb_image_resize2.h" />
     <ClInclude Include="libs\stbi\stb_image_write.h" />
   </ItemGroup>
   <ItemGroup>
