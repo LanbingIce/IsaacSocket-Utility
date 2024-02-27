@@ -40,6 +40,9 @@
     <Filter Include="libs\httplib">
       <UniqueIdentifier>{54f14607-5c5b-40f0-8539-4f0ccbdae822}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libs\ImGuiFileDialog">
+      <UniqueIdentifier>{1224ee38-055c-4a36-94e1-8b44f4577625}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libs\glad\glad.cpp">
@@ -116,6 +119,9 @@
     </ClCompile>
     <ClCompile Include="src\modules\sound.cpp">
       <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\ImGuiFileDialog\ImGuiFileDialog.cpp">
+      <Filter>libs\ImGuiFileDialog</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -535,6 +541,12 @@
     </ClInclude>
     <ClInclude Include="libs\stbi\stb_image_resize2.h">
       <Filter>libs\stbi</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\ImGuiFileDialog\ImGuiFileDialog.h">
+      <Filter>libs\ImGuiFileDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\ImGuiFileDialog\ImGuiFileDialogConfig.h">
+      <Filter>libs\ImGuiFileDialog</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
