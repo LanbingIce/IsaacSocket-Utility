@@ -97,6 +97,10 @@ namespace imgui {
 		return 0;
 	}
 
+	static int BeginItemTooltip(lua_State* L) {
+		RET(integer, ImGui::BeginItemTooltip());
+	}
+
 	static int BeginListBox(lua_State* L) {
 		ARG(1, string, const char*, label);
 		ARG_UDATA_DEF(2, ImVec2, const ::ImVec2*, size, &VEC2_0);
@@ -113,6 +117,18 @@ namespace imgui {
 		RET(boolean, ImGui::BeginMenuBar());
 	}
 
+	static int BeginPopup(lua_State* L) {
+		ARG(1, string, const char*, str_id);
+		ARG_DEF(2, integer, ImGuiWindowFlags, flags, 0);
+		RET(boolean, ImGui::BeginPopup(str_id, flags));
+	}
+
+	static int BeginPopupContextItem(lua_State* L) {
+		ARG_DEF(1, string, const char*, str_id, NULL);
+		ARG_DEF(2, integer, ImGuiPopupFlags, popup_flags, 1);
+		RET(boolean, ImGui::BeginPopupContextItem(str_id, popup_flags));
+	}
+
 	static int BeginTabBar(lua_State* L) {
 		ARG(1, string, const char*, str_id);
 		ARG_DEF(2, integer, ImGuiTabBarFlags, flags, 0);
@@ -126,6 +142,10 @@ namespace imgui {
 		local.lua.lua_pushboolean(L, ImGui::BeginTabItem(label, &open, flags));
 		local.lua.lua_pushboolean(L, open);
 		return 2;
+	}
+
+	static int BeginTooltip(lua_State* L) {
+		RET(boolean, ImGui::BeginTooltip());
 	}
 
 	static int Button(lua_State* L) {
@@ -180,6 +200,155 @@ namespace imgui {
 		return 2;
 	}
 
+	static int DragFloat(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, number, float, v);
+		ARG_DEF(3, number, float, v_speed, 1.0f);
+		ARG_DEF(4, number, float, v_min, 0.0f);
+		ARG_DEF(5, number, float, v_max, 0.0f);
+		ARG_DEF(6, string, const char*, format, "%.3f");
+		ARG_DEF(7, integer, ImGuiSliderFlags, flags, 0);
+
+		local.lua.lua_pushboolean(L, ImGui::DragFloat(label, &v, v_speed, v_min, v_max, format, flags));
+		local.lua.lua_pushnumber(L, v);
+		return 2;
+	}
+
+	static int DragFloat2(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorfloat, vector<float>, v);
+		ARG_DEF(3, number, float, v_speed, 1.0f);
+		ARG_DEF(4, number, float, v_min, 0.0f);
+		ARG_DEF(5, number, float, v_max, 0.0f);
+		ARG_DEF(6, string, const char*, format, "%.3f");
+		ARG_DEF(7, integer, ImGuiSliderFlags, flags, 0);
+		v.resize(2);
+		local.lua.lua_pushboolean(L, ImGui::DragFloat2(label, v.data(), v_speed, v_min, v_max, format, flags));
+		local.lua.lua_pushvectorfloat(L, v);
+		return 2;
+	}
+
+	static int DragFloat3(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorfloat, vector<float>, v);
+		ARG_DEF(3, number, float, v_speed, 1.0f);
+		ARG_DEF(4, number, float, v_min, 0.0f);
+		ARG_DEF(5, number, float, v_max, 0.0f);
+		ARG_DEF(6, string, const char*, format, "%.3f");
+		ARG_DEF(7, integer, ImGuiSliderFlags, flags, 0);
+		v.resize(3);
+		local.lua.lua_pushboolean(L, ImGui::DragFloat3(label, v.data(), v_speed, v_min, v_max, format, flags));
+		local.lua.lua_pushvectorfloat(L, v);
+		return 2;
+	}
+
+	static int DragFloat4(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorfloat, vector<float>, v);
+		ARG_DEF(3, number, float, v_speed, 1.0f);
+		ARG_DEF(4, number, float, v_min, 0.0f);
+		ARG_DEF(5, number, float, v_max, 0.0f);
+		ARG_DEF(6, string, const char*, format, "%.3f");
+		ARG_DEF(7, integer, ImGuiSliderFlags, flags, 0);
+		v.resize(4);
+		local.lua.lua_pushboolean(L, ImGui::DragFloat4(label, v.data(), v_speed, v_min, v_max, format, flags));
+		local.lua.lua_pushvectorfloat(L, v);
+		return 2;
+	}
+
+	static int DragFloatRange2(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, number, float, v_current_min);
+		ARG(3, number, float, v_current_max);
+		ARG_DEF(4, number, float, v_speed, 1.0f);
+		ARG_DEF(5, number, float, v_min, 0.0f);
+		ARG_DEF(6, number, float, v_max, 0.0f);
+		ARG_DEF(7, string, const char*, format, "%.3f");
+		ARG_DEF(8, string, const char*, format_max, NULL);
+		ARG_DEF(9, integer, ImGuiSliderFlags, flags, 0);
+		local.lua.lua_pushboolean(L, ImGui::DragFloatRange2(label, &v_current_min, &v_current_max, v_speed, v_min, v_max, format, format_max, flags));
+		local.lua.lua_pushnumber(L, v_current_min);
+		local.lua.lua_pushnumber(L, v_current_max);
+		return 3;
+	}
+
+	static int DragInt(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, integer, int, v);
+		ARG_DEF(3, number, float, v_speed, 1.0f);
+		ARG_DEF(4, integer, int, v_min, 0);
+		ARG_DEF(5, integer, int, v_max, 0);
+		ARG_DEF(6, string, const char*, format, "%d");
+		ARG_DEF(7, integer, ImGuiSliderFlags, flags, 0);
+		local.lua.lua_pushboolean(L, ImGui::DragInt(label, &v, v_speed, v_min, v_max, format, flags));
+		local.lua.lua_pushinteger(L, v);
+		return 2;
+	}
+
+	static int DragInt2(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorint, vector<int>, v);
+		ARG_DEF(3, number, float, v_speed, 1.0f);
+		ARG_DEF(4, integer, int, v_min, 0);
+		ARG_DEF(5, integer, int, v_max, 0);
+		ARG_DEF(6, string, const char*, format, "%d");
+		ARG_DEF(7, integer, ImGuiSliderFlags, flags, 0);
+		v.resize(2);
+		local.lua.lua_pushboolean(L, ImGui::DragInt2(label, v.data(), v_speed, v_min, v_max, format, flags));
+		local.lua.lua_pushvectorint(L, v);
+		return 2;
+	}
+
+	static int DragInt3(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorint, vector<int>, v);
+		ARG_DEF(3, number, float, v_speed, 1.0f);
+		ARG_DEF(4, integer, int, v_min, 0);
+		ARG_DEF(5, integer, int, v_max, 0);
+		ARG_DEF(6, string, const char*, format, "%d");
+		ARG_DEF(7, integer, ImGuiSliderFlags, flags, 0);
+		v.resize(3);
+		local.lua.lua_pushboolean(L, ImGui::DragInt3(label, v.data(), v_speed, v_min, v_max, format, flags));
+		local.lua.lua_pushvectorint(L, v);
+		return 2;
+	}
+
+	static int DragInt4(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, vectorint, vector<int>, v);
+		ARG_DEF(3, number, float, v_speed, 1.0f);
+		ARG_DEF(4, integer, int, v_min, 0);
+		ARG_DEF(5, integer, int, v_max, 0);
+		ARG_DEF(6, string, const char*, format, "%d");
+		ARG_DEF(7, integer, ImGuiSliderFlags, flags, 0);
+		v.resize(4);
+		local.lua.lua_pushboolean(L, ImGui::DragInt4(label, v.data(), v_speed, v_min, v_max, format, flags));
+		local.lua.lua_pushvectorint(L, v);
+		return 2;
+	}
+
+	static int DragIntRange2(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG(2, integer, int, v_current_min);
+		ARG(3, integer, int, v_current_max);
+		ARG_DEF(4, number, float, v_speed, 1.0f);
+		ARG_DEF(5, integer, int, v_min, 0);
+		ARG_DEF(6, integer, int, v_max, 0);
+		ARG_DEF(7, string, const char*, format, "%d");
+		ARG_DEF(8, string, const char*, format_max, NULL);
+		ARG_DEF(9, integer, ImGuiSliderFlags, flags, 0);
+		local.lua.lua_pushboolean(L, ImGui::DragIntRange2(label, &v_current_min, &v_current_max, v_speed, v_min, v_max, format, format_max, flags));
+		local.lua.lua_pushinteger(L, v_current_min);
+		local.lua.lua_pushinteger(L, v_current_max);
+		return 3;
+	}
+
+	static int Dummy(lua_State* L) {
+		ARG_UDATA(1, ImVec2, ::ImVec2*, size);
+		ImGui::Dummy(*size);
+		return 0;
+	}
+
 	static int End(lua_State* L) {
 		ImGui::End();
 		return 0;
@@ -210,6 +379,11 @@ namespace imgui {
 		return 0;
 	}
 
+	static int EndPopup(lua_State* L) {
+		ImGui::EndPopup();
+		return 0;
+	}
+
 	static int EndTabBar(lua_State* L) {
 		ImGui::EndTabBar();
 		return 0;
@@ -217,6 +391,11 @@ namespace imgui {
 
 	static int EndTabItem(lua_State* L) {
 		ImGui::EndTabItem();
+		return 0;
+	}
+
+	static int EndTooltip(lua_State* L) {
+		ImGui::EndTooltip();
 		return 0;
 	}
 
@@ -404,6 +583,99 @@ namespace imgui {
 		RET(boolean, ImGui::IsAnyMouseDown());
 	}
 
+	static int IsItemActivated(lua_State* L) {
+		RET(boolean, ImGui::IsItemActivated());
+	}
+
+	static int IsItemActive(lua_State* L) {
+		RET(boolean, ImGui::IsItemActive());
+	}
+
+	static int IsItemClicked(lua_State* L) {
+		ARG_DEF(1, integer, ImGuiMouseButton, mouse_button, 0);
+		RET(boolean, ImGui::IsItemClicked(mouse_button));
+	}
+
+	static int IsItemDeactivated(lua_State* L) {
+		RET(boolean, ImGui::IsItemDeactivated());
+	}
+
+	static int IsItemDeactivatedAfterEdit(lua_State* L) {
+		RET(boolean, ImGui::IsItemDeactivatedAfterEdit());
+	}
+
+	static int IsItemEdited(lua_State* L) {
+		RET(boolean, ImGui::IsItemEdited());
+	}
+
+	static int IsItemFocused(lua_State* L) {
+		RET(boolean, ImGui::IsItemFocused());
+	}
+
+	static int IsItemHovered(lua_State* L) {
+		ARG_DEF(1, integer, ImGuiHoveredFlags, flags, 0);
+		RET(boolean, ImGui::IsItemHovered(flags));
+	}
+
+	static int IsItemToggledOpen(lua_State* L) {
+		RET(boolean, ImGui::IsItemToggledOpen());
+	}
+
+	static int IsItemVisible(lua_State* L) {
+		RET(boolean, ImGui::IsItemVisible());
+	}
+
+	static int IsKeyChordPressed(lua_State* L) {
+		ARG(1, integer, ImGuiKeyChord, key_chord);
+		if (local.lua.lua_isnoneornil(L, 2)) {
+			RET(boolean, ImGui::IsKeyChordPressed(key_chord));
+		}
+		else
+		{
+			ARG(2, integer, ImGuiID, owner_id);
+			ARG_DEF(3, integer, ImGuiInputFlags, flags, 0);
+			RET(boolean, ImGui::IsKeyChordPressed(key_chord, owner_id, flags));
+		}
+	}
+
+	static int IsKeyDown(lua_State* L) {
+		ARG(1, integer, ImGuiKey, key);
+		if (local.lua.lua_isnoneornil(L, 2)) {
+			RET(boolean, ImGui::IsKeyDown(key));
+		}
+		else
+		{
+			ARG(2, integer, ImGuiID, owner_id);
+			RET(boolean, ImGui::IsKeyDown(key, owner_id));
+		}
+	}
+
+	static int IsKeyPressed(lua_State* L) {
+		ARG(1, integer, ImGuiKey, key);
+		if (local.lua.lua_isboolean(L, 2)) {
+			ARG_DEF(2, boolean, bool, repeat, true);
+			RET(boolean, ImGui::IsKeyPressed(key, repeat));
+		}
+		else
+		{
+			ARG(2, integer, ImGuiID, owner_id);
+			ARG_DEF(3, integer, ImGuiInputFlags, flags, 0);
+			RET(boolean, ImGui::IsKeyPressed(key, owner_id, flags));
+		}
+	}
+
+	static int IsKeyReleased(lua_State* L) {
+		ARG(1, integer, ImGuiKey, key);
+		if (local.lua.lua_isnoneornil(L, 2)) {
+			RET(boolean, ImGui::IsKeyReleased(key));
+		}
+		else
+		{
+			ARG(2, integer, ImGuiID, owner_id);
+			RET(boolean, ImGui::IsKeyReleased(key, owner_id));
+		}
+	}
+
 	static int IsMouseClicked(lua_State* L) {
 		ARG(1, integer, ImGuiMouseButton, button);
 		if (local.lua.lua_isboolean(L, 2))
@@ -462,7 +734,7 @@ namespace imgui {
 		ARG_UDATA_DEF(1, ImVec2, const ::ImVec2*, mouse_pos, nullptr);
 		RET(boolean, ImGui::IsMousePosValid(mouse_pos));
 	}
-		
+
 	static int IsMouseReleased(lua_State* L) {
 		ARG(1, integer, ImGuiMouseButton, button);
 		if (local.lua.lua_isnoneornil(L, 2))
@@ -505,6 +777,20 @@ namespace imgui {
 
 	static int NewLine(lua_State* L) {
 		ImGui::NewLine();
+		return 0;
+	}
+
+	static int OpenPopup(lua_State* L) {
+		ARG_DEF(2, integer, ImGuiPopupFlags, popup_flags, 0);
+		if (local.lua.lua_isstring(L, 1))
+		{
+			ARG(1, string, const char*, str_id);
+			ImGui::OpenPopup(str_id, popup_flags);
+		}
+		else {
+			ARG(1, integer, ImGuiID, id);
+			ImGui::OpenPopup(id, popup_flags);
+		}
 		return 0;
 	}
 
@@ -587,6 +873,12 @@ namespace imgui {
 		return 0;
 	}
 
+	static int SetItemTooltip(lua_State* L) {
+		ARG(1, string, const char*, text);
+		ImGui::SetItemTooltip("%s", text);
+		return 0;
+	}
+
 	static int SetScrollHereX(lua_State* L) {
 		ARG_DEF(1, number, float, center_x_ratio, 0.5f);
 		ImGui::SetScrollHereX(center_x_ratio);
@@ -608,6 +900,12 @@ namespace imgui {
 	static int SetScrollY(lua_State* L) {
 		ARG(1, number, float, scroll_y);
 		ImGui::SetScrollY(scroll_y);
+		return 0;
+	}
+
+	static int SetTooltip(lua_State* L) {
+		ARG(1, string, const char*, text);
+		ImGui::SetTooltip("%s", text);
 		return 0;
 	}
 
@@ -823,8 +1121,8 @@ namespace imgui {
 	}
 
 	static int Text(lua_State* L) {
-		ARG(1, string, const char*, fmt);
-		ImGui::Text(fmt);
+		ARG(1, string, const char*, text);
+		ImGui::Text("%s", text);
 		return 0;
 	}
 
@@ -867,20 +1165,20 @@ namespace imgui {
 		// MODULE_FUNC(BeginDragDropSource);
 		// MODULE_FUNC(BeginDragDropTarget);
 		MODULE_FUNC(BeginGroup);
-		// MODULE_FUNC(BeginItemTooltip);
+		MODULE_FUNC(BeginItemTooltip);
 		MODULE_FUNC(BeginListBox);
 		// MODULE_FUNC(BeginMainMenuBar);	//只能在C++中调用
 		MODULE_FUNC(BeginMenu);
 		MODULE_FUNC(BeginMenuBar);
-		// MODULE_FUNC(BeginPopup);
-		// MODULE_FUNC(BeginPopupContextItem);
+		MODULE_FUNC(BeginPopup);
+		MODULE_FUNC(BeginPopupContextItem);
 		// MODULE_FUNC(BeginPopupContextVoid);
 		// MODULE_FUNC(BeginPopupContextWindow);
 		// MODULE_FUNC(BeginPopupModal);
 		MODULE_FUNC(BeginTabBar);
 		MODULE_FUNC(BeginTabItem);
 		// MODULE_FUNC(BeginTable);
-		// MODULE_FUNC(BeginTooltip);
+		MODULE_FUNC(BeginTooltip);
 		// MODULE_FUNC(Bullet);
 		// MODULE_FUNC(BulletText);
 		// MODULE_FUNC(BulletTextV);
@@ -903,25 +1201,25 @@ namespace imgui {
 		// MODULE_FUNC(ColorPicker3);
 		// MODULE_FUNC(ColorPicker4);
 		// MODULE_FUNC(Columns);
-		MODULE_FUNC(Combo);		//重载2/3 未实现 bool ImGui::Combo(const char* label, int* current_item, const char* (*getter)(void* user_data, int idx), void* user_data, int items_count, int popup_max_height_in_items)
+		MODULE_FUNC(Combo);
 		// MODULE_FUNC(CreateContext);		//只能在c++中调用
 		// MODULE_FUNC(DebugCheckVersionAndDataLayout);
 		// MODULE_FUNC(DebugFlashStyleColor);
 		// MODULE_FUNC(DebugTextEncoding);
 		// MODULE_FUNC(DestroyContext);		//只能在c++中调用
-		// MODULE_FUNC(DragFloat);	
-		// MODULE_FUNC(DragFloat2);
-		// MODULE_FUNC(DragFloat3);
-		// MODULE_FUNC(DragFloat4);
-		// MODULE_FUNC(DragFloatRange2);
-		// MODULE_FUNC(DragInt);
-		// MODULE_FUNC(DragInt2);
-		// MODULE_FUNC(DragInt3);
-		// MODULE_FUNC(DragInt4);
-		// MODULE_FUNC(DragIntRange2);
-		// MODULE_FUNC(DragScalar);
-		// MODULE_FUNC(DragScalarN);
-		// MODULE_FUNC(Dummy);
+		MODULE_FUNC(DragFloat);
+		MODULE_FUNC(DragFloat2);
+		MODULE_FUNC(DragFloat3);
+		MODULE_FUNC(DragFloat4);
+		MODULE_FUNC(DragFloatRange2);
+		MODULE_FUNC(DragInt);
+		MODULE_FUNC(DragInt2);
+		MODULE_FUNC(DragInt3);
+		MODULE_FUNC(DragInt4);
+		MODULE_FUNC(DragIntRange2);
+		// MODULE_FUNC(DragScalar);		//难以实现
+		// MODULE_FUNC(DragScalarN);		//难以实现
+		MODULE_FUNC(Dummy);
 		MODULE_FUNC(End);
 		// MODULE_FUNC(EndChild);
 		// MODULE_FUNC(EndChildFrame);
@@ -935,11 +1233,11 @@ namespace imgui {
 		//MODULE_FUNC(EndMainMenuBar);		//只能在C++中调用
 		MODULE_FUNC(EndMenu);
 		MODULE_FUNC(EndMenuBar);
-		// MODULE_FUNC(EndPopup);
+		MODULE_FUNC(EndPopup);
 		MODULE_FUNC(EndTabBar);
 		MODULE_FUNC(EndTabItem);
 		// MODULE_FUNC(EndTable);
-		// MODULE_FUNC(EndTooltip);
+		MODULE_FUNC(EndTooltip);
 		// MODULE_FUNC(GetAllocatorFunctions);
 		// MODULE_FUNC(GetBackgroundDrawList);
 		MODULE_FUNC(GetClipboardText);
@@ -1023,20 +1321,20 @@ namespace imgui {
 		// MODULE_FUNC(IsAnyItemFocused);
 		// MODULE_FUNC(IsAnyItemHovered);
 		MODULE_FUNC(IsAnyMouseDown);
-		// MODULE_FUNC(IsItemActivated);
-		// MODULE_FUNC(IsItemActive);
-		// MODULE_FUNC(IsItemClicked);
-		// MODULE_FUNC(IsItemDeactivated);
-		// MODULE_FUNC(IsItemDeactivatedAfterEdit);
-		// MODULE_FUNC(IsItemEdited);
-		// MODULE_FUNC(IsItemFocused);
-		// MODULE_FUNC(IsItemHovered);
-		// MODULE_FUNC(IsItemToggledOpen);
-		// MODULE_FUNC(IsItemVisible);
-		// MODULE_FUNC(IsKeyChordPressed);
-		// MODULE_FUNC(IsKeyDown);
-		// MODULE_FUNC(IsKeyPressed);
-		// MODULE_FUNC(IsKeyReleased);
+		MODULE_FUNC(IsItemActivated);
+		MODULE_FUNC(IsItemActive);
+		MODULE_FUNC(IsItemClicked);
+		MODULE_FUNC(IsItemDeactivated);
+		MODULE_FUNC(IsItemDeactivatedAfterEdit);
+		MODULE_FUNC(IsItemEdited);
+		MODULE_FUNC(IsItemFocused);
+		MODULE_FUNC(IsItemHovered);
+		MODULE_FUNC(IsItemToggledOpen);
+		MODULE_FUNC(IsItemVisible);
+		MODULE_FUNC(IsKeyChordPressed);
+		MODULE_FUNC(IsKeyDown);
+		MODULE_FUNC(IsKeyPressed);
+		MODULE_FUNC(IsKeyReleased);
 		MODULE_FUNC(IsMouseClicked);
 		MODULE_FUNC(IsMouseDoubleClicked);
 		MODULE_FUNC(IsMouseDown);
@@ -1050,7 +1348,7 @@ namespace imgui {
 		// MODULE_FUNC(IsWindowCollapsed);
 		// MODULE_FUNC(IsWindowFocused);
 		// MODULE_FUNC(IsWindowHovered);
-		MODULE_FUNC(LabelText);
+		MODULE_FUNC(LabelText);		//不完全实现：不支持格式
 		// MODULE_FUNC(LabelTextV);		//va_list，无法暴露给lua
 		MODULE_FUNC(ListBox);
 		// MODULE_FUNC(LoadIniSettingsFromDisk);
@@ -1068,7 +1366,7 @@ namespace imgui {
 		// MODULE_FUNC(NewFrame);	//在c++中已调用
 		MODULE_FUNC(NewLine);
 		// MODULE_FUNC(NextColumn);
-		// MODULE_FUNC(OpenPopup);
+		MODULE_FUNC(OpenPopup);
 		// MODULE_FUNC(OpenPopupOnItemClick);
 		// MODULE_FUNC(PlotHistogram);
 		// MODULE_FUNC(PlotLines);
@@ -1115,8 +1413,8 @@ namespace imgui {
 		// MODULE_FUNC(SetDragDropPayload);
 		// MODULE_FUNC(SetItemAllowOverlap);
 		MODULE_FUNC(SetItemDefaultFocus);
-		// MODULE_FUNC(SetItemTooltip);
-		// MODULE_FUNC(SetItemTooltipV);
+		MODULE_FUNC(SetItemTooltip);	//不完全实现，不支持格式
+		//MODULE_FUNC(SetItemTooltipV);		//va_list无法实现
 		// MODULE_FUNC(SetKeyboardFocusHere);
 		// MODULE_FUNC(SetMouseCursor);
 		// MODULE_FUNC(SetNextFrameWantCaptureKeyboard);
@@ -1140,8 +1438,8 @@ namespace imgui {
 		MODULE_FUNC(SetScrollY);
 		// MODULE_FUNC(SetStateStorage);
 		// MODULE_FUNC(SetTabItemClosed);
-		// MODULE_FUNC(SetTooltip);
-		// MODULE_FUNC(SetTooltipV);
+		MODULE_FUNC(SetTooltip);
+		//MODULE_FUNC(SetTooltipV);		//va_list无法实现
 		// MODULE_FUNC(SetWindowCollapsed);
 		// MODULE_FUNC(SetWindowFocus);
 		// MODULE_FUNC(SetWindowFontScale);
@@ -1190,7 +1488,7 @@ namespace imgui {
 		// MODULE_FUNC(TableSetColumnIndex);
 		// MODULE_FUNC(TableSetupColumn);
 		// MODULE_FUNC(TableSetupScrollFreeze);
-		MODULE_FUNC(Text);	//不完全实现：只有第一个参数有效
+		MODULE_FUNC(Text);	//不完全实现：不支持格式
 		MODULE_FUNC(TextColored);
 		// MODULE_FUNC(TextColoredV);
 		// MODULE_FUNC(TextDisabled);
