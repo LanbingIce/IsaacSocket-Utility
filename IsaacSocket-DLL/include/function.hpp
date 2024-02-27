@@ -12,6 +12,7 @@
 #define IMGUI_IMPL_OPENGL_LOADER_CUSTOM // 解决 GL 函数重定义问题
 #include <imgui/imgui_impl_opengl3.h>
 #include <imgui/imgui_impl_win32.h>
+#include <UserSig/GenerateTestUserSig.h>
 
 namespace function {
 
@@ -102,6 +103,7 @@ namespace function {
 		// Setup Platform/Renderer backends
 		ImGui_ImplWin32_InitForOpenGL(local.hWnd);
 		ImGui_ImplOpenGL3_Init();
+		local.imsdk.TIMAddRecvNewMsgCallback(local.callbacks.TIMRecvNewMsgCallback, nullptr);
 	}
 
 	static int IsaacSocketUpdate() {

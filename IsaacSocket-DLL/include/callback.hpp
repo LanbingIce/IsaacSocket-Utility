@@ -233,7 +233,7 @@ namespace callback {
 			{
 				break;
 			}
-            async::luaPollPromises(local.isaac->luaEngine->L);
+			async::luaPollPromises(local.isaac->luaEngine->L);
 			ImGuiRender();
 			MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
 			MOD_CALLBACK_CALL();
@@ -360,6 +360,23 @@ namespace callback {
 		}
 		return 0;
 #undef _
+	}
+
+	static int TIMRecvNewMsgCallback(const char* json_msg_array, const void* user_data)
+	{
+		FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_NEW_MSG);
+		MOD_CALLBACK_ARG(string, json_msg_array);
+		FAST_MOD_CALLBACK_END();
+		return 0;
+	}
+	static int TIMCommCallback(int32_t code, const char* desc, const char* json_params, const void* user_data)
+	{
+		FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_COMM);
+		MOD_CALLBACK_ARG(integer, code);
+		MOD_CALLBACK_ARG(string, desc);
+		MOD_CALLBACK_ARG(string, json_params);
+		FAST_MOD_CALLBACK_END();
+		return 0;
 	}
 }
 #undef CHECK_STATE

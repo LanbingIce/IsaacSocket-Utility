@@ -29,6 +29,8 @@ namespace main {
 			(LPCVOID)callback::OnExecuteCommand,
 			(LPCVOID)callback::OnConsoleOutput,
 			(LPCVOID)callback::PreWndProc,
+			callback::TIMRecvNewMsgCallback,
+			callback::TIMCommCallback,
 		};
 
 		inject::Init();

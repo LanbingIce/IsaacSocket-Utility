@@ -65,6 +65,7 @@
     <ClInclude Include="include\function.hpp" />
     <ClInclude Include="include\gnucompat.hpp" />
     <ClInclude Include="include\handle.hpp" />
+    <ClInclude Include="include\imsdk.hpp" />
     <ClInclude Include="include\inject.hpp" />
     <ClInclude Include="include\isaac.hpp" />
     <ClInclude Include="include\isaac_socket.hpp" />
@@ -75,7 +76,6 @@
     <ClInclude Include="include\reload.hpp" />
     <ClInclude Include="include\state.hpp" />
     <ClInclude Include="include\utils.hpp" />
-    <ClInclude Include="include\imsdk.hpp" />
     <ClInclude Include="libs\glad\glad.h" />
     <ClInclude Include="libs\httplib\httplib.h" />
     <ClInclude Include="libs\ImGuiFileDialog\ImGuiFileDialog.h" />
@@ -200,6 +200,9 @@
     <ClInclude Include="libs\stbi\stb_image.h" />
     <ClInclude Include="libs\stbi\stb_image_resize2.h" />
     <ClInclude Include="libs\stbi\stb_image_write.h" />
+    <ClInclude Include="libs\UserSig\GenerateTestUserSig.h" />
+    <ClInclude Include="libs\zlib\zconf.h" />
+    <ClInclude Include="libs\zlib\zlib.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libs\glad\glad.cpp" />
@@ -213,6 +216,7 @@
     <ClCompile Include="libs\imgui\imgui_tables.cpp" />
     <ClCompile Include="libs\imgui\imgui_widgets.cpp" />
     <ClCompile Include="libs\json\jsoncpp.cpp" />
+    <ClCompile Include="libs\UserSig\GenerateTestUserSig.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
@@ -222,6 +226,7 @@
     <ClCompile Include="src\modules\http.cpp" />
     <ClCompile Include="src\modules\image.cpp" />
     <ClCompile Include="src\modules\imgui_.cpp" />
+    <ClCompile Include="src\modules\imsdk_.cpp" />
     <ClCompile Include="src\modules\isaac_.cpp" />
     <ClCompile Include="src\modules\isaac_api.cpp" />
     <ClCompile Include="src\modules\memory.cpp" />
@@ -230,6 +235,9 @@
     <ClCompile Include="src\modules\system_.cpp" />
     <ClCompile Include="src\modules\win_api.cpp" />
     <ClCompile Include="src\reload.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="libs\zlib\zlibstatic.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

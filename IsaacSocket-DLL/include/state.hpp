@@ -44,6 +44,8 @@ namespace state {
 			LPCVOID OnExecuteCommand;
 			LPCVOID OnConsoleOutput;
 			LPCVOID PreWndProc;
+			TIMRecvNewMsgCallback TIMRecvNewMsgCallback;
+			TIMCommCallback TIMCommCallback;
 		} callbacks;
 		HWND hWnd;
 		bool initialized = false;

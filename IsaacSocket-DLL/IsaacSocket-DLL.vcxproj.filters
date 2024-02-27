@@ -43,6 +43,12 @@
     <Filter Include="libs\ImGuiFileDialog">
       <UniqueIdentifier>{1224ee38-055c-4a36-94e1-8b44f4577625}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libs\UserSig">
+      <UniqueIdentifier>{3edf17d9-88a6-484c-8b2e-7d4d992f8b42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\zlib">
+      <UniqueIdentifier>{c9eda22d-30b5-46c6-a324-6509b42e5c24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libs\glad\glad.cpp">
@@ -122,6 +128,12 @@
     </ClCompile>
     <ClCompile Include="libs\ImGuiFileDialog\ImGuiFileDialog.cpp">
       <Filter>libs\ImGuiFileDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\imsdk_.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\UserSig\GenerateTestUserSig.cpp">
+      <Filter>libs\UserSig</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -551,5 +563,19 @@
     <ClInclude Include="include\imsdk.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="libs\UserSig\GenerateTestUserSig.h">
+      <Filter>libs\UserSig</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\zlib\zconf.h">
+      <Filter>libs\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\zlib\zlib.h">
+      <Filter>libs\zlib</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="libs\zlib\zlibstatic.lib">
+      <Filter>libs\zlib</Filter>
+    </Library>
   </ItemGroup>
 </Project>
