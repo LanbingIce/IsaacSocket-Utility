@@ -73,6 +73,13 @@ namespace utils {
 		return (const char*)path.u8string().c_str();
 	}
 
+	static std::wstring GetDataFilePathW(const wchar_t* fileName) {
+		wchar_t c_path[MAX_PATH];
+		GetEnvironmentVariableW(L"APPDATA", c_path, MAX_PATH);
+		std::filesystem::path path = std::filesystem::path(c_path) / "IsaacSocket" / fileName;
+		return path.wstring();
+	}
+
 	// 折叠表达式打印可变参数列表
 	template <typename... Args>
 	void cw(const Args&... args) {

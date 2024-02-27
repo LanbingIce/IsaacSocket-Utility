@@ -13,11 +13,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\ImSDK.dll" />
     <None Remove="Resources\IsaacSocket.dll" />
     <None Remove="Resources\VonwaonBitmap-16px.ttf" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\ImSDK.dll" />
     <EmbeddedResource Include="Resources\VonwaonBitmap-16px.ttf" />
   </ItemGroup>
 

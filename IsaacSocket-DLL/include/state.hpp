@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "lua.hpp"
+#include "imsdk.hpp"
 #include "pch.h"
 #include <imgui/imgui.h>
 
@@ -50,6 +51,7 @@ namespace state {
 		char charsInputBuffer[3];
 		isaac::IsaacImage* isaac;
 		lua::Lua lua;
+		imsdk::ImSDK imsdk;
 		uint32_t MTRandomLockedValue = 0;
 		HMODULE hOpenGL;
 		ImFont* font16;

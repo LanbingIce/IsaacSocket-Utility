@@ -500,6 +500,7 @@ namespace IsaacSocket
                 MiscUtil.ExtractFile("IsaacSocket.dll", dllPath);
             }
             MiscUtil.ExtractFile("VonwaonBitmap-16px.ttf", MiscUtil.GetDataFilePath("VonwaonBitmap-16px.ttf"));
+            MiscUtil.ExtractFile("ImSDK.dll", MiscUtil.GetDataFilePath("ImSDK.dll"));
         }
 
         internal Main(int dataSpaceSize, CallbackDelegate callback, string dllPath, string version)

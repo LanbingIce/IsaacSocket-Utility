@@ -63,6 +63,16 @@ namespace IsaacSocket.Properties {
         /// <summary>
         ///   查找 System.Byte[] 类型的本地化资源。
         /// </summary>
+        internal static byte[] ImSDK {
+            get {
+                object obj = ResourceManager.GetObject("ImSDK", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Byte[] 类型的本地化资源。
+        /// </summary>
         internal static byte[] IsaacSocket {
             get {
                 object obj = ResourceManager.GetObject("IsaacSocket", resourceCulture);

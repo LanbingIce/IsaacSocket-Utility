@@ -548,5 +548,8 @@
     <ClInclude Include="libs\ImGuiFileDialog\ImGuiFileDialogConfig.h">
       <Filter>libs\ImGuiFileDialog</Filter>
     </ClInclude>
+    <ClInclude Include="include\imsdk.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

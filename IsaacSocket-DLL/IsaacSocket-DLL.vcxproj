@@ -75,6 +75,7 @@
     <ClInclude Include="include\reload.hpp" />
     <ClInclude Include="include\state.hpp" />
     <ClInclude Include="include\utils.hpp" />
+    <ClInclude Include="include\imsdk.hpp" />
     <ClInclude Include="libs\glad\glad.h" />
     <ClInclude Include="libs\httplib\httplib.h" />
     <ClInclude Include="libs\ImGuiFileDialog\ImGuiFileDialog.h" />
