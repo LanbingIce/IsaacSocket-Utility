@@ -871,7 +871,6 @@ float ImGui_ImplWin32_GetDpiScaleForHwnd(void* hwnd)
 // (the Dwm* functions are Vista era functions but we are borrowing logic from GLFW)
 void ImGui_ImplWin32_EnableAlphaCompositing(void* hwnd)
 {
-#ifndef __MINGW32__
     if (!_IsWindowsVistaOrGreater())
         return;
 
@@ -897,7 +896,6 @@ void ImGui_ImplWin32_EnableAlphaCompositing(void* hwnd)
         bb.dwFlags = DWM_BB_ENABLE;
         ::DwmEnableBlurBehindWindow((HWND)hwnd, &bb);
     }
-#endif
 }
 
 //---------------------------------------------------------------------------------------------------------
