@@ -463,6 +463,7 @@ namespace imgui {
 	static int Indent(lua_State* L) {
 		ARG_DEF(1, number, float, indent_w, 0.0f);
 		ImGui::Indent(indent_w);
+		return 0;
 	}
 
 	static int InputDouble(lua_State* L) {
@@ -1210,6 +1211,7 @@ namespace imgui {
 	static int Unindent(lua_State* L) {
 		ARG_DEF(1, number, float, indent_w, 0.0f);
 		ImGui::Unindent(indent_w);
+		return 0;
 	}
 
 	static RegisterModule Init = [] {
