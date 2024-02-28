@@ -1,6 +1,5 @@
 ﻿#include "module.hpp"
 #include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
 #include <imgui/imgui_stdlib.h>
 
 namespace imgui {
@@ -98,7 +97,7 @@ namespace imgui {
 	}
 
 	static int BeginItemTooltip(lua_State* L) {
-		RET(integer, ImGui::BeginItemTooltip());
+		RET(boolean, ImGui::BeginItemTooltip());
 	}
 
 	static int BeginListBox(lua_State* L) {
@@ -125,7 +124,7 @@ namespace imgui {
 
 	static int BeginPopupContextItem(lua_State* L) {
 		ARG_DEF(1, string, const char*, str_id, NULL);
-		ARG_DEF(2, integer, ImGuiPopupFlags, popup_flags, 1);
+		ARG_DEF(2, integer, ImGuiPopupFlags, popup_flags, ImGuiPopupFlags_MouseButtonRight);
 		RET(boolean, ImGui::BeginPopupContextItem(str_id, popup_flags));
 	}
 
@@ -189,12 +188,8 @@ namespace imgui {
 			ARG(3, vectorcstring, vector<const char*>, items);
 			ARG(4, integer, size_t, items_count);
 			ARG_DEF(5, integer, int, height_in_items, -1);
-			if (items_count > items.size())
-			{
-				items_count = items.size();
-			}
-			const char** arr = items.data();
-			local.lua.lua_pushboolean(L, ImGui::Combo(label, &current_item, arr, items_count, height_in_items));
+			items.resize(items_count);
+			local.lua.lua_pushboolean(L, ImGui::Combo(label, &current_item, items.data(), items_count, height_in_items));
 		}
 		local.lua.lua_pushinteger(L, current_item);
 		return 2;
@@ -453,7 +448,7 @@ namespace imgui {
 	static int ImageButton(lua_State* L) {
 		ARG(1, string, const char*, str_id);
 		ARG(2, integer, ImTextureID, user_texture_id);
-		ARG_UDATA_DEF(3, ImVec2, const ::ImVec2*, image_size, &VEC2_0);
+		ARG_UDATA(3, ImVec2, const ::ImVec2*, image_size);
 		ARG_UDATA_DEF(4, ImVec2, const ::ImVec2*, uv0, &VEC2_0);
 		ARG_UDATA_DEF(5, ImVec2, const ::ImVec2*, uv1, &VEC2_1);
 		ARG_UDATA_DEF(6, ImVec4, const ::ImVec4*, bg_col, &VEC4_0);
@@ -592,7 +587,7 @@ namespace imgui {
 	}
 
 	static int IsItemClicked(lua_State* L) {
-		ARG_DEF(1, integer, ImGuiMouseButton, mouse_button, 0);
+		ARG_DEF(1, integer, ImGuiMouseButton, mouse_button, ImGuiMouseButton_Left);
 		RET(boolean, ImGui::IsItemClicked(mouse_button));
 	}
 
@@ -627,94 +622,39 @@ namespace imgui {
 
 	static int IsKeyChordPressed(lua_State* L) {
 		ARG(1, integer, ImGuiKeyChord, key_chord);
-		if (local.lua.lua_isnoneornil(L, 2)) {
-			RET(boolean, ImGui::IsKeyChordPressed(key_chord));
-		}
-		else
-		{
-			ARG(2, integer, ImGuiID, owner_id);
-			ARG_DEF(3, integer, ImGuiInputFlags, flags, 0);
-			RET(boolean, ImGui::IsKeyChordPressed(key_chord, owner_id, flags));
-		}
+		RET(boolean, ImGui::IsKeyChordPressed(key_chord));
 	}
 
 	static int IsKeyDown(lua_State* L) {
 		ARG(1, integer, ImGuiKey, key);
-		if (local.lua.lua_isnoneornil(L, 2)) {
-			RET(boolean, ImGui::IsKeyDown(key));
-		}
-		else
-		{
-			ARG(2, integer, ImGuiID, owner_id);
-			RET(boolean, ImGui::IsKeyDown(key, owner_id));
-		}
+		RET(boolean, ImGui::IsKeyDown(key));
 	}
 
 	static int IsKeyPressed(lua_State* L) {
 		ARG(1, integer, ImGuiKey, key);
-		if (local.lua.lua_isboolean(L, 2)) {
-			ARG_DEF(2, boolean, bool, repeat, true);
-			RET(boolean, ImGui::IsKeyPressed(key, repeat));
-		}
-		else
-		{
-			ARG(2, integer, ImGuiID, owner_id);
-			ARG_DEF(3, integer, ImGuiInputFlags, flags, 0);
-			RET(boolean, ImGui::IsKeyPressed(key, owner_id, flags));
-		}
+		ARG_DEF(2, boolean, bool, repeat, true);
+		RET(boolean, ImGui::IsKeyPressed(key, repeat));
 	}
 
 	static int IsKeyReleased(lua_State* L) {
 		ARG(1, integer, ImGuiKey, key);
-		if (local.lua.lua_isnoneornil(L, 2)) {
-			RET(boolean, ImGui::IsKeyReleased(key));
-		}
-		else
-		{
-			ARG(2, integer, ImGuiID, owner_id);
-			RET(boolean, ImGui::IsKeyReleased(key, owner_id));
-		}
+		RET(boolean, ImGui::IsKeyReleased(key));
 	}
 
 	static int IsMouseClicked(lua_State* L) {
 		ARG(1, integer, ImGuiMouseButton, button);
-		if (local.lua.lua_isboolean(L, 2))
-		{
-			ARG_DEF(2, boolean, bool, repeat, false);
-			RET(boolean, ImGui::IsMouseClicked(button, repeat));
-		}
-		else
-		{
-			ARG(2, integer, ImGuiID, owner_id);
-			ARG_DEF(3, integer, ImGuiInputFlags, flags, 0);
-			RET(boolean, ImGui::IsMouseClicked(button, owner_id, flags));
-		}
+		ARG_DEF(2, boolean, bool, repeat, false);
+		RET(boolean, ImGui::IsMouseClicked(button, repeat));
 	}
 
 	static int IsMouseDoubleClicked(lua_State* L) {
 		ARG(1, integer, ImGuiMouseButton, button);
-		if (local.lua.lua_isnoneornil(L, 2))
-		{
-			RET(boolean, ImGui::IsMouseDoubleClicked(button));
-		}
-		else
-		{
-			ARG(2, integer, ImGuiID, owner_id);
-			RET(boolean, ImGui::IsMouseDoubleClicked(button, owner_id));
-		}
+		RET(boolean, ImGui::IsMouseDoubleClicked(button));
 	}
 
 	static int IsMouseDown(lua_State* L) {
 		ARG(1, integer, ImGuiMouseButton, button);
-		if (local.lua.lua_isnoneornil(L, 2))
-		{
-			RET(boolean, ImGui::IsMouseDown(button));
-		}
-		else
-		{
-			ARG(2, integer, ImGuiID, owner_id);
-			RET(boolean, ImGui::IsMouseDown(button, owner_id));
-		}
+		RET(boolean, ImGui::IsMouseDown(button));
 	}
 
 	static int IsMouseDragging(lua_State* L) {
@@ -731,21 +671,18 @@ namespace imgui {
 	}
 
 	static int IsMousePosValid(lua_State* L) {
-		ARG_UDATA_DEF(1, ImVec2, const ::ImVec2*, mouse_pos, nullptr);
+		ARG_UDATA_DEF(1, ImVec2, const ::ImVec2*, mouse_pos, NULL);
 		RET(boolean, ImGui::IsMousePosValid(mouse_pos));
 	}
 
 	static int IsMouseReleased(lua_State* L) {
 		ARG(1, integer, ImGuiMouseButton, button);
-		if (local.lua.lua_isnoneornil(L, 2))
-		{
-			RET(boolean, ImGui::IsMouseDown(button));
-		}
-		else
-		{
-			ARG(2, integer, ImGuiID, owner_id);
-			RET(boolean, ImGui::IsMouseReleased(button, owner_id));
-		}
+		RET(boolean, ImGui::IsMouseReleased(button));
+	}
+
+	static int IsWindowFocused(lua_State* L) {
+		ARG_DEF(1, integer, ImGuiFocusedFlags, flags, 0);
+		RET(boolean, ImGui::IsWindowFocused(flags));
 	}
 
 	static int LabelText(lua_State* L) {
@@ -772,7 +709,9 @@ namespace imgui {
 		ARG_DEF(2, string, const char*, shortcut, NULL);
 		ARG_DEF(3, boolean, bool, selected, false);
 		ARG_DEF(4, boolean, bool, enabled, true);
-		RET(boolean, ImGui::MenuItem(label, shortcut, selected, enabled));
+		local.lua.lua_pushboolean(L, ImGui::MenuItem(label, shortcut, &selected, enabled));
+		local.lua.lua_pushboolean(L, selected);
+		return 2;
 	}
 
 	static int NewLine(lua_State* L) {
@@ -782,14 +721,14 @@ namespace imgui {
 
 	static int OpenPopup(lua_State* L) {
 		ARG_DEF(2, integer, ImGuiPopupFlags, popup_flags, 0);
-		if (local.lua.lua_isstring(L, 1))
+		if (local.lua.lua_isinteger(L, 1))
 		{
-			ARG(1, string, const char*, str_id);
-			ImGui::OpenPopup(str_id, popup_flags);
-		}
-		else {
 			ARG(1, integer, ImGuiID, id);
 			ImGui::OpenPopup(id, popup_flags);
+		}
+		else {
+			ARG(1, string, const char*, str_id);
+			ImGui::OpenPopup(str_id, popup_flags);
 		}
 		return 0;
 	}
@@ -825,12 +764,19 @@ namespace imgui {
 
 	static int RadioButton(lua_State* L) {
 		ARG(1, string, const char*, label);
-		ARG(2, integer, int, v);
-		ARG(3, integer, int, v_button);
-
-		local.lua.lua_pushboolean(L, ImGui::RadioButton(label, &v, v_button));
-		local.lua.lua_pushinteger(L, v);
-		return 2;
+		if (local.lua.lua_isinteger(L, 2))
+		{
+			ARG(2, integer, int, v);
+			ARG(3, integer, int, v_button);
+			local.lua.lua_pushboolean(L, ImGui::RadioButton(label, &v, v_button));
+			local.lua.lua_pushinteger(L, v);
+			return 2;
+		}
+		else
+		{
+			ARG(2, boolean, bool, active);
+			RET(boolean, ImGui::RadioButton(label, active));
+		}
 	}
 
 	static int SameLine(lua_State* L) {
@@ -846,7 +792,7 @@ namespace imgui {
 		ARG(2, boolean, bool, selected);
 		ARG_DEF(3, integer, ImGuiSelectableFlags, flags, 0);
 		ARG_UDATA_DEF(4, ImVec2, const ::ImVec2*, size_arg, &VEC2_0);
-		local.lua.lua_pushboolean(L, ImGui::Selectable(label, selected, flags, *size_arg));
+		local.lua.lua_pushboolean(L, ImGui::Selectable(label, &selected, flags, *size_arg));
 		local.lua.lua_pushboolean(L, selected);
 		return 2;
 	}
@@ -914,12 +860,12 @@ namespace imgui {
 		{
 			ARG(1, string, const char*, name);
 			ARG_UDATA(2, ImVec2, ::ImVec2*, pos);
-			ARG(3, integer, ::ImGuiCond, cond);
+			ARG_DEF(3, integer, ::ImGuiCond, cond, 0);
 			ImGui::SetWindowPos(name, *pos, cond);
 		}
 		else {
 			ARG_UDATA(1, ImVec2, ::ImVec2*, pos);
-			ARG(2, integer, ::ImGuiCond, cond);
+			ARG_DEF(2, integer, ::ImGuiCond, cond, 0);
 			ImGui::SetWindowPos(*pos, cond);
 		}
 		return 0;
@@ -930,20 +876,21 @@ namespace imgui {
 		{
 			ARG(1, string, const char*, name);
 			ARG_UDATA(2, ImVec2, ::ImVec2*, size);
-			ARG(3, integer, ::ImGuiCond, cond);
+			ARG_DEF(3, integer, ::ImGuiCond, cond, 0);
 			ImGui::SetWindowSize(name, *size, cond);
 		}
 		else {
 			ARG_UDATA(1, ImVec2, ::ImVec2*, size);
-			ARG(2, integer, ::ImGuiCond, cond);
+			ARG_DEF(2, integer, ::ImGuiCond, cond, 0);
 			ImGui::SetWindowSize(*size, cond);
 		}
 		return 0;
 	}
 
 	static int ShowAboutWindow(lua_State* L) {
-		ImGui::ShowAboutWindow();
-		return 0;
+		ARG_DEF(1, boolean, bool, open, true);
+		ImGui::ShowAboutWindow(&open);
+		RET(boolean, open);
 	}
 
 	static int ShowDebugLogWindow(lua_State* L) {
@@ -1104,19 +1051,22 @@ namespace imgui {
 
 	static int StyleColorsClassic(lua_State* L) {
 		local.styleColor = state::CLASSIC;
-		ImGui::StyleColorsClassic();
+		ARG_UDATA_DEF(1, ImGuiStyle, ::ImGuiStyle*, dst, NULL);
+		ImGui::StyleColorsClassic(dst);
 		return 0;
 	}
 
 	static int StyleColorsDark(lua_State* L) {
 		local.styleColor = state::DARK;
-		ImGui::StyleColorsDark();
+		ARG_UDATA_DEF(1, ImGuiStyle, ::ImGuiStyle*, dst, NULL);
+		ImGui::StyleColorsDark(dst);
 		return 0;
 	}
 
 	static int StyleColorsLight(lua_State* L) {
 		local.styleColor = state::LIGHT;
-		ImGui::StyleColorsLight();
+		ARG_UDATA_DEF(1, ImGuiStyle, ::ImGuiStyle*, dst, NULL);
+		ImGui::StyleColorsLight(dst);
 		return 0;
 	}
 
@@ -1129,7 +1079,7 @@ namespace imgui {
 	static int TextUnformatted(lua_State* L) {
 		ARG(1, string, const char*, text);
 		ARG_DEF(2, string, const char*, text_end, NULL);
-		ImGui::TextUnformatted(text);
+		ImGui::TextUnformatted(text, text_end);
 		return 0;
 	}
 
@@ -1346,7 +1296,7 @@ namespace imgui {
 		// MODULE_FUNC(IsRectVisible);
 		// MODULE_FUNC(IsWindowAppearing);
 		// MODULE_FUNC(IsWindowCollapsed);
-		// MODULE_FUNC(IsWindowFocused);
+		MODULE_FUNC(IsWindowFocused);
 		// MODULE_FUNC(IsWindowHovered);
 		MODULE_FUNC(LabelText);		//不完全实现：不支持格式
 		// MODULE_FUNC(LabelTextV);		//va_list，无法暴露给lua
