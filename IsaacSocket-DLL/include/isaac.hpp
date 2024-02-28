@@ -53,14 +53,14 @@ namespace isaac {
 		float SFXVolume; // 0x1c
 		float MapOpacity; // 0x20
 		bool Fullscreen; // 0x24
-		bool FilterEnabled; // 0x25
+		bool EnableFilter; // 0x25
 		bool field6_0x26; // 0x26
 		bool field7_0x27; // 0x27
 		float Gamma; // 0x28
 		float Exposure; // 0x2c
 		float Brightness; // 0x30
 		float Contrast; // 0x34
-		bool ControlHotplugEnabled; // 0x38
+		bool ControllerHotplug; // 0x38
 		bool DisplayPopups; // 0x39
 		bool FoundHUD; // 0x3a
 		bool field15_0x3b; // 0x3b
@@ -72,13 +72,13 @@ namespace isaac {
 		bool RumbleEnabled; // 0x4a
 		bool ChargeBars; // 0x4b
 		bool BulletVisibility; // 0x4c
-		bool EnableAimLock; // 0x4d
+		bool AimLock; // 0x4d
 		bool field25_0x4e; // 0x4e
 		bool field26_0x4f; // 0x4f
 		int TouchMode; // 0x50
 		bool DebugConsoleEnabled; // 0x54
 		bool VSync; // 0x55
-		bool EnableSteamCloud; // 0x56
+		bool SteamCloud; // 0x56
 		bool PauseOnFocusLost; // 0x57
 		bool MouseControl; // 0x58
 		bool field33_0x59; // 0x59
@@ -103,7 +103,7 @@ namespace isaac {
 		bool EnablePixelation; // 0x81
 		bool EnableBloom; // 0x82
 		bool EnableWaterSurface; // 0x83
-		bool GetsSetToEnableWaterSurface; // 0x84
+		bool EnableHeatWaves; // 0x84
 		bool EnableColorModifier; // 0x85
 		bool BossHpOnBottom; // 0x86
 		bool field58_0x87; // 0x87
