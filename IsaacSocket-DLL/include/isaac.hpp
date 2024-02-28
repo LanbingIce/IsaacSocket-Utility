@@ -165,19 +165,6 @@ namespace isaac {
 		int32_t varData;
 	};
 
-	// 角色身上的道具(饰品)类
-	struct HistoryItem
-	{
-		uint32_t time;
-		bool isTrinket;
-		char name_guess[3];
-		int32_t item;
-		uint32_t levelStage;
-		uint32_t stageType;
-		uint32_t roomType;
-		uint32_t itemPoolType;
-	};
-
 	// 武器类，未研究完毕
 	struct Weapon
 	{
@@ -241,6 +228,24 @@ namespace isaac {
 		};
 	};
 
+	// 角色身上的道具(饰品)类
+	struct HistoryItem
+	{
+		uint32_t time;
+		bool isTrinket;
+		char paddind[3];
+		int32_t id;
+		uint32_t levelStage;
+		uint32_t stageType;
+		uint32_t roomType;
+		uint32_t itemPoolType;
+	};
+
+	// 角色的历史
+	struct History {
+		vector<HistoryItem> historyItems;
+	};
+
 	// 角色类
 	struct Player
 	{
@@ -249,7 +254,7 @@ namespace isaac {
 			FIELD(0x132C, Weapon*, weapon);
 			FIELD(0x14C4, Active, actives[4]);
 			FIELD(0x1745, uint8_t, canShoot);
-			FIELD(0x1D0C, vector<HistoryItem>, historyItems);
+			FIELD(0x1D0C, History, history);
 		};
 	};
 

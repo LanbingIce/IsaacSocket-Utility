@@ -233,12 +233,12 @@ namespace isaac_api {
 		ARG_DEF(1, integer, uint32_t, playerId, 0);
 		ARG_RANGE(playerId, local.isaac->game->players.size());
 
-		vector<isaac::HistoryItem>& historyItems = local.isaac->game->players[playerId]->historyItems;
+		vector<isaac::HistoryItem>& historyItems = local.isaac->game->players[playerId]->history.historyItems;
 
 		RET_TABLE();
 
 		for (size_t i = 0; i < historyItems.size(); i++) {
-			RET_TABLE_KEY(integer, i + 1, integer, historyItems[i].item);
+			RET_TABLE_KEY(integer, i + 1, integer, historyItems[i].id);
 		}
 
 		RET_TABLE_END();
