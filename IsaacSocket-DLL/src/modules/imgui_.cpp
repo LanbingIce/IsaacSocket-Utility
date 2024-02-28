@@ -416,6 +416,10 @@ namespace imgui {
 		RET(number, ImGui::GetTime());
 	}
 
+	static int GetTreeNodeToLabelSpacing(lua_State* L) {
+		RET(number, ImGui::GetTreeNodeToLabelSpacing());
+	}
+
 	static int GetVersion(lua_State* L) {
 		RET(string, ImGui::GetVersion());
 	}
@@ -454,6 +458,11 @@ namespace imgui {
 		ARG_UDATA_DEF(6, ImVec4, const ::ImVec4*, bg_col, &VEC4_0);
 		ARG_UDATA_DEF(7, ImVec4, const ::ImVec4*, tint_col, &VEC4_1);
 		RET(boolean, ImGui::ImageButton(str_id, user_texture_id, *image_size, *uv0, *uv1, *bg_col, *tint_col));
+	}
+
+	static int Indent(lua_State* L) {
+		ARG_DEF(1, number, float, indent_w, 0.0f);
+		ImGui::Indent(indent_w);
 	}
 
 	static int InputDouble(lua_State* L) {
@@ -680,6 +689,14 @@ namespace imgui {
 		RET(boolean, ImGui::IsMouseReleased(button));
 	}
 
+	static int IsWindowAppearing(lua_State* L) {
+		RET(boolean, ImGui::IsWindowAppearing());
+	}
+
+	static int IsWindowCollapsed(lua_State* L) {
+		RET(boolean, ImGui::IsWindowCollapsed());
+	}
+
 	static int IsWindowFocused(lua_State* L) {
 		ARG_DEF(1, integer, ImGuiFocusedFlags, flags, 0);
 		RET(boolean, ImGui::IsWindowFocused(flags));
@@ -716,6 +733,11 @@ namespace imgui {
 
 	static int NewLine(lua_State* L) {
 		ImGui::NewLine();
+		return 0;
+	}
+
+	static int NextColumn(lua_State* L) {
+		ImGui::NextColumn();
 		return 0;
 	}
 
@@ -1049,6 +1071,16 @@ namespace imgui {
 		return 2;
 	}
 
+	static int SmallButton(lua_State* L) {
+		ARG(1, string, const char*, label);
+		RET(boolean, ImGui::SmallButton(label));
+	}
+
+	static int Spacing(lua_State* L) {
+		ImGui::Spacing();
+		return 0;
+	}
+
 	static int StyleColorsClassic(lua_State* L) {
 		local.styleColor = state::CLASSIC;
 		ARG_UDATA_DEF(1, ImGuiStyle, ::ImGuiStyle*, dst, NULL);
@@ -1068,6 +1100,39 @@ namespace imgui {
 		ARG_UDATA_DEF(1, ImGuiStyle, ::ImGuiStyle*, dst, NULL);
 		ImGui::StyleColorsLight(dst);
 		return 0;
+	}
+
+	static int TabItemButton(lua_State* L) {
+		ARG(1, string, const char*, label);
+		ARG_DEF(2, integer, ImGuiTabItemFlags, flags, 0);
+		RET(boolean, ImGui::TabItemButton(label, flags));
+	}
+
+	static int TableAngledHeadersRow(lua_State* L) {
+		ImGui::TableAngledHeadersRow();
+		return 0;
+	}
+
+	static int TableGetColumnCount(lua_State* L) {
+		RET(integer, ImGui::TableGetColumnCount());
+	}
+
+	static int TableGetColumnFlags(lua_State* L) {
+		ARG_DEF(1, integer, int, column_n, -1);
+		RET(integer, ImGui::TableGetColumnFlags(column_n));
+	}
+
+	static int TableGetColumnIndex(lua_State* L) {
+		RET(integer, ImGui::TableGetColumnIndex());
+	}
+
+	static int TableGetColumnName(lua_State* L) {
+		ARG_DEF(1, integer, int, column_n, -1);
+		RET(string, ImGui::TableGetColumnName(column_n));
+	}
+
+	static int TableGetRowIndex(lua_State* L) {
+		RET(integer, ImGui::TableGetRowIndex());
 	}
 
 	static int Text(lua_State* L) {
@@ -1090,10 +1155,61 @@ namespace imgui {
 		return 0;
 	}
 
+	static int TextDisabled(lua_State* L) {
+		ARG(1, string, const char*, text);
+		ImGui::TextDisabled("%s", text);
+		return 0;
+	}
+
 	static int TextWrapped(lua_State* L) {
 		ARG(1, string, const char*, text);
 		ImGui::TextWrapped("%s", text);
 		return 0;
+	}
+
+	static int TreeNode(lua_State* L) {
+		if (local.lua.lua_isnoneornil(L, 2))
+		{
+			ARG(1, string, const char*, label);
+			RET(boolean, ImGui::TreeNode(label));
+		}
+		else
+		{
+			ARG(1, string, const char*, str_id);
+			ARG(2, string, const char*, text);
+			RET(boolean, ImGui::TreeNode(str_id, "%s", text));
+		}
+	}
+
+	static int TreeNodeEx(lua_State* L) {
+		ARG_DEF(2, integer, ImGuiTreeNodeFlags, flags, 0);
+		if (local.lua.lua_isnoneornil(L, 3))
+		{
+			ARG(1, string, const char*, label);
+			RET(boolean, ImGui::TreeNodeEx(label, flags));
+		}
+		else
+		{
+			ARG(1, string, const char*, str_id);
+			ARG(3, string, const char*, text);
+			RET(boolean, ImGui::TreeNodeEx(str_id, flags, "%s", text));
+		}
+	}
+
+	static int TreePop(lua_State* L) {
+		ImGui::TreePop();
+		return 0;
+	}
+
+	static int TreePush(lua_State* L) {
+		ARG(1, string, const char*, str_id);
+		ImGui::TreePush(str_id);
+		return 0;
+	}
+
+	static int Unindent(lua_State* L) {
+		ARG_DEF(1, number, float, indent_w, 0.0f);
+		ImGui::Unindent(indent_w);
 	}
 
 	static RegisterModule Init = [] {
@@ -1240,7 +1356,7 @@ namespace imgui {
 		// MODULE_FUNC(GetTextLineHeight);
 		// MODULE_FUNC(GetTextLineHeightWithSpacing);
 		MODULE_FUNC(GetTime);
-		// MODULE_FUNC(GetTreeNodeToLabelSpacing);
+		MODULE_FUNC(GetTreeNodeToLabelSpacing);
 		MODULE_FUNC(GetVersion);
 		// MODULE_FUNC(GetWindowContentRegionMax);
 		// MODULE_FUNC(GetWindowContentRegionMin);
@@ -1251,7 +1367,7 @@ namespace imgui {
 		// MODULE_FUNC(GetWindowWidth);
 		MODULE_FUNC(Image);
 		MODULE_FUNC(ImageButton);
-		// MODULE_FUNC(Indent);
+		MODULE_FUNC(Indent);
 		MODULE_FUNC(InputDouble);
 		MODULE_FUNC(InputFloat);
 		MODULE_FUNC(InputFloat2);
@@ -1294,12 +1410,12 @@ namespace imgui {
 		MODULE_FUNC(IsMouseReleased);
 		// MODULE_FUNC(IsPopupOpen);
 		// MODULE_FUNC(IsRectVisible);
-		// MODULE_FUNC(IsWindowAppearing);
-		// MODULE_FUNC(IsWindowCollapsed);
+		MODULE_FUNC(IsWindowAppearing);
+		MODULE_FUNC(IsWindowCollapsed);
 		MODULE_FUNC(IsWindowFocused);
 		// MODULE_FUNC(IsWindowHovered);
 		MODULE_FUNC(LabelText);		//不完全实现：不支持格式
-		// MODULE_FUNC(LabelTextV);		//va_list，无法暴露给lua
+		// MODULE_FUNC(LabelTextV);		//va_list
 		MODULE_FUNC(ListBox);
 		// MODULE_FUNC(LoadIniSettingsFromDisk);
 		// MODULE_FUNC(LoadIniSettingsFromMemory);
@@ -1310,12 +1426,12 @@ namespace imgui {
 		// MODULE_FUNC(LogToClipboard);
 		// MODULE_FUNC(LogToFile);
 		// MODULE_FUNC(LogToTTY);
-		// MODULE_FUNC(MemAlloc);	//可能会造成内存泄漏，不暴露给lua
-		// MODULE_FUNC(MemFree);	//可能会造成内存泄漏，不暴露给lua
+		// MODULE_FUNC(MemAlloc);	//过于底层
+		// MODULE_FUNC(MemFree);	//过于底层
 		MODULE_FUNC(MenuItem);
-		// MODULE_FUNC(NewFrame);	//在c++中已调用
+		// MODULE_FUNC(NewFrame);	//过于底层
 		MODULE_FUNC(NewLine);
-		// MODULE_FUNC(NextColumn);
+		MODULE_FUNC(NextColumn);
 		MODULE_FUNC(OpenPopup);
 		// MODULE_FUNC(OpenPopupOnItemClick);
 		// MODULE_FUNC(PlotHistogram);
@@ -1342,7 +1458,7 @@ namespace imgui {
 		// MODULE_FUNC(PushTabStop);
 		// MODULE_FUNC(PushTextWrapPos);
 		MODULE_FUNC(RadioButton);
-		// MODULE_FUNC(Render);			//只能在c++中调用
+		// MODULE_FUNC(Render);			//过于底层
 		// MODULE_FUNC(ResetMouseDragDelta);
 		MODULE_FUNC(SameLine);
 		// MODULE_FUNC(SaveIniSettingsToDisk);
@@ -1350,7 +1466,7 @@ namespace imgui {
 		MODULE_FUNC(Selectable);
 		MODULE_FUNC(Separator);
 		MODULE_FUNC(SeparatorText);
-		// MODULE_FUNC(SetAllocatorFunctions);
+		// MODULE_FUNC(SetAllocatorFunctions);		//过于底层
 		MODULE_FUNC(SetClipboardText);
 		// MODULE_FUNC(SetColorEditOptions);
 		// MODULE_FUNC(SetColumnOffset);
@@ -1416,18 +1532,18 @@ namespace imgui {
 		MODULE_FUNC(SliderInt4);
 		// MODULE_FUNC(SliderScalar);
 		// MODULE_FUNC(SliderScalarN);
-		// MODULE_FUNC(SmallButton);
-		// MODULE_FUNC(Spacing);
+		MODULE_FUNC(SmallButton);
+		MODULE_FUNC(Spacing);
 		MODULE_FUNC(StyleColorsClassic);
 		MODULE_FUNC(StyleColorsDark);
 		MODULE_FUNC(StyleColorsLight);
-		// MODULE_FUNC(TabItemButton);
-		// MODULE_FUNC(TableAngledHeadersRow);
-		// MODULE_FUNC(TableGetColumnCount);
-		// MODULE_FUNC(TableGetColumnFlags);
-		// MODULE_FUNC(TableGetColumnIndex);
-		// MODULE_FUNC(TableGetColumnName);
-		// MODULE_FUNC(TableGetRowIndex);
+		MODULE_FUNC(TabItemButton);
+		MODULE_FUNC(TableAngledHeadersRow);
+		MODULE_FUNC(TableGetColumnCount);
+		MODULE_FUNC(TableGetColumnFlags);
+		MODULE_FUNC(TableGetColumnIndex);
+		MODULE_FUNC(TableGetColumnName);
+		MODULE_FUNC(TableGetRowIndex);
 		// MODULE_FUNC(TableGetSortSpecs);
 		// MODULE_FUNC(TableHeader);
 		// MODULE_FUNC(TableHeadersRow);
@@ -1440,21 +1556,21 @@ namespace imgui {
 		// MODULE_FUNC(TableSetupScrollFreeze);
 		MODULE_FUNC(Text);	//不完全实现：不支持格式
 		MODULE_FUNC(TextColored);
-		// MODULE_FUNC(TextColoredV);
-		// MODULE_FUNC(TextDisabled);
-		// MODULE_FUNC(TextDisabledV);
+		// MODULE_FUNC(TextColoredV);		//va_list无法实现
+		MODULE_FUNC(TextDisabled);
+		// MODULE_FUNC(TextDisabledV);		//va_list无法实现
 		MODULE_FUNC(TextUnformatted);
-		// MODULE_FUNC(TextV);
+		// MODULE_FUNC(TextV);		//va_list无法实现
 		MODULE_FUNC(TextWrapped);
-		// MODULE_FUNC(TextWrappedV);
-		// MODULE_FUNC(TreeNode);
-		// MODULE_FUNC(TreeNodeEx);
-		// MODULE_FUNC(TreeNodeExV);
-		// MODULE_FUNC(TreeNodeV);
-		// MODULE_FUNC(TreePop);
-		// MODULE_FUNC(TreePush);
-		// MODULE_FUNC(Unindent);
-		// MODULE_FUNC(Value);
+		// MODULE_FUNC(TextWrappedV);		//va_list无法实现
+		MODULE_FUNC(TreeNode);
+		MODULE_FUNC(TreeNodeEx);
+		//MODULE_FUNC(TreeNodeExV);		//va_list无法实现
+		//MODULE_FUNC(TreeNodeV);		//va_list无法实现
+		MODULE_FUNC(TreePop);
+		MODULE_FUNC(TreePush);
+		MODULE_FUNC(Unindent);
+		// MODULE_FUNC(Value);		//官方文档中说明无用的api
 		// MODULE_FUNC(VSliderFloat);
 		// MODULE_FUNC(VSliderInt);
 		// MODULE_FUNC(VSliderScalar);
