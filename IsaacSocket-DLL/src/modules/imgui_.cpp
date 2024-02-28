@@ -17,11 +17,27 @@ namespace imgui {
 		METATABLE_END();
 	}
 
+	static int p_ImVec2__newindex(lua_State* L) {
+		ARG_UDATA(1, p_ImVec2, ::ImVec2**, pp_vec);
+		METATABLE_BEGIN(::ImVec2, **pp_vec);
+		METATABLE_NEWINDEX(number, x, float);
+		METATABLE_NEWINDEX(number, y, float);
+		METATABLE_END();
+	}
+
 	static int ImVec2__index(lua_State* L) {
 		ARG_UDATA(1, ImVec2, ::ImVec2*, p_vec);
 		METATABLE_BEGIN(::ImVec2, *p_vec);
 		METATABLE_INDEX(number, x, float);
 		METATABLE_INDEX(number, y, float);
+		METATABLE_END();
+	}
+
+	static int ImVec2__newindex(lua_State* L) {
+		ARG_UDATA(1, ImVec2, ::ImVec2*, p_vec);
+		METATABLE_BEGIN(::ImVec2, *p_vec);
+		METATABLE_NEWINDEX(number, x, float);
+		METATABLE_NEWINDEX(number, y, float);
 		METATABLE_END();
 	}
 
@@ -35,12 +51,28 @@ namespace imgui {
 		METATABLE_END();
 	}
 
+	static int ImVec4__newindex(lua_State* L) {
+		ARG_UDATA(1, ImVec4, ::ImVec4*, p_vec);
+		METATABLE_BEGIN(::ImVec4, *p_vec);
+		METATABLE_NEWINDEX(number, x, float);
+		METATABLE_NEWINDEX(number, y, float);
+		METATABLE_NEWINDEX(number, z, float);
+		METATABLE_NEWINDEX(number, w, float);
+		METATABLE_END();
+	}
+
 	static int p_ImGuiIO__index(lua_State* L) {
 		ARG_UDATA(1, p_ImGuiIO, ImGuiIO**, pp_io);
 		METATABLE_BEGIN(::ImGuiIO, **pp_io);
 		METATABLE_INDEX(number, DeltaTime, float);
 		METATABLE_INDEX_UDATA_P(p_ImVec2, DisplaySize, ::ImVec2*);
 
+		METATABLE_END();
+	}
+
+	static int p_ImGuiIO__newindex(lua_State* L) {
+		ARG_UDATA(1, p_ImGuiIO, ImGuiIO**, pp_io);
+		METATABLE_BEGIN(::ImGuiIO, **pp_io);
 		METATABLE_END();
 	}
 

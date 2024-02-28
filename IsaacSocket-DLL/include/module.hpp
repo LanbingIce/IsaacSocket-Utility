@@ -33,7 +33,7 @@ namespace lua {
 
 }
 
-#define SET_METATABLE(name) local.lua.luaL_newmetatable(L, #name);luaL_Reg mt_##name[] = { { "__index", name##__index },{ "__newindex", name##__index },{ NULL, NULL } };local.lua.luaL_setfuncs(L, mt_##name, 0);local.lua.lua_setmetatable(L, -2)
+#define SET_METATABLE(name) local.lua.luaL_newmetatable(L, #name);luaL_Reg mt_##name[] = { { "__index", name##__index },{ "__newindex", name##__newindex },{ NULL, NULL } };local.lua.luaL_setfuncs(L, mt_##name, 0);local.lua.lua_setmetatable(L, -2)
 
 #define MODULE_BEGIN(name) lua_State* L = local.isaac->luaEngine->L; int top = local.lua.lua_gettop(L); local.lua.lua_getglobal(L, "_ISAAC_SOCKET"); local.lua.lua_pushstring(L, "IsaacSocket"); local.lua.lua_gettable(L, -2); local.lua.lua_pushstring(L, #name); local.lua.lua_newtable(L)
 #define MODULE_FUNC(name) local.lua.lua_pushstring(L, #name);local.lua.lua_pushcfunction(L, lua::lua_cppfunction<name>()); local.lua.lua_settable(L, -3)
