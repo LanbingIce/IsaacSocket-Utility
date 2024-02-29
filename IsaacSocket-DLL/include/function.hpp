@@ -127,4 +127,10 @@ namespace function {
 		cw("已禁用系统控制台，请手动关闭此窗口");
 		::FreeConsole();
 	}
+
+	// 全屏/取消全屏
+	static void FullScreen(bool fullScreen) {
+		FUNC(0x4810E0, void, __stdcall, bool);
+		f_0x4810E0(fullScreen);
+	}
 }

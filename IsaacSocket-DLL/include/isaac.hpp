@@ -53,7 +53,7 @@ namespace isaac {
 		float SFXVolume; // 0x1c
 		float MapOpacity; // 0x20
 		bool Fullscreen; // 0x24
-		bool EnableFilter; // 0x25
+		bool Filter; // 0x25
 		bool field6_0x26; // 0x26
 		bool field7_0x27; // 0x27
 		float Gamma; // 0x28
@@ -99,7 +99,7 @@ namespace isaac {
 		bool EnableLighting; // 0x7d
 		bool EnableShockwave; // 0x7e
 		bool EnableCaustics; // 0x7f
-		bool Filter; // 0x80
+		bool EnableFilter; // 0x80
 		bool EnablePixelation; // 0x81
 		bool EnableBloom; // 0x82
 		bool EnableWaterSurface; // 0x83

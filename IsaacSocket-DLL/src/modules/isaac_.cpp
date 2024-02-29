@@ -4,6 +4,7 @@
 #include "lua.hpp"
 #include "state.hpp"
 #include "utils.hpp"
+#include "function.hpp"
 
 using isaac::lua_State;
 
@@ -75,17 +76,9 @@ namespace isaac_ {
 		// 以上是config.ini中的成员
 
 		METATABLE_INDEX_STRING(OptionsIniFilePath);
-		//METATABLE_INDEX(boolean, field6_0x26, bool);
-		//METATABLE_INDEX(boolean, field7_0x27, bool);
-		//METATABLE_INDEX(boolean, field15_0x3b, bool);
-		//METATABLE_INDEX(boolean, field25_0x4e, bool);
-		//METATABLE_INDEX(boolean, field26_0x4f, bool);
-		//METATABLE_INDEX(boolean, field33_0x59, bool);
-		//METATABLE_INDEX(boolean, field34_0x5a, bool);
-		//METATABLE_INDEX(boolean, field35_0x5b, bool);
+
 		METATABLE_INDEX(boolean, EnableHeatWaves, bool);
-		//METATABLE_INDEX(boolean, field58_0x87, bool);
-		//以上是未知成员
+
 		METATABLE_END();
 	}
 
@@ -105,7 +98,7 @@ namespace isaac_ {
 		METATABLE_NEWINDEX(boolean, FadedConsoleDisplay, bool);
 		METATABLE_NEWINDEX(boolean, Filter, bool);
 		METATABLE_NEWINDEX(boolean, FoundHUD, bool);
-		METATABLE_NEWINDEX(boolean, Fullscreen, bool);
+		METATABLE_NEWINDEX(boolean, Fullscreen, bool, function::FullScreen(_obj.Fullscreen));
 		METATABLE_NEWINDEX(number, Gamma, float);
 		METATABLE_NEWINDEX(number, HUDOffset, float);
 		// Language 不在这个类里
@@ -151,21 +144,11 @@ namespace isaac_ {
 		METATABLE_NEWINDEX(boolean, EnableWaterSurface, bool);
 		METATABLE_NEWINDEX(boolean, EnableInterpolation, bool);
 		METATABLE_NEWINDEX(boolean, EnableColorModifier, bool);
+		METATABLE_NEWINDEX(boolean, EnableHeatWaves, bool);		//这个成员在config.ini中与EnableWaterSurface共用一个项目
 
 		// 以上是config.ini中的成员
 
 		//METATABLE_NEWINDEX_STRING(OptionsIniFilePath);
-		//METATABLE_NEWINDEX(boolean, field6_0x26, bool);
-		//METATABLE_NEWINDEX(boolean, field7_0x27, bool);
-		//METATABLE_NEWINDEX(boolean, field15_0x3b, bool);
-		//METATABLE_NEWINDEX(boolean, field25_0x4e, bool);
-		//METATABLE_NEWINDEX(boolean, field26_0x4f, bool);
-		//METATABLE_NEWINDEX(boolean, field33_0x59, bool);
-		//METATABLE_NEWINDEX(boolean, field34_0x5a, bool);
-		//METATABLE_NEWINDEX(boolean, field35_0x5b, bool);
-		METATABLE_NEWINDEX(boolean, EnableHeatWaves, bool);
-		//METATABLE_NEWINDEX(boolean, field58_0x87, bool);
-		//以上是未知成员
 		METATABLE_END();
 	}
 
