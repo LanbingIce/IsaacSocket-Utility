@@ -349,7 +349,7 @@ namespace callback {
 		switch (uMsg)
 		{
 		case WM_CHAR:
-			if (!local.charsInputBuffer[0] || !std::iscntrl(wParam))
+			if (!std::iswcntrl(wParam))
 			{
 				_(ISMC_PRE_CHAR_INPUT, string, u8);
 			}

@@ -35,6 +35,7 @@
 #include <unordered_set>
 #include <json/json.h>
 #include <fstream>
+#include <cwctype>
 
 #ifdef _MSC_VER
 #define FASTCALL __fastcall
