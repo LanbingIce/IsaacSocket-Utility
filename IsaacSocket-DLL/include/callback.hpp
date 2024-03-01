@@ -168,40 +168,47 @@ namespace callback {
 		return 0;
 	}
 
-	static int ImGuiRender() {
+	static int ImGuiRender(bool render) {
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		bool font16 = local.isaac->screenPointScale == 1.0f;
-		if (font16)
+		if (render)
 		{
-			ImGui::PushFont(local.font16);
-		}
+			bool font16 = local.isaac->screenPointScale == 1.0f;
+			if (font16)
+			{
+				ImGui::PushFont(local.font16);
+			}
 
-		if ((local.isaac->game->pauseMenu.state || local.menuBarDisplayMode == state::ALWAYS || local.menuBarDisplayMode == state::TAB_HOLD && ImGui::IsKeyDown(ImGuiKey_Tab)) && ImGui::BeginMainMenuBar())
-		{
-			ImGuiMainMenuBarRender();
-			FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_MAIN_MENU_BAR_RENDER);
+			if ((local.isaac->game->pauseMenu.state || local.menuBarDisplayMode == state::ALWAYS || local.menuBarDisplayMode == state::TAB_HOLD && ImGui::IsKeyDown(ImGuiKey_Tab)) && ImGui::BeginMainMenuBar())
+			{
+				ImGuiMainMenuBarRender();
+				FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_MAIN_MENU_BAR_RENDER);
+				FAST_MOD_CALLBACK_END();
+				ImGui::EndMainMenuBar();
+			}
+
+			ImGuiWindowRender();
+
+			FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_RENDER);
 			FAST_MOD_CALLBACK_END();
-			ImGui::EndMainMenuBar();
+
+			if (font16)
+			{
+				ImGui::PopFont();
+			}
+
+			ImGui::Render();
+
+			// Draw the overlay
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		}
-
-		ImGuiWindowRender();
-
-		FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_RENDER);
-		FAST_MOD_CALLBACK_END();
-
-		if (font16)
+		else
 		{
-			ImGui::PopFont();
+			ImGui::EndFrame();
 		}
-
-		ImGui::Render();
-
-		// Draw the overlay
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		return 0;
 	}
@@ -210,21 +217,18 @@ namespace callback {
 	static int PreSwapBuffers(HDC hdc)
 	{
 		CHECK_RELOAD();
-		if (local.initialized)
+		if (!local.initialized && global->connectionState == state::CONNECTING)
 		{
-			FAST_MOD_CALLBACK_BEGIN(_ISAAC_SOCKET_UPDATE);
-			FAST_MOD_CALLBACK_END();
+			local.hWnd = WindowFromDC(hdc);
+			function::IsaacSocketFirstTimeInit();
+			local.initialized = true;
 		}
+		CHECK_INIT();
+		FAST_MOD_CALLBACK_BEGIN(_ISAAC_SOCKET_UPDATE);
+		FAST_MOD_CALLBACK_END();
+		ImGuiRender(global->connectionState == state::CONNECTED);
 		switch (global->connectionState) {
-		case state::DISCONNECTED:
-			break;
 		case state::CONNECTING:
-			if (!local.initialized)
-			{
-				local.hWnd = WindowFromDC(hdc);
-				function::IsaacSocketFirstTimeInit();
-				local.initialized = true;
-			}
 			isaac_socket::Init();
 			global->connectionState = state::CONNECTED;
 			break;
@@ -234,10 +238,11 @@ namespace callback {
 				break;
 			}
 			async::luaPollPromises(local.isaac->luaEngine->L);
-			ImGuiRender();
 			MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
 			MOD_CALLBACK_CALL();
 			MOD_CALLBACK_END();
+			break;
+		default:
 			break;
 		}
 		return 0;
