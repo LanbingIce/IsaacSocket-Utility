@@ -79,8 +79,16 @@ namespace function {
 		io.FontAllowUserScaling = true;
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;   // Enable Keyboard Controls
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;    // Enable Gamepad Controls
-
+		auto ifs = std::ifstream(local.fontFileName);
 		string path = utils::GetDataFilePath("VonwaonBitmap-16px.ttf");
+		if (ifs)
+		{
+			ifs.close();
+			if (local.fontSize >= 6)
+			{
+				io.Fonts->AddFontFromFileTTF(local.fontFileName.c_str(), local.fontSize, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+			}
+		}
 		io.Fonts->AddFontFromFileTTF(path.c_str(), 32.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 		io.Fonts->AddFontFromFileTTF(path.c_str(), 16.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 

@@ -62,13 +62,16 @@ namespace state {
 		const string configName = utils::GetDataFilePath("config.json");
 		const string iniFileName = utils::GetDataFilePath("imgui.ini");
 		const string logFileName = utils::GetDataFilePath("imgui_log.txt");
+		string currentPath = ".";
+		string fontFileName;
+		float fontSize;
 		struct
 		{
 			bool ShowDemoWindow = false;
 			bool ShowAboutWindow = false;
 			bool ShowDebugLogWindow = false;
 			bool ShowUserGuide = false;
-			bool ShowISAbout= false;
+			bool ShowISAbout = false;
 		}imgui;
 	};
 

@@ -8,6 +8,7 @@
 #include "config.hpp"
 #include "isaac_socket.hpp"
 #include <imgui/imgui.h>
+#include <ImGuiFileDialog/ImGuiFileDialog.h>
 
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -90,6 +91,11 @@ namespace callback {
 		}
 	}
 
+	static void ShowSelectFont() {
+		IGFD::FileDialogConfig config; config.path = local.currentPath;
+		ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "选择字体文件", "字体文件 (*.ttf *.otf){.ttf,.otf}", config);
+	}
+
 #define MENU_BEGIN(name)if (ImGui::BeginMenu(name)){
 #define MENU_END()ImGui::EndMenu();}
 #define MENU_ITEM(name,selected,e)if (ImGui::MenuItem(name, nullptr, selected)){e;}
@@ -123,6 +129,15 @@ namespace callback {
 			MENU_ITEM(font->GetDebugName(), font == ImGui::GetFont(), io.FontDefault = font);
 			ImGui::PopID();
 		}
+		MENU_ITEM("设置自定义字体", false, ShowSelectFont());
+		ImGui::SetItemTooltip("设置之后需要重启游戏才能生效，请务必记得设置字体大小");
+		MENU_BEGIN("设置自定义字体尺寸");
+		for (size_t i = 6; i <= 64; i++)
+		{
+			MENU_ITEM((std::to_string(i) + "##字体尺寸").c_str(), local.fontSize == i, local.fontSize = (float)i; config::SetFloat({ "IsaacSocket", "FontSize" }, (float)i));
+		}
+		MENU_END();
+		MENU_ITEM("清除自定义字体", false, local.fontFileName = ""; config::SetString({ "IsaacSocket", "FontFile" }, ""));
 		MENU_END();
 		ImGui::Separator();
 		MENU_BEGIN("调试工具");
@@ -174,6 +189,21 @@ namespace callback {
 				ImGui::End();
 			}
 		}
+
+		// display
+		if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
+			if (ImGuiFileDialog::Instance()->IsOk()) { // action if OK
+				std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+				local.currentPath = ImGuiFileDialog::Instance()->GetCurrentPath();
+				local.fontFileName = filePathName;
+				config::SetString({ "IsaacSocket", "FontFile" }, filePathName);
+				// action
+			}
+
+			// close
+			ImGuiFileDialog::Instance()->Close();
+		}
+
 		return 0;
 	}
 

@@ -62,4 +62,84 @@ namespace config {
 		*p_json = value;
 		utils::WriteFile(local.configName, Encode(json));
 	}
+
+	float GetFloat(const vector<const char*>& path) {
+		if (path.empty()) {
+			return 0;
+		}
+
+		string str = utils::ReadFile(local.configName);
+		Json::Value json = ParseJson(str);
+		Json::Value* p_json = &json;
+
+		for (const auto& p : path) {
+			if (!p_json->isMember(p))
+			{
+				return 0;
+			}
+			p_json = &(*p_json)[p];
+		}
+
+		return (*p_json).asFloat();
+	}
+
+	void SetFloat(const vector<const char*>& path, float value) {
+		if (path.empty()) {
+			return;
+		}
+
+		string str = utils::ReadFile(local.configName);
+		Json::Value json = ParseJson(str);
+		Json::Value* p_json = &json;
+
+		for (const auto& p : path) {
+			if (!p_json->isMember(p) || !(*p_json)[p].isObject()) {
+				(*p_json)[p] = Json::Value();
+			}
+			p_json = &(*p_json)[p];
+		}
+
+		*p_json = value;
+		utils::WriteFile(local.configName, Encode(json));
+	}
+
+	string GetString(const vector<const char*>& path) {
+		if (path.empty()) {
+			return "";
+		}
+
+		string str = utils::ReadFile(local.configName);
+		Json::Value json = ParseJson(str);
+		Json::Value* p_json = &json;
+
+		for (const auto& p : path) {
+			if (!p_json->isMember(p))
+			{
+				return "";
+			}
+			p_json = &(*p_json)[p];
+		}
+
+		return (*p_json).asString();
+	}
+
+	void SetString(const vector<const char*>& path, string value) {
+		if (path.empty()) {
+			return;
+		}
+
+		string str = utils::ReadFile(local.configName);
+		Json::Value json = ParseJson(str);
+		Json::Value* p_json = &json;
+
+		for (const auto& p : path) {
+			if (!p_json->isMember(p) || !(*p_json)[p].isObject()) {
+				(*p_json)[p] = Json::Value();
+			}
+			p_json = &(*p_json)[p];
+		}
+
+		*p_json = value;
+		utils::WriteFile(local.configName, Encode(json));
+	}
 }

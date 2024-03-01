@@ -23,6 +23,8 @@ namespace main {
 		local.hOpenGL = GetModuleHandleA("opengl32.dll");
 		local.styleColor = (state::ImGuiStyleColor)config::GetInt({ "IsaacSocket", "StyleColors" });
 		local.menuBarDisplayMode = (state::MenuBarDisplayMode)config::GetInt({ "IsaacSocket",  "MenuBar" });
+		local.fontFileName = config::GetString({ "IsaacSocket", "FontFile" });
+		local.fontSize = config::GetFloat({ "IsaacSocket", "FontSize" });
 
 		local.callbacks = {
 			(LPCVOID)callback::PreSwapBuffers,
