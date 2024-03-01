@@ -107,6 +107,7 @@ namespace callback {
 		MENU_BEGIN("实验性功能");
 		MENU_ITEM("重载lua", false, local.needReload = true);
 		MENU_END();
+		MENU_ITEM("打开数据目录", false, ShellExecuteW(nullptr, L"open", utils::GetDataFilePathW(L".").c_str(), nullptr, nullptr, SW_SHOWNORMAL));
 		ImGui::Separator();
 		MENU_ITEM("关于 IsaacSocket", false, local.imgui.ShowISAbout = true);
 		MENU_END();

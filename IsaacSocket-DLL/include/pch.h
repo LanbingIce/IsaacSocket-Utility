@@ -36,6 +36,7 @@
 #include <json/json.h>
 #include <fstream>
 #include <cwctype>
+#include <shellapi.h>
 
 #ifdef _MSC_VER
 #define FASTCALL __fastcall
