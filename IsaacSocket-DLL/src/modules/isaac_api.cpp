@@ -10,6 +10,26 @@ using isaac::lua_State;
 
 namespace isaac_api {
 
+	static int HistoryItem__index(lua_State* L) {
+		ARG_UDATA(1, HistoryItem, isaac::HistoryItem*, p_item);
+		METATABLE_BEGIN(isaac::HistoryItem, *p_item);
+		METATABLE_INDEX(integer, time);
+		METATABLE_INDEX(boolean, isTrinket);
+		METATABLE_INDEX(integer, id);
+		METATABLE_INDEX(integer, levelStage);
+		METATABLE_INDEX(integer, stageType);
+		METATABLE_INDEX(integer, roomType);
+		METATABLE_INDEX(integer, itemPoolType);
+		METATABLE_END();
+	}
+
+	static int HistoryItem__newindex(lua_State* L) {
+		ARG_UDATA(1, HistoryItem, isaac::HistoryItem*, p_item);
+		METATABLE_BEGIN(isaac::HistoryItem, *p_item);
+		METATABLE_END();
+	}
+
+
 	//是否强制暂停
 	static int IsForcePaused(lua_State* L) {
 		RET(boolean, local.isaac->game->console.state < 0);
@@ -229,7 +249,7 @@ namespace isaac_api {
 	}
 
 	//获取被动道具列表
-	static int GetItemIds(lua_State* L) {
+	static int GetHistoryItems(lua_State* L) {
 		ARG_DEF(1, integer, uint32_t, playerId, 0);
 		ARG_RANGE(playerId, local.isaac->game->players.size());
 
@@ -238,7 +258,13 @@ namespace isaac_api {
 		RET_TABLE();
 
 		for (size_t i = 0; i < historyItems.size(); i++) {
-			RET_TABLE_KEY(integer, i + 1, integer, historyItems[i].id);
+			local.lua.lua_pushinteger(L, (LUA_INTEGER)(i + 1));
+
+			isaac::HistoryItem* item = (isaac::HistoryItem*)local.lua.lua_newuserdata(L, sizeof(isaac::HistoryItem));
+			*item = historyItems[i];
+			SET_METATABLE(HistoryItem);
+
+			local.lua.lua_settable(L, -3);
 		}
 
 		RET_TABLE_END();
@@ -306,7 +332,7 @@ namespace isaac_api {
 		MODULE_FUNC(GetGreedDonationCount);
 		MODULE_FUNC(SetGreedDonationCount);
 
-		MODULE_FUNC(GetItemIds);
+		MODULE_FUNC(GetHistoryItems);
 
 		MODULE_FUNC(GetFPS);
 

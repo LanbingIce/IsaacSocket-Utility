@@ -15,69 +15,69 @@ namespace isaac_ {
 		ARG_UDATA(1, p_Options, ::isaac::Options**, pp_options);
 		METATABLE_BEGIN(isaac::Options, **pp_options);
 
-		METATABLE_INDEX(integer, AnnouncerVoiceMode, int);
-		METATABLE_INDEX(boolean, BulletVisibility, bool);
-		METATABLE_INDEX(integer, CameraStyle, int);
-		METATABLE_INDEX(boolean, ChargeBars, bool);
-		METATABLE_INDEX(integer, ConsoleFont, int);
-		METATABLE_INDEX(boolean, DebugConsoleEnabled, bool);
-		METATABLE_INDEX(boolean, DisplayPopups, bool);
-		METATABLE_INDEX(integer, ExtraHUDStyle, int);
-		METATABLE_INDEX(boolean, FadedConsoleDisplay, bool);
-		METATABLE_INDEX(boolean, Filter, bool);
-		METATABLE_INDEX(boolean, FoundHUD, bool);
-		METATABLE_INDEX(boolean, Fullscreen, bool);
-		METATABLE_INDEX(number, Gamma, float);
-		METATABLE_INDEX(number, HUDOffset, float);
+		METATABLE_INDEX(integer, AnnouncerVoiceMode);
+		METATABLE_INDEX(boolean, BulletVisibility);
+		METATABLE_INDEX(integer, CameraStyle);
+		METATABLE_INDEX(boolean, ChargeBars);
+		METATABLE_INDEX(integer, ConsoleFont);
+		METATABLE_INDEX(boolean, DebugConsoleEnabled);
+		METATABLE_INDEX(boolean, DisplayPopups);
+		METATABLE_INDEX(integer, ExtraHUDStyle);
+		METATABLE_INDEX(boolean, FadedConsoleDisplay);
+		METATABLE_INDEX(boolean, Filter);
+		METATABLE_INDEX(boolean, FoundHUD);
+		METATABLE_INDEX(boolean, Fullscreen);
+		METATABLE_INDEX(number, Gamma);
+		METATABLE_INDEX(number, HUDOffset);
 		// Language 不在这个类里
-		METATABLE_INDEX(number, MapOpacity, float);
-		METATABLE_INDEX(integer, MaxRenderScale, int);
-		METATABLE_INDEX(integer, MaxScale, int);
-		METATABLE_INDEX(boolean, MouseControl, bool);
-		METATABLE_INDEX(number, MusicVolume, float);
-		METATABLE_INDEX(boolean, PauseOnFocusLost, bool);
-		METATABLE_INDEX(boolean, RumbleEnabled, bool);
-		METATABLE_INDEX(boolean, SaveCommandHistory, bool);
-		METATABLE_INDEX(number, SFXVolume, float);
-		METATABLE_INDEX(boolean, UseBorderlessFullscreen, bool);
-		METATABLE_INDEX(boolean, VSync, bool);
+		METATABLE_INDEX(number, MapOpacity);
+		METATABLE_INDEX(integer, MaxRenderScale);
+		METATABLE_INDEX(integer, MaxScale);
+		METATABLE_INDEX(boolean, MouseControl);
+		METATABLE_INDEX(number, MusicVolume);
+		METATABLE_INDEX(boolean, PauseOnFocusLost);
+		METATABLE_INDEX(boolean, RumbleEnabled);
+		METATABLE_INDEX(boolean, SaveCommandHistory);
+		METATABLE_INDEX(number, SFXVolume);
+		METATABLE_INDEX(boolean, UseBorderlessFullscreen);
+		METATABLE_INDEX(boolean, VSync);
 
 		// 以上是Options原有的成员
 
 		//MusicEnabled 不在这个类里
-		METATABLE_INDEX(number, Exposure, float);
-		METATABLE_INDEX(number, Brightness, float);
-		METATABLE_INDEX(number, Contrast, float);
-		METATABLE_INDEX(boolean, ControllerHotplug, bool);
-		METATABLE_INDEX(boolean, TryImportSave, bool);
-		METATABLE_INDEX(boolean, EnableMods, bool);
-		METATABLE_INDEX(integer, TouchMode, int);
-		METATABLE_INDEX(boolean, AimLock, bool);
-		METATABLE_INDEX(boolean, SteamCloud, bool);
-		METATABLE_INDEX(boolean, BossHpOnBottom, bool);
-		METATABLE_INDEX(integer, WindowWidth, int);
-		METATABLE_INDEX(integer, WindowHeight, int);
-		METATABLE_INDEX(integer, WindowPosX, int);
-		METATABLE_INDEX(integer, WindowPosY, int);
+		METATABLE_INDEX(number, Exposure);
+		METATABLE_INDEX(number, Brightness);
+		METATABLE_INDEX(number, Contrast);
+		METATABLE_INDEX(boolean, ControllerHotplug);
+		METATABLE_INDEX(boolean, TryImportSave);
+		METATABLE_INDEX(boolean, EnableMods);
+		METATABLE_INDEX(integer, TouchMode);
+		METATABLE_INDEX(boolean, AimLock);
+		METATABLE_INDEX(boolean, SteamCloud);
+		METATABLE_INDEX(boolean, BossHpOnBottom);
+		METATABLE_INDEX(integer, WindowWidth);
+		METATABLE_INDEX(integer, WindowHeight);
+		METATABLE_INDEX(integer, WindowPosX);
+		METATABLE_INDEX(integer, WindowPosY);
 
 		// 以上是剩余成员中，存在于Options.ini中的成员
 
-		METATABLE_INDEX(boolean, EnableColorCorrection, bool);
-		METATABLE_INDEX(boolean, EnableCaustics, bool);
-		METATABLE_INDEX(boolean, EnableShockwave, bool);
-		METATABLE_INDEX(boolean, EnableLighting, bool);
-		METATABLE_INDEX(boolean, EnableFilter, bool);
-		METATABLE_INDEX(boolean, EnablePixelation, bool);
-		METATABLE_INDEX(boolean, EnableBloom, bool);
-		METATABLE_INDEX(boolean, EnableWaterSurface, bool);
-		METATABLE_INDEX(boolean, EnableInterpolation, bool);
-		METATABLE_INDEX(boolean, EnableColorModifier, bool);
+		METATABLE_INDEX(boolean, EnableColorCorrection);
+		METATABLE_INDEX(boolean, EnableCaustics);
+		METATABLE_INDEX(boolean, EnableShockwave);
+		METATABLE_INDEX(boolean, EnableLighting);
+		METATABLE_INDEX(boolean, EnableFilter);
+		METATABLE_INDEX(boolean, EnablePixelation);
+		METATABLE_INDEX(boolean, EnableBloom);
+		METATABLE_INDEX(boolean, EnableWaterSurface);
+		METATABLE_INDEX(boolean, EnableInterpolation);
+		METATABLE_INDEX(boolean, EnableColorModifier);
 
 		// 以上是config.ini中的成员
 
 		METATABLE_INDEX_STRING(OptionsIniFilePath);
 
-		METATABLE_INDEX(boolean, EnableHeatWaves, bool);
+		METATABLE_INDEX(boolean, EnableHeatWaves);
 
 		METATABLE_END();
 	}
@@ -87,64 +87,64 @@ namespace isaac_ {
 		ARG_UDATA(1, p_Options, ::isaac::Options**, pp_options);
 		METATABLE_BEGIN(isaac::Options, **pp_options);
 
-		METATABLE_NEWINDEX(integer, AnnouncerVoiceMode, int);
-		METATABLE_NEWINDEX(boolean, BulletVisibility, bool);
-		METATABLE_NEWINDEX(integer, CameraStyle, int);
-		METATABLE_NEWINDEX(boolean, ChargeBars, bool);
-		METATABLE_NEWINDEX(integer, ConsoleFont, int);
-		METATABLE_NEWINDEX(boolean, DebugConsoleEnabled, bool);
-		METATABLE_NEWINDEX(boolean, DisplayPopups, bool);
-		METATABLE_NEWINDEX(integer, ExtraHUDStyle, int);
-		METATABLE_NEWINDEX(boolean, FadedConsoleDisplay, bool);
-		METATABLE_NEWINDEX(boolean, Filter, bool);
-		METATABLE_NEWINDEX(boolean, FoundHUD, bool);
-		METATABLE_NEWINDEX(boolean, Fullscreen, bool, function::FullScreen(_obj.Fullscreen));
-		METATABLE_NEWINDEX(number, Gamma, float);
-		METATABLE_NEWINDEX(number, HUDOffset, float);
+		METATABLE_NEWINDEX(integer, AnnouncerVoiceMode);
+		METATABLE_NEWINDEX(boolean, BulletVisibility);
+		METATABLE_NEWINDEX(integer, CameraStyle);
+		METATABLE_NEWINDEX(boolean, ChargeBars);
+		METATABLE_NEWINDEX(integer, ConsoleFont);
+		METATABLE_NEWINDEX(boolean, DebugConsoleEnabled);
+		METATABLE_NEWINDEX(boolean, DisplayPopups);
+		METATABLE_NEWINDEX(integer, ExtraHUDStyle);
+		METATABLE_NEWINDEX(boolean, FadedConsoleDisplay);
+		METATABLE_NEWINDEX(boolean, Filter);
+		METATABLE_NEWINDEX(boolean, FoundHUD);
+		METATABLE_NEWINDEX(boolean, Fullscreen, function::FullScreen(_obj.Fullscreen));
+		METATABLE_NEWINDEX(number, Gamma);
+		METATABLE_NEWINDEX(number, HUDOffset);
 		// Language 不在这个类里
-		METATABLE_NEWINDEX(number, MapOpacity, float);
-		METATABLE_NEWINDEX(integer, MaxRenderScale, int);
-		METATABLE_NEWINDEX(integer, MaxScale, int);
-		METATABLE_NEWINDEX(boolean, MouseControl, bool);
-		METATABLE_NEWINDEX(number, MusicVolume, float, function::MusicVolume(_obj.MusicVolume));
-		METATABLE_NEWINDEX(boolean, PauseOnFocusLost, bool);
-		METATABLE_NEWINDEX(boolean, RumbleEnabled, bool);
-		METATABLE_NEWINDEX(boolean, SaveCommandHistory, bool);
-		METATABLE_NEWINDEX(number, SFXVolume, float);
-		METATABLE_NEWINDEX(boolean, UseBorderlessFullscreen, bool);
-		METATABLE_NEWINDEX(boolean, VSync, bool);
+		METATABLE_NEWINDEX(number, MapOpacity);
+		METATABLE_NEWINDEX(integer, MaxRenderScale);
+		METATABLE_NEWINDEX(integer, MaxScale);
+		METATABLE_NEWINDEX(boolean, MouseControl);
+		METATABLE_NEWINDEX(number, MusicVolume, function::MusicVolume(_obj.MusicVolume));
+		METATABLE_NEWINDEX(boolean, PauseOnFocusLost);
+		METATABLE_NEWINDEX(boolean, RumbleEnabled);
+		METATABLE_NEWINDEX(boolean, SaveCommandHistory);
+		METATABLE_NEWINDEX(number, SFXVolume);
+		METATABLE_NEWINDEX(boolean, UseBorderlessFullscreen);
+		METATABLE_NEWINDEX(boolean, VSync);
 
 		// 以上是Options原有的成员
 
 		//MusicEnabled 不在这个类里
-		METATABLE_NEWINDEX(number, Exposure, float);
-		METATABLE_NEWINDEX(number, Brightness, float);
-		METATABLE_NEWINDEX(number, Contrast, float);
-		METATABLE_NEWINDEX(boolean, ControllerHotplug, bool);
-		METATABLE_NEWINDEX(boolean, TryImportSave, bool);
-		METATABLE_NEWINDEX(boolean, EnableMods, bool);
-		METATABLE_NEWINDEX(integer, TouchMode, int);
-		METATABLE_NEWINDEX(boolean, AimLock, bool);
-		METATABLE_NEWINDEX(boolean, SteamCloud, bool);
-		METATABLE_NEWINDEX(boolean, BossHpOnBottom, bool);
-		METATABLE_NEWINDEX(integer, WindowWidth, int);
-		METATABLE_NEWINDEX(integer, WindowHeight, int);
-		METATABLE_NEWINDEX(integer, WindowPosX, int);
-		METATABLE_NEWINDEX(integer, WindowPosY, int);
+		METATABLE_NEWINDEX(number, Exposure);
+		METATABLE_NEWINDEX(number, Brightness);
+		METATABLE_NEWINDEX(number, Contrast);
+		METATABLE_NEWINDEX(boolean, ControllerHotplug);
+		METATABLE_NEWINDEX(boolean, TryImportSave);
+		METATABLE_NEWINDEX(boolean, EnableMods);
+		METATABLE_NEWINDEX(integer, TouchMode);
+		METATABLE_NEWINDEX(boolean, AimLock);
+		METATABLE_NEWINDEX(boolean, SteamCloud);
+		METATABLE_NEWINDEX(boolean, BossHpOnBottom);
+		METATABLE_NEWINDEX(integer, WindowWidth);
+		METATABLE_NEWINDEX(integer, WindowHeight);
+		METATABLE_NEWINDEX(integer, WindowPosX);
+		METATABLE_NEWINDEX(integer, WindowPosY);
 
 		// 以上是剩余成员中，存在于Options.ini中的成员
 
-		METATABLE_NEWINDEX(boolean, EnableColorCorrection, bool);
-		METATABLE_NEWINDEX(boolean, EnableCaustics, bool);
-		METATABLE_NEWINDEX(boolean, EnableShockwave, bool);
-		METATABLE_NEWINDEX(boolean, EnableLighting, bool);
-		METATABLE_NEWINDEX(boolean, EnableFilter, bool);
-		METATABLE_NEWINDEX(boolean, EnablePixelation, bool);
-		METATABLE_NEWINDEX(boolean, EnableBloom, bool);
-		METATABLE_NEWINDEX(boolean, EnableWaterSurface, bool);
-		METATABLE_NEWINDEX(boolean, EnableInterpolation, bool);
-		METATABLE_NEWINDEX(boolean, EnableColorModifier, bool);
-		METATABLE_NEWINDEX(boolean, EnableHeatWaves, bool);		//这个成员在config.ini中与EnableWaterSurface共用一个项目
+		METATABLE_NEWINDEX(boolean, EnableColorCorrection);
+		METATABLE_NEWINDEX(boolean, EnableCaustics);
+		METATABLE_NEWINDEX(boolean, EnableShockwave);
+		METATABLE_NEWINDEX(boolean, EnableLighting);
+		METATABLE_NEWINDEX(boolean, EnableFilter);
+		METATABLE_NEWINDEX(boolean, EnablePixelation);
+		METATABLE_NEWINDEX(boolean, EnableBloom);
+		METATABLE_NEWINDEX(boolean, EnableWaterSurface);
+		METATABLE_NEWINDEX(boolean, EnableInterpolation);
+		METATABLE_NEWINDEX(boolean, EnableColorModifier);
+		METATABLE_NEWINDEX(boolean, EnableHeatWaves);		//这个成员在config.ini中与EnableWaterSurface共用一个项目
 
 		// 以上是config.ini中的成员
 

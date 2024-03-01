@@ -107,7 +107,7 @@ namespace opengl
 		static int lua_index(lua_State* L) {
 			ARG_CPPDATA(1, Texture, texture);
 			METATABLE_BEGIN(Texture, *texture);
-			METATABLE_INDEX(integer, textureId, GLuint);
+			METATABLE_INDEX(integer, textureId);
 			METATABLE_END();
 		}
 

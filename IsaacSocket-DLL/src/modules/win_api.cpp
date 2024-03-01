@@ -10,7 +10,7 @@ namespace win_api
 
 			ARG_CPPDATA(1, LUA_WIN32_FIND_DATAW, data);
 			METATABLE_BEGIN(WIN32_FIND_DATAW, (*data).data);
-			METATABLE_INDEX(stdwstring, cFileName, std::wstring);
+			METATABLE_INDEX(stdwstring, cFileName);
 			METATABLE_END();
 		}
 		static int lua_newindex(lua_State* L) {
