@@ -133,4 +133,10 @@ namespace function {
 		FUNC(0x4810E0, void, __stdcall, bool);
 		f_0x4810E0(fullScreen);
 	}
+
+	// 音乐音量
+	static void MusicVolume(float musicVolume) {
+		FUNC(0x481080, void, __stdcall, float);
+		f_0x481080(musicVolume);
+	}
 }

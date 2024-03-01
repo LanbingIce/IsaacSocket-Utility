@@ -106,7 +106,7 @@ namespace isaac_ {
 		METATABLE_NEWINDEX(integer, MaxRenderScale, int);
 		METATABLE_NEWINDEX(integer, MaxScale, int);
 		METATABLE_NEWINDEX(boolean, MouseControl, bool);
-		METATABLE_NEWINDEX(number, MusicVolume, float);
+		METATABLE_NEWINDEX(number, MusicVolume, float, function::MusicVolume(_obj.MusicVolume));
 		METATABLE_NEWINDEX(boolean, PauseOnFocusLost, bool);
 		METATABLE_NEWINDEX(boolean, RumbleEnabled, bool);
 		METATABLE_NEWINDEX(boolean, SaveCommandHistory, bool);
