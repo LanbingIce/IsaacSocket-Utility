@@ -82,7 +82,7 @@ namespace function {
 
 		string path = utils::GetDataFilePath("VonwaonBitmap-16px.ttf");
 		io.Fonts->AddFontFromFileTTF(path.c_str(), 32.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
-		local.font16 = io.Fonts->AddFontFromFileTTF(path.c_str(), 16.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+		io.Fonts->AddFontFromFileTTF(path.c_str(), 16.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 
 		io.IniFilename = local.iniFileName.c_str();
 		io.LogFilename = local.logFileName.c_str();

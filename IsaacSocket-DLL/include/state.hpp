@@ -56,7 +56,6 @@ namespace state {
 		imsdk::ImSDK imsdk;
 		uint32_t MTRandomLockedValue = 0;
 		HMODULE hOpenGL;
-		ImFont* font16;
 		bool allocConsole = false;
 		MenuBarDisplayMode menuBarDisplayMode = NEVER;
 		ImGuiStyleColor styleColor = CLASSIC;

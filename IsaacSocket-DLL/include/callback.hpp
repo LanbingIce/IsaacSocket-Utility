@@ -90,39 +90,48 @@ namespace callback {
 		}
 	}
 
-#define MENU_BEGIN(name)if (ImGui::BeginMenu(#name)){
+#define MENU_BEGIN(name)if (ImGui::BeginMenu(name)){
 #define MENU_END()ImGui::EndMenu();}
-#define MENU_ITEM(name,selected,e)if (ImGui::MenuItem(#name, nullptr, selected)){e;}
+#define MENU_ITEM(name,selected,e)if (ImGui::MenuItem(name, nullptr, selected)){e;}
 
 	static int ImGuiMainMenuBarRender() {
 
-		MENU_BEGIN(IsaacSocket);
-		MENU_ITEM(启用系统控制台, local.allocConsole, local.allocConsole = !local.allocConsole; if (local.allocConsole)function::AllocConsole(); else function::FreeConsole(););
-		MENU_BEGIN(实验性功能);
-		MENU_ITEM(重载lua, false, local.needReload = true);
+		MENU_BEGIN("IsaacSocket");
+		MENU_ITEM("启用系统控制台", local.allocConsole, local.allocConsole = !local.allocConsole; if (local.allocConsole)function::AllocConsole(); else function::FreeConsole(););
+		MENU_BEGIN("实验性功能");
+		MENU_ITEM("重载lua", false, local.needReload = true);
 		MENU_END();
 		ImGui::Separator();
-		MENU_ITEM(关于 IsaacSocket, false, local.imgui.ShowISAbout = true);
+		MENU_ITEM("关于 IsaacSocket", false, local.imgui.ShowISAbout = true);
 		MENU_END();
-		MENU_BEGIN(ImGui);
-		MENU_BEGIN(显示主菜单条);
-		MENU_ITEM(默认, local.menuBarDisplayMode == state::NEVER, local.menuBarDisplayMode = state::NEVER; config::SetInt({ "IsaacSocket", "MenuBar" }, 0));
-		MENU_ITEM(按下Tab键时, local.menuBarDisplayMode == state::TAB_HOLD, local.menuBarDisplayMode = state::TAB_HOLD; config::SetInt({ "IsaacSocket","MenuBar" }, 1));
-		MENU_ITEM(总是显示, local.menuBarDisplayMode == state::ALWAYS, local.menuBarDisplayMode = state::ALWAYS; config::SetInt({ "IsaacSocket", "MenuBar" }, 2));
+		MENU_BEGIN("ImGui");
+		MENU_BEGIN("显示主菜单条");
+		MENU_ITEM("默认", local.menuBarDisplayMode == state::NEVER, local.menuBarDisplayMode = state::NEVER; config::SetInt({ "IsaacSocket", "MenuBar" }, 0));
+		MENU_ITEM("按下Tab键时", local.menuBarDisplayMode == state::TAB_HOLD, local.menuBarDisplayMode = state::TAB_HOLD; config::SetInt({ "IsaacSocket","MenuBar" }, 1));
+		MENU_ITEM("总是显示", local.menuBarDisplayMode == state::ALWAYS, local.menuBarDisplayMode = state::ALWAYS; config::SetInt({ "IsaacSocket", "MenuBar" }, 2));
 		MENU_END();
-		MENU_BEGIN(配色);
-		MENU_ITEM(默认, local.styleColor == state::CLASSIC, local.styleColor = state::CLASSIC; ImGui::StyleColorsClassic(); config::SetInt({ "IsaacSocket", "StyleColors" }, 0));
-		MENU_ITEM(浅色, local.styleColor == state::LIGHT, local.styleColor = state::LIGHT; ImGui::StyleColorsLight(); config::SetInt({ "IsaacSocket", "StyleColors" }, 1));
-		MENU_ITEM(深色, local.styleColor == state::DARK, local.styleColor = state::DARK; ImGui::StyleColorsDark(); config::SetInt({ "IsaacSocket","StyleColors" }, 2));
+		MENU_BEGIN("配色");
+		MENU_ITEM("默认", local.styleColor == state::CLASSIC, local.styleColor = state::CLASSIC; ImGui::StyleColorsClassic(); config::SetInt({ "IsaacSocket", "StyleColors" }, 0));
+		MENU_ITEM("浅色", local.styleColor == state::LIGHT, local.styleColor = state::LIGHT; ImGui::StyleColorsLight(); config::SetInt({ "IsaacSocket", "StyleColors" }, 1));
+		MENU_ITEM("深色", local.styleColor == state::DARK, local.styleColor = state::DARK; ImGui::StyleColorsDark(); config::SetInt({ "IsaacSocket","StyleColors" }, 2));
+		MENU_END();
+		MENU_BEGIN("选择字体");
+		ImGuiIO& io = ImGui::GetIO();
+		for (ImFont* font : io.Fonts->Fonts)
+		{
+			ImGui::PushID(font);
+			MENU_ITEM(font->GetDebugName(), font == ImGui::GetFont(), io.FontDefault = font);
+			ImGui::PopID();
+		}
 		MENU_END();
 		ImGui::Separator();
-		MENU_BEGIN(调试工具);
-		MENU_ITEM(示例窗口, local.imgui.ShowDemoWindow, local.imgui.ShowDemoWindow = !local.imgui.ShowDemoWindow);
-		MENU_ITEM(调试日志, local.imgui.ShowDebugLogWindow, local.imgui.ShowDebugLogWindow = !local.imgui.ShowDebugLogWindow);
+		MENU_BEGIN("调试工具");
+		MENU_ITEM("示例窗口", local.imgui.ShowDemoWindow, local.imgui.ShowDemoWindow = !local.imgui.ShowDemoWindow);
+		MENU_ITEM("调试日志", local.imgui.ShowDebugLogWindow, local.imgui.ShowDebugLogWindow = !local.imgui.ShowDebugLogWindow);
 		MENU_END();
 		ImGui::Separator();
-		MENU_ITEM(操作说明, local.imgui.ShowUserGuide, local.imgui.ShowUserGuide = !local.imgui.ShowUserGuide);
-		MENU_ITEM(关于ImGui, local.imgui.ShowAboutWindow, local.imgui.ShowAboutWindow = !local.imgui.ShowAboutWindow);
+		MENU_ITEM("操作说明", local.imgui.ShowUserGuide, local.imgui.ShowUserGuide = !local.imgui.ShowUserGuide);
+		MENU_ITEM("关于ImGui", local.imgui.ShowAboutWindow, local.imgui.ShowAboutWindow = !local.imgui.ShowAboutWindow);
 		MENU_END();
 		return 0;
 	}
@@ -176,12 +185,6 @@ namespace callback {
 
 		if (render)
 		{
-			bool font16 = local.isaac->screenPointScale == 1.0f;
-			if (font16)
-			{
-				ImGui::PushFont(local.font16);
-			}
-
 			if ((local.isaac->game->pauseMenu.state || local.menuBarDisplayMode == state::ALWAYS || local.menuBarDisplayMode == state::TAB_HOLD && ImGui::IsKeyDown(ImGuiKey_Tab)) && ImGui::BeginMainMenuBar())
 			{
 				ImGuiMainMenuBarRender();
@@ -194,11 +197,6 @@ namespace callback {
 
 			FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_RENDER);
 			FAST_MOD_CALLBACK_END();
-
-			if (font16)
-			{
-				ImGui::PopFont();
-			}
 
 			ImGui::Render();
 
