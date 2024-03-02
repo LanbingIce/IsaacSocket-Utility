@@ -147,4 +147,10 @@ namespace function {
 		FUNC(0x481080, void, __stdcall, float);
 		f_0x481080(musicVolume);
 	}
+
+	// 垂直同步
+	static void VSync(bool vSync) {
+		FUNC(0x481280, void, __stdcall, bool);
+		f_0x481280(vSync);
+	}
 }

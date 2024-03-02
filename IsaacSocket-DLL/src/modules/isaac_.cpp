@@ -112,7 +112,7 @@ namespace isaac_ {
 		METATABLE_NEWINDEX(boolean, SaveCommandHistory);
 		METATABLE_NEWINDEX(number, SFXVolume);
 		METATABLE_NEWINDEX(boolean, UseBorderlessFullscreen);
-		METATABLE_NEWINDEX(boolean, VSync);
+		METATABLE_NEWINDEX(boolean, VSync, function::VSync(_obj.VSync));
 
 		// 以上是Options原有的成员
 
@@ -127,10 +127,10 @@ namespace isaac_ {
 		METATABLE_NEWINDEX(boolean, AimLock);
 		METATABLE_NEWINDEX(boolean, SteamCloud);
 		METATABLE_NEWINDEX(boolean, BossHpOnBottom);
-		METATABLE_NEWINDEX(integer, WindowWidth);
-		METATABLE_NEWINDEX(integer, WindowHeight);
-		METATABLE_NEWINDEX(integer, WindowPosX);
-		METATABLE_NEWINDEX(integer, WindowPosY);
+		METATABLE_NEWINDEX(integer, WindowWidth, if (!_obj.Fullscreen)function::FullScreen(false));
+		METATABLE_NEWINDEX(integer, WindowHeight, if (!_obj.Fullscreen) function::FullScreen(false));
+		METATABLE_NEWINDEX(integer, WindowPosX, if (!_obj.Fullscreen) function::FullScreen(false));
+		METATABLE_NEWINDEX(integer, WindowPosY, if (!_obj.Fullscreen) function::FullScreen(false));
 
 		// 以上是剩余成员中，存在于Options.ini中的成员
 
