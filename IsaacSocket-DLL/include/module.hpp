@@ -33,7 +33,8 @@ namespace lua {
 
 }
 
-#define SET_METATABLE(name) local.lua.luaL_newmetatable(L, #name);luaL_Reg mt_##name[] = { { "__index", name##__index },{ "__newindex", name##__newindex },{ NULL, NULL } };local.lua.luaL_setfuncs(L, mt_##name, 0);local.lua.lua_setmetatable(L, -2)
+#define NEW_UDATA(type,name) type& name = *(type*)local.lua.lua_newuserdata(L, sizeof(type))
+#define SET_METATABLE(name) if(local.lua.luaL_newmetatable(L, #name)){luaL_Reg mt_##name[] = { { "__index", name##__index },{ "__newindex", name##__newindex },{ NULL, NULL } };local.lua.luaL_setfuncs(L, mt_##name, 0);}local.lua.lua_setmetatable(L, -2)
 
 #define MODULE_BEGIN(name) lua_State* L = local.isaac->luaEngine->L; int top = local.lua.lua_gettop(L); local.lua.lua_getglobal(L, "_ISAAC_SOCKET"); local.lua.lua_pushstring(L, "IsaacSocket"); local.lua.lua_gettable(L, -2); local.lua.lua_pushstring(L, #name); local.lua.lua_newtable(L)
 #define MODULE_FUNC(name) local.lua.lua_pushstring(L, #name);local.lua.lua_pushcfunction(L, lua::lua_cppfunction<name>()); local.lua.lua_settable(L, -3)
@@ -45,9 +46,9 @@ namespace lua {
 #define ARG_DEF(index,luaType,type,name,def) type name;if(local.lua.lua_isnoneornil(L,index)){name=def;}else _CHECK_ARG(index,luaType,type,name)
 #define ARG_RANGE(name,range) if (name >= range){std::ostringstream oss;oss<<"invalid "#name": "<<std::to_string(name); return local.lua.luaL_error(L, oss.str().c_str());}
 
-#define _CHECK_ARG_UDATA(index,udataType,type,name)name = (type)local.lua.luaL_checkudata(L, index, #udataType)
-#define ARG_UDATA(index,udataType,type,name)type name;_CHECK_ARG_UDATA(index,udataType,type,name)
-#define ARG_UDATA_DEF(index,udataType,type,name,def)type name;if(local.lua.lua_isnoneornil(L,index)){name=def;}else _CHECK_ARG_UDATA(index,udataType,type,name)
+#define _CHECK_ARG_UDATA(index,udataType,type,name)p_##name = (type*)local.lua.luaL_checkudata(L, index, #udataType);type& name = *p_##name
+#define ARG_UDATA(index,udataType,type,name)type* p_##name; _CHECK_ARG_UDATA(index,udataType,type,name)
+#define ARG_UDATA_DEF(index,udataType,type,name,def)type* p_##name;if(local.lua.lua_isnoneornil(L,index)){p_##name=&def;}else _CHECK_ARG_UDATA(index,udataType,type,name)
 
 #define _LUA_PCALL(paramNum,resultNum)if(local.lua.lua_pcall(L, paramNum, resultNum, 0)!=LUA_OK){ARG_DEF(-1,stdstring,string,_err,"unknow error!");local.lua.lua_pop(L, 1);for(int i=0;i<resultNum;i++){local.lua.lua_pushnil(L);}_err.append("\n");function::ConsoleOutput(_err, 0xFFF08080);}
 

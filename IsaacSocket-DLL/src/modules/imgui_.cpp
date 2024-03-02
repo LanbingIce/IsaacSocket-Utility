@@ -10,40 +10,40 @@ namespace imgui {
 	static const ::ImVec2 VEC2_NEG_MIN_0 = ::ImVec2(-FLT_MIN, 0);
 
 	static int p_ImVec2__index(lua_State* L) {
-		ARG_UDATA(1, p_ImVec2, ::ImVec2**, pp_vec);
-		METATABLE_BEGIN(::ImVec2, **pp_vec);
+		ARG_UDATA(1, p_ImVec2, ::ImVec2*, p_vec);
+		METATABLE_BEGIN(::ImVec2, *p_vec);
 		METATABLE_INDEX(number, x);
 		METATABLE_INDEX(number, y);
 		METATABLE_END();
 	}
 
 	static int p_ImVec2__newindex(lua_State* L) {
-		ARG_UDATA(1, p_ImVec2, ::ImVec2**, pp_vec);
-		METATABLE_BEGIN(::ImVec2, **pp_vec);
+		ARG_UDATA(1, p_ImVec2, ::ImVec2*, p_vec);
+		METATABLE_BEGIN(::ImVec2, *p_vec);
 		METATABLE_NEWINDEX(number, x);
 		METATABLE_NEWINDEX(number, y);
 		METATABLE_END();
 	}
 
 	static int ImVec2__index(lua_State* L) {
-		ARG_UDATA(1, ImVec2, ::ImVec2*, p_vec);
-		METATABLE_BEGIN(::ImVec2, *p_vec);
+		ARG_UDATA(1, ImVec2, ::ImVec2, vec);
+		METATABLE_BEGIN(::ImVec2, vec);
 		METATABLE_INDEX(number, x);
 		METATABLE_INDEX(number, y);
 		METATABLE_END();
 	}
 
 	static int ImVec2__newindex(lua_State* L) {
-		ARG_UDATA(1, ImVec2, ::ImVec2*, p_vec);
-		METATABLE_BEGIN(::ImVec2, *p_vec);
+		ARG_UDATA(1, ImVec2, ::ImVec2, vec);
+		METATABLE_BEGIN(::ImVec2, vec);
 		METATABLE_NEWINDEX(number, x);
 		METATABLE_NEWINDEX(number, y);
 		METATABLE_END();
 	}
 
 	static int ImVec4__index(lua_State* L) {
-		ARG_UDATA(1, ImVec4, ::ImVec4*, p_vec);
-		METATABLE_BEGIN(::ImVec4, *p_vec);
+		ARG_UDATA(1, ImVec4, ::ImVec4, vec);
+		METATABLE_BEGIN(::ImVec4, vec);
 		METATABLE_INDEX(number, x);
 		METATABLE_INDEX(number, y);
 		METATABLE_INDEX(number, z);
@@ -52,8 +52,8 @@ namespace imgui {
 	}
 
 	static int ImVec4__newindex(lua_State* L) {
-		ARG_UDATA(1, ImVec4, ::ImVec4*, p_vec);
-		METATABLE_BEGIN(::ImVec4, *p_vec);
+		ARG_UDATA(1, ImVec4, ::ImVec4, vec);
+		METATABLE_BEGIN(::ImVec4, vec);
 		METATABLE_NEWINDEX(number, x);
 		METATABLE_NEWINDEX(number, y);
 		METATABLE_NEWINDEX(number, z);
@@ -62,8 +62,8 @@ namespace imgui {
 	}
 
 	static int p_ImGuiIO__index(lua_State* L) {
-		ARG_UDATA(1, p_ImGuiIO, ImGuiIO**, pp_io);
-		METATABLE_BEGIN(::ImGuiIO, **pp_io);
+		ARG_UDATA(1, p_ImGuiIO, ImGuiIO*, p_io);
+		METATABLE_BEGIN(::ImGuiIO, *p_io);
 		METATABLE_INDEX(number, DeltaTime);
 		METATABLE_INDEX_UDATA_P(p_ImVec2, DisplaySize, ::ImVec2*);
 
@@ -71,18 +71,32 @@ namespace imgui {
 	}
 
 	static int p_ImGuiIO__newindex(lua_State* L) {
-		ARG_UDATA(1, p_ImGuiIO, ImGuiIO**, pp_io);
-		METATABLE_BEGIN(::ImGuiIO, **pp_io);
+		ARG_UDATA(1, p_ImGuiIO, ImGuiIO*, p_io);
+		METATABLE_BEGIN(::ImGuiIO, *p_io);
+		METATABLE_END();
+	}
+
+	static int p_ImFont__index(lua_State* L) {
+		ARG_UDATA(1, p_ImFont, ImFont*, p_font);
+		METATABLE_BEGIN(ImFont, *p_font);
+		METATABLE_INDEX(number, Scale);
+		METATABLE_END();
+	}
+
+	static int p_ImFont__newindex(lua_State* L) {
+		ARG_UDATA(1, p_ImFont, ImFont*, p_font);
+		METATABLE_BEGIN(ImFont, *p_font);
+		METATABLE_NEWINDEX(number, Scale);
 		METATABLE_END();
 	}
 
 	static int ImVec2(lua_State* L) {
 		ARG(1, number, float, x);
 		ARG(2, number, float, y);
-		::ImVec2* vec = (::ImVec2*)local.lua.lua_newuserdata(L, sizeof(::ImVec2));
+		NEW_UDATA(::ImVec2, vec);
 		SET_METATABLE(ImVec2);
-		vec->x = x;
-		vec->y = y;
+		vec.x = x;
+		vec.y = y;
 		return 1;
 	}
 
@@ -91,19 +105,19 @@ namespace imgui {
 		ARG(2, number, float, y);
 		ARG(3, number, float, z);
 		ARG(4, number, float, w);
-		::ImVec4* vec = (::ImVec4*)local.lua.lua_newuserdata(L, sizeof(::ImVec4));
+		NEW_UDATA(::ImVec4, vec);
 		SET_METATABLE(ImVec4);
-		vec->x = x;
-		vec->y = y;
-		vec->z = z;
-		vec->w = w;
+		vec.x = x;
+		vec.y = y;
+		vec.z = z;
+		vec.w = w;
 		return 1;
 	}
 
 	static int GetIO(lua_State* L) {
-		ImGuiIO** p_io = (ImGuiIO**)local.lua.lua_newuserdata(L, sizeof(ImGuiIO*));
+		NEW_UDATA(ImGuiIO*, p_io);
 		SET_METATABLE(p_ImGuiIO);
-		*p_io = &ImGui::GetIO();
+		p_io = &ImGui::GetIO();
 		return 1;
 	}
 
@@ -159,22 +173,41 @@ namespace imgui {
 
 	static int StyleColorsDark(lua_State* L) {
 		local.styleColor = state::DARK;
-		ARG_UDATA_DEF(1, ImGuiStyle, ::ImGuiStyle*, dst, NULL);
-		ImGui::StyleColorsDark(dst);
+		if (local.lua.lua_isnoneornil(L, 1))
+		{
+			ImGui::StyleColorsDark();
+		}
+		else
+		{
+			ARG_UDATA(1, ImGuiStyle, ::ImGuiStyle, dst);
+			ImGui::StyleColorsDark(&dst);
+		}
 		return 0;
 	}
 
 	static int StyleColorsLight(lua_State* L) {
-		local.styleColor = state::LIGHT;
-		ARG_UDATA_DEF(1, ImGuiStyle, ::ImGuiStyle*, dst, NULL);
-		ImGui::StyleColorsLight(dst);
+		if (local.lua.lua_isnoneornil(L, 1))
+		{
+			ImGui::StyleColorsLight();
+		}
+		else
+		{
+			ARG_UDATA(1, ImGuiStyle, ::ImGuiStyle, dst);
+			ImGui::StyleColorsLight(&dst);
+		}
 		return 0;
 	}
 
 	static int StyleColorsClassic(lua_State* L) {
-		local.styleColor = state::CLASSIC;
-		ARG_UDATA_DEF(1, ImGuiStyle, ::ImGuiStyle*, dst, NULL);
-		ImGui::StyleColorsClassic(dst);
+		if (local.lua.lua_isnoneornil(L, 1))
+		{
+			ImGui::StyleColorsClassic();
+		}
+		else
+		{
+			ARG_UDATA(1, ImGuiStyle, ::ImGuiStyle, dst);
+			ImGui::StyleColorsClassic(&dst);
+		}
 		return 0;
 	}
 
@@ -212,16 +245,16 @@ namespace imgui {
 	}
 
 	static int GetWindowPos(lua_State* L) {
-		::ImVec2* p_vec = (::ImVec2*)local.lua.lua_newuserdata(L, sizeof(::ImVec2));
+		NEW_UDATA(::ImVec2, vec);
 		SET_METATABLE(ImVec2);
-		*p_vec = ImGui::GetWindowPos();
+		vec = ImGui::GetWindowPos();
 		return 1;
 	}
 
 	static int GetWindowSize(lua_State* L) {
-		::ImVec2* p_vec = (::ImVec2*)local.lua.lua_newuserdata(L, sizeof(::ImVec2));
+		NEW_UDATA(::ImVec2, vec);
 		SET_METATABLE(ImVec2);
-		*p_vec = ImGui::GetWindowSize();
+		vec = ImGui::GetWindowSize();
 		return 1;
 	}
 
@@ -237,14 +270,14 @@ namespace imgui {
 		if (local.lua.lua_isstring(L, 1))
 		{
 			ARG(1, string, const char*, name);
-			ARG_UDATA(2, ImVec2, ::ImVec2*, pos);
+			ARG_UDATA(2, ImVec2, ::ImVec2, pos);
 			ARG_DEF(3, integer, ::ImGuiCond, cond, 0);
-			ImGui::SetWindowPos(name, *pos, cond);
+			ImGui::SetWindowPos(name, pos, cond);
 		}
 		else {
-			ARG_UDATA(1, ImVec2, ::ImVec2*, pos);
+			ARG_UDATA(1, ImVec2, ::ImVec2, pos);
 			ARG_DEF(2, integer, ::ImGuiCond, cond, 0);
-			ImGui::SetWindowPos(*pos, cond);
+			ImGui::SetWindowPos(pos, cond);
 		}
 		return 0;
 	}
@@ -253,15 +286,28 @@ namespace imgui {
 		if (local.lua.lua_isstring(L, 1))
 		{
 			ARG(1, string, const char*, name);
-			ARG_UDATA(2, ImVec2, ::ImVec2*, size);
+			ARG_UDATA(2, ImVec2, ::ImVec2, size);
 			ARG_DEF(3, integer, ::ImGuiCond, cond, 0);
-			ImGui::SetWindowSize(name, *size, cond);
+			ImGui::SetWindowSize(name, size, cond);
 		}
 		else {
-			ARG_UDATA(1, ImVec2, ::ImVec2*, size);
+			ARG_UDATA(1, ImVec2, ::ImVec2, size);
 			ARG_DEF(2, integer, ::ImGuiCond, cond, 0);
-			ImGui::SetWindowSize(*size, cond);
+			ImGui::SetWindowSize(size, cond);
 		}
+		return 0;
+	}
+
+	static int SetWindowFocus(lua_State* L) {
+		if (local.lua.lua_isstring(L, 1))
+		{
+			ARG(1, string, const char*, name);
+			ImGui::SetWindowFocus(name);
+		}
+		else {
+			ImGui::SetWindowFocus();
+		}
+		ARG(1, number, float, scale);
 		return 0;
 	}
 
@@ -319,8 +365,8 @@ namespace imgui {
 		}
 		else
 		{
-			ARG_UDATA(2, ImVec4, ::ImVec4*, col);
-			ImGui::PushStyleColor(idx, *col);
+			ARG_UDATA(2, ImVec4, ::ImVec4, col);
+			ImGui::PushStyleColor(idx, col);
 		}
 		return 0;
 	}
@@ -329,6 +375,13 @@ namespace imgui {
 		ARG_DEF(1, integer, int, count, 1);
 		ImGui::PopStyleColor(count);
 		return 0;
+	}
+
+	static int GetFont(lua_State* L) {
+		NEW_UDATA(ImFont*, p_font);
+		SET_METATABLE(p_ImFont);
+		p_font = ImGui::GetFont();
+		return 1;
 	}
 
 	static int Separator(lua_State* L) {
@@ -355,8 +408,8 @@ namespace imgui {
 	}
 
 	static int Dummy(lua_State* L) {
-		ARG_UDATA(1, ImVec2, ::ImVec2*, size);
-		ImGui::Dummy(*size);
+		ARG_UDATA(1, ImVec2, ::ImVec2, size);
+		ImGui::Dummy(size);
 		return 0;
 	}
 
@@ -396,9 +449,9 @@ namespace imgui {
 	}
 
 	static int TextColored(lua_State* L) {
-		ARG_UDATA(1, ImVec4, ::ImVec4*, col);
+		ARG_UDATA(1, ImVec4, ::ImVec4, col);
 		ARG(2, string, const char*, text);
-		ImGui::TextColored(*col, "%s", text);
+		ImGui::TextColored(col, "%s", text);
 		return 0;
 	}
 
@@ -429,8 +482,8 @@ namespace imgui {
 
 	static int Button(lua_State* L) {
 		ARG(1, string, const char*, label);
-		ARG_UDATA_DEF(2, ImVec2, const ::ImVec2*, size, &VEC2_0);
-		RET(boolean, ImGui::Button(label, *size));
+		ARG_UDATA_DEF(2, ImVec2, const ::ImVec2, size, VEC2_0);
+		RET(boolean, ImGui::Button(label, size));
 	}
 
 	static int SmallButton(lua_State* L) {
@@ -472,32 +525,32 @@ namespace imgui {
 
 	static int ProgressBar(lua_State* L) {
 		ARG(1, number, float, fraction);
-		ARG_UDATA_DEF(2, ImVec2, const ::ImVec2*, size_arg, &VEC2_NEG_MIN_0);
+		ARG_UDATA_DEF(2, ImVec2, const ::ImVec2, size_arg, VEC2_NEG_MIN_0);
 		ARG_DEF(3, string, const char*, overlay, NULL);
-		ImGui::ProgressBar(fraction, *size_arg, overlay);
+		ImGui::ProgressBar(fraction, size_arg, overlay);
 		return 0;
 	}
 
 	static int Image(lua_State* L) {
 		ARG(1, integer, ImTextureID, user_texture_id);
-		ARG_UDATA(2, ImVec2, ::ImVec2*, image_size);
-		ARG_UDATA_DEF(3, ImVec2, const ::ImVec2*, uv0, &VEC2_0);
-		ARG_UDATA_DEF(4, ImVec2, const ::ImVec2*, uv1, &VEC2_1);
-		ARG_UDATA_DEF(5, ImVec4, const ::ImVec4*, tint_col, &VEC4_1);
-		ARG_UDATA_DEF(6, ImVec4, const ::ImVec4*, border_col, &VEC4_0);
-		ImGui::Image(user_texture_id, *image_size, *uv0, *uv1, *tint_col, *border_col);
+		ARG_UDATA(2, ImVec2, ::ImVec2, image_size);
+		ARG_UDATA_DEF(3, ImVec2, const ::ImVec2, uv0, VEC2_0);
+		ARG_UDATA_DEF(4, ImVec2, const ::ImVec2, uv1, VEC2_1);
+		ARG_UDATA_DEF(5, ImVec4, const ::ImVec4, tint_col, VEC4_1);
+		ARG_UDATA_DEF(6, ImVec4, const ::ImVec4, border_col, VEC4_0);
+		ImGui::Image(user_texture_id, image_size, uv0, uv1, tint_col, border_col);
 		return 0;
 	}
 
 	static int ImageButton(lua_State* L) {
 		ARG(1, string, const char*, str_id);
 		ARG(2, integer, ImTextureID, user_texture_id);
-		ARG_UDATA(3, ImVec2, const ::ImVec2*, image_size);
-		ARG_UDATA_DEF(4, ImVec2, const ::ImVec2*, uv0, &VEC2_0);
-		ARG_UDATA_DEF(5, ImVec2, const ::ImVec2*, uv1, &VEC2_1);
-		ARG_UDATA_DEF(6, ImVec4, const ::ImVec4*, bg_col, &VEC4_0);
-		ARG_UDATA_DEF(7, ImVec4, const ::ImVec4*, tint_col, &VEC4_1);
-		RET(boolean, ImGui::ImageButton(str_id, user_texture_id, *image_size, *uv0, *uv1, *bg_col, *tint_col));
+		ARG_UDATA(3, ImVec2, const ::ImVec2, image_size);
+		ARG_UDATA_DEF(4, ImVec2, const ::ImVec2, uv0, VEC2_0);
+		ARG_UDATA_DEF(5, ImVec2, const ::ImVec2, uv1, VEC2_1);
+		ARG_UDATA_DEF(6, ImVec4, const ::ImVec4, bg_col, VEC4_0);
+		ARG_UDATA_DEF(7, ImVec4, const ::ImVec4, tint_col, VEC4_1);
+		RET(boolean, ImGui::ImageButton(str_id, user_texture_id, image_size, uv0, uv1, bg_col, tint_col));
 	}
 
 	static int BeginCombo(lua_State* L) {
@@ -805,9 +858,9 @@ namespace imgui {
 	static int InputTextMultiline(lua_State* L) {
 		ARG(1, string, const char*, label);
 		ARG(2, string, string, str);
-		ARG_UDATA_DEF(3, ImVec2, const ::ImVec2*, size, &VEC2_0);
+		ARG_UDATA_DEF(3, ImVec2, const ::ImVec2, size, VEC2_0);
 		ARG_DEF(4, integer, ImGuiInputTextFlags, flags, 0);
-		local.lua.lua_pushboolean(L, ImGui::InputTextMultiline(label, &str, *size, flags));
+		local.lua.lua_pushboolean(L, ImGui::InputTextMultiline(label, &str, size, flags));
 		local.lua.lua_pushstring(L, str.c_str());
 		return 2;
 	}
@@ -959,16 +1012,16 @@ namespace imgui {
 		ARG(1, string, const char*, label);
 		ARG(2, boolean, bool, selected);
 		ARG_DEF(3, integer, ImGuiSelectableFlags, flags, 0);
-		ARG_UDATA_DEF(4, ImVec2, const ::ImVec2*, size_arg, &VEC2_0);
-		local.lua.lua_pushboolean(L, ImGui::Selectable(label, &selected, flags, *size_arg));
+		ARG_UDATA_DEF(4, ImVec2, const ::ImVec2, size_arg, VEC2_0);
+		local.lua.lua_pushboolean(L, ImGui::Selectable(label, &selected, flags, size_arg));
 		local.lua.lua_pushboolean(L, selected);
 		return 2;
 	}
 
 	static int BeginListBox(lua_State* L) {
 		ARG(1, string, const char*, label);
-		ARG_UDATA_DEF(2, ImVec2, const ::ImVec2*, size, &VEC2_0);
-		RET(boolean, ImGui::BeginListBox(label, *size));
+		ARG_UDATA_DEF(2, ImVec2, const ::ImVec2, size, VEC2_0);
+		RET(boolean, ImGui::BeginListBox(label, size));
 	}
 
 	static int EndListBox(lua_State* L) {
@@ -1101,9 +1154,64 @@ namespace imgui {
 		RET(integer, ImGui::TableGetColumnFlags(column_n));
 	}
 
+	static int TableSetColumnEnabled(lua_State* L) {
+		ARG(1, integer, int, column_n);
+		ARG(2, boolean, bool, enabled);
+		ImGui::TableSetColumnEnabled(column_n, enabled);
+		return 0;
+	}
+
+	static int TableSetBgColor(lua_State* L) {
+		ARG(1, integer, ImGuiTableBgTarget, target);
+		ARG(2, integer, ImU32, color);
+		ARG_DEF(3, integer, int, column_n, -1);
+		ImGui::TableSetBgColor(target, color, column_n);
+		return 0;
+	}
+
+	static int Columns(lua_State* L) {
+		ARG_DEF(1, integer, int, count, 1);
+		ARG_DEF(2, string, const char*, id, NULL);
+		ARG_DEF(3, boolean, bool, border, true);
+		ImGui::Columns(count, id, border);
+		return 0;
+	}
+
 	static int NextColumn(lua_State* L) {
 		ImGui::NextColumn();
 		return 0;
+	}
+
+	static int GetColumnIndex(lua_State* L) {
+		RET(integer, ImGui::GetColumnIndex());
+	}
+
+	static int GetColumnWidth(lua_State* L) {
+		ARG_DEF(1, integer, int, column_index, -1);
+		RET(number, ImGui::GetColumnWidth(column_index));
+	}
+
+	static int SetColumnWidth(lua_State* L) {
+		ARG(1, integer, int, column_index);
+		ARG(2, number, float, width);
+		ImGui::SetColumnWidth(column_index, width);
+		return 0;
+	}
+
+	static int GetColumnOffset(lua_State* L) {
+		ARG_DEF(1, integer, int, column_index, -1);
+		RET(number, ImGui::GetColumnOffset(column_index));
+	}
+
+	static int SetColumnOffset(lua_State* L) {
+		ARG(1, integer, int, column_index);
+		ARG(2, number, float, offset_x);
+		ImGui::SetColumnOffset(column_index, offset_x);
+		return 0;
+	}
+
+	static int GetColumnsCount(lua_State* L) {
+		RET(integer, ImGui::GetColumnsCount());
 	}
 
 	static int BeginTabBar(lua_State* L) {
@@ -1137,8 +1245,30 @@ namespace imgui {
 		RET(boolean, ImGui::TabItemButton(label, flags));
 	}
 
+	static int SetTabItemClosed(lua_State* L) {
+		ARG(1, string, const char*, tab_or_docked_window_label);
+		ImGui::SetTabItemClosed(tab_or_docked_window_label);
+		return 0;
+	}
+
+	static int BeginDisabled(lua_State* L) {
+		ARG_DEF(1, boolean, bool, disabled, true);
+		ImGui::BeginDisabled(disabled);
+		return 0;
+	}
+
+	static int EndDisabled(lua_State* L) {
+		ImGui::EndDisabled();
+		return 0;
+	}
+
 	static int SetItemDefaultFocus(lua_State* L) {
 		ImGui::SetItemDefaultFocus();
+		return 0;
+	}
+
+	static int SetNextItemAllowOverlap(lua_State* L) {
+		ImGui::SetNextItemAllowOverlap();
 		return 0;
 	}
 
@@ -1184,15 +1314,68 @@ namespace imgui {
 		RET(boolean, ImGui::IsItemToggledOpen());
 	}
 
-	static int GetItemRectSize(lua_State* L) {
-		::ImVec2* p_vec = (::ImVec2*)local.lua.lua_newuserdata(L, sizeof(::ImVec2));
+	static int IsAnyItemHovered(lua_State* L) {
+		RET(boolean, ImGui::IsAnyItemHovered());
+	}
+
+	static int IsAnyItemActive(lua_State* L) {
+		RET(boolean, ImGui::IsAnyItemActive());
+	}
+
+	static int IsAnyItemFocused(lua_State* L) {
+		RET(boolean, ImGui::IsAnyItemFocused());
+	}
+
+	static int GetItemID(lua_State* L) {
+		RET(integer, ImGui::GetItemID());
+	}
+
+	static int GetItemRectMin(lua_State* L) {
+		NEW_UDATA(::ImVec2, vec);
 		SET_METATABLE(ImVec2);
-		*p_vec = ImGui::GetItemRectSize();
+		vec = ImGui::GetItemRectMin();
 		return 1;
+	}
+
+	static int GetItemRectMax(lua_State* L) {
+		NEW_UDATA(::ImVec2, vec);
+		SET_METATABLE(ImVec2);
+		vec = ImGui::GetItemRectMax();
+		return 1;
+	}
+
+	static int GetItemRectSize(lua_State* L) {
+		NEW_UDATA(::ImVec2, vec);
+		SET_METATABLE(ImVec2);
+		vec = ImGui::GetItemRectSize();
+		return 1;
+	}
+
+	static int IsRectVisible(lua_State* L) {
+		if (local.lua.lua_isnoneornil(L, 2))
+		{
+			ARG_UDATA(1, ImVec2, ::ImVec2, size);
+			RET(boolean, ImGui::IsRectVisible(size));
+		}
+		else
+		{
+			ARG_UDATA(1, ImVec2, ::ImVec2, rect_min);
+			ARG_UDATA(2, ImVec2, ::ImVec2, rect_max);
+			RET(boolean, ImGui::IsRectVisible(rect_min, rect_max));
+		}
 	}
 
 	static int GetTime(lua_State* L) {
 		RET(number, ImGui::GetTime());
+	}
+
+	static int GetFrameCount(lua_State* L) {
+		RET(integer, ImGui::GetFrameCount());
+	}
+
+	static int GetStyleColorName(lua_State* L) {
+		ARG(1, integer, ImGuiCol, idx);
+		RET(string, ImGui::GetStyleColorName(idx));
 	}
 
 	static int CalcTextSize(lua_State* L) {
@@ -1200,10 +1383,47 @@ namespace imgui {
 		ARG_DEF(2, string, const char*, text_end, NULL);
 		ARG_DEF(3, boolean, bool, hide_text_after_double_hash, false);
 		ARG_DEF(4, number, float, wrap_width, -1.0f);
-		::ImVec2* p_vec = (::ImVec2*)local.lua.lua_newuserdata(L, sizeof(::ImVec2));
+		NEW_UDATA(::ImVec2, vec);
 		SET_METATABLE(ImVec2);
-		*p_vec = ImGui::CalcTextSize(text, text_end, hide_text_after_double_hash, wrap_width);
+		vec = ImGui::CalcTextSize(text, text_end, hide_text_after_double_hash, wrap_width);
 		return 1;
+	}
+
+	static int ColorConvertU32ToFloat4(lua_State* L) {
+		ARG(1, integer, ImU32, in);
+		NEW_UDATA(::ImVec4, vec);
+		SET_METATABLE(ImVec4);
+		vec = ImGui::ColorConvertU32ToFloat4(in);
+		return 1;
+	}
+
+	static int ColorConvertFloat4ToU32(lua_State* L) {
+		ARG_UDATA(1, ImVec4, ::ImVec4, in);
+		RET(integer, ImGui::ColorConvertFloat4ToU32(in));
+	}
+
+	static int ColorConvertRGBtoHSV(lua_State* L) {
+		ARG(1, number, float, r);
+		ARG(2, number, float, g);
+		ARG(3, number, float, b);
+		float h, s, v;
+		ImGui::ColorConvertRGBtoHSV(r, g, b, h, s, v);
+		local.lua.lua_pushnumber(L, h);
+		local.lua.lua_pushnumber(L, s);
+		local.lua.lua_pushnumber(L, v);
+		return 3;
+	}
+
+	static int ColorConvertHSVtoRGB(lua_State* L) {
+		ARG(1, number, float, h);
+		ARG(2, number, float, s);
+		ARG(3, number, float, v);
+		float r, g, b;
+		ImGui::ColorConvertHSVtoRGB(h, s, v, r, g, b);
+		local.lua.lua_pushnumber(L, r);
+		local.lua.lua_pushnumber(L, g);
+		local.lua.lua_pushnumber(L, b);
+		return 3;
 	}
 
 	static int IsKeyDown(lua_State* L) {
@@ -1227,6 +1447,11 @@ namespace imgui {
 		RET(boolean, ImGui::IsKeyChordPressed(key_chord));
 	}
 
+	static int GetKeyName(lua_State* L) {
+		ARG(1, integer, ImGuiKey, key);
+		RET(string, ImGui::GetKeyName(key));
+	}
+
 	static int IsMouseDown(lua_State* L) {
 		ARG(1, integer, ImGuiMouseButton, button);
 		RET(boolean, ImGui::IsMouseDown(button));
@@ -1248,26 +1473,83 @@ namespace imgui {
 		RET(boolean, ImGui::IsMouseDoubleClicked(button));
 	}
 
+	static int GetMouseClickedCount(lua_State* L) {
+		ARG(1, integer, ImGuiMouseButton, button);
+		RET(integer, ImGui::GetMouseClickedCount(button));
+	}
+
 	static int IsMouseHoveringRect(lua_State* L) {
-		ARG_UDATA(1, ImVec2, const ::ImVec2*, r_min);
-		ARG_UDATA(2, ImVec2, const ::ImVec2*, r_max);
+		ARG_UDATA(1, ImVec2, const ::ImVec2, r_min);
+		ARG_UDATA(2, ImVec2, const ::ImVec2, r_max);
 		ARG_DEF(3, boolean, bool, clip, true);
-		RET(boolean, ImGui::IsMouseHoveringRect(*r_min, *r_max, clip));
+		RET(boolean, ImGui::IsMouseHoveringRect(r_min, r_max, clip));
 	}
 
 	static int IsMousePosValid(lua_State* L) {
-		ARG_UDATA_DEF(1, ImVec2, const ::ImVec2*, mouse_pos, NULL);
-		RET(boolean, ImGui::IsMousePosValid(mouse_pos));
+		if (local.lua.lua_isnoneornil(L, 1))
+		{
+			RET(boolean, ImGui::IsMousePosValid());
+		}
+		else
+		{
+			ARG_UDATA(1, ImVec2, const ::ImVec2, mouse_pos);
+			RET(boolean, ImGui::IsMousePosValid(&mouse_pos));
+		}
 	}
 
 	static int IsAnyMouseDown(lua_State* L) {
 		RET(boolean, ImGui::IsAnyMouseDown());
 	}
 
+	static int GetMousePos(lua_State* L) {
+		NEW_UDATA(::ImVec2, vec);
+		SET_METATABLE(ImVec2);
+		vec = ImGui::GetMousePos();
+		return 1;
+	}
+
+	static int GetMousePosOnOpeningCurrentPopup(lua_State* L) {
+		NEW_UDATA(::ImVec2, vec);
+		SET_METATABLE(ImVec2);
+		vec = ImGui::GetMousePosOnOpeningCurrentPopup();
+		return 1;
+	}
+
 	static int IsMouseDragging(lua_State* L) {
 		ARG(1, integer, ImGuiMouseButton, button);
 		ARG_DEF(2, number, float, lock_threshold, -1.0f);
 		RET(boolean, ImGui::IsMouseDragging(button, lock_threshold));
+	}
+
+	static int GetMouseDragDelta(lua_State* L) {
+		ARG_DEF(1, integer, ImGuiMouseButton, button, 0);
+		ARG_DEF(2, number, float, lock_threshold, -1.0f);
+		NEW_UDATA(::ImVec2, vec);
+		SET_METATABLE(ImVec2);
+		vec = ImGui::GetMouseDragDelta(button, lock_threshold);
+		return 1;
+	}
+
+	static int ResetMouseDragDelta(lua_State* L) {
+		ARG_DEF(1, integer, ImGuiMouseButton, button, 0);
+		ImGui::ResetMouseDragDelta(button);
+		return 0;
+	}
+
+	static int GetMouseCursor(lua_State* L) {
+		RET(integer, ImGui::GetMouseCursor());
+	}
+
+	static int SetMouseCursor(lua_State* L) {
+		ARG(1, integer, ImGuiMouseCursor, cursor_type);
+		ImGui::SetMouseCursor(cursor_type);
+		return 0;
+	}
+
+	static int SetNextFrameWantCaptureMouse(lua_State* L) {
+		ARG(1, boolean, bool, want_capture_mouse);
+		ImGui::SetNextFrameWantCaptureMouse(want_capture_mouse);
+		return 0;
 	}
 
 	static int GetClipboardText(lua_State* L) {
@@ -1278,6 +1560,34 @@ namespace imgui {
 		ARG(1, string, const char*, text);
 		ImGui::SetClipboardText(text);
 		return 0;
+	}
+
+	static int DebugTextEncoding(lua_State* L) {
+		ARG(1, string, const char*, text);
+		ImGui::DebugTextEncoding(text);
+		return 0;
+	}
+
+	static int DebugFlashStyleColor(lua_State* L) {
+		ARG(1, integer, ImGuiCol, idx);
+		ImGui::DebugFlashStyleColor(idx);
+		return 0;
+	}
+
+	static int DebugStartItemPicker(lua_State* L) {
+		ImGui::DebugStartItemPicker();
+		return 0;
+	}
+
+	static int DebugCheckVersionAndDataLayout(lua_State* L) {
+		ARG(1, string, const char*, version_str);
+		ARG(2, integer, size_t, sz_io);
+		ARG(3, integer, size_t, sz_style);
+		ARG(4, integer, size_t, sz_vec2);
+		ARG(5, integer, size_t, sz_vec4);
+		ARG(6, integer, size_t, sz_drawvert);
+		ARG(7, integer, size_t, sz_drawidx);
+		RET(boolean, ImGui::DebugCheckVersionAndDataLayout(version_str, sz_io, sz_style, sz_vec2, sz_vec4, sz_drawvert, sz_drawidx));
 	}
 
 	static RegisterModule Init = [] {
@@ -1387,7 +1697,7 @@ namespace imgui {
 		// MODULE_FUNC(SetWindowFocus);                                                           // (not recommended) set current window to be focused / top-most. prefer using SetNextWindowFocus().
 		// MODULE_FUNC(SetWindowFontScale);                                            // [OBSOLETE] set font scale. Adjust IO.FontGlobalScale if you want to scale all windows. This is an old API! For correct scaling, prefer to reload font + rebuild ImFontAtlas + call style.ScaleAllSizes().
 		// MODULE_FUNC(SetWindowCollapsed);   // set named window collapsed state
-		// MODULE_FUNC(SetWindowFocus);                                           // set named window to be focused / top-most. use NULL to remove focus.
+		MODULE_FUNC(SetWindowFocus);                                           // set named window to be focused / top-most. use NULL to remove focus.
 
 		// Content region
 		// - Retrieve available space from a given point. GetContentRegionAvail() is frequently useful.
@@ -1434,7 +1744,7 @@ namespace imgui {
 
 		// Style read access
 		// - Use the ShowStyleEditor() function to interactively see/edit the colors.
-		// MODULE_FUNC(GetFont);                                                      // get current font
+		MODULE_FUNC(GetFont);                                                      // get current font
 		// MODULE_FUNC(GetFontSize);                                                  // get current font size (= height in pixels) of current font with current scale applied
 		// MODULE_FUNC(GetFontTexUvWhitePixel);                                       // get UV coordinate for a while pixel, useful to draw custom shapes via the ImDrawList API
 		// MODULE_FUNC(GetColorU32);              // retrieve given style color with style alpha applied and optional extra alpha multiplier, packed as a 32-bit value suitable for ImDrawList
@@ -1781,19 +2091,19 @@ namespace imgui {
 		MODULE_FUNC(TableGetRowIndex);                         // return current row index.
 		MODULE_FUNC(TableGetColumnName);      // return "" if column didn't have a name declared by TableSetupColumn(). Pass -1 to use current column.
 		MODULE_FUNC(TableGetColumnFlags);     // return column flags so you can query their Enabled/Visible/Sorted/Hovered status flags. Pass -1 to use current column.
-		// MODULE_FUNC(TableSetColumnEnabled);// change user accessible enabled/disabled state of a column. Set to false to hide the column. User can use the context menu to change this themselves (right-click in headers, or right-click in columns body with ImGuiTableFlags_ContextMenuInBody)
-		// MODULE_FUNC(TableSetBgColor);  // change the color of a cell, row, or column. See ImGuiTableBgTarget_ flags for details.
+		MODULE_FUNC(TableSetColumnEnabled);// change user accessible enabled/disabled state of a column. Set to false to hide the column. User can use the context menu to change this themselves (right-click in headers, or right-click in columns body with ImGuiTableFlags_ContextMenuInBody)
+		MODULE_FUNC(TableSetBgColor);  // change the color of a cell, row, or column. See ImGuiTableBgTarget_ flags for details.
 
 		// Legacy Columns API (prefer using Tables!)
 		// - You can also use SameLine(pos_x) to mimic simplified columns.
-		// MODULE_FUNC(Columns);
+		MODULE_FUNC(Columns);
 		MODULE_FUNC(NextColumn);                                                       // next column, defaults to current row or next row if the current row is finished
-		// MODULE_FUNC(GetColumnIndex);                                                   // get current column index
-		// MODULE_FUNC(GetColumnWidth);                              // get column width (in pixels). pass -1 to use current column
-		// MODULE_FUNC(SetColumnWidth);                      // set column width (in pixels). pass -1 to use current column
-		// MODULE_FUNC(GetColumnOffset);                             // get position of column line (in pixels, from the left side of the contents region). pass -1 to use current column, otherwise 0..GetColumnsCount() inclusive. column 0 is typically 0.0f
-		// MODULE_FUNC(SetColumnOffset);                  // set position of column line (in pixels, from the left side of the contents region). pass -1 to use current column
-		// MODULE_FUNC(GetColumnsCount);
+		MODULE_FUNC(GetColumnIndex);                                                   // get current column index
+		MODULE_FUNC(GetColumnWidth);                              // get column width (in pixels). pass -1 to use current column
+		MODULE_FUNC(SetColumnWidth);                      // set column width (in pixels). pass -1 to use current column
+		MODULE_FUNC(GetColumnOffset);                             // get position of column line (in pixels, from the left side of the contents region). pass -1 to use current column, otherwise 0..GetColumnsCount() inclusive. column 0 is typically 0.0f
+		MODULE_FUNC(SetColumnOffset);                  // set position of column line (in pixels, from the left side of the contents region). pass -1 to use current column
+		MODULE_FUNC(GetColumnsCount);
 
 		// Tab Bars, Tabs
 		// - Note: Tabs are automatically created by the docking system (when in 'docking' branch). Use this to create tab bars/tabs yourself.
@@ -1802,7 +2112,7 @@ namespace imgui {
 		MODULE_FUNC(BeginTabItem); // create a Tab. Returns true if the Tab is selected.
 		MODULE_FUNC(EndTabItem);                                                       // only call EndTabItem() if BeginTabItem() returns true!
 		MODULE_FUNC(TabItemButton);      // create a Tab behaving like a button. return true when clicked. cannot be selected in the tab bar.
-		// MODULE_FUNC(SetTabItemClosed);           // notify TabBar or Docking system of a closed tab/window ahead (useful to reduce visual flicker on reorderable tab bars). For tab-bar: call after BeginTabBar() and before Tab submissions. Otherwise call with a window name.
+		MODULE_FUNC(SetTabItemClosed);           // notify TabBar or Docking system of a closed tab/window ahead (useful to reduce visual flicker on reorderable tab bars). For tab-bar: call after BeginTabBar() and before Tab submissions. Otherwise call with a window name.
 
 		// Logging/Capture
 		// - All text output from the interface can be captured into tty/file/clipboard. By default, tree nodes are automatically opened during logging.
@@ -1831,8 +2141,8 @@ namespace imgui {
 		// - Disable all user interactions and dim items visuals (applying style.DisabledAlpha over current colors)
 		// - Those can be nested but it cannot be used to enable an already disabled section (a single BeginDisabled(true) in the stack is enough to keep everything disabled)
 		// - BeginDisabled(false) essentially does nothing useful but is provided to facilitate use of boolean expressions. If you can avoid calling BeginDisabled(False)/EndDisabled() best to avoid it.
-		// MODULE_FUNC(BeginDisabled);
-		// MODULE_FUNC(EndDisabled);
+		MODULE_FUNC(BeginDisabled);
+		MODULE_FUNC(EndDisabled);
 
 		// Clipping
 		// - Mouse hovering is affected by ImGui::PushClipRect() calls, unlike direct calls to ImDrawList::PushClipRect() which are render only.
@@ -1845,7 +2155,7 @@ namespace imgui {
 		// MODULE_FUNC(SetKeyboardFocusHere);                               // focus keyboard on the next widget. Use positive 'offset' to access sub components of a multiple component widget. Use -1 to access previous widget.
 
 		// Overlapping mode
-		// MODULE_FUNC(SetNextItemAllowOverlap);                                          // allow next item to be overlapped by a subsequent item. Useful with invisible buttons, selectable, treenode covering an area where subsequent items may need to be added. Note that both Selectable() and TreeNode() have dedicated flags doing this.
+		MODULE_FUNC(SetNextItemAllowOverlap);                                          // allow next item to be overlapped by a subsequent item. Useful with invisible buttons, selectable, treenode covering an area where subsequent items may need to be added. Note that both Selectable() and TreeNode() have dedicated flags doing this.
 
 		// Item/Widgets Utilities and Query Functions
 		// - Most of the functions are referring to the previous Item that has been submitted.
@@ -1860,12 +2170,12 @@ namespace imgui {
 		MODULE_FUNC(IsItemDeactivated);                                                // was the last item just made inactive (item was previously active). Useful for Undo/Redo patterns with widgets that require continuous editing.
 		MODULE_FUNC(IsItemDeactivatedAfterEdit);                                       // was the last item just made inactive and made a value change when it was active? (e.g. Slider/Drag moved). Useful for Undo/Redo patterns with widgets that require continuous editing. Note that you may get false positives (some widgets such as Combo()/ListBox()/Selectable() will return true even when clicking an already selected item).
 		MODULE_FUNC(IsItemToggledOpen);                                                // was the last item open state toggled? set by TreeNode().
-		// MODULE_FUNC(IsAnyItemHovered);                                                 // is any item hovered?
-		// MODULE_FUNC(IsAnyItemActive);                                                  // is any item active?
-		// MODULE_FUNC(IsAnyItemFocused);                                                 // is any item focused?
-		// MODULE_FUNC(GetItemID);                                                        // get ID of last item (~~ often same ImGui::GetID(label) beforehand)
-		// MODULE_FUNC(GetItemRectMin);                                                   // get upper-left bounding rectangle of the last item (screen space)
-		// MODULE_FUNC(GetItemRectMax);                                                   // get lower-right bounding rectangle of the last item (screen space)
+		MODULE_FUNC(IsAnyItemHovered);                                                 // is any item hovered?
+		MODULE_FUNC(IsAnyItemActive);                                                  // is any item active?
+		MODULE_FUNC(IsAnyItemFocused);                                                 // is any item focused?
+		MODULE_FUNC(GetItemID);                                                        // get ID of last item (~~ often same ImGui::GetID(label) beforehand)
+		MODULE_FUNC(GetItemRectMin);                                                   // get upper-left bounding rectangle of the last item (screen space)
+		MODULE_FUNC(GetItemRectMax);                                                   // get lower-right bounding rectangle of the last item (screen space)
 		MODULE_FUNC(GetItemRectSize);                                                  // get size of last item
 
 		// Viewports
@@ -1879,12 +2189,11 @@ namespace imgui {
 		// MODULE_FUNC(GetForegroundDrawList);                                            // this draw list will be the last rendered one. Useful to quickly draw shapes/text over dear imgui contents.
 
 		// Miscellaneous Utilities
-		// MODULE_FUNC(IsRectVisible);                                  // test if rectangle (of given size, starting from cursor position) is visible / not clipped.
-		// MODULE_FUNC(IsRectVisible);      // test if rectangle (in screen space) is visible / not clipped. to perform coarse clipping on user's side.
+		MODULE_FUNC(IsRectVisible);                                  // test if rectangle (of given size, starting from cursor position) is visible / not clipped.  // test if rectangle (in screen space) is visible / not clipped. to perform coarse clipping on user's side.
 		MODULE_FUNC(GetTime);                                                          // get global imgui time. incremented by io.DeltaTime every frame.
-		// MODULE_FUNC(GetFrameCount);                                                    // get global imgui frame count. incremented by 1 every frame.
+		MODULE_FUNC(GetFrameCount);                                                    // get global imgui frame count. incremented by 1 every frame.
 		// MODULE_FUNC(GetDrawListSharedData);                                    // you may use this when creating your own ImDrawList instances.
-		// MODULE_FUNC(GetStyleColorName);                                    // get a string corresponding to the enum value (for display, saving, etc.).
+		MODULE_FUNC(GetStyleColorName);                                    // get a string corresponding to the enum value (for display, saving, etc.).
 		// MODULE_FUNC(SetStateStorage);                             // replace current window storage with our own (if you want to manipulate it yourself, typically clear subsection of it)
 		// MODULE_FUNC(GetStateStorage);
 
@@ -1892,10 +2201,10 @@ namespace imgui {
 		MODULE_FUNC(CalcTextSize);
 
 		// Color Utilities
-		// MODULE_FUNC(ColorConvertU32ToFloat4);
-		// MODULE_FUNC(ColorConvertFloat4ToU32);
-		// MODULE_FUNC(ColorConvertRGBtoHSV);
-		// MODULE_FUNC(ColorConvertHSVtoRGB);
+		MODULE_FUNC(ColorConvertU32ToFloat4);
+		MODULE_FUNC(ColorConvertFloat4ToU32);
+		MODULE_FUNC(ColorConvertRGBtoHSV);
+		MODULE_FUNC(ColorConvertHSVtoRGB);
 
 		// Inputs Utilities: Keyboard/Mouse/Gamepad
 		// - the ImGuiKey enum contains all possible keyboard, mouse and gamepad inputs (e.g. ImGuiKey_A, ImGuiKey_MouseLeft, ImGuiKey_GamepadDpadUp...).
@@ -1907,7 +2216,7 @@ namespace imgui {
 		MODULE_FUNC(IsKeyReleased);                                        // was key released (went from Down to !Down)?
 		MODULE_FUNC(IsKeyChordPressed);                         // was key chord (mods + key) pressed, e.g. you can pass 'ImGuiMod_Ctrl | ImGuiKey_S' as a key-chord. This doesn't do any routing or focus check, please consider using Shortcut() function instead.
 		// MODULE_FUNC(GetKeyPressedAmount);  // uses provided repeat rate/delay. return a count, most often 0 or 1 but might be >1 if RepeatRate is small enough that DeltaTime > RepeatRate
-		// MODULE_FUNC(GetKeyName);                                           // [DEBUG] returns English name of the key. Those names a provided for debugging purpose and are not meant to be saved persistently not compared.
+		MODULE_FUNC(GetKeyName);                                           // [DEBUG] returns English name of the key. Those names a provided for debugging purpose and are not meant to be saved persistently not compared.
 		// MODULE_FUNC(SetNextFrameWantCaptureKeyboard);        // Override io.WantCaptureKeyboard flag next frame (said flag is left for your application to handle, typically when true it instructs your app to ignore inputs). e.g. force capture keyboard when your widget is being hovered. This is equivalent to setting "io.WantCaptureKeyboard = want_capture_keyboard"; after the next NewFrame() call.
 
 		// Inputs Utilities: Mouse specific
@@ -1918,18 +2227,18 @@ namespace imgui {
 		MODULE_FUNC(IsMouseClicked);       // did mouse button clicked? (went from !Down to Down). Same as GetMouseClickedCount() == 1.
 		MODULE_FUNC(IsMouseReleased);                           // did mouse button released? (went from Down to !Down)
 		MODULE_FUNC(IsMouseDoubleClicked);                      // did mouse button double-clicked? Same as GetMouseClickedCount() == 2. (note that a double-click will also report IsMouseClicked() == true)
-		// MODULE_FUNC(GetMouseClickedCount);                      // return the number of successive mouse-clicks at the time where a click happen (otherwise 0).
+		MODULE_FUNC(GetMouseClickedCount);                      // return the number of successive mouse-clicks at the time where a click happen (otherwise 0).
 		MODULE_FUNC(IsMouseHoveringRect);// is mouse hovering given bounding rect (in screen space). clipped by current clipping settings, but disregarding of other consideration of focus/window ordering/popup-block.
 		MODULE_FUNC(IsMousePosValid);                    // by convention we use (-FLT_MAX,-FLT_MAX) to denote that there is no mouse available
 		MODULE_FUNC(IsAnyMouseDown);                                                   // [WILL OBSOLETE] is any mouse button held? This was designed for backends, but prefer having backend maintain a mask of held mouse buttons, because upcoming input queue system will make this invalid.
-		// MODULE_FUNC(GetMousePos);                                                      // shortcut to ImGui::GetIO().MousePos provided by user, to be consistent with other calls
-		// MODULE_FUNC(GetMousePosOnOpeningCurrentPopup);                                 // retrieve mouse position at the time of opening popup we have BeginPopup() into (helper to avoid user backing that value themselves)
+		MODULE_FUNC(GetMousePos);                                                      // shortcut to ImGui::GetIO().MousePos provided by user, to be consistent with other calls
+		MODULE_FUNC(GetMousePosOnOpeningCurrentPopup);                                 // retrieve mouse position at the time of opening popup we have BeginPopup() into (helper to avoid user backing that value themselves)
 		MODULE_FUNC(IsMouseDragging);         // is mouse dragging? (if lock_threshold < -1.0f, uses io.MouseDraggingThreshold)
-		// MODULE_FUNC(GetMouseDragDelta);   // return the delta from the initial clicking position while the mouse button is pressed or was just released. This is locked and return 0.0f until the mouse moves past a distance threshold at least once (if lock_threshold < -1.0f, uses io.MouseDraggingThreshold)
-		// MODULE_FUNC(ResetMouseDragDelta);                   //
-		// MODULE_FUNC(GetMouseCursor);                                                // get desired mouse cursor shape. Important: reset in ImGui::NewFrame(), this is updated during the frame. valid before Render(). If you use software rendering by setting io.MouseDrawCursor ImGui will render those for you
-		// MODULE_FUNC(SetMouseCursor);                       // set desired mouse cursor shape
-		// MODULE_FUNC(SetNextFrameWantCaptureMouse);              // Override io.WantCaptureMouse flag next frame (said flag is left for your application to handle, typical when true it instucts your app to ignore inputs). This is equivalent to setting "io.WantCaptureMouse = want_capture_mouse;" after the next NewFrame() call.
+		MODULE_FUNC(GetMouseDragDelta);   // return the delta from the initial clicking position while the mouse button is pressed or was just released. This is locked and return 0.0f until the mouse moves past a distance threshold at least once (if lock_threshold < -1.0f, uses io.MouseDraggingThreshold)
+		MODULE_FUNC(ResetMouseDragDelta);                   //
+		MODULE_FUNC(GetMouseCursor);                                                // get desired mouse cursor shape. Important: reset in ImGui::NewFrame(), this is updated during the frame. valid before Render(). If you use software rendering by setting io.MouseDrawCursor ImGui will render those for you
+		MODULE_FUNC(SetMouseCursor);                       // set desired mouse cursor shape
+		MODULE_FUNC(SetNextFrameWantCaptureMouse);              // Override io.WantCaptureMouse flag next frame (said flag is left for your application to handle, typical when true it instucts your app to ignore inputs). This is equivalent to setting "io.WantCaptureMouse = want_capture_mouse;" after the next NewFrame() call.
 
 		// Clipboard Utilities
 		// - Also see the LogToClipboard() function to capture GUI into clipboard, or easily output text data to the clipboard.
@@ -1947,10 +2256,10 @@ namespace imgui {
 
 		// Debug Utilities
 		// - Your main debugging friend is the ShowMetricsWindow() function, which is also accessible from Demo->Tools->Metrics Debugger
-		// MODULE_FUNC(DebugTextEncoding);
-		// MODULE_FUNC(DebugFlashStyleColor);
-		// MODULE_FUNC(DebugStartItemPicker);
-		// MODULE_FUNC(DebugCheckVersionAndDataLayout); // This is called by IMGUI_CHECKVERSION() macro.
+		MODULE_FUNC(DebugTextEncoding);
+		MODULE_FUNC(DebugFlashStyleColor);
+		MODULE_FUNC(DebugStartItemPicker);
+		MODULE_FUNC(DebugCheckVersionAndDataLayout); // This is called by IMGUI_CHECKVERSION() macro.
 
 		// Memory Allocators
 		// - Those functions are not reliant on the current context.

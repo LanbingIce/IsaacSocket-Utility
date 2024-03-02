@@ -12,8 +12,8 @@ namespace isaac_ {
 
 	static int p_Options__index(lua_State* L) {
 
-		ARG_UDATA(1, p_Options, ::isaac::Options**, pp_options);
-		METATABLE_BEGIN(isaac::Options, **pp_options);
+		ARG_UDATA(1, p_Options, ::isaac::Options*, p_options);
+		METATABLE_BEGIN(isaac::Options, *p_options);
 
 		METATABLE_INDEX(integer, AnnouncerVoiceMode);
 		METATABLE_INDEX(boolean, BulletVisibility);
@@ -84,8 +84,8 @@ namespace isaac_ {
 
 	static int p_Options__newindex(lua_State* L) {
 
-		ARG_UDATA(1, p_Options, ::isaac::Options**, pp_options);
-		METATABLE_BEGIN(isaac::Options, **pp_options);
+		ARG_UDATA(1, p_Options, ::isaac::Options*, p_options);
+		METATABLE_BEGIN(isaac::Options, *p_options);
 
 		METATABLE_NEWINDEX(integer, AnnouncerVoiceMode);
 		METATABLE_NEWINDEX(boolean, BulletVisibility);

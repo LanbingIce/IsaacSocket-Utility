@@ -11,8 +11,8 @@ using isaac::lua_State;
 namespace isaac_api {
 
 	static int HistoryItem__index(lua_State* L) {
-		ARG_UDATA(1, HistoryItem, isaac::HistoryItem*, p_item);
-		METATABLE_BEGIN(isaac::HistoryItem, *p_item);
+		ARG_UDATA(1, HistoryItem, isaac::HistoryItem, item);
+		METATABLE_BEGIN(isaac::HistoryItem, item);
 		METATABLE_INDEX(integer, time);
 		METATABLE_INDEX(boolean, isTrinket);
 		METATABLE_INDEX(integer, id);
@@ -24,8 +24,8 @@ namespace isaac_api {
 	}
 
 	static int HistoryItem__newindex(lua_State* L) {
-		ARG_UDATA(1, HistoryItem, isaac::HistoryItem*, p_item);
-		METATABLE_BEGIN(isaac::HistoryItem, *p_item);
+		ARG_UDATA(1, HistoryItem, isaac::HistoryItem, item);
+		METATABLE_BEGIN(isaac::HistoryItem, item);
 		METATABLE_END();
 	}
 
