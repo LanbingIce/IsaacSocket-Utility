@@ -79,21 +79,23 @@ namespace inject {
 	{
 		__asm {
 			push ecx
-			push[esp + 0x10]
-			push[esp + 0x10]
-			push[esp + 0x10]
+			push[esp + 0x18]
+			push[esp + 0x18]
+			push[esp + 0x18]
 			call local.callbacks.OnExecuteCommand
 			add esp, 0x0C
 			pop ecx
 			test eax, eax
 			jne flag
-			push ebp
-			mov ebp, esp
-			push - 0x01
 			mov eax, local.isaac
-			add eax, 0x2655C5
+			add eax, 0x5F36B0
+			push eax
+			mov eax, local.isaac
+			add eax, 0x2655CA
 			jmp eax
-			flag : ret 0x0C
+			flag : mov esp, ebp
+			pop ebp
+			ret 0x0C
 		}
 	}
 
@@ -102,21 +104,23 @@ namespace inject {
 	{
 		__asm {
 			push ecx
-			push[esp + 0x10]
-			push[esp + 0x10]
-			push[esp + 0x10]
+			push[esp + 0x18]
+			push[esp + 0x18]
+			push[esp + 0x18]
 			call local.callbacks.OnConsoleOutput
 			add esp, 0x0C
 			pop ecx
 			test eax, eax
 			jne flag
-			push ebp
-			mov ebp, esp
-			push - 0x01
 			mov eax, local.isaac
-			add eax, 0x26AEC5
+			add eax, 0x5F3735
+			push eax
+			mov eax, local.isaac
+			add eax, 0x26AECA
 			jmp eax
-			flag : ret 0x0C
+			flag : mov esp, ebp
+			pop ebp
+			ret 0x0C
 		}
 	}
 
@@ -170,9 +174,9 @@ namespace inject {
 		// SwapBuffers
 		INJECT(0x4B1076, SwapBuffers, 1);
 		// 执行控制台指令
-		INJECT(0x2655C0, ExecuteCommand, 0);
+		INJECT(0x2655C5, ExecuteCommand, 0);
 		// 控制台输出
-		INJECT(0x26AEC0, ConsoleOutput, 0);
+		INJECT(0x26AEC5, ConsoleOutput, 0);
 		// 日志输出
 		INJECT(0x55E330, LogPrintf, 1);
 		// MT19937随机数生成
@@ -180,5 +184,5 @@ namespace inject {
 		// 窗口消息
 		INJECT(0x5971D0, WndProc, 1);
 #undef INJECT
-}
+	}
 }
