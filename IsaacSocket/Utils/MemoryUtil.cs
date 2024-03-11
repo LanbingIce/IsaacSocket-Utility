@@ -90,6 +90,7 @@ namespace IsaacSocket.Utils
             byte[] patternData = buffer.ToArray();
 
             IntPtr address = 0;
+            IntPtr singleAddress = 0;
             byte[] dataBuffer;
             IntPtr memoryAddress = 0;
             bool readResult;
@@ -125,8 +126,30 @@ namespace IsaacSocket.Utils
                     }
 
 
-                }
+                    while (readResult && singleAddress != -1)
+                    {
+                        foundOffset = MiscUtil.FindPatternIndex(dataBuffer, BitConverter.GetBytes(data), foundOffset);
+                        if (foundOffset == -1)
+                        {
+                            foundOffset = 0;
+                            break;
+                        }
+                        else if (singleAddress == 0)
+                        {
+                            singleAddress = memoryAddress + foundOffset;
+                        }
+                        else
+                        {
+                            singleAddress = -1;
+                            foundOffset = 0;
+                            break;
+                        }
+                        foundOffset += 8;
+                    }
 
+
+
+                }
 
                 memoryAddress += memoryBlockInfo.RegionSize;
 
@@ -135,7 +158,10 @@ namespace IsaacSocket.Utils
             }
 
 
-
+            if (address == 0 && singleAddress != -1)
+            {
+                address = singleAddress;
+            }
             return address;
         }
 

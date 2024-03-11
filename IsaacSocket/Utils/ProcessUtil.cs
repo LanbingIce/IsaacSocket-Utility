@@ -27,7 +27,7 @@ namespace IsaacSocket.Utils
 
         internal static uint GetProcessId(string lpClassName, string lpWindowName)
         {
-            _ = WinAPIUtil.GetWindowThreadProcessId(WinAPIUtil.FindWindow(lpClassName, lpWindowName), out uint processID);
+            _ = WinAPIUtil.GetWindowThreadProcessId(MiscUtil.FindWindow(lpClassName, lpWindowName), out uint processID);
 
             return processID;
         }

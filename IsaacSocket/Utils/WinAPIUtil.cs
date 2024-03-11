@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Text;
 namespace IsaacSocket.Utils
 {
     internal static partial class WinAPIUtil
@@ -112,6 +113,15 @@ namespace IsaacSocket.Utils
         public static extern bool VirtualFreeEx(IntPtr hProcess, IntPtr lpAddress, int dwSize, FreeType dwFreeType);
         [DllImport("kernel32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
         internal static extern nint GetModuleHandleA(string moduleName);
+
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Ansi)]
+        internal static extern nint FindWindowExA(nint hwndParent, nint hwndChildAfter, string lpszClass, string? lpszWindow);
+
+        [DllImport("user32.dll")]
+        internal static extern int GetWindowText(nint hWnd, StringBuilder text, int count);
+
+        [DllImport("user32.dll")]
+        internal static extern int GetWindowTextLengthA(nint hWnd);
 
     }
 }

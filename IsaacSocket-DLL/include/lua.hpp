@@ -61,7 +61,7 @@ namespace lua {
 
 	struct Lua
 	{
-		HMODULE hLuaModule = GetModuleHandleA("Lua5.3.3r.dll");
+		HMODULE hLuaModule = []() {auto h = GetModuleHandleA("Lua5.4.dll"); if (!h)h = GetModuleHandleA("Lua5.3.3r.dll"); return h; }();
 
 		_(const char*, lua_pushstring, lua_State* L, const char* s);
 
@@ -233,9 +233,9 @@ namespace lua {
 			return lua_isstring(L, i);
 		}
 			int lua_isstdwstring(lua_State * L, int i) const
-			{
-				return lua_isstring(L, i);
-			}
+		{
+			return lua_isstring(L, i);
+		}
 
 		int lua_isstdstringview(lua_State* L, int i) const
 		{

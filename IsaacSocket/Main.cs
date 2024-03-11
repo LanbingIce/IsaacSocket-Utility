@@ -254,22 +254,22 @@ namespace IsaacSocket
                             connectionState = ConnectionState.FOUND_PROCESS;
                         }
                     }
-                    uint sendAddressType = 0;
+                    byte sendAddressType = 0;
                     uint sendTextAddress = 0;
-                    uint receiveAddressType = 0;
+                    byte receiveAddressType = 0;
                     uint receiveTextAddress = 0;
 
                     if (connectionState == ConnectionState.CONNECTED || connectionState == ConnectionState.CONNECTING)
                     {
-                        sendAddressType = MemoryUtil.ReadUInt32FromMemory(isaacProcessHandle, sendAddress + 8);
+                        sendAddressType = MemoryUtil.ReadByteFromMemory(isaacProcessHandle, sendAddress + 0x8);
                         sendTextAddress = MemoryUtil.ReadUInt32FromMemory(isaacProcessHandle, sendAddress);
-                        receiveAddressType = MemoryUtil.ReadUInt32FromMemory(isaacProcessHandle, receiveAddress + 8);
+                        receiveAddressType = MemoryUtil.ReadByteFromMemory(isaacProcessHandle, receiveAddress + 0x8);
                         receiveTextAddress = MemoryUtil.ReadUInt32FromMemory(isaacProcessHandle, receiveAddress);
-                        if (sendAddressType == 84 && (receiveAddressType == 68 || receiveAddressType == 84))//两个变量都为文本
+                        if (sendAddressType == 0x54 && (receiveAddressType == 0x44 || receiveAddressType == 0x54))//两个变量都为文本
                         {
                             connectionState = ConnectionState.CONNECTED;
                         }
-                        else if (sendAddressType == 19 && sendTextAddress == dataSpaceSize && receiveAddressType == 19 && receiveTextAddress == 1)//两个变量都是数值型且mod向程序发送数据的变量地址为1
+                        else if ((sendAddressType == 0x13 || sendAddressType == 0x3) && sendTextAddress == dataSpaceSize && (receiveAddressType == 0x13 || receiveAddressType == 0x3) && receiveTextAddress == 1)//两个变量都是数值型且mod向程序发送数据的变量地址为1
                         {
                             connectionState = ConnectionState.CONNECTING;
                         }
@@ -288,16 +288,16 @@ namespace IsaacSocket
                                 Connected(dataSpaceSize);
                             }
                             uint size;
-                            if (receiveAddressType == 68)
+                            if (receiveAddressType == 0x44)
                             {
-                                size = MemoryUtil.ReadByteFromMemory(isaacProcessHandle, (IntPtr)(receiveTextAddress + 7));
+                                size = MemoryUtil.ReadByteFromMemory(isaacProcessHandle, (IntPtr)(receiveTextAddress + 0x7));
                             }
                             else
                             {
-                                size = MemoryUtil.ReadUInt32FromMemory(isaacProcessHandle, (IntPtr)receiveTextAddress + 12);
+                                size = MemoryUtil.ReadUInt32FromMemory(isaacProcessHandle, (IntPtr)receiveTextAddress + 0xD);
                             }
 
-                            receiveTable.Update(MemoryUtil.ReadFromMemory(isaacProcessHandle, (IntPtr)(receiveTextAddress + 16), size));
+                            receiveTable.Update(MemoryUtil.ReadFromMemory(isaacProcessHandle, (IntPtr)(receiveTextAddress + 0x10), size));
                             byte[]? newMessage = receiveTable.GetMessage();
                             while (newMessage != null)
                             {
@@ -314,7 +314,7 @@ namespace IsaacSocket
                             if (sendTable.Update(receiveTable))
                             {
 
-                                MemoryUtil.WriteToMemory(isaacProcessHandle, (IntPtr)(sendTextAddress + 16), sendTable.Serialize());
+                                MemoryUtil.WriteToMemory(isaacProcessHandle, (IntPtr)(sendTextAddress + 0x10), sendTable.Serialize());
 
 
                             }

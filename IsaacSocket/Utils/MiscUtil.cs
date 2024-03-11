@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using System.Text;
 
 namespace IsaacSocket.Utils
 {
@@ -23,7 +24,7 @@ namespace IsaacSocket.Utils
             for (int i = startIndex; i <= end; i += 4)
             {
                 bool isPatternFound = true;
-                for (int j = 0; j < 16; j++)
+                for (int j = 0; j < patternData.Length; j++)
                 {
 
                     if (byteArray[i + j] != patternData[j])
@@ -170,6 +171,37 @@ namespace IsaacSocket.Utils
             }
             long uptimeTimestamp = new DateTimeOffset(bootTime).ToUnixTimeMilliseconds();
             return uptimeTimestamp;
+        }
+
+        internal static IntPtr FindWindow(string lpClassName, string lpWindowName)
+        {
+            nint h = nint.Zero;
+            int size = lpWindowName.Length;
+            while (true)
+            {
+                h = WinAPIUtil.FindWindowExA(0, h, lpClassName, null);
+                if (h != 0)
+                {
+                    string TitleName = GetWindowText(h);
+                    if(TitleName.Contains(lpWindowName))
+                     {
+                        return h;
+                    }
+                }
+
+            }
+        }
+
+        public static string GetWindowText(nint hWnd)
+        {
+            int length = WinAPIUtil.GetWindowTextLengthA(hWnd);
+            if (length > 0)
+            {
+                StringBuilder sb = new StringBuilder(length + 1);
+                _ = WinAPIUtil.GetWindowText(hWnd, sb, sb.Capacity);
+                return sb.ToString();
+            }
+            return "";
         }
     }
 }
