@@ -339,9 +339,9 @@ namespace callback {
 
 		char buffer[4]{};
 		char* u8 = buffer;
-        bool isRepentogon = GetModuleHandleA("Lua5.4.dll") != NULL; // 只有忏悔龙会改变版本为 Lua5.4.dll
+        static bool isRepentogon = GetModuleHandleA("Lua5.4.dll") != NULL; // 只有忏悔龙会改变版本为 Lua5.4.dll（static 表示只需一次性检测，更高效）
 
-		if (isRepentogon && ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
+		if (isRepentogon && ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) // 如果是忏悔龙，则提前给他没有转换过的原始 wparam
 		{
 			return 1;
 		}
@@ -368,7 +368,7 @@ namespace callback {
 			}
 		}
 
-		if (!isRepentogon && ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
+		if (!isRepentogon && ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) // 如果没有，则给imgui我们转换为utf8的wparam
 		{
 			return 1;
 		}
