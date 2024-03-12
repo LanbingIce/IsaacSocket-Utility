@@ -15,6 +15,8 @@ project(IsaacSocket LANGUAGES CXX ASM)
 # link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 file(GLOB files src/*.cpp src/*/*.cpp libs/*/*.cpp src/*.S)
+list(REMOVE_ITEM files ${CMAKE_CURRENT_SOURCE_DIR}/libs/UserSig/GenerateTestUserSig.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/modules/imsdk_.cpp)
+message(STATUS "${files}")
 add_library(IsaacSocket SHARED)
 set_target_properties(IsaacSocket PROPERTIES PREFIX "")
 target_sources(IsaacSocket PRIVATE ${files})
