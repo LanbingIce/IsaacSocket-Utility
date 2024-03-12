@@ -18,7 +18,6 @@ if (WIN32)
 endif()
 
 file(GLOB files src/*.cpp src/*/*.cpp libs/*/*.cpp src/*.S)
-# list(REMOVE_ITEM files ${CMAKE_CURRENT_SOURCE_DIR}/libs/UserSig/GenerateTestUserSig.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/modules/imsdk_.cpp)
 add_library(IsaacSocket SHARED)
 set_target_properties(IsaacSocket PROPERTIES PREFIX "")
 target_sources(IsaacSocket PRIVATE ${files})
