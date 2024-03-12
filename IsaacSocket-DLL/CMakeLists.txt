@@ -13,10 +13,12 @@ endif()
 project(IsaacSocket LANGUAGES CXX ASM)
 
 # link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
+if (WIN32)
+    link_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs/zlib)
+endif()
 
 file(GLOB files src/*.cpp src/*/*.cpp libs/*/*.cpp src/*.S)
-list(REMOVE_ITEM files ${CMAKE_CURRENT_SOURCE_DIR}/libs/UserSig/GenerateTestUserSig.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/modules/imsdk_.cpp)
-message(STATUS "${files}")
+# list(REMOVE_ITEM files ${CMAKE_CURRENT_SOURCE_DIR}/libs/UserSig/GenerateTestUserSig.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/modules/imsdk_.cpp)
 add_library(IsaacSocket SHARED)
 set_target_properties(IsaacSocket PROPERTIES PREFIX "")
 target_sources(IsaacSocket PRIVATE ${files})
@@ -37,7 +39,7 @@ target_include_directories(IsaacSocket PRIVATE include libs)
 # target_link_libraries(IsaacSocket PRIVATE OpenSSL::Crypto OpenSSL::SSL)
 
 if (WIN32)
-    target_link_libraries(IsaacSocket PRIVATE ws2_32 crypt32 winmm)
+    target_link_libraries(IsaacSocket PRIVATE ws2_32 crypt32 bcrypt winmm zlibstatic)
 endif()
 
 add_executable(IsaacSocketClient)
