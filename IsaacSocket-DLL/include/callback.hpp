@@ -339,6 +339,12 @@ namespace callback {
 
 		char buffer[4]{};
 		char* u8 = buffer;
+        bool isRepentogon = GetModuleHandleA("Lua5.4.dll") != NULL; // 只有忏悔龙会改变版本为 Lua5.4.dll
+
+		if (isRepentogon && ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
+		{
+			return 1;
+		}
 
 		if (uMsg == WM_CHAR)
 		{
@@ -362,7 +368,7 @@ namespace callback {
 			}
 		}
 
-		if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
+		if (!isRepentogon && ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
 		{
 			return 1;
 		}
