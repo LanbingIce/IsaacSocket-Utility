@@ -38,7 +38,7 @@ target_include_directories(IsaacSocket PRIVATE include libs)
 # target_link_libraries(IsaacSocket PRIVATE OpenSSL::Crypto OpenSSL::SSL)
 
 if (WIN32)
-    target_link_libraries(IsaacSocket PRIVATE ws2_32 crypt32 bcrypt winmm zlibstatic)
+    target_link_libraries(IsaacSocket PRIVATE ws2_32 crypt32 bcrypt winmm zlibstatic dwmapi)
 endif()
 
 add_executable(IsaacSocketClient)
