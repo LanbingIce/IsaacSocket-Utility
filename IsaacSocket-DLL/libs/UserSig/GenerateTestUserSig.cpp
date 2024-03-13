@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <memory>
 #include <assert.h>
-#include <Windows.h>
+#include <windows.h>
 #include <bcrypt.h>
 
 #pragma comment(lib, "bcrypt.lib")

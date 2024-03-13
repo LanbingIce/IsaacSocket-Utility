@@ -133,3 +133,11 @@ __ZN6inject11SwapBuffersEv:
     mov eax, local.isaac
     add eax, 0x4B107C
     jmp eax
+
+.global ___security_cookie
+___security_cookie:
+    ret
+
+.global @__security_check_cookie@4
+@__security_check_cookie@4:
+    ret 4

@@ -339,6 +339,7 @@ namespace callback {
 
 		char buffer[4]{};
 		char* u8 = buffer;
+        bool isUnicodeWnd = IsWindowUnicode(hWnd); // 忏悔龙会让 IsWindowUnicode 为 false
 
 		if (uMsg == WM_CHAR)
 		{
@@ -362,10 +363,21 @@ namespace callback {
 			}
 		}
 
-		if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
-		{
-			return 1;
-		}
+    if (isUnicodeWnd) {
+        if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) // 没有忏悔龙，则用UTF-16调用
+        {
+            return 1;
+        }
+    } else {
+        bool anyTrue = false;
+        for (int i = 0; i < 4 && u8[i]; i++) { // 没有忏悔龙，则用UTF-8分别调用
+            anyTrue = anyTrue || ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, u8[i], lParam);
+        }
+        if (anyTrue)
+        {
+            return 1;
+        }
+    }
 
 		CHECK_STATE();
 

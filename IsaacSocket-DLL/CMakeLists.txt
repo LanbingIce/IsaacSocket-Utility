@@ -13,6 +13,9 @@ endif()
 project(IsaacSocket LANGUAGES CXX ASM)
 
 # link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
+if (WIN32)
+    link_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs/zlib)
+endif()
 
 file(GLOB files src/*.cpp src/*/*.cpp libs/*/*.cpp src/*.S)
 add_library(IsaacSocket SHARED)
@@ -35,7 +38,7 @@ target_include_directories(IsaacSocket PRIVATE include libs)
 # target_link_libraries(IsaacSocket PRIVATE OpenSSL::Crypto OpenSSL::SSL)
 
 if (WIN32)
-    target_link_libraries(IsaacSocket PRIVATE ws2_32 crypt32 winmm)
+    target_link_libraries(IsaacSocket PRIVATE ws2_32 crypt32 bcrypt winmm zlibstatic dwmapi)
 endif()
 
 add_executable(IsaacSocketClient)
