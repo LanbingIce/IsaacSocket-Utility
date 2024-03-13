@@ -337,51 +337,31 @@ namespace callback {
 #define _(name,paramType,...)MOD_CALLBACK_BEGIN(name);MOD_CALLBACK_ARG(paramType,__VA_ARGS__);MOD_CALLBACK_CALL();MOD_CALLBACK_END();
 		CHECK_INIT();
 
-		char buffer[4]{};
-		char* u8 = buffer;
-        bool isUnicodeWnd = IsWindowUnicode(hWnd); // 忏悔龙会让 IsWindowUnicode 为 false
-
-		if (uMsg == WM_CHAR)
+		if (uMsg != WM_CHAR && ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
 		{
-			if (local.charsInputBuffer[0] < 0)
-			{
-				local.charsInputBuffer[1] = wParam;
-				wchar_t* u16 = (wchar_t*)&wParam;
-				utils::AnsiToU16(local.charsInputBuffer, u16, 2);
-				local.charsInputBuffer[0] = 0;
-				local.charsInputBuffer[1] = 0;
-				utils::U16ToU8(u16, u8, 4);
-			}
-			else
-			{
-				local.charsInputBuffer[0] = wParam;
-				if (local.charsInputBuffer[0] < 0)
-				{
-					return 1;
-				}
-				u8 = local.charsInputBuffer;
-			}
+			return 1;
 		}
-
-    if (isUnicodeWnd) {
-        if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) // 没有忏悔龙，则用UTF-16调用
-        {
-            return 1;
-        }
-    } else {
-        bool anyTrue = false;
-        for (int i = 0; i < 4 && u8[i]; i++) { // 没有忏悔龙，则用UTF-8分别调用
-            anyTrue = anyTrue || ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, u8[i], lParam);
-        }
-        if (anyTrue)
-        {
-            return 1;
-        }
-    }
 
 		CHECK_STATE();
 
-		const ImGuiIO& io = ImGui::GetIO();
+		ImGuiIO& io = ImGui::GetIO();
+
+		if (uMsg == WM_CHAR)
+		{
+			if (local.charsInputBuffer[0])
+			{
+				local.charsInputBuffer[1] = wParam;
+				MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, local.charsInputBuffer, 2, (LPWSTR)&wParam, 1);
+				local.charsInputBuffer[0] = 0;
+			}
+			else if (IsDBCSLeadByte(wParam))
+			{
+				local.charsInputBuffer[0] = wParam;
+				return 0;
+			}
+
+			io.AddInputCharacter(wParam);
+		}
 
 		if (io.WantCaptureMouse && (uMsg == WM_LBUTTONDOWN || uMsg == WM_LBUTTONUP || uMsg == WM_RBUTTONDOWN || uMsg == WM_RBUTTONUP || uMsg == WM_MBUTTONDOWN || uMsg == WM_MBUTTONUP || uMsg == WM_MOUSEWHEEL || uMsg == WM_MOUSEMOVE)) {
 			return 1;
@@ -397,6 +377,8 @@ namespace callback {
 		case WM_CHAR:
 			if (!std::iswcntrl(wParam))
 			{
+				char u8[4]{};
+				WideCharToMultiByte(CP_UTF8, 0, (LPCWCH)&wParam, 1, u8, 3, nullptr, nullptr);
 				_(ISMC_PRE_CHAR_INPUT, string, u8);
 			}
 			break;

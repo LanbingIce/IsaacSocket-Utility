@@ -50,7 +50,7 @@ namespace state {
 		HWND hWnd;
 		bool initialized = false;
 		bool needReload = false;
-		char charsInputBuffer[3];
+		char charsInputBuffer[2];
 		isaac::IsaacImage* isaac;
 		lua::Lua lua;
 		imsdk::ImSDK imsdk;
