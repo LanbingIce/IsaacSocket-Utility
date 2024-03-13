@@ -339,12 +339,7 @@ namespace callback {
 
 		char buffer[4]{};
 		char* u8 = buffer;
-        static bool isRepentogon = GetModuleHandleA("Lua5.4.dll") != NULL; // 只有忏悔龙会改变版本为 Lua5.4.dll（static 表示只需一次性检测，更高效）
-
-		if (isRepentogon && ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) // 如果是忏悔龙，则提前给他没有转换过的原始 wparam
-		{
-			return 1;
-		}
+        bool isUnicodeWnd = IsWindowUnicode(hWnd); // 忏悔龙会让 IsWindowUnicode 为 false
 
 		if (uMsg == WM_CHAR)
 		{
@@ -368,10 +363,21 @@ namespace callback {
 			}
 		}
 
-		if (!isRepentogon && ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) // 如果没有，则给imgui我们转换为utf8的wparam
-		{
-			return 1;
-		}
+    if (isUnicodeWnd) {
+        if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) // 没有忏悔龙，则用UTF-16调用
+        {
+            return 1;
+        }
+    } else {
+        bool anyTrue = false;
+        for (int i = 0; i < 4 && u8[i]; i++) { // 没有忏悔龙，则用UTF-8分别调用
+            anyTrue = anyTrue || ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, u8[i], lParam);
+        }
+        if (anyTrue)
+        {
+            return 1;
+        }
+    }
 
 		CHECK_STATE();
 
