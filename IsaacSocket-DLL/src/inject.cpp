@@ -56,7 +56,7 @@ namespace inject {
 	}
 
 	//SwapBuffers
-	__declspec(naked) void SwapBuffers()
+	static __declspec(naked) void _SwapBuffers()
 	{
 		__asm {
 			call local.callbacks.PreSwapBuffers
@@ -74,16 +74,12 @@ namespace inject {
 		}
 	}
 
-	// 执行控制台指令函数,最后两个参数总是0,如果最后一个参数不是0，游戏就会崩溃
-	__declspec(naked) void FASTCALL ExecuteCommand(isaac::Console& console, LPCVOID _, const string& text, int unknow, int unknow_point_guess)
+	// 执行控制台指令函数，用于注入的函数体
+	static __declspec(naked) void _ExecuteCommand()
 	{
 		__asm {
 			push ecx
-			push[esp + 0x18]
-			push[esp + 0x18]
-			push[esp + 0x18]
 			call local.callbacks.OnExecuteCommand
-			add esp, 0x0C
 			pop ecx
 			test eax, eax
 			jne flag
@@ -99,16 +95,23 @@ namespace inject {
 		}
 	}
 
-	// 控制台输出函数,最后一个参数总是0x96，只有当控制台顶部的"Repentance Console"这行字输出时，这个参数是0
-	__declspec(naked) void FASTCALL ConsoleOutput(isaac::Console& console, LPCVOID _, const string& text, uint32_t color, uint32_t type_guess)
+	// 执行控制台指令函数，最后两个参数总是0,如果最后一个参数不是0，游戏就会崩溃
+	__declspec(naked) void FASTCALL ExecuteCommand(isaac::Console& console, LPCVOID, string& text, int unknow, LPCVOID unknow_point_guess)
+	{
+		__asm {
+			push ebp
+			mov ebp, esp
+			push - 0x01
+			jmp _ExecuteCommand
+		}
+	}
+
+	// 控制台输出函数，用于注入的函数体
+	static __declspec(naked) void _ConsoleOutput()
 	{
 		__asm {
 			push ecx
-			push[esp + 0x18]
-			push[esp + 0x18]
-			push[esp + 0x18]
 			call local.callbacks.OnConsoleOutput
-			add esp, 0x0C
 			pop ecx
 			test eax, eax
 			jne flag
@@ -124,8 +127,18 @@ namespace inject {
 		}
 	}
 
+	// 控制台输出函数，最后一个参数总是0x96，只有当控制台顶部的"Repentance Console"这行字输出时，这个参数是0
+	__declspec(naked) void FASTCALL ConsoleOutput(isaac::Console& console, LPCVOID, string& text, uint32_t color, int type_guess) {
+		__asm {
+			push ebp
+			mov ebp, esp
+			push - 0x01
+			jmp _ConsoleOutput
+		}
+	}
+
 	// MT19937随机数生成,这个函数的注入点在尾部，因此不会影响正常的随机序列，且可以获取并覆盖原函数的返回值
-	__declspec(naked) void MTRandom()
+	static __declspec(naked) void _MTRandom()
 	{
 
 		__asm {
@@ -172,15 +185,15 @@ namespace inject {
 
 #define INJECT(offset, name, padding) InjectCode(local.isaac, offset, (LPCVOID)name, padding)
 		// SwapBuffers
-		INJECT(0x4B1076, SwapBuffers, 1);
+		INJECT(0x4B1076, _SwapBuffers, 1);
 		// 执行控制台指令
-		INJECT(0x2655C5, ExecuteCommand, 0);
+		INJECT(0x2655C5, _ExecuteCommand, 0);
 		// 控制台输出
-		INJECT(0x26AEC5, ConsoleOutput, 0);
+		INJECT(0x26AEC5, _ConsoleOutput, 0);
 		// 日志输出
 		INJECT(0x55E330, LogPrintf, 1);
 		// MT19937随机数生成
-		INJECT(0x2C3EA8, MTRandom, 1);
+		INJECT(0x2C3EA8, _MTRandom, 1);
 		// 窗口消息
 		INJECT(0x5971D0, WndProc, 1);
 #undef INJECT

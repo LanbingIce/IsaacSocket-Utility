@@ -17,13 +17,13 @@
 namespace function {
 
 	// 进行一次 “控制台输出”
-	static void ConsoleOutput(const string& text, uint32_t color = 0xFFD3D3D3)
+	static void ConsoleOutput(string text, uint32_t color = 0xFFD3D3D3)
 	{
 		inject::ConsoleOutput(local.isaac->game->console, NULL, text, color, 0x96);
 	}
 
 	// 进行一次 “执行控制台指令”
-	static void ExecuteCommand(const string& commandText)
+	static void ExecuteCommand(string commandText)
 	{
 		inject::ExecuteCommand(local.isaac->game->console, NULL, commandText, 0, 0);
 	}

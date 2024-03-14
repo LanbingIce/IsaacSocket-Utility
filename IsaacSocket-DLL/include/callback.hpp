@@ -278,7 +278,7 @@ namespace callback {
 	}
 
 	// 执行控制台指令回调，时机在执行控制台指令函数的起始位置，返回1则取消此次指令
-	static int OnExecuteCommand(string& text, int unknow, LPCVOID unknow_point_guess)
+	static int OnExecuteCommand(isaac::Console& console, int, LPCVOID, LPCVOID, string& text, int unknow, LPCVOID unknow_point_guess)
 	{
 		CHECK_STATE();
 
@@ -313,7 +313,7 @@ namespace callback {
 	}
 
 	// 控制台输出回调，时机在控制台输出函数的起始位置，返回1则取消此次输出
-	static int OnConsoleOutput(string& text, uint32_t color, int32_t type)
+	static int OnConsoleOutput(isaac::Console& console, int, LPCVOID, LPCVOID, string& text, uint32_t color, int type_guess)
 	{
 		CHECK_STATE();
 
@@ -332,7 +332,7 @@ namespace callback {
 	}
 
 	// 窗口消息回调，返回1则拦截此次消息
-	static int PreWndProc(LPCVOID _, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	static int PreWndProc(LPCVOID, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 #define _(name,paramType,...)MOD_CALLBACK_BEGIN(name);MOD_CALLBACK_ARG(paramType,__VA_ARGS__);MOD_CALLBACK_CALL();MOD_CALLBACK_END();
 		CHECK_INIT();
