@@ -32,13 +32,13 @@ namespace lua {
 	}
 
 }
+#define _SET_METATABLE(udataName,type) if(local.lua.luaL_newmetatable(L, typeid(type).name())){luaL_Reg mt_##udataName[] = { { "__index", udataName##__index },{ "__newindex", udataName##__newindex },{ NULL, NULL } };local.lua.luaL_setfuncs(L, mt_##udataName, 0);}local.lua.lua_setmetatable(L, -2)
 
-#define NEW_UDATA(type,name) type& name = *(type*)local.lua.lua_newuserdata(L, sizeof(type))
-#define SET_METATABLE(name) if(local.lua.luaL_newmetatable(L, #name)){luaL_Reg mt_##name[] = { { "__index", name##__index },{ "__newindex", name##__newindex },{ NULL, NULL } };local.lua.luaL_setfuncs(L, mt_##name, 0);}local.lua.lua_setmetatable(L, -2)
+#define NEW_UDATA(type,name,udataName) type& name = *(type*)local.lua.lua_newuserdata(L, sizeof(type));_SET_METATABLE(udataName,type)
 
 #define MODULE_BEGIN(name) lua_State* L = local.isaac->luaEngine->L; int top = local.lua.lua_gettop(L); local.lua.lua_getglobal(L, "_ISAAC_SOCKET"); local.lua.lua_pushstring(L, "IsaacSocket"); local.lua.lua_gettable(L, -2); local.lua.lua_pushstring(L, #name); local.lua.lua_newtable(L)
 #define MODULE_FUNC(name) local.lua.lua_pushstring(L, #name);local.lua.lua_pushcfunction(L, lua::lua_cppfunction<name>()); local.lua.lua_settable(L, -3)
-#define MODULE_UDATA(name,type,value)local.lua.lua_pushstring(L, #name);type** pp_##name = (type**)local.lua.lua_newuserdata(L, sizeof(type*));SET_METATABLE(p_##name);*pp_##name = &value;local.lua.lua_settable(L, -3)
+#define MODULE_UDATA(name,type,value)local.lua.lua_pushstring(L, #name);type** pp_##name = (type**)local.lua.lua_newuserdata(L, sizeof(type*));_SET_METATABLE(p_##name,type*);*pp_##name = &value;local.lua.lua_settable(L, -3)
 #define MODULE_END() local.lua.lua_settable(L, -3); local.lua.lua_settop(L, top)
 
 #define _CHECK_ARG(index,luaType,type,name) if(local.lua.lua_is##luaType(L,index)){name = (type)local.lua.lua_to##luaType(L,index);}else{return local.lua.luaL_error(L, "bad argument #"#index": "#name" should be "#luaType);}
@@ -46,9 +46,9 @@ namespace lua {
 #define ARG_DEF(index,luaType,type,name,def) type name;if(local.lua.lua_isnoneornil(L,index)){name=def;}else _CHECK_ARG(index,luaType,type,name)
 #define ARG_RANGE(name,range) if (name >= range){std::ostringstream oss;oss<<"invalid "#name": "<<std::to_string(name); return local.lua.luaL_error(L, oss.str().c_str());}
 
-#define _CHECK_ARG_UDATA(index,udataType,type,name)p_##name = (type*)local.lua.luaL_checkudata(L, index, #udataType);type& name = *p_##name
-#define ARG_UDATA(index,udataType,type,name)type* p_##name; _CHECK_ARG_UDATA(index,udataType,type,name)
-#define ARG_UDATA_DEF(index,udataType,type,name,def)type* p_##name;if(local.lua.lua_isnoneornil(L,index)){p_##name=&def;}else _CHECK_ARG_UDATA(index,udataType,type,name)
+#define _CHECK_ARG_UDATA(index,type,_name)p_##_name = (type*)local.lua.luaL_checkudata(L, index, typeid(type).name());type& _name = *p_##_name
+#define ARG_UDATA(index,type,name)type* p_##name; _CHECK_ARG_UDATA(index,type,name)
+#define ARG_UDATA_DEF(index,type,name,def)type* p_##name;if(local.lua.lua_isnoneornil(L,index)){p_##name=&def;}else _CHECK_ARG_UDATA(index,type,name)
 
 #define _LUA_PCALL(paramNum,resultNum)if(local.lua.lua_pcall(L, paramNum, resultNum, 0)!=LUA_OK){ARG_DEF(-1,stdstring,string,_err,"unknow error!");local.lua.lua_pop(L, 1);for(int i=0;i<resultNum;i++){local.lua.lua_pushnil(L);}_err.append("\n");function::ConsoleOutput(_err, 0xFFF08080);}
 
@@ -74,9 +74,13 @@ namespace lua {
 #define METATABLE_INDEX(luaType,name)_METATABLE_INDEX(luaType,name,_obj.name)
 #define METATABLE_NEWINDEX(luaType,name,...)_METATABLE_NEWINDEX(luaType,name,_obj.name,__VA_ARGS__)
 
-#define _METATABLE_INDEX_UDATA(udataType,name,type,and_,star) if (strcmp(key,#name) == 0) {if (local.lua.lua_isnone(L, 3)) {type* p_##name = (type*)local.lua.lua_newuserdata(L, sizeof(type));SET_METATABLE(udataType);*p_##name = and_ _obj.name;return 1;}else { type* _value = (type*)local.lua.luaL_testudata(L,3,#udataType); if(_value){_obj.name =star *_value;return 0;}}}
-#define METATABLE_INDEX_UDATA(udataType,name,type) _METATABLE_INDEX_UDATA(udataType,name,type)
-#define METATABLE_INDEX_UDATA_P(udataType,name,type) _METATABLE_INDEX_UDATA(udataType,name,type,&,*)
+#define _METATABLE_NEWINDEX_UDATA(udataName,name,type,star) if (strcmp(key,#name) == 0) { type* _value = (type*)local.lua.luaL_testudata(L,3,#udataName); if(_value){_obj.name =star *_value;return 0;}}
+#define METATABLE_NEWINDEX_UDATA(udataName,name,type) _METATABLE_NEWINDEX_UDATA(udataName,name,type)
+#define METATABLE_NEWINDEX_UDATA_P(udataName,name,type) _METATABLE_NEWINDEX_UDATA(udataName,name,type,*)
+
+#define _METATABLE_INDEX_UDATA(udataName,name,type,and_) if (strcmp(key,#name) == 0) {if (local.lua.lua_isnone(L, 3)) {type* p_##name = (type*)local.lua.lua_newuserdata(L, sizeof(type));_SET_METATABLE(udataName,type);*p_##name = and_ _obj.name;return 1;}}
+#define METATABLE_INDEX_UDATA(udataName,name,type) _METATABLE_INDEX_UDATA(udataName,name,type)
+#define METATABLE_INDEX_UDATA_P(udataName,name,type) _METATABLE_INDEX_UDATA(udataName,name,type,&)
 
 #define METATABLE_INDEX_STRING(name)_METATABLE_INDEX(string,name,_obj.name.c_str())
 #define METATABLE_END()return local.lua.luaL_error(L, "Invalid member access.")

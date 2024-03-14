@@ -10,7 +10,7 @@ namespace imgui {
 	static const ::ImVec2 VEC2_NEG_MIN_0 = ::ImVec2(-FLT_MIN, 0);
 
 	static int p_ImVec2__index(lua_State* L) {
-		ARG_UDATA(1, p_ImVec2, ::ImVec2*, p_vec);
+		ARG_UDATA(1, ::ImVec2*, p_vec);
 		METATABLE_BEGIN(::ImVec2, *p_vec);
 		METATABLE_INDEX(number, x);
 		METATABLE_INDEX(number, y);
@@ -18,7 +18,7 @@ namespace imgui {
 	}
 
 	static int p_ImVec2__newindex(lua_State* L) {
-		ARG_UDATA(1, p_ImVec2, ::ImVec2*, p_vec);
+		ARG_UDATA(1, ::ImVec2*, p_vec);
 		METATABLE_BEGIN(::ImVec2, *p_vec);
 		METATABLE_NEWINDEX(number, x);
 		METATABLE_NEWINDEX(number, y);
@@ -26,7 +26,7 @@ namespace imgui {
 	}
 
 	static int ImVec2__index(lua_State* L) {
-		ARG_UDATA(1, ImVec2, ::ImVec2, vec);
+		ARG_UDATA(1, ::ImVec2, vec);
 		METATABLE_BEGIN(::ImVec2, vec);
 		METATABLE_INDEX(number, x);
 		METATABLE_INDEX(number, y);
@@ -34,7 +34,7 @@ namespace imgui {
 	}
 
 	static int ImVec2__newindex(lua_State* L) {
-		ARG_UDATA(1, ImVec2, ::ImVec2, vec);
+		ARG_UDATA(1, ::ImVec2, vec);
 		METATABLE_BEGIN(::ImVec2, vec);
 		METATABLE_NEWINDEX(number, x);
 		METATABLE_NEWINDEX(number, y);
@@ -42,7 +42,7 @@ namespace imgui {
 	}
 
 	static int ImVec4__index(lua_State* L) {
-		ARG_UDATA(1, ImVec4, ::ImVec4, vec);
+		ARG_UDATA(1, ::ImVec4, vec);
 		METATABLE_BEGIN(::ImVec4, vec);
 		METATABLE_INDEX(number, x);
 		METATABLE_INDEX(number, y);
@@ -52,7 +52,7 @@ namespace imgui {
 	}
 
 	static int ImVec4__newindex(lua_State* L) {
-		ARG_UDATA(1, ImVec4, ::ImVec4, vec);
+		ARG_UDATA(1, ::ImVec4, vec);
 		METATABLE_BEGIN(::ImVec4, vec);
 		METATABLE_NEWINDEX(number, x);
 		METATABLE_NEWINDEX(number, y);
@@ -62,7 +62,7 @@ namespace imgui {
 	}
 
 	static int p_ImGuiIO__index(lua_State* L) {
-		ARG_UDATA(1, p_ImGuiIO, ImGuiIO*, p_io);
+		ARG_UDATA(1, ImGuiIO*, p_io);
 		METATABLE_BEGIN(::ImGuiIO, *p_io);
 		METATABLE_INDEX(number, DeltaTime);
 		METATABLE_INDEX_UDATA_P(p_ImVec2, DisplaySize, ::ImVec2*);
@@ -71,20 +71,20 @@ namespace imgui {
 	}
 
 	static int p_ImGuiIO__newindex(lua_State* L) {
-		ARG_UDATA(1, p_ImGuiIO, ImGuiIO*, p_io);
+		ARG_UDATA(1, ImGuiIO*, p_io);
 		METATABLE_BEGIN(::ImGuiIO, *p_io);
 		METATABLE_END();
 	}
 
 	static int p_ImFont__index(lua_State* L) {
-		ARG_UDATA(1, p_ImFont, ImFont*, p_font);
+		ARG_UDATA(1, ImFont*, p_font);
 		METATABLE_BEGIN(ImFont, *p_font);
 		METATABLE_INDEX(number, Scale);
 		METATABLE_END();
 	}
 
 	static int p_ImFont__newindex(lua_State* L) {
-		ARG_UDATA(1, p_ImFont, ImFont*, p_font);
+		ARG_UDATA(1, ImFont*, p_font);
 		METATABLE_BEGIN(ImFont, *p_font);
 		METATABLE_NEWINDEX(number, Scale);
 		METATABLE_END();
@@ -93,8 +93,7 @@ namespace imgui {
 	static int ImVec2(lua_State* L) {
 		ARG(1, number, float, x);
 		ARG(2, number, float, y);
-		NEW_UDATA(::ImVec2, vec);
-		SET_METATABLE(ImVec2);
+		NEW_UDATA(::ImVec2, vec, ImVec2);
 		vec.x = x;
 		vec.y = y;
 		return 1;
@@ -105,8 +104,7 @@ namespace imgui {
 		ARG(2, number, float, y);
 		ARG(3, number, float, z);
 		ARG(4, number, float, w);
-		NEW_UDATA(::ImVec4, vec);
-		SET_METATABLE(ImVec4);
+		NEW_UDATA(::ImVec4, vec, ImVec4);
 		vec.x = x;
 		vec.y = y;
 		vec.z = z;
@@ -115,8 +113,7 @@ namespace imgui {
 	}
 
 	static int GetIO(lua_State* L) {
-		NEW_UDATA(ImGuiIO*, p_io);
-		SET_METATABLE(p_ImGuiIO);
+		NEW_UDATA(ImGuiIO*, p_io, p_ImGuiIO);
 		p_io = &ImGui::GetIO();
 		return 1;
 	}
@@ -179,7 +176,7 @@ namespace imgui {
 		}
 		else
 		{
-			ARG_UDATA(1, ImGuiStyle, ::ImGuiStyle, dst);
+			ARG_UDATA(1, ::ImGuiStyle, dst);
 			ImGui::StyleColorsDark(&dst);
 		}
 		return 0;
@@ -192,7 +189,7 @@ namespace imgui {
 		}
 		else
 		{
-			ARG_UDATA(1, ImGuiStyle, ::ImGuiStyle, dst);
+			ARG_UDATA(1, ::ImGuiStyle, dst);
 			ImGui::StyleColorsLight(&dst);
 		}
 		return 0;
@@ -205,7 +202,7 @@ namespace imgui {
 		}
 		else
 		{
-			ARG_UDATA(1, ImGuiStyle, ::ImGuiStyle, dst);
+			ARG_UDATA(1, ::ImGuiStyle, dst);
 			ImGui::StyleColorsClassic(&dst);
 		}
 		return 0;
@@ -245,15 +242,13 @@ namespace imgui {
 	}
 
 	static int GetWindowPos(lua_State* L) {
-		NEW_UDATA(::ImVec2, vec);
-		SET_METATABLE(ImVec2);
+		NEW_UDATA(::ImVec2, vec, ImVec2);
 		vec = ImGui::GetWindowPos();
 		return 1;
 	}
 
 	static int GetWindowSize(lua_State* L) {
-		NEW_UDATA(::ImVec2, vec);
-		SET_METATABLE(ImVec2);
+		NEW_UDATA(::ImVec2, vec, ImVec2);
 		vec = ImGui::GetWindowSize();
 		return 1;
 	}
@@ -270,12 +265,12 @@ namespace imgui {
 		if (local.lua.lua_isstring(L, 1))
 		{
 			ARG(1, string, const char*, name);
-			ARG_UDATA(2, ImVec2, ::ImVec2, pos);
+			ARG_UDATA(2, ::ImVec2, pos);
 			ARG_DEF(3, integer, ::ImGuiCond, cond, 0);
 			ImGui::SetWindowPos(name, pos, cond);
 		}
 		else {
-			ARG_UDATA(1, ImVec2, ::ImVec2, pos);
+			ARG_UDATA(1, ::ImVec2, pos);
 			ARG_DEF(2, integer, ::ImGuiCond, cond, 0);
 			ImGui::SetWindowPos(pos, cond);
 		}
@@ -286,12 +281,12 @@ namespace imgui {
 		if (local.lua.lua_isstring(L, 1))
 		{
 			ARG(1, string, const char*, name);
-			ARG_UDATA(2, ImVec2, ::ImVec2, size);
+			ARG_UDATA(2, ::ImVec2, size);
 			ARG_DEF(3, integer, ::ImGuiCond, cond, 0);
 			ImGui::SetWindowSize(name, size, cond);
 		}
 		else {
-			ARG_UDATA(1, ImVec2, ::ImVec2, size);
+			ARG_UDATA(1, ::ImVec2, size);
 			ARG_DEF(2, integer, ::ImGuiCond, cond, 0);
 			ImGui::SetWindowSize(size, cond);
 		}
@@ -365,7 +360,7 @@ namespace imgui {
 		}
 		else
 		{
-			ARG_UDATA(2, ImVec4, ::ImVec4, col);
+			ARG_UDATA(2, ::ImVec4, col);
 			ImGui::PushStyleColor(idx, col);
 		}
 		return 0;
@@ -378,8 +373,7 @@ namespace imgui {
 	}
 
 	static int GetFont(lua_State* L) {
-		NEW_UDATA(ImFont*, p_font);
-		SET_METATABLE(p_ImFont);
+		NEW_UDATA(ImFont*, p_font, p_ImFont);
 		p_font = ImGui::GetFont();
 		return 1;
 	}
@@ -408,7 +402,7 @@ namespace imgui {
 	}
 
 	static int Dummy(lua_State* L) {
-		ARG_UDATA(1, ImVec2, ::ImVec2, size);
+		ARG_UDATA(1, ::ImVec2, size);
 		ImGui::Dummy(size);
 		return 0;
 	}
@@ -449,7 +443,7 @@ namespace imgui {
 	}
 
 	static int TextColored(lua_State* L) {
-		ARG_UDATA(1, ImVec4, ::ImVec4, col);
+		ARG_UDATA(1, ::ImVec4, col);
 		ARG(2, string, const char*, text);
 		ImGui::TextColored(col, "%s", text);
 		return 0;
@@ -482,7 +476,7 @@ namespace imgui {
 
 	static int Button(lua_State* L) {
 		ARG(1, string, const char*, label);
-		ARG_UDATA_DEF(2, ImVec2, const ::ImVec2, size, VEC2_0);
+		ARG_UDATA_DEF(2, const ::ImVec2, size, VEC2_0);
 		RET(boolean, ImGui::Button(label, size));
 	}
 
@@ -525,7 +519,7 @@ namespace imgui {
 
 	static int ProgressBar(lua_State* L) {
 		ARG(1, number, float, fraction);
-		ARG_UDATA_DEF(2, ImVec2, const ::ImVec2, size_arg, VEC2_NEG_MIN_0);
+		ARG_UDATA_DEF(2, const ::ImVec2, size_arg, VEC2_NEG_MIN_0);
 		ARG_DEF(3, string, const char*, overlay, NULL);
 		ImGui::ProgressBar(fraction, size_arg, overlay);
 		return 0;
@@ -533,11 +527,11 @@ namespace imgui {
 
 	static int Image(lua_State* L) {
 		ARG(1, integer, ImTextureID, user_texture_id);
-		ARG_UDATA(2, ImVec2, ::ImVec2, image_size);
-		ARG_UDATA_DEF(3, ImVec2, const ::ImVec2, uv0, VEC2_0);
-		ARG_UDATA_DEF(4, ImVec2, const ::ImVec2, uv1, VEC2_1);
-		ARG_UDATA_DEF(5, ImVec4, const ::ImVec4, tint_col, VEC4_1);
-		ARG_UDATA_DEF(6, ImVec4, const ::ImVec4, border_col, VEC4_0);
+		ARG_UDATA(2, ::ImVec2, image_size);
+		ARG_UDATA_DEF(3, const ::ImVec2, uv0, VEC2_0);
+		ARG_UDATA_DEF(4, const ::ImVec2, uv1, VEC2_1);
+		ARG_UDATA_DEF(5, const ::ImVec4, tint_col, VEC4_1);
+		ARG_UDATA_DEF(6, const ::ImVec4, border_col, VEC4_0);
 		ImGui::Image(user_texture_id, image_size, uv0, uv1, tint_col, border_col);
 		return 0;
 	}
@@ -545,11 +539,11 @@ namespace imgui {
 	static int ImageButton(lua_State* L) {
 		ARG(1, string, const char*, str_id);
 		ARG(2, integer, ImTextureID, user_texture_id);
-		ARG_UDATA(3, ImVec2, const ::ImVec2, image_size);
-		ARG_UDATA_DEF(4, ImVec2, const ::ImVec2, uv0, VEC2_0);
-		ARG_UDATA_DEF(5, ImVec2, const ::ImVec2, uv1, VEC2_1);
-		ARG_UDATA_DEF(6, ImVec4, const ::ImVec4, bg_col, VEC4_0);
-		ARG_UDATA_DEF(7, ImVec4, const ::ImVec4, tint_col, VEC4_1);
+		ARG_UDATA(3, const ::ImVec2, image_size);
+		ARG_UDATA_DEF(4, const ::ImVec2, uv0, VEC2_0);
+		ARG_UDATA_DEF(5, const ::ImVec2, uv1, VEC2_1);
+		ARG_UDATA_DEF(6, const ::ImVec4, bg_col, VEC4_0);
+		ARG_UDATA_DEF(7, const ::ImVec4, tint_col, VEC4_1);
 		RET(boolean, ImGui::ImageButton(str_id, user_texture_id, image_size, uv0, uv1, bg_col, tint_col));
 	}
 
@@ -858,7 +852,7 @@ namespace imgui {
 	static int InputTextMultiline(lua_State* L) {
 		ARG(1, string, const char*, label);
 		ARG(2, string, string, str);
-		ARG_UDATA_DEF(3, ImVec2, const ::ImVec2, size, VEC2_0);
+		ARG_UDATA_DEF(3, const ::ImVec2, size, VEC2_0);
 		ARG_DEF(4, integer, ImGuiInputTextFlags, flags, 0);
 		local.lua.lua_pushboolean(L, ImGui::InputTextMultiline(label, &str, size, flags));
 		local.lua.lua_pushstring(L, str.c_str());
@@ -1012,7 +1006,7 @@ namespace imgui {
 		ARG(1, string, const char*, label);
 		ARG(2, boolean, bool, selected);
 		ARG_DEF(3, integer, ImGuiSelectableFlags, flags, 0);
-		ARG_UDATA_DEF(4, ImVec2, const ::ImVec2, size_arg, VEC2_0);
+		ARG_UDATA_DEF(4, const ::ImVec2, size_arg, VEC2_0);
 		local.lua.lua_pushboolean(L, ImGui::Selectable(label, &selected, flags, size_arg));
 		local.lua.lua_pushboolean(L, selected);
 		return 2;
@@ -1020,7 +1014,7 @@ namespace imgui {
 
 	static int BeginListBox(lua_State* L) {
 		ARG(1, string, const char*, label);
-		ARG_UDATA_DEF(2, ImVec2, const ::ImVec2, size, VEC2_0);
+		ARG_UDATA_DEF(2, const ::ImVec2, size, VEC2_0);
 		RET(boolean, ImGui::BeginListBox(label, size));
 	}
 
@@ -1331,22 +1325,19 @@ namespace imgui {
 	}
 
 	static int GetItemRectMin(lua_State* L) {
-		NEW_UDATA(::ImVec2, vec);
-		SET_METATABLE(ImVec2);
+		NEW_UDATA(::ImVec2, vec, ImVec2);
 		vec = ImGui::GetItemRectMin();
 		return 1;
 	}
 
 	static int GetItemRectMax(lua_State* L) {
-		NEW_UDATA(::ImVec2, vec);
-		SET_METATABLE(ImVec2);
+		NEW_UDATA(::ImVec2, vec, ImVec2);
 		vec = ImGui::GetItemRectMax();
 		return 1;
 	}
 
 	static int GetItemRectSize(lua_State* L) {
-		NEW_UDATA(::ImVec2, vec);
-		SET_METATABLE(ImVec2);
+		NEW_UDATA(::ImVec2, vec, ImVec2);
 		vec = ImGui::GetItemRectSize();
 		return 1;
 	}
@@ -1354,13 +1345,13 @@ namespace imgui {
 	static int IsRectVisible(lua_State* L) {
 		if (local.lua.lua_isnoneornil(L, 2))
 		{
-			ARG_UDATA(1, ImVec2, ::ImVec2, size);
+			ARG_UDATA(1, ::ImVec2, size);
 			RET(boolean, ImGui::IsRectVisible(size));
 		}
 		else
 		{
-			ARG_UDATA(1, ImVec2, ::ImVec2, rect_min);
-			ARG_UDATA(2, ImVec2, ::ImVec2, rect_max);
+			ARG_UDATA(1, ::ImVec2, rect_min);
+			ARG_UDATA(2, ::ImVec2, rect_max);
 			RET(boolean, ImGui::IsRectVisible(rect_min, rect_max));
 		}
 	}
@@ -1383,22 +1374,20 @@ namespace imgui {
 		ARG_DEF(2, string, const char*, text_end, NULL);
 		ARG_DEF(3, boolean, bool, hide_text_after_double_hash, false);
 		ARG_DEF(4, number, float, wrap_width, -1.0f);
-		NEW_UDATA(::ImVec2, vec);
-		SET_METATABLE(ImVec2);
+		NEW_UDATA(::ImVec2, vec, ImVec2);
 		vec = ImGui::CalcTextSize(text, text_end, hide_text_after_double_hash, wrap_width);
 		return 1;
 	}
 
 	static int ColorConvertU32ToFloat4(lua_State* L) {
 		ARG(1, integer, ImU32, in);
-		NEW_UDATA(::ImVec4, vec);
-		SET_METATABLE(ImVec4);
+		NEW_UDATA(::ImVec4, vec, ImVec4);
 		vec = ImGui::ColorConvertU32ToFloat4(in);
 		return 1;
 	}
 
 	static int ColorConvertFloat4ToU32(lua_State* L) {
-		ARG_UDATA(1, ImVec4, ::ImVec4, in);
+		ARG_UDATA(1, ::ImVec4, in);
 		RET(integer, ImGui::ColorConvertFloat4ToU32(in));
 	}
 
@@ -1479,8 +1468,8 @@ namespace imgui {
 	}
 
 	static int IsMouseHoveringRect(lua_State* L) {
-		ARG_UDATA(1, ImVec2, const ::ImVec2, r_min);
-		ARG_UDATA(2, ImVec2, const ::ImVec2, r_max);
+		ARG_UDATA(1, const ::ImVec2, r_min);
+		ARG_UDATA(2, const ::ImVec2, r_max);
 		ARG_DEF(3, boolean, bool, clip, true);
 		RET(boolean, ImGui::IsMouseHoveringRect(r_min, r_max, clip));
 	}
@@ -1492,7 +1481,7 @@ namespace imgui {
 		}
 		else
 		{
-			ARG_UDATA(1, ImVec2, const ::ImVec2, mouse_pos);
+			ARG_UDATA(1, const ::ImVec2, mouse_pos);
 			RET(boolean, ImGui::IsMousePosValid(&mouse_pos));
 		}
 	}
@@ -1502,15 +1491,13 @@ namespace imgui {
 	}
 
 	static int GetMousePos(lua_State* L) {
-		NEW_UDATA(::ImVec2, vec);
-		SET_METATABLE(ImVec2);
+		NEW_UDATA(::ImVec2, vec, ImVec2);
 		vec = ImGui::GetMousePos();
 		return 1;
 	}
 
 	static int GetMousePosOnOpeningCurrentPopup(lua_State* L) {
-		NEW_UDATA(::ImVec2, vec);
-		SET_METATABLE(ImVec2);
+		NEW_UDATA(::ImVec2, vec, ImVec2);
 		vec = ImGui::GetMousePosOnOpeningCurrentPopup();
 		return 1;
 	}
@@ -1524,8 +1511,7 @@ namespace imgui {
 	static int GetMouseDragDelta(lua_State* L) {
 		ARG_DEF(1, integer, ImGuiMouseButton, button, 0);
 		ARG_DEF(2, number, float, lock_threshold, -1.0f);
-		NEW_UDATA(::ImVec2, vec);
-		SET_METATABLE(ImVec2);
+		NEW_UDATA(::ImVec2, vec, ImVec2);
 		vec = ImGui::GetMouseDragDelta(button, lock_threshold);
 		return 1;
 	}

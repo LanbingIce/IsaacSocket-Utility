@@ -11,7 +11,7 @@ using isaac::lua_State;
 namespace isaac_api {
 
 	static int HistoryItem__index(lua_State* L) {
-		ARG_UDATA(1, HistoryItem, isaac::HistoryItem, item);
+		ARG_UDATA(1, isaac::HistoryItem, item);
 		METATABLE_BEGIN(isaac::HistoryItem, item);
 		METATABLE_INDEX(integer, time);
 		METATABLE_INDEX(boolean, isTrinket);
@@ -24,7 +24,7 @@ namespace isaac_api {
 	}
 
 	static int HistoryItem__newindex(lua_State* L) {
-		ARG_UDATA(1, HistoryItem, isaac::HistoryItem, item);
+		ARG_UDATA(1, isaac::HistoryItem, item);
 		METATABLE_BEGIN(isaac::HistoryItem, item);
 		METATABLE_END();
 	}
@@ -260,10 +260,8 @@ namespace isaac_api {
 		for (size_t i = 0; i < historyItems.size(); i++) {
 			local.lua.lua_pushinteger(L, (LUA_INTEGER)(i + 1));
 
-			isaac::HistoryItem* item = (isaac::HistoryItem*)local.lua.lua_newuserdata(L, sizeof(isaac::HistoryItem));
-			*item = historyItems[i];
-			SET_METATABLE(HistoryItem);
-
+			NEW_UDATA(isaac::HistoryItem, item, HistoryItem);
+			item = historyItems[i];
 			local.lua.lua_settable(L, -3);
 		}
 
