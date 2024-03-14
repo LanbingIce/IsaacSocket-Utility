@@ -58,13 +58,14 @@ namespace lua {
 #define RET_TABLE_KEY(keyType,key,valueType,value) local.lua.lua_push##keyType(L,key);local.lua.lua_push##valueType(L,value);local.lua.lua_settable(L,-3)
 #define RET_TABLE_END() return 1
 
-#define MOD_CALLBACK_BEGIN(name){lua_State* L = local.isaac->luaEngine->L;size_t top = local.lua.lua_gettop(L);local.lua.lua_getglobal(L, "Isaac");local.lua.lua_pushstring(L, "GetCallbacks");local.lua.lua_gettable(L, -2);local.lua.lua_pushstring(L, #name);_LUA_PCALL(1, 1);bool terminate = false;local.lua.lua_pushnil(L);while(local.lua.lua_next(L, -2) != 0){local.lua.lua_pushstring(L, "Function");local.lua.lua_gettable(L, -2);local.lua.lua_pushstring(L, "Mod");local.lua.lua_gettable(L, -3);size_t paramNum = 1
+#define _MOD_CALLBACK_BEGIN(name)lua_State* L = local.isaac->luaEngine->L;size_t top = local.lua.lua_gettop(L);local.lua.lua_getglobal(L, "Isaac");local.lua.lua_pushstring(L, "GetCallbacks");local.lua.lua_gettable(L, -2);local.lua.lua_pushstring(L, #name);_LUA_PCALL(1, 1);local.lua.lua_pushnil(L);while(local.lua.lua_next(L, -2) != 0){local.lua.lua_pushstring(L, "Function");local.lua.lua_gettable(L, -2);local.lua.lua_pushstring(L, "Mod");local.lua.lua_gettable(L, -3);size_t paramNum = 1
+#define MOD_CALLBACK_BEGIN(name){bool terminate = false;_MOD_CALLBACK_BEGIN(name)
 #define MOD_CALLBACK_ARG(paramType,...)local.lua.lua_push##paramType(L, __VA_ARGS__);paramNum++
 #define MOD_CALLBACK_CALL()_LUA_PCALL(paramNum, 1)
 #define MOD_CALLBACK_END()if(!local.lua.lua_isnil(L, -1)){terminate = true;}local.lua.lua_pop(L, 2);}local.lua.lua_settop(L, top);if(terminate){return 1;}}
 
-#define FAST_MOD_CALLBACK_BEGIN(name){lua_State* L = local.isaac->luaEngine->L;size_t top = local.lua.lua_gettop(L);local.lua.lua_getglobal(L, "Isaac");local.lua.lua_pushstring(L, "RunCallback");local.lua.lua_gettable(L, -2);local.lua.lua_pushstring(L, #name);size_t paramNum = 1
-#define FAST_MOD_CALLBACK_END()if(local.lua.lua_pcall(L, paramNum, 0, 0)!=LUA_OK){ARG_DEF(-1,string,string,_err,"unknow error!");_err.append("\n");function::ConsoleOutput(_err, 0xFFF08080);}local.lua.lua_settop(L, top);}
+#define FAST_MOD_CALLBACK_BEGIN(name){_MOD_CALLBACK_BEGIN(name)
+#define FAST_MOD_CALLBACK_END()MOD_CALLBACK_CALL();local.lua.lua_pop(L, 2);}local.lua.lua_settop(L, top);}
 
 #define _METATABLE_ERROR(luaType,name)else{return local.lua.luaL_error(L, "bad value, "#name" should be "#luaType);}}
 #define _METATABLE_INDEX(luaType,name,result)if(strcmp(key, #name) == 0){RET(luaType,result);}
