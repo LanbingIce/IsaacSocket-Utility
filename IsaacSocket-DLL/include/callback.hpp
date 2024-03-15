@@ -342,15 +342,16 @@ namespace callback {
 
 		if (uMsg == WM_CHAR)
 		{
-			if (local.charsInputBuffer[0])
+			static char buffer[2];
+			if (buffer[0])
 			{
-				local.charsInputBuffer[1] = wParam;
-				MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, local.charsInputBuffer, 2, (LPWSTR)&wParam, 1);
-				local.charsInputBuffer[0] = 0;
+				buffer[1] = wParam;
+				MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, buffer, 2, (LPWSTR)&wParam, 1);
+				buffer[0] = 0;
 			}
 			else if (IsDBCSLeadByte(wParam))
 			{
-				local.charsInputBuffer[0] = wParam;
+				buffer[0] = wParam;
 				return 0;
 			}
 

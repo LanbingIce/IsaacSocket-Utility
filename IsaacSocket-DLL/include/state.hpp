@@ -49,7 +49,6 @@ namespace state {
 			TIMCommCallback TIMCommCallback;
 		} callbacks;
 		HWND hWnd;
-		char charsInputBuffer[2];
 		isaac::IsaacImage* isaac;
 		lua::Lua lua;
 		imsdk::ImSDK imsdk;
