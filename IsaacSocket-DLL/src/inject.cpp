@@ -96,7 +96,7 @@ namespace inject {
 	}
 
 	// 执行控制台指令函数，最后两个参数总是0,如果最后一个参数不是0，游戏就会崩溃
-	__declspec(naked) void FASTCALL ExecuteCommand(isaac::Console& console, LPCVOID, string& text, int unknow, LPCVOID unknow_point_guess)
+	__declspec(naked) void FASTCALL ExecuteCommand(const isaac::Console& console, LPCVOID, string& text, int unknow, LPCVOID unknow_point_guess)
 	{
 		__asm {
 			push ebp
@@ -128,7 +128,7 @@ namespace inject {
 	}
 
 	// 控制台输出函数，最后一个参数总是0x96，只有当控制台顶部的"Repentance Console"这行字输出时，这个参数是0
-	__declspec(naked) void FASTCALL ConsoleOutput(isaac::Console& console, LPCVOID, string& text, uint32_t color, int type_guess) {
+	__declspec(naked) void FASTCALL ConsoleOutput(const isaac::Console& console, LPCVOID, string& text, uint32_t color, int type_guess) {
 		__asm {
 			push ebp
 			mov ebp, esp
