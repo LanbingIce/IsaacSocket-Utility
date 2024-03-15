@@ -102,7 +102,7 @@ namespace callback {
 		MENU_BEGIN("IsaacSocket");
 		MENU_ITEM("启用系统控制台", local.allocConsole, local.allocConsole = !local.allocConsole; if (local.allocConsole)function::AllocConsole(); else function::FreeConsole(););
 		MENU_BEGIN("实验性功能");
-		MENU_ITEM("重载lua", false, local.needReload = true);
+		MENU_ITEM("重载lua", false, local.connectionState = state::NEED_RELOAD_LUA);
 		MENU_END();
 		MENU_ITEM("打开数据目录", false, ShellExecuteW(nullptr, L"open", utils::GetDataFilePathW(L".").c_str(), nullptr, nullptr, SW_SHOWNORMAL));
 		ImGui::Separator();
@@ -256,15 +256,18 @@ namespace callback {
 		}
 		FAST_MOD_CALLBACK_BEGIN(_ISAAC_SOCKET_UPDATE);
 		FAST_MOD_CALLBACK_END();
-		CHECK_STATE();
-		if (function::IsaacSocketUpdate())
+		switch (local.connectionState)
 		{
-			return 0;
+		case state::NEED_RELOAD_LUA:
+			function::ReloadLuaWithoutDeleteRoom();
+			break;
+		case state::CONNECTED:
+			async::luaPollPromises(local.isaac->luaEngine->L);
+			MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
+			MOD_CALLBACK_CALL();
+			MOD_CALLBACK_END();
+			break;
 		}
-		async::luaPollPromises(local.isaac->luaEngine->L);
-		MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
-		MOD_CALLBACK_CALL();
-		MOD_CALLBACK_END();
 		return 0;
 	}
 
@@ -292,7 +295,7 @@ namespace callback {
 
 		if (text == "lualua")
 		{
-			local.needReload = true;
+			local.connectionState = state::NEED_RELOAD_LUA;
 		}
 
 		if (text == "luadll")

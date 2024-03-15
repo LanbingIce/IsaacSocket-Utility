@@ -27,7 +27,6 @@ namespace isaac_socket
 		local.lua.lua_setglobal(L, "IsaacSocket");
 		local.connectionState = state::DISCONNECTED;
 		local.MTRandomLockedValue = 0;
-		local.needReload = false;
 		local.isaac->game->console.state += local.isaac->game->console.state < 0 ? 5 : 0;
 		local.isaac->game->pauseMenu.state = std::abs(local.isaac->game->pauseMenu.state);
 		VAR_WRITE(local.isaac->FrameInterval, 1.0 / 60);

@@ -49,7 +49,7 @@ namespace isaac_api {
 	static int ReloadLua(lua_State* L) {
 		ARG_DEF(1, boolean, bool, luaDebug, local.isaac->luaEngine->luaDebug);
 		local.isaac->luaEngine->luaDebug = luaDebug;
-		local.needReload = true;
+		local.connectionState = state::NEED_RELOAD_LUA;
 		return 0;
 	}
 

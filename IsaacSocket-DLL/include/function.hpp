@@ -114,16 +114,6 @@ namespace function {
 		local.imsdk.TIMAddRecvNewMsgCallback(local.callbacks.TIMRecvNewMsgCallback, nullptr);
 	}
 
-	static int IsaacSocketUpdate() {
-		if (local.needReload) [[unlikely]]
-			{
-				local.needReload = false;
-				function::ReloadLuaWithoutDeleteRoom();
-				return 1;
-			}
-			return 0;
-	}
-
 	static void AllocConsole() {
 		::AllocConsole();
 		SetForegroundWindow(local.hWnd);

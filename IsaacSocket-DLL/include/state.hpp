@@ -11,9 +11,10 @@ namespace state {
 #pragma warning(disable: 26495)//禁用警告C26495: 始终初始化成员变量
 	enum ConnectionState
 	{
-		NEED_INIT = 0,
-		DISCONNECTED = 1,
-		CONNECTED = 2
+		NEED_INIT,
+		NEED_RELOAD_LUA,
+		DISCONNECTED,
+		CONNECTED
 	};
 
 	enum MenuBarDisplayMode
@@ -49,7 +50,6 @@ namespace state {
 			TIMCommCallback TIMCommCallback;
 		} callbacks;
 		HWND hWnd;
-		bool needReload = false;
 		char charsInputBuffer[2];
 		isaac::IsaacImage* isaac;
 		lua::Lua lua;
