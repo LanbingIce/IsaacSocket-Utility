@@ -11,8 +11,8 @@ namespace state {
 #pragma warning(disable: 26495)//禁用警告C26495: 始终初始化成员变量
 	enum ConnectionState
 	{
-		DISCONNECTED = 0,
-		CONNECTING = 1,
+		NEED_INIT = 0,
+		DISCONNECTED = 1,
 		CONNECTED = 2
 	};
 
@@ -32,12 +32,13 @@ namespace state {
 
 	struct _GlobalState
 	{
-		ConnectionState connectionState = DISCONNECTED;
+		char padding[4];
 		const char version[8]{};
 	};
 
 	struct _LocalState
 	{
+		ConnectionState connectionState = NEED_INIT;
 		struct
 		{
 			LPCVOID PreSwapBuffers;
@@ -48,7 +49,6 @@ namespace state {
 			TIMCommCallback TIMCommCallback;
 		} callbacks;
 		HWND hWnd;
-		bool initialized = false;
 		bool needReload = false;
 		char charsInputBuffer[2];
 		isaac::IsaacImage* isaac;

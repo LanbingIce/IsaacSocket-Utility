@@ -13,8 +13,8 @@
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-#define CHECK_INIT()if (!local.initialized)return 0
-#define CHECK_STATE()if (global->connectionState != state::CONNECTED)return 0
+#define CHECK_INIT()if (local.connectionState == state::NEED_INIT)return 0
+#define CHECK_STATE()if (local.connectionState != state::CONNECTED)return 0
 namespace callback {
 
 	// 小彭老师专用代码开始
@@ -61,9 +61,6 @@ namespace callback {
 	}
 #endif
 	// 小彭老师专用代码结束
-
-#define CHECK_INIT()if (!local.initialized)return 0
-#define CHECK_STATE()if (global->connectionState != state::CONNECTED)return 0
 
 	static void ShowUserGuide(bool* p_open)
 	{
@@ -246,34 +243,28 @@ namespace callback {
 	static int PreSwapBuffers(HDC hdc)
 	{
 		CHECK_RELOAD();
-		if (!local.initialized && global->connectionState == state::CONNECTING)
+		if (local.connectionState == state::NEED_INIT)
 		{
 			local.hWnd = WindowFromDC(hdc);
 			function::IsaacSocketFirstTimeInit();
-			local.initialized = true;
+			local.connectionState = state::DISCONNECTED;
 		}
-		CHECK_INIT();
+		ImGuiRender(local.connectionState == state::CONNECTED);
+		if (!isaac_socket::CheckInit())
+		{
+			return 0;
+		}
 		FAST_MOD_CALLBACK_BEGIN(_ISAAC_SOCKET_UPDATE);
 		FAST_MOD_CALLBACK_END();
-		ImGuiRender(global->connectionState == state::CONNECTED);
-		switch (global->connectionState) {
-		case state::CONNECTING:
-			isaac_socket::Init();
-			global->connectionState = state::CONNECTED;
-			break;
-		case state::CONNECTED:
-			if (function::IsaacSocketUpdate())
-			{
-				break;
-			}
-			async::luaPollPromises(local.isaac->luaEngine->L);
-			MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
-			MOD_CALLBACK_CALL();
-			MOD_CALLBACK_END();
-			break;
-		default:
-			break;
+		CHECK_STATE();
+		if (function::IsaacSocketUpdate())
+		{
+			return 0;
 		}
+		async::luaPollPromises(local.isaac->luaEngine->L);
+		MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
+		MOD_CALLBACK_CALL();
+		MOD_CALLBACK_END();
 		return 0;
 	}
 

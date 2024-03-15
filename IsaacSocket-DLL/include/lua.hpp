@@ -105,6 +105,8 @@ namespace lua {
 
 		_(int, lua_isstring, lua_State* L, int idx);
 
+		_(int, lua_iscfunction, lua_State* L, int idx);
+
 		_(const char*, lua_tolstring, lua_State* L, int idx, size_t* len);
 
 		_(int, luaL_error, lua_State* L, const char* fmt, ...);
