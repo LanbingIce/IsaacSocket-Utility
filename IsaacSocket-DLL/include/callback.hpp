@@ -339,6 +339,7 @@ namespace callback {
 		CHECK_STATE();
 
 		ImGuiIO& io = ImGui::GetIO();
+		wchar_t wChar = wParam;
 
 		if (uMsg == WM_CHAR)
 		{
@@ -346,7 +347,7 @@ namespace callback {
 			if (buffer[0])
 			{
 				buffer[1] = wParam;
-				MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, buffer, 2, (LPWSTR)&wParam, 1);
+				MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, buffer, 2, &wChar, 1);
 				buffer[0] = 0;
 			}
 			else if (IsDBCSLeadByte(wParam))
@@ -355,7 +356,7 @@ namespace callback {
 				return 0;
 			}
 
-			io.AddInputCharacter(wParam);
+			io.AddInputCharacter(wChar);
 		}
 
 		if (io.WantCaptureMouse && (uMsg == WM_LBUTTONDOWN || uMsg == WM_LBUTTONUP || uMsg == WM_RBUTTONDOWN || uMsg == WM_RBUTTONUP || uMsg == WM_MBUTTONDOWN || uMsg == WM_MBUTTONUP || uMsg == WM_MOUSEWHEEL || uMsg == WM_MOUSEMOVE)) {
@@ -370,10 +371,10 @@ namespace callback {
 		switch (uMsg)
 		{
 		case WM_CHAR:
-			if (!std::iswcntrl(wParam))
+			if (!std::iswcntrl(wChar))
 			{
 				char u8[4]{};
-				WideCharToMultiByte(CP_UTF8, 0, (LPCWCH)&wParam, 1, u8, 3, nullptr, nullptr);
+				WideCharToMultiByte(CP_UTF8, 0, &wChar, 1, u8, 3, nullptr, nullptr);
 				_(ISMC_PRE_CHAR_INPUT, string, u8);
 			}
 			break;
