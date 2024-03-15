@@ -33,7 +33,6 @@ namespace state {
 
 	struct _GlobalState
 	{
-		char padding[4];
 		const char version[8]{};
 	};
 
@@ -55,7 +54,6 @@ namespace state {
 		lua::Lua lua;
 		imsdk::ImSDK imsdk;
 		uint32_t MTRandomLockedValue = 0;
-		HMODULE hOpenGL;
 		bool allocConsole = false;
 		MenuBarDisplayMode menuBarDisplayMode = NEVER;
 		ImGuiStyleColor styleColor = CLASSIC;

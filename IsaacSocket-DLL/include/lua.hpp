@@ -234,7 +234,7 @@ namespace lua {
 		{
 			return lua_isstring(L, i);
 		}
-			int lua_isstdwstring(lua_State * L, int i) const
+		int lua_isstdwstring(lua_State* L, int i) const
 		{
 			return lua_isstring(L, i);
 		}

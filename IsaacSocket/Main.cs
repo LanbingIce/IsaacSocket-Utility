@@ -358,7 +358,7 @@ namespace IsaacSocket
                                         using MemoryMappedViewAccessor accessor = mmf.CreateViewAccessor();
 
                                         byte[] bytes = new byte[8];
-                                        accessor.ReadArray(4, bytes, 0, 8);
+                                        accessor.ReadArray(0, bytes, 0, 8);
                                         int nullIndex = Array.IndexOf(bytes, (byte)0);
                                         string oldVersion = Encoding.ASCII.GetString(bytes, 0, nullIndex);
 
@@ -369,9 +369,8 @@ namespace IsaacSocket
                                         }
                                         else
                                         {
-                                            accessor.Write(0, 1);
                                             bytes = Encoding.ASCII.GetBytes(version + '\0');
-                                            accessor.WriteArray(4, bytes, 0, bytes.Length);
+                                            accessor.WriteArray(0, bytes, 0, bytes.Length);
 
                                             MemoryUtil.WriteToMemory(isaacProcessHandle, sendAddress, BitConverter.GetBytes(dataSpaceSize));
                                             MemoryUtil.WriteToMemory(isaacProcessHandle, receiveAddress, BitConverter.GetBytes(1));
