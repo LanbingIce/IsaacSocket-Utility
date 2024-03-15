@@ -89,6 +89,11 @@ namespace IsaacSocket.Utils
             buffer.AddRange(BitConverter.GetBytes(0x13));
             byte[] patternData = buffer.ToArray();
 
+            buffer.Clear();
+            buffer.AddRange(BitConverter.GetBytes(data));
+            buffer.Add(0x3);
+            byte[] singlePatternData = buffer.ToArray();
+
             IntPtr address = 0;
             IntPtr singleAddress = 0;
             byte[] dataBuffer;
@@ -128,7 +133,7 @@ namespace IsaacSocket.Utils
 
                     while (readResult && singleAddress != -1)
                     {
-                        foundOffset = MiscUtil.FindPatternIndex(dataBuffer, BitConverter.GetBytes(data), foundOffset);
+                        foundOffset = MiscUtil.FindPatternIndex(dataBuffer, singlePatternData, foundOffset);
                         if (foundOffset == -1)
                         {
                             foundOffset = 0;
