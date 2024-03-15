@@ -176,7 +176,6 @@ namespace IsaacSocket.Utils
         internal static IntPtr FindWindow(string lpClassName, string lpWindowName)
         {
             nint h = nint.Zero;
-            int size = lpWindowName.Length;
             while (true)
             {
                 h = WinAPIUtil.FindWindowExA(0, h, lpClassName, null);
@@ -184,7 +183,7 @@ namespace IsaacSocket.Utils
                 {
                     string TitleName = GetWindowText(h);
                     if(TitleName.Contains(lpWindowName))
-                     {
+                    {
                         return h;
                     }
                 }
@@ -197,7 +196,7 @@ namespace IsaacSocket.Utils
             int length = WinAPIUtil.GetWindowTextLengthA(hWnd);
             if (length > 0)
             {
-                StringBuilder sb = new StringBuilder(length + 1);
+                StringBuilder sb = new(length + 1);
                 _ = WinAPIUtil.GetWindowText(hWnd, sb, sb.Capacity);
                 return sb.ToString();
             }
