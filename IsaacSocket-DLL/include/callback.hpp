@@ -13,7 +13,7 @@
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-#define CHECK_INIT()if (local.connectionState == state::NEED_INIT)return 0
+#define CHECK_INIT()if (local.connectionState == state::INIT)return 0
 #define CHECK_STATE()if (local.connectionState != state::CONNECTED)return 0
 namespace callback {
 
@@ -101,8 +101,9 @@ namespace callback {
 
 		MENU_BEGIN("IsaacSocket");
 		MENU_ITEM("启用系统控制台", local.allocConsole, local.allocConsole = !local.allocConsole; if (local.allocConsole)function::AllocConsole(); else function::FreeConsole(););
+		MENU_ITEM("小退并重载Lua环境", false, local.connectionState = state::RELOAD_LUA; local.reloadLuaState = state::EXIT);
 		MENU_BEGIN("实验性功能");
-		MENU_ITEM("重载lua", false, local.connectionState = state::NEED_RELOAD_LUA);
+		MENU_ITEM("重载Lua环境", false, local.connectionState = state::RELOAD_LUA; local.reloadLuaState = state::RELOAD);
 		MENU_END();
 		MENU_ITEM("打开数据目录", false, ShellExecuteW(nullptr, L"open", utils::GetDataFilePathW(L".").c_str(), nullptr, nullptr, SW_SHOWNORMAL));
 		ImGui::Separator();
@@ -243,7 +244,7 @@ namespace callback {
 	static int PreSwapBuffers(const HDC hdc)
 	{
 		CHECK_RELOAD();
-		if (local.connectionState == state::NEED_INIT)
+		if (local.connectionState == state::INIT)
 		{
 			local.hWnd = WindowFromDC(hdc);
 			function::IsaacSocketFirstTimeInit();
@@ -258,8 +259,20 @@ namespace callback {
 		FAST_MOD_CALLBACK_END();
 		switch (local.connectionState)
 		{
-		case state::NEED_RELOAD_LUA:
-			function::ReloadLuaWithoutDeleteRoom();
+		case state::RELOAD_LUA:
+			switch (local.reloadLuaState)
+			{
+			case state::EXIT:
+				local.isaac->manager->needExit = true;
+				local.reloadLuaState = state::SWITCH_PAGE;
+				break;
+			case state::SWITCH_PAGE:
+				local.isaac->mainMenu->page = 3;
+				[[fallthrough]];
+			case state::RELOAD:
+				function::ReloadLua();
+				break;
+			}
 			break;
 		case state::CONNECTED:
 			async::luaPollPromises(local.isaac->luaEngine->L);
@@ -295,12 +308,8 @@ namespace callback {
 
 		if (text == "lualua")
 		{
-			local.connectionState = state::NEED_RELOAD_LUA;
-		}
-
-		if (text == "luadll")
-		{
-			//local.needReloadDll = true;
+			local.connectionState = state::RELOAD_LUA;
+			local.reloadLuaState = state::RELOAD;
 		}
 
 		return 0;

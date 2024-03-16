@@ -48,8 +48,10 @@ namespace isaac_api {
 	//重新加载lua
 	static int ReloadLua(lua_State* L) {
 		ARG_DEF(1, boolean, bool, luaDebug, local.isaac->luaEngine->luaDebug);
+		ARG_DEF(2, boolean, bool, exitGame, true);
 		local.isaac->luaEngine->luaDebug = luaDebug;
-		local.connectionState = state::NEED_RELOAD_LUA;
+		local.connectionState = state::RELOAD_LUA;
+		local.reloadLuaState = exitGame ? state::EXIT : state::RELOAD;
 		return 0;
 	}
 

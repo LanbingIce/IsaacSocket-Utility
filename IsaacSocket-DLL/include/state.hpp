@@ -11,10 +11,17 @@ namespace state {
 #pragma warning(disable: 26495)//禁用警告C26495: 始终初始化成员变量
 	enum ConnectionState
 	{
-		NEED_INIT,
-		NEED_RELOAD_LUA,
+		INIT,
+		RELOAD_LUA,
 		DISCONNECTED,
 		CONNECTED
+	};
+
+	enum ReloadLuaState
+	{
+		EXIT,
+		SWITCH_PAGE,
+		RELOAD
 	};
 
 	enum MenuBarDisplayMode
@@ -38,7 +45,9 @@ namespace state {
 
 	struct _LocalState
 	{
-		ConnectionState connectionState = NEED_INIT;
+		ConnectionState connectionState = INIT;
+		ReloadLuaState reloadLuaState;
+		bool isRepentogon = GetModuleHandleA("Lua5.4.dll");
 		struct
 		{
 			LPCVOID PreSwapBuffers;

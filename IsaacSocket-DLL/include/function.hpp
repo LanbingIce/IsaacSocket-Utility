@@ -35,32 +35,40 @@ namespace function {
 	}
 
 	// 重新载入lua环境
-	static void ReloadLuaWithoutDeleteRoom()
+	static void ReloadLua()
 	{
-		isaac::IsaacImage* isaac = local.isaac;
-		// 输出日志
-		inject::LogPrintf(0, "Lua is resetting!\n");
-		// 卸载lua环境
-		FUNC(0x40AE00, void, FASTCALL, isaac::LuaEngine*);
-		f_0x40AE00(isaac->luaEngine);
-		// 加载lua环境
-		FUNC(0x3FCB00, void, FASTCALL, isaac::LuaEngine*, LPCVOID, bool);
-		f_0x3FCB00(isaac->luaEngine, NULL, isaac->luaEngine->luaDebug);
-		// 清除mod列表
-		FUNC(0x4702F0, void, FASTCALL, isaac::ModManager&);
-		f_0x4702F0(isaac->manager->modManager);
-		// 创建mod列表
-		FUNC(0x470B40, void, FASTCALL, isaac::ModManager&);
-		f_0x470B40(isaac->manager->modManager);
-		// 重新加载着色器
-		FUNC(0x46F2B0, void, FASTCALL, isaac::ModManager&);
-		f_0x46F2B0(isaac->manager->modManager);
-		// 重新加载精灵和字体
-		FUNC(0x4AF200, void, FASTCALL);
-		f_0x4AF200();
-		// 重新加载xml
-		FUNC(0x46DAE0, void, FASTCALL, isaac::ModManager&);
-		f_0x46DAE0(isaac->manager->modManager);
+		if (!local.isaac->mainMenu || local.isRepentogon)
+		{
+			isaac::IsaacImage* isaac = local.isaac;
+			// 输出日志
+			inject::LogPrintf(0, "Lua is resetting!\n");
+			// 卸载lua环境
+			FUNC(0x40AE00, void, FASTCALL, isaac::LuaEngine*);
+			f_0x40AE00(isaac->luaEngine);
+			// 加载lua环境
+			FUNC(0x3FCB00, void, FASTCALL, isaac::LuaEngine*, LPCVOID, bool);
+			f_0x3FCB00(isaac->luaEngine, NULL, isaac->luaEngine->luaDebug);
+			// 清除mod列表
+			FUNC(0x4702F0, void, FASTCALL, isaac::ModManager&);
+			f_0x4702F0(isaac->manager->modManager);
+			// 创建mod列表
+			FUNC(0x470B40, void, FASTCALL, isaac::ModManager&);
+			f_0x470B40(isaac->manager->modManager);
+			// 重新加载着色器
+			FUNC(0x46F2B0, void, FASTCALL, isaac::ModManager&);
+			f_0x46F2B0(isaac->manager->modManager);
+			// 重新加载精灵和字体
+			FUNC(0x4AF200, void, FASTCALL);
+			f_0x4AF200();
+			// 重新加载xml
+			FUNC(0x46DAE0, void, FASTCALL, isaac::ModManager&);
+			f_0x46DAE0(isaac->manager->modManager);
+		}
+		else
+		{
+			FUNC(0x473410, void, FASTCALL, isaac::ModManager&);
+			f_0x473410(local.isaac->manager->modManager);
+		}
 	}
 
 	// 设置GLFW的接收字符回调，使得直接设置控制台state的方式打开控制台也可以输入字符

@@ -131,6 +131,7 @@ namespace isaac {
 			FIELD(0x29DF8, Options, options);
 			FIELD(0x29FD8, ModManager, modManager);
 			FIELD(0x4A234, StringTable, stringTable);
+			FIELD(0x1EA818, bool, needExit);
 		};
 	};
 
