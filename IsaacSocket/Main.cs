@@ -428,27 +428,14 @@ namespace IsaacSocket
 
         private bool InjectCode(nint isaacProcessHandle)
         {
-            int pMem = 0;
-            nint hThread = 0;
-            uint pExitCode = 0;
-            try
-            {
-                int nSize = Encoding.Unicode.GetByteCount(dllPath);
-                pMem = (int)WinAPIUtil.VirtualAllocEx(isaacProcessHandle, 0, (uint)nSize, WinAPIUtil.AllocationType.COMMIT | WinAPIUtil.AllocationType.RESERVE, WinAPIUtil.MemoryProtection.EXECUTE_READWRITE);
-                WinAPIUtil.WriteProcessMemory(isaacProcessHandle, pMem, Encoding.Unicode.GetBytes(dllPath), (uint)nSize, out _);
-                nint hModule = WinAPIUtil.GetModuleHandleA("Kernel32.dll");
-                nint funcAddress = WinAPIUtil.GetProcAddress(hModule, "LoadLibraryW");
-                hThread = WinAPIUtil.CreateRemoteThread(isaacProcessHandle, 0, 0, funcAddress, pMem, 0, 0);
-                _ = WinAPIUtil.WaitForSingleObject(hThread, uint.MaxValue);
-                WinAPIUtil.GetExitCodeThread(hThread, out pExitCode);
-            }
-            catch { }
-            finally
-            {
-                WinAPIUtil.CloseHandle(hThread);
-                WinAPIUtil.VirtualFreeEx(isaacProcessHandle, pMem, 0, WinAPIUtil.FreeType.MEM_RELEASE);
-            }
-            return pExitCode != 0;
+            MiscUtil.LoadLibrary(isaacProcessHandle, MiscUtil.GetDataFilePath("ImSDK.dll"));
+            MiscUtil.LoadLibrary(isaacProcessHandle, MiscUtil.GetDataFilePath("PocoFoundation.dll"));
+            MiscUtil.LoadLibrary(isaacProcessHandle, MiscUtil.GetDataFilePath("PocoNet.dll"));
+            // MiscUtil.LoadLibrary(isaacProcessHandle, MiscUtil.GetDataFilePath("PocoEncodings.dll"));
+            // MiscUtil.LoadLibrary(isaacProcessHandle, MiscUtil.GetDataFilePath("PocoJSON.dll"));
+            // MiscUtil.LoadLibrary(isaacProcessHandle, MiscUtil.GetDataFilePath("PocoUtil.dll"));
+            // MiscUtil.LoadLibrary(isaacProcessHandle, MiscUtil.GetDataFilePath("PocoXML.dll"));
+            return MiscUtil.LoadLibrary(isaacProcessHandle, dllPath);
         }
 
         internal void Send(Channel channel, byte[] data)
@@ -500,6 +487,12 @@ namespace IsaacSocket
             }
             MiscUtil.ExtractFile("VonwaonBitmap-16px.ttf", MiscUtil.GetDataFilePath("VonwaonBitmap-16px.ttf"));
             MiscUtil.ExtractFile("ImSDK.dll", MiscUtil.GetDataFilePath("ImSDK.dll"));
+            // MiscUtil.ExtractFile("PocoEncodings.dll", MiscUtil.GetDataFilePath("PocoEncodings.dll"));
+            MiscUtil.ExtractFile("PocoFoundation.dll", MiscUtil.GetDataFilePath("PocoFoundation.dll"));
+            // MiscUtil.ExtractFile("PocoJSON.dll", MiscUtil.GetDataFilePath("PocoJSON.dll"));
+            MiscUtil.ExtractFile("PocoNet.dll", MiscUtil.GetDataFilePath("PocoNet.dll"));
+            // MiscUtil.ExtractFile("PocoUtil.dll", MiscUtil.GetDataFilePath("PocoUtil.dll"));
+            // MiscUtil.ExtractFile("PocoXML.dll", MiscUtil.GetDataFilePath("PocoXML.dll"));
         }
 
         internal Main(int dataSpaceSize, CallbackDelegate callback, string dllPath, string version)

@@ -4,9 +4,6 @@ namespace IsaacSocket.Utils
 {
     internal static partial class WinAPIUtil
     {
-        [DllImport("kernel32.dll")]
-        internal static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress, uint dwSize, AllocationType flAllocationType, MemoryProtection flProtect);
-
         [Flags]
         internal enum AllocationType : uint
         {
@@ -38,15 +35,9 @@ namespace IsaacSocket.Utils
         }
 
         [DllImport("kernel32.dll")]
-        internal static extern int GetProcessId(IntPtr processHandle);
+        internal static extern int GetProcessId(nint processHandle);
 
-        [DllImport("user32.dll", SetLastError = true)]
-        internal static extern bool AddClipboardFormatListener(IntPtr hwnd);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        internal static extern bool RemoveClipboardFormatListener(IntPtr hwnd);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
+        [DllImport("kernel32.dll")]
         internal static extern bool AllocConsole();
 
         [Flags]
@@ -67,61 +58,67 @@ namespace IsaacSocket.Utils
         [StructLayout(LayoutKind.Sequential)]
         internal struct MEMORY_BASIC_INFORMATION
         {
-            internal IntPtr BaseAddress;
-            internal IntPtr AllocationBase;
+            internal nint BaseAddress;
+            internal nint AllocationBase;
             internal uint AllocationProtect;
-            internal IntPtr RegionSize;
+            internal nint RegionSize;
             internal uint State;
             internal uint Protect;
             internal uint Type;
         }
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        internal static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint nSize, out int lpNumberOfBytesWritten);
+        [DllImport("kernel32.dll")]
+        internal static extern bool WriteProcessMemory(nint hProcess, nint lpBaseAddress, byte[] lpBuffer, uint nSize, out int lpNumberOfBytesWritten);
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        internal static extern bool GetExitCodeProcess(IntPtr hProcess, out uint lpExitCode);
+        [DllImport("kernel32.dll")]
+        internal static extern bool GetExitCodeProcess(nint hProcess, out uint lpExitCode);
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        internal static extern IntPtr OpenProcess(ProcessAccessFlags access, bool inheritHandle, uint processId);
+        [DllImport("kernel32.dll")]
+        internal static extern nint OpenProcess(ProcessAccessFlags access, bool inheritHandle, uint processId);
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        internal static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint nSize, out int lpNumberOfBytesRead);
+        [DllImport("kernel32.dll")]
+        internal static extern bool ReadProcessMemory(nint hProcess, nint lpBaseAddress, byte[] lpBuffer, uint nSize, out int lpNumberOfBytesRead);
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        internal static extern bool CloseHandle(IntPtr hObject);
+        [DllImport("kernel32.dll")]
+        internal static extern bool CloseHandle(nint hObject);
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        internal static extern uint VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, uint dwLength);
+        [DllImport("kernel32.dll")]
+        internal static extern uint VirtualQueryEx(nint hProcess, nint lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, uint dwLength);
 
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        internal static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        internal static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-        [DllImport("kernel32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-        internal static extern nint GetProcAddress(nint hModule, string procName);
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-        internal static extern nint CreateRemoteThread(nint hProcess, nint lpThreadAttributes, uint dwStackSize, nint lpStartAddress, nint lpParameter, uint dwCreationFlags, nint lpThreadId);
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern uint WaitForSingleObject(IntPtr hHandle, uint dwMilliseconds);
-
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern bool GetExitCodeThread(IntPtr hThread, out uint lpExitCode);
-
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern bool VirtualFreeEx(IntPtr hProcess, IntPtr lpAddress, int dwSize, FreeType dwFreeType);
-        [DllImport("kernel32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-        internal static extern nint GetModuleHandleA(string moduleName);
-
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Ansi)]
-        internal static extern nint FindWindowExA(nint hwndParent, nint hwndChildAfter, string lpszClass, string? lpszWindow);
+        [DllImport("kernel32.dll")]
+        internal static extern nint VirtualAllocEx(nint hProcess, nint lpAddress, uint dwSize, AllocationType flAllocationType, MemoryProtection flProtect);
 
         [DllImport("user32.dll")]
+        internal static extern uint GetWindowThreadProcessId(nint hWnd, out uint lpdwProcessId);
+
+#pragma warning disable CA2101 // 指定对 P/Invoke 字符串参数进行封送处理
+        [DllImport("kernel32.dll", CharSet = CharSet.Ansi)]
+#pragma warning restore CA2101 // 指定对 P/Invoke 字符串参数进行封送处理
+        internal static extern nint GetProcAddress(nint hModule, string procName);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        internal static extern nint CreateRemoteThread(nint hProcess, nint lpThreadAttributes, uint dwStackSize, nint lpStartAddress, nint lpParameter, uint dwCreationFlags, nint lpThreadId);
+
+        [DllImport("kernel32.dll")]
+        internal static extern uint WaitForSingleObject(nint hHandle, uint dwMilliseconds);
+
+        [DllImport("kernel32.dll")]
+        internal static extern bool GetExitCodeThread(nint hThread, out uint lpExitCode);
+
+        [DllImport("kernel32.dll")]
+        public static extern bool VirtualFreeEx(nint hProcess, nint lpAddress, int dwSize, FreeType dwFreeType);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
+        internal static extern nint GetModuleHandle(string moduleName);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        internal static extern nint FindWindowEx(nint hwndParent, nint hwndChildAfter, string lpszClass, string? lpszWindow);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         internal static extern int GetWindowText(nint hWnd, StringBuilder text, int count);
 
         [DllImport("user32.dll")]
-        internal static extern int GetWindowTextLengthA(nint hWnd);
+        internal static extern int GetWindowTextLength(nint hWnd);
 
     }
 }

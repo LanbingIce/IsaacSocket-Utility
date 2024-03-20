@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# SYSLIB1054: 使用 “LibraryImportAttribute” 而不是 “DllImportAttribute” 在编译时生成 P/Invoke 封送代码
+dotnet_diagnostic.SYSLIB1054.severity = none

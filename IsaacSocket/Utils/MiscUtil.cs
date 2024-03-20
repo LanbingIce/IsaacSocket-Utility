@@ -178,11 +178,11 @@ namespace IsaacSocket.Utils
             nint h = nint.Zero;
             while (true)
             {
-                h = WinAPIUtil.FindWindowExA(0, h, lpClassName, null);
+                h = WinAPIUtil.FindWindowEx(0, h, lpClassName, null);
                 if (h != 0)
                 {
                     string TitleName = GetWindowText(h);
-                    if(TitleName.Contains(lpWindowName))
+                    if (TitleName.Contains(lpWindowName))
                     {
                         return h;
                     }
@@ -193,7 +193,7 @@ namespace IsaacSocket.Utils
 
         public static string GetWindowText(nint hWnd)
         {
-            int length = WinAPIUtil.GetWindowTextLengthA(hWnd);
+            int length = WinAPIUtil.GetWindowTextLength(hWnd);
             if (length > 0)
             {
                 StringBuilder sb = new(length + 1);
@@ -201,6 +201,32 @@ namespace IsaacSocket.Utils
                 return sb.ToString();
             }
             return "";
+        }
+
+        internal static bool LoadLibrary(nint isaacProcessHandle, string dllPath)
+        {
+            nint pMem = 0;
+            nint hThread = 0;
+            uint exitCode = 0;
+            try
+            {
+                byte[] pathData = Encoding.Unicode.GetBytes(dllPath + "\0");
+                uint pathSize = (uint)pathData.Length;
+                pMem = WinAPIUtil.VirtualAllocEx(isaacProcessHandle, 0, pathSize, WinAPIUtil.AllocationType.COMMIT | WinAPIUtil.AllocationType.RESERVE, WinAPIUtil.MemoryProtection.READWRITE);
+                WinAPIUtil.WriteProcessMemory(isaacProcessHandle, pMem, pathData, pathSize, out _);
+                nint hModule = WinAPIUtil.GetModuleHandle("Kernel32.dll");
+                nint funcAddress = WinAPIUtil.GetProcAddress(hModule, "LoadLibraryW");
+                hThread = WinAPIUtil.CreateRemoteThread(isaacProcessHandle, 0, 0, funcAddress, pMem, 0, 0);
+                _ = WinAPIUtil.WaitForSingleObject(hThread, uint.MaxValue);
+                WinAPIUtil.GetExitCodeThread(hThread, out exitCode);
+            }
+            catch { }
+            finally
+            {
+                WinAPIUtil.CloseHandle(hThread);
+                WinAPIUtil.VirtualFreeEx(isaacProcessHandle, pMem, 0, WinAPIUtil.FreeType.MEM_RELEASE);
+            }
+            return exitCode != 0;
         }
     }
 }

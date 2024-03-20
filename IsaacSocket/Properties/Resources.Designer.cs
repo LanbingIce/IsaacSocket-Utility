@@ -83,6 +83,66 @@ namespace IsaacSocket.Properties {
         /// <summary>
         ///   查找 System.Byte[] 类型的本地化资源。
         /// </summary>
+        internal static byte[] PocoEncodings {
+            get {
+                object obj = ResourceManager.GetObject("PocoEncodings", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Byte[] 类型的本地化资源。
+        /// </summary>
+        internal static byte[] PocoFoundation {
+            get {
+                object obj = ResourceManager.GetObject("PocoFoundation", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Byte[] 类型的本地化资源。
+        /// </summary>
+        internal static byte[] PocoJSON {
+            get {
+                object obj = ResourceManager.GetObject("PocoJSON", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Byte[] 类型的本地化资源。
+        /// </summary>
+        internal static byte[] PocoNet {
+            get {
+                object obj = ResourceManager.GetObject("PocoNet", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Byte[] 类型的本地化资源。
+        /// </summary>
+        internal static byte[] PocoUtil {
+            get {
+                object obj = ResourceManager.GetObject("PocoUtil", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Byte[] 类型的本地化资源。
+        /// </summary>
+        internal static byte[] PocoXML {
+            get {
+                object obj = ResourceManager.GetObject("PocoXML", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Byte[] 类型的本地化资源。
+        /// </summary>
         internal static byte[] VonwaonBitmap_16px {
             get {
                 object obj = ResourceManager.GetObject("VonwaonBitmap-16px", resourceCulture);

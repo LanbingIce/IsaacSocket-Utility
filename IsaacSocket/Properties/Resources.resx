@@ -124,6 +124,24 @@
   <data name="IsaacSocket" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IsaacSocket.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="PocoEncodings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PocoEncodings.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PocoFoundation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PocoFoundation.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PocoJSON" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PocoJSON.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PocoNet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PocoNet.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PocoUtil" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PocoUtil.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PocoXML" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PocoXML.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="VonwaonBitmap-16px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\VonwaonBitmap-16px.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
