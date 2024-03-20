@@ -66,7 +66,6 @@
     <ClInclude Include="include\function.hpp" />
     <ClInclude Include="include\gnucompat.hpp" />
     <ClInclude Include="include\handle.hpp" />
-    <ClInclude Include="include\imsdk.hpp" />
     <ClInclude Include="include\inject.hpp" />
     <ClInclude Include="include\isaac.hpp" />
     <ClInclude Include="include\isaac_socket.hpp" />
@@ -91,6 +90,19 @@
     <ClInclude Include="libs\imgui\imstb_rectpack.h" />
     <ClInclude Include="libs\imgui\imstb_textedit.h" />
     <ClInclude Include="libs\imgui\imstb_truetype.h" />
+    <ClInclude Include="libs\imsdk\TIMCloud.h" />
+    <ClInclude Include="libs\imsdk\TIMCloudComm.h" />
+    <ClInclude Include="libs\imsdk\TIMCloudDef.h" />
+    <ClInclude Include="libs\imsdk\TIMCommunityManager.h" />
+    <ClInclude Include="libs\imsdk\TIMConversationManager.h" />
+    <ClInclude Include="libs\imsdk\TIMErrorCode.h" />
+    <ClInclude Include="libs\imsdk\TIMExperimentalAPI.h" />
+    <ClInclude Include="libs\imsdk\TIMFriendshipManager.h" />
+    <ClInclude Include="libs\imsdk\TIMGroupManager.h" />
+    <ClInclude Include="libs\imsdk\TIMManager.h" />
+    <ClInclude Include="libs\imsdk\TIMMessageManager.h" />
+    <ClInclude Include="libs\imsdk\TIMOfflinePushManager.h" />
+    <ClInclude Include="libs\imsdk\TIMSignalingManager.h" />
     <ClInclude Include="libs\json\json-forwards.h" />
     <ClInclude Include="libs\json\json.h" />
     <ClInclude Include="libs\KHR\khrplatform.h" />
@@ -227,7 +239,7 @@
     <ClCompile Include="src\modules\http.cpp" />
     <ClCompile Include="src\modules\image.cpp" />
     <ClCompile Include="src\modules\imgui_.cpp" />
-    <ClCompile Include="src\modules\imsdk_.cpp" />
+    <ClCompile Include="src\modules\tim.cpp" />
     <ClCompile Include="src\modules\isaac_.cpp" />
     <ClCompile Include="src\modules\isaac_api.cpp" />
     <ClCompile Include="src\modules\memory.cpp" />
@@ -238,6 +250,7 @@
     <ClCompile Include="src\reload.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Library Include="libs\imsdk\ImSDK.lib" />
     <Library Include="libs\zlib\zlibstatic.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

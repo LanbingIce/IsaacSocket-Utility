@@ -38,6 +38,13 @@
 #include <cwctype>
 #include <shellapi.h>
 
+#include <imsdk/TIMManager.h>
+#include <imsdk/TIMMessageManager.h>
+
+#pragma comment(lib, "bcrypt.lib")
+#pragma comment(lib, "libs/zlib/zlibstatic.lib")
+#pragma comment(lib, "libs/imsdk/ImSDK.lib")
+
 #ifdef _MSC_VER
 #define FASTCALL __fastcall
 #endif //_MSC_VER

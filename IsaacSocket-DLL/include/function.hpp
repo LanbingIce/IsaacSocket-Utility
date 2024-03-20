@@ -119,7 +119,7 @@ namespace function {
 		// Setup Platform/Renderer backends
 		ImGui_ImplWin32_InitForOpenGL(local.hWnd);
 		ImGui_ImplOpenGL3_Init();
-		local.imsdk.TIMAddRecvNewMsgCallback(local.callbacks.TIMRecvNewMsgCallback, nullptr);
+		TIMAddRecvNewMsgCallback(local.callbacks.TIMRecvNewMsgCallback, nullptr);
 	}
 
 	static void AllocConsole() {

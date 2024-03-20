@@ -13,9 +13,6 @@
 #include <windows.h>
 #include <bcrypt.h>
 
-#pragma comment(lib, "bcrypt.lib")
-#pragma comment(lib, "libs/zlib/zlibstatic.lib")
-
 class GenerateTestUserSigImpl
 {
 public:

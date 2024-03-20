@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "lua.hpp"
-#include "imsdk.hpp"
 #include "pch.h"
 #include <imgui/imgui.h>
 
@@ -60,7 +59,6 @@ namespace state {
 		HWND hWnd;
 		isaac::IsaacImage* isaac;
 		lua::Lua lua;
-		imsdk::ImSDK imsdk;
 		uint32_t MTRandomLockedValue = 0;
 		bool allocConsole = false;
 		MenuBarDisplayMode menuBarDisplayMode = NEVER;

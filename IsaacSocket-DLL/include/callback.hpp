@@ -395,21 +395,25 @@ namespace callback {
 #undef _
 	}
 
-	static int TIMRecvNewMsgCallback(const char* json_msg_array, const void* user_data)
+	static void TIMRecvNewMsgCallback(const char* json_msg_array, const void* user_data)
 	{
-		FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_NEW_MSG);
-		MOD_CALLBACK_ARG(string, json_msg_array);
-		FAST_MOD_CALLBACK_END();
-		return 0;
+		[=]() {
+			FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_NEW_MSG);
+			MOD_CALLBACK_ARG(string, json_msg_array);
+			FAST_MOD_CALLBACK_END();
+			return 0;
+			}();
 	}
-	static int TIMCommCallback(int32_t code, const char* desc, const char* json_params, const void* user_data)
+	static void TIMCommCallback(int32_t code, const char* desc, const char* json_params, const void* user_data)
 	{
-		FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_COMM);
-		MOD_CALLBACK_ARG(integer, code);
-		MOD_CALLBACK_ARG(string, desc);
-		MOD_CALLBACK_ARG(string, json_params);
-		FAST_MOD_CALLBACK_END();
-		return 0;
+		[=]() {
+			FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_COMM);
+			MOD_CALLBACK_ARG(integer, code);
+			MOD_CALLBACK_ARG(string, desc);
+			MOD_CALLBACK_ARG(string, json_params);
+			FAST_MOD_CALLBACK_END();
+			return 0;
+			}();
 	}
 }
 #undef CHECK_STATE

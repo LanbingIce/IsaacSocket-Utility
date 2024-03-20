@@ -49,6 +49,9 @@
     <Filter Include="libs\zlib">
       <UniqueIdentifier>{c9eda22d-30b5-46c6-a324-6509b42e5c24}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libs\imsdk">
+      <UniqueIdentifier>{63fe1ff4-d392-4263-b2b7-f32974eb857a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libs\glad\glad.cpp">
@@ -129,7 +132,7 @@
     <ClCompile Include="libs\ImGuiFileDialog\ImGuiFileDialog.cpp">
       <Filter>libs\ImGuiFileDialog</Filter>
     </ClCompile>
-    <ClCompile Include="src\modules\imsdk_.cpp">
+    <ClCompile Include="src\modules\tim.cpp">
       <Filter>源文件\modules</Filter>
     </ClCompile>
     <ClCompile Include="libs\UserSig\GenerateTestUserSig.cpp">
@@ -560,9 +563,6 @@
     <ClInclude Include="libs\ImGuiFileDialog\ImGuiFileDialogConfig.h">
       <Filter>libs\ImGuiFileDialog</Filter>
     </ClInclude>
-    <ClInclude Include="include\imsdk.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="libs\UserSig\GenerateTestUserSig.h">
       <Filter>libs\UserSig</Filter>
     </ClInclude>
@@ -572,10 +572,52 @@
     <ClInclude Include="libs\zlib\zlib.h">
       <Filter>libs\zlib</Filter>
     </ClInclude>
+    <ClInclude Include="libs\imsdk\TIMCloud.h">
+      <Filter>libs\imsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imsdk\TIMCloudComm.h">
+      <Filter>libs\imsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imsdk\TIMCloudDef.h">
+      <Filter>libs\imsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imsdk\TIMCommunityManager.h">
+      <Filter>libs\imsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imsdk\TIMConversationManager.h">
+      <Filter>libs\imsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imsdk\TIMErrorCode.h">
+      <Filter>libs\imsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imsdk\TIMExperimentalAPI.h">
+      <Filter>libs\imsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imsdk\TIMFriendshipManager.h">
+      <Filter>libs\imsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imsdk\TIMGroupManager.h">
+      <Filter>libs\imsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imsdk\TIMManager.h">
+      <Filter>libs\imsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imsdk\TIMMessageManager.h">
+      <Filter>libs\imsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imsdk\TIMOfflinePushManager.h">
+      <Filter>libs\imsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imsdk\TIMSignalingManager.h">
+      <Filter>libs\imsdk</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="libs\zlib\zlibstatic.lib">
       <Filter>libs\zlib</Filter>
+    </Library>
+    <Library Include="libs\imsdk\ImSDK.lib">
+      <Filter>libs\imsdk</Filter>
     </Library>
   </ItemGroup>
 </Project>
