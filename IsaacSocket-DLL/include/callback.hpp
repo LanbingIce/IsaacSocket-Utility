@@ -100,7 +100,7 @@ namespace callback {
 	static int ImGuiMainMenuBarRender() {
 
 		MENU_BEGIN("IsaacSocket");
-		MENU_ITEM("启用系统控制台", local.allocConsole, local.allocConsole = !local.allocConsole; if (local.allocConsole)function::AllocConsole(); else function::FreeConsole(););
+		MENU_ITEM("启用系统控制台", local.allocConsole, local.allocConsole = !local.allocConsole; if (local.allocConsole)function_::AllocConsole(); else function_::FreeConsole(););
 		MENU_ITEM("小退并重载Lua环境", false, local.connectionState = state::RELOAD_LUA; local.reloadLuaState = state::EXIT);
 		MENU_BEGIN("实验性功能");
 		MENU_ITEM("重载Lua环境", false, local.connectionState = state::RELOAD_LUA; local.reloadLuaState = state::RELOAD);
@@ -247,7 +247,7 @@ namespace callback {
 		if (local.connectionState == state::INIT)
 		{
 			local.hWnd = WindowFromDC(hdc);
-			function::IsaacSocketFirstTimeInit();
+			function_::IsaacSocketFirstTimeInit();
 			local.connectionState = state::DISCONNECTED;
 		}
 		ImGuiRender(local.connectionState == state::CONNECTED);
@@ -270,7 +270,7 @@ namespace callback {
 				local.isaac->mainMenu->page = 3;
 				[[fallthrough]];
 			case state::RELOAD:
-				function::ReloadLua();
+				function_::ReloadLua();
 				break;
 			}
 			break;

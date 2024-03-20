@@ -14,7 +14,7 @@
 #include <imgui/imgui_impl_win32.h>
 #include <UserSig/GenerateTestUserSig.h>
 
-namespace function {
+namespace function_ {
 
 	// 进行一次 “控制台输出”
 	static void ConsoleOutput(string text, uint32_t color = 0xFFD3D3D3)
@@ -78,7 +78,7 @@ namespace function {
 
 	static void IsaacSocketFirstTimeInit() {
 		gladLoadGL();
-		function::SetGLFWCharacter();
+		SetGLFWCharacter();
 
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();

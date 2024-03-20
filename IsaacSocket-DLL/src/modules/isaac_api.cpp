@@ -287,7 +287,7 @@ namespace isaac_api {
 		}
 		ARG_DEF(2, integer, uint32_t, color, 0xFFD3D3D3);
 		string str = string(text, len);
-		function::ConsoleOutput(str, color);
+		function_::ConsoleOutput(str, color);
 		return 0;
 	}
 

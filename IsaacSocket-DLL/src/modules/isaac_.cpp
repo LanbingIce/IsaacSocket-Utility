@@ -98,7 +98,7 @@ namespace isaac_ {
 		METATABLE_NEWINDEX(boolean, FadedConsoleDisplay);
 		METATABLE_NEWINDEX(boolean, Filter);
 		METATABLE_NEWINDEX(boolean, FoundHUD);
-		METATABLE_NEWINDEX(boolean, Fullscreen, function::FullScreen(_obj.Fullscreen));
+		METATABLE_NEWINDEX(boolean, Fullscreen, function_::FullScreen(_obj.Fullscreen));
 		METATABLE_NEWINDEX(number, Gamma);
 		METATABLE_NEWINDEX(number, HUDOffset);
 		// Language 不在这个类里
@@ -106,13 +106,13 @@ namespace isaac_ {
 		METATABLE_NEWINDEX(integer, MaxRenderScale);
 		METATABLE_NEWINDEX(integer, MaxScale);
 		METATABLE_NEWINDEX(boolean, MouseControl);
-		METATABLE_NEWINDEX(number, MusicVolume, function::MusicVolume(_obj.MusicVolume));
+		METATABLE_NEWINDEX(number, MusicVolume, function_::MusicVolume(_obj.MusicVolume));
 		METATABLE_NEWINDEX(boolean, PauseOnFocusLost);
 		METATABLE_NEWINDEX(boolean, RumbleEnabled);
 		METATABLE_NEWINDEX(boolean, SaveCommandHistory);
 		METATABLE_NEWINDEX(number, SFXVolume);
 		METATABLE_NEWINDEX(boolean, UseBorderlessFullscreen);
-		METATABLE_NEWINDEX(boolean, VSync, function::VSync(_obj.VSync));
+		METATABLE_NEWINDEX(boolean, VSync, function_::VSync(_obj.VSync));
 
 		// 以上是Options原有的成员
 
@@ -127,10 +127,10 @@ namespace isaac_ {
 		METATABLE_NEWINDEX(boolean, AimLock);
 		METATABLE_NEWINDEX(boolean, SteamCloud);
 		METATABLE_NEWINDEX(boolean, BossHpOnBottom);
-		METATABLE_NEWINDEX(integer, WindowWidth, if (!_obj.Fullscreen)function::FullScreen(false));
-		METATABLE_NEWINDEX(integer, WindowHeight, if (!_obj.Fullscreen) function::FullScreen(false));
-		METATABLE_NEWINDEX(integer, WindowPosX, if (!_obj.Fullscreen) function::FullScreen(false));
-		METATABLE_NEWINDEX(integer, WindowPosY, if (!_obj.Fullscreen) function::FullScreen(false));
+		METATABLE_NEWINDEX(integer, WindowWidth, if (!_obj.Fullscreen)function_::FullScreen(false));
+		METATABLE_NEWINDEX(integer, WindowHeight, if (!_obj.Fullscreen) function_::FullScreen(false));
+		METATABLE_NEWINDEX(integer, WindowPosX, if (!_obj.Fullscreen) function_::FullScreen(false));
+		METATABLE_NEWINDEX(integer, WindowPosY, if (!_obj.Fullscreen) function_::FullScreen(false));
 
 		// 以上是剩余成员中，存在于Options.ini中的成员
 

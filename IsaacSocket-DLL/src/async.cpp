@@ -114,7 +114,7 @@ void luaPollPromises(lua_State *L) {
             n = -1;
         }
         if (n >= 0 && !local.lua.lua_isnoneornil(L, -1 - n)) [[likely]] {
-            if(local.lua.lua_pcall(L, n, 0, 0)!=LUA_OK){std::string _err="?";if(local.lua.lua_isstring(L,-1)){_err=local.lua.lua_tostring(L,-1);};local.lua.lua_pop(L, 1);_err.append("\n");function::ConsoleOutput(_err, 0xFFF08080);cw("Error in async callback:", _err.c_str());}
+            if(local.lua.lua_pcall(L, n, 0, 0)!=LUA_OK){std::string _err="?";if(local.lua.lua_isstring(L,-1)){_err=local.lua.lua_tostring(L,-1);};local.lua.lua_pop(L, 1);_err.append("\n");function_::ConsoleOutput(_err, 0xFFF08080);cw("Error in async callback:", _err.c_str());}
         }
         local.lua.lua_settop(L, top);
         promiseTable().destroy(h);
