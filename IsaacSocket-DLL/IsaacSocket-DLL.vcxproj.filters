@@ -138,6 +138,9 @@
     <ClCompile Include="libs\UserSig\GenerateTestUserSig.cpp">
       <Filter>libs\UserSig</Filter>
     </ClCompile>
+    <ClCompile Include="http2.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="libs\glad\glad.h">

@@ -3,6 +3,7 @@
 #include "lua.hpp"
 #include "pch.h"
 #include <imgui/imgui.h>
+#include <Poco/TaskManager.h>
 
 namespace isaac { struct IsaacImage; }
 
@@ -44,6 +45,7 @@ namespace state {
 
 	struct _LocalState
 	{
+		Poco::TaskManager* taskManager;
 		ConnectionState connectionState = INIT;
 		ReloadLuaState reloadLuaState;
 		bool isRepentogon = GetModuleHandleA("Lua5.4.dll");
