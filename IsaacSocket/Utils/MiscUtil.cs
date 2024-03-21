@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Reflection;
 using System.Text;
 
 namespace IsaacSocket.Utils
@@ -128,24 +127,17 @@ namespace IsaacSocket.Utils
 
             return extraByteCount == 0;
         }
-        internal static bool ExtractFile(string resource, string path)
+        internal static bool ExtractFile(byte[] resource, string path)
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            Stream? stream = assembly.GetManifestResourceStream("IsaacSocket.Resources." + resource);
-            if (stream == null)
-            {
-                return false;
-            }
             try
             {
-                using FileStream fileStream = File.Create(path);
-                stream.CopyTo(fileStream);
-                return true;
+                File.WriteAllBytes(path, resource);
             }
             catch
             {
                 return false;
             }
+            return true;
         }
         internal static string GetCurrentExecutableFileName()
         {

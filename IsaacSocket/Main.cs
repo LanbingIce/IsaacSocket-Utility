@@ -1,5 +1,6 @@
 ﻿using IsaacSocket.Common;
 using IsaacSocket.Modules;
+using IsaacSocket.Properties;
 using IsaacSocket.Utils;
 using System.Collections.Concurrent;
 using System.IO.MemoryMappedFiles;
@@ -477,10 +478,10 @@ namespace IsaacSocket
             string dllPath = MiscUtil.GetDataFilePath("IsaacSocket.dll");
             if (this.dllPath == dllPath)
             {
-                MiscUtil.ExtractFile("IsaacSocket.dll", dllPath);
+                MiscUtil.ExtractFile(Resources.IsaacSocket, dllPath);
             }
-            MiscUtil.ExtractFile("VonwaonBitmap-16px.ttf", MiscUtil.GetDataFilePath("VonwaonBitmap-16px.ttf"));
-            MiscUtil.ExtractFile("ImSDK.dll", MiscUtil.GetDataFilePath("ImSDK.dll"));
+            MiscUtil.ExtractFile(Resources.VonwaonBitmap_16px, MiscUtil.GetDataFilePath("VonwaonBitmap-16px.ttf"));
+            MiscUtil.ExtractFile(Resources.ImSDK, MiscUtil.GetDataFilePath("ImSDK.dll"));
         }
 
         internal Main(int dataSpaceSize, CallbackDelegate callback, string dllPath, string version)
