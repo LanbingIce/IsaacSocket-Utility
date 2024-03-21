@@ -61,7 +61,7 @@ namespace lua {
 
 	struct Lua
 	{
-		HMODULE hLuaModule = []() {auto h = GetModuleHandleA("Lua5.4.dll"); if (!h)h = GetModuleHandleA("Lua5.3.3r.dll"); return h; }();
+		HMODULE hLuaModule = [] {auto h = GetModuleHandleA("Lua5.4.dll"); if (!h)h = GetModuleHandleA("Lua5.3.3r.dll"); return h; }();
 
 		_(const char*, lua_pushstring, lua_State* L, const char* s);
 
