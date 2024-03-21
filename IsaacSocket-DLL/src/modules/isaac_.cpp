@@ -4,7 +4,7 @@
 #include "lua.hpp"
 #include "state.hpp"
 #include "utils.hpp"
-#include "function.hpp"
+#include "function_.hpp"
 
 using isaac::lua_State;
 

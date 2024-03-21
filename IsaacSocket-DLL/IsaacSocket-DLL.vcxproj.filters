@@ -203,7 +203,7 @@
     <ClInclude Include="include\framework.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\function.hpp">
+    <ClInclude Include="include\function_.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\gnucompat.hpp">
