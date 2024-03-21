@@ -45,6 +45,8 @@
 #pragma comment(lib, "libs/zlib/zlibstatic.lib")
 #pragma comment(lib, "libs/imsdk/ImSDK.lib")
 
+#define POCO_STATIC
+
 #ifdef _MSC_VER
 #define FASTCALL __fastcall
 #endif //_MSC_VER
