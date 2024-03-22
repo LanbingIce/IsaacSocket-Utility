@@ -77,7 +77,7 @@ namespace function_ {
 	}
 
 	static void IsaacSocketFirstTimeInit() {
-		local.taskManager = new Poco::TaskManager();
+		new (&local.taskManager)Poco::TaskManager();
 		gladLoadGL();
 		SetGLFWCharacter();
 

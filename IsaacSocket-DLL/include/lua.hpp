@@ -194,6 +194,11 @@ namespace lua {
 			return lua_tolstring(L, i, NULL);
 		}
 
+		int lua_isfunction(lua_State* L, int n) const
+		{
+			return lua_type(L, n) == LUA_TFUNCTION;
+		}
+
 		int lua_istable(lua_State* L, int n) const
 		{
 			return lua_type(L, n) == LUA_TTABLE;

@@ -39,8 +39,13 @@ namespace isaac_socket
 		lua_State* L = local.isaac->luaEngine->L;
 		int top = local.lua.lua_gettop(L);
 		local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
+
 		local.lua.lua_pushstring(L, "version");
 		local.lua.lua_pushstring(L, global->version);
+		local.lua.lua_settable(L, -3);
+
+		local.lua.lua_pushstring(L, "TaskContinuation");
+		local.lua.lua_newtable(L);
 		local.lua.lua_settable(L, -3);
 
 		MODULE_FUNC(Connect);

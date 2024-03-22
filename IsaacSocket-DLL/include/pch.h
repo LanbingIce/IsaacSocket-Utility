@@ -37,6 +37,8 @@
 #include <fstream>
 #include <cwctype>
 #include <shellapi.h>
+#include <queue>
+#include <unordered_map>
 
 #include <imsdk/TIMManager.h>
 #include <imsdk/TIMMessageManager.h>

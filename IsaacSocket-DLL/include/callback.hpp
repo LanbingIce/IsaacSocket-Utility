@@ -6,6 +6,8 @@
 #include "utils.hpp"
 #include "function_.hpp"
 #include "config.hpp"
+#include "task_.hpp"
+
 #include "isaac_socket.hpp"
 #include <imgui/imgui.h>
 #include <ImGuiFileDialog/ImGuiFileDialog.h>
@@ -275,6 +277,7 @@ namespace callback {
 			}
 			break;
 		case state::CONNECTED:
+			task_::RunCallback();
 			async::luaPollPromises(local.isaac->luaEngine->L);
 			MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
 			MOD_CALLBACK_CALL();

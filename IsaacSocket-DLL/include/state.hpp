@@ -45,7 +45,9 @@ namespace state {
 
 	struct _LocalState
 	{
-		Poco::TaskManager* taskManager;
+		std::unordered_map<size_t, string> map;
+		union { Poco::TaskManager taskManager; };
+		std::mutex responsesMutex;
 		ConnectionState connectionState = INIT;
 		ReloadLuaState reloadLuaState;
 		bool isRepentogon = GetModuleHandleA("Lua5.4.dll");
@@ -79,6 +81,8 @@ namespace state {
 			bool ShowUserGuide = false;
 			bool ShowISAbout = false;
 		}imgui;
+		_LocalState() {}
+		~_LocalState() {}
 	};
 
 	inline state::_GlobalState* global;

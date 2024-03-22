@@ -614,6 +614,9 @@
     <ClInclude Include="libs\imsdk\TIMSignalingManager.h">
       <Filter>libs\imsdk</Filter>
     </ClInclude>
+    <ClInclude Include="include\task_.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="libs\zlib\zlibstatic.lib">
