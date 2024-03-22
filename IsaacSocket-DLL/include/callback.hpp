@@ -91,7 +91,8 @@ namespace callback {
 	}
 
 	static void ShowSelectFont() {
-		IGFD::FileDialogConfig config; config.path = local.currentPath;
+		IGFD::FileDialogConfig config;
+		config.path = local.currentPath;
 		ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "选择字体文件", "字体文件 (*.ttf *.otf){.ttf,.otf}", config);
 	}
 
@@ -113,14 +114,16 @@ namespace callback {
 		MENU_END();
 		MENU_BEGIN("ImGui");
 		MENU_BEGIN("显示主菜单条");
-		MENU_ITEM("默认", local.menuBarDisplayMode == state::NEVER, local.menuBarDisplayMode = state::NEVER; config::SetInt({ "IsaacSocket", "MenuBar" }, 0));
-		MENU_ITEM("按下Tab键时", local.menuBarDisplayMode == state::TAB_HOLD, local.menuBarDisplayMode = state::TAB_HOLD; config::SetInt({ "IsaacSocket","MenuBar" }, 1));
-		MENU_ITEM("总是显示", local.menuBarDisplayMode == state::ALWAYS, local.menuBarDisplayMode = state::ALWAYS; config::SetInt({ "IsaacSocket", "MenuBar" }, 2));
+		int menuBar = config::Get<int>("IsaacSocket.MenuBar");
+		MENU_ITEM("默认", menuBar == state::NEVER, config::Set("IsaacSocket.MenuBar", 0));
+		MENU_ITEM("按下Tab键时", menuBar == state::TAB_HOLD, config::Set("IsaacSocket.MenuBar", 1));
+		MENU_ITEM("总是显示", menuBar == state::ALWAYS, config::Set("IsaacSocket.MenuBar", 2));
 		MENU_END();
 		MENU_BEGIN("配色");
-		MENU_ITEM("默认", local.styleColor == state::CLASSIC, local.styleColor = state::CLASSIC; ImGui::StyleColorsClassic(); config::SetInt({ "IsaacSocket", "StyleColors" }, 0));
-		MENU_ITEM("浅色", local.styleColor == state::LIGHT, local.styleColor = state::LIGHT; ImGui::StyleColorsLight(); config::SetInt({ "IsaacSocket", "StyleColors" }, 1));
-		MENU_ITEM("深色", local.styleColor == state::DARK, local.styleColor = state::DARK; ImGui::StyleColorsDark(); config::SetInt({ "IsaacSocket","StyleColors" }, 2));
+		int styleColors = config::Get<int>("IsaacSocket.StyleColors");
+		MENU_ITEM("默认", styleColors == state::CLASSIC, ImGui::StyleColorsClassic(); config::Set("IsaacSocket.StyleColors", 0));
+		MENU_ITEM("浅色", styleColors == state::LIGHT, ImGui::StyleColorsLight(); config::Set("IsaacSocket.StyleColors", 1));
+		MENU_ITEM("深色", styleColors == state::DARK, ImGui::StyleColorsDark(); config::Set("IsaacSocket.StyleColors", 2));
 		MENU_END();
 		MENU_BEGIN("选择字体");
 		ImGuiIO& io = ImGui::GetIO();
@@ -133,12 +136,13 @@ namespace callback {
 		MENU_ITEM("设置自定义字体", false, ShowSelectFont());
 		ImGui::SetItemTooltip("设置之后需要重启游戏才能生效，请务必记得设置字体大小");
 		MENU_BEGIN("设置自定义字体尺寸");
-		for (size_t i = 6; i <= 64; i++)
+		float fontSize = config::Get<float>("IsaacSocket.FontSize");
+		for (size_t i = 8; i <= 64; i++)
 		{
-			MENU_ITEM((std::to_string(i) + "##字体尺寸").c_str(), local.fontSize == i, local.fontSize = (float)i; config::SetFloat({ "IsaacSocket", "FontSize" }, (float)i));
+			MENU_ITEM((std::to_string(i) + "##字体尺寸").c_str(), fontSize == i, config::Set("IsaacSocket.FontSize", (float)i));
 		}
 		MENU_END();
-		MENU_ITEM("清除自定义字体", false, local.fontFileName = ""; config::SetString({ "IsaacSocket", "FontFile" }, ""));
+		MENU_ITEM("清除自定义字体", false, config::Set("IsaacSocket.FontFile", ""));
 		MENU_END();
 		ImGui::Separator();
 		MENU_BEGIN("调试工具");
@@ -194,10 +198,9 @@ namespace callback {
 		// display
 		if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
 			if (ImGuiFileDialog::Instance()->IsOk()) { // action if OK
-				std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+				string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
 				local.currentPath = ImGuiFileDialog::Instance()->GetCurrentPath();
-				local.fontFileName = filePathName;
-				config::SetString({ "IsaacSocket", "FontFile" }, filePathName);
+				config::Set("IsaacSocket.FontFile", filePathName);
 				// action
 			}
 
@@ -216,7 +219,8 @@ namespace callback {
 
 		if (render)
 		{
-			if ((local.isaac->game->pauseMenu.state || local.menuBarDisplayMode == state::ALWAYS || local.menuBarDisplayMode == state::TAB_HOLD && ImGui::IsKeyDown(ImGuiKey_Tab)) && ImGui::BeginMainMenuBar())
+			int mode = config::Get<int>("IsaacSocket.MenuBar");
+			if ((local.isaac->game->pauseMenu.state || mode == state::ALWAYS || mode == state::TAB_HOLD && ImGui::IsKeyDown(ImGuiKey_Tab)) && ImGui::BeginMainMenuBar())
 			{
 				ImGuiMainMenuBarRender();
 				FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_MAIN_MENU_BAR_RENDER);

@@ -6,6 +6,7 @@
 #include "utils.hpp"
 #include "inject.hpp"
 #include "reload.hpp"
+#include "config.hpp"
 
 #include <glad/glad.h>
 
@@ -88,23 +89,33 @@ namespace function_ {
 		io.FontAllowUserScaling = true;
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;   // Enable Keyboard Controls
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;    // Enable Gamepad Controls
-		auto ifs = std::ifstream(local.fontFileName);
-		string path = utils::GetDataFilePath("VonwaonBitmap-16px.ttf");
+
+		string fontFile = config::Get<string>("IsaacSocket.FontFile");
+
+		auto ifs = std::ifstream(fontFile);
+
 		if (ifs)
 		{
-			ifs.close();
-			if (local.fontSize >= 6)
+			float fontSize = config::Get<float>("IsaacSocket.FontSize");
+			if (fontSize < 8 || fontSize > 64)
 			{
-				io.Fonts->AddFontFromFileTTF(local.fontFileName.c_str(), local.fontSize, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+				fontSize = 32;
+				config::Set("IsaacSocket.FontSize", fontSize);
 			}
+			io.Fonts->AddFontFromFileTTF(fontFile.c_str(), fontSize, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 		}
+
+		string path = utils::GetDataFilePath("VonwaonBitmap-16px.ttf");
 		io.Fonts->AddFontFromFileTTF(path.c_str(), 32.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 		io.Fonts->AddFontFromFileTTF(path.c_str(), 16.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 
-		io.IniFilename = local.iniFileName.c_str();
-		io.LogFilename = local.logFileName.c_str();
+		static const string iniFileName = utils::GetDataFilePath("imgui.ini");
+		static const string logFileName = utils::GetDataFilePath("imgui_log.txt");
 
-		switch (local.styleColor)
+		io.IniFilename = iniFileName.c_str();
+		io.LogFilename = logFileName.c_str();
+
+		switch (config::Get<int>("IsaacSocket.StyleColors"))
 		{
 		case state::LIGHT:
 			ImGui::StyleColorsLight();

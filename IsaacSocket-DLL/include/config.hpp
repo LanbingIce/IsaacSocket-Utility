@@ -2,144 +2,44 @@
 #include "pch.h"
 #include "state.hpp"
 #include "utils.hpp"
+#include <Poco/Util/JSONConfiguration.h>
 
 namespace config {
+	static const string path = utils::GetDataFilePath("config.json");
+	static Poco::Util::JSONConfiguration _config = Poco::Util::JSONConfiguration(path);
 
-	Json::Value ParseJson(const string& mystr)
-	{
-		Json::CharReaderBuilder crb;
-		std::unique_ptr<Json::CharReader> charread(crb.newCharReader());
-		Json::Value root;
-
-		charread->parse(mystr.c_str(), mystr.c_str() + mystr.size(), &root, nullptr);
-		return root;
+	static void Load() {
+		utils::ReadFile(path, "{}");
+		_config.load(path);
 	}
 
-	string Encode(Json::Value& json)
-	{
-		Json::StreamWriterBuilder swb;
-		string str = Json::writeString(swb, json);
-		Json::writeString(swb, str);
-		return str;
+	static void Save() {
+		std::ofstream ofs(path);
+		if (ofs)
+		{
+			_config.save(ofs);
+		}
 	}
 
-	int GetInt(const vector<const char*>& path) {
-		if (path.empty()) {
-			return 0;
-		}
-
-		string str = utils::ReadFile(local.configName);
-		Json::Value json = ParseJson(str);
-		Json::Value* p_json = &json;
-
-		for (const auto& p : path) {
-			if (!p_json->isMember(p))
-			{
-				return 0;
-			}
-			p_json = &(*p_json)[p];
-		}
-
-		return (*p_json).asInt();
+#define _(type,Type,def) if constexpr (std::is_same_v<T, type>){return (type)_config.get##Type(path,def);}
+	template <typename T>
+	static T Get(const string& path) {
+		_(int, Int, 0);
+		_(string, String, "");
+		_(double, Double, 0.0);
+		_(float, Double, 0.0F);
+		return 0;
 	}
+#undef _
 
-	void SetInt(const vector<const char*>& path, int value) {
-		if (path.empty()) {
-			return;
-		}
-
-		string str = utils::ReadFile(local.configName);
-		Json::Value json = ParseJson(str);
-		Json::Value* p_json = &json;
-
-		for (const auto& p : path) {
-			if (!p_json->isMember(p) || !(*p_json)[p].isObject()) {
-				(*p_json)[p] = Json::Value();
-			}
-			p_json = &(*p_json)[p];
-		}
-
-		*p_json = value;
-		utils::WriteFile(local.configName, Encode(json));
+#define _(type,Type) if constexpr (std::is_same_v<T, type>) {if (Get<type>(path)==value)return;_config.set##Type(path,value);Save();return;}
+	template <typename T>
+	static void Set(const string& path, T value) {
+		_(int, Int);
+		_(const char*, String);
+		_(string, String);
+		_(float, Double);
+		_(double, Double);
 	}
-
-	float GetFloat(const vector<const char*>& path) {
-		if (path.empty()) {
-			return 0;
-		}
-
-		string str = utils::ReadFile(local.configName);
-		Json::Value json = ParseJson(str);
-		Json::Value* p_json = &json;
-
-		for (const auto& p : path) {
-			if (!p_json->isMember(p))
-			{
-				return 0;
-			}
-			p_json = &(*p_json)[p];
-		}
-
-		return (*p_json).asFloat();
-	}
-
-	void SetFloat(const vector<const char*>& path, float value) {
-		if (path.empty()) {
-			return;
-		}
-
-		string str = utils::ReadFile(local.configName);
-		Json::Value json = ParseJson(str);
-		Json::Value* p_json = &json;
-
-		for (const auto& p : path) {
-			if (!p_json->isMember(p) || !(*p_json)[p].isObject()) {
-				(*p_json)[p] = Json::Value();
-			}
-			p_json = &(*p_json)[p];
-		}
-
-		*p_json = value;
-		utils::WriteFile(local.configName, Encode(json));
-	}
-
-	string GetString(const vector<const char*>& path) {
-		if (path.empty()) {
-			return "";
-		}
-
-		string str = utils::ReadFile(local.configName);
-		Json::Value json = ParseJson(str);
-		Json::Value* p_json = &json;
-
-		for (const auto& p : path) {
-			if (!p_json->isMember(p))
-			{
-				return "";
-			}
-			p_json = &(*p_json)[p];
-		}
-
-		return (*p_json).asString();
-	}
-
-	void SetString(const vector<const char*>& path, string value) {
-		if (path.empty()) {
-			return;
-		}
-
-		string str = utils::ReadFile(local.configName);
-		Json::Value json = ParseJson(str);
-		Json::Value* p_json = &json;
-
-		for (const auto& p : path) {
-			if (!p_json->isMember(p) || !(*p_json)[p].isObject()) {
-				(*p_json)[p] = Json::Value();
-			}
-			p_json = &(*p_json)[p];
-		}
-
-		*p_json = value;
-		utils::WriteFile(local.configName, Encode(json));
-	}
+#undef _
 }

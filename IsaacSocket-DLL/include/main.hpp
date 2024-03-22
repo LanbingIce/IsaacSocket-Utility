@@ -19,11 +19,8 @@ namespace main {
 		}
 
 		global = (state::_GlobalState*)MapViewOfFile(hMapFile, FILE_MAP_WRITE, 0, 0, 0);
+		config::Load();
 		local.isaac = (isaac::IsaacImage*)GetModuleHandleA(NULL);
-		local.styleColor = (state::ImGuiStyleColor)config::GetInt({ "IsaacSocket", "StyleColors" });
-		local.menuBarDisplayMode = (state::MenuBarDisplayMode)config::GetInt({ "IsaacSocket",  "MenuBar" });
-		local.fontFileName = config::GetString({ "IsaacSocket", "FontFile" });
-		local.fontSize = config::GetFloat({ "IsaacSocket", "FontSize" });
 
 		local.callbacks = {
 			(LPCVOID)callback::PreSwapBuffers,

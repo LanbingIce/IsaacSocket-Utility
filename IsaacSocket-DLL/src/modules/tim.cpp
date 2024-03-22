@@ -1,6 +1,7 @@
 ﻿#include "module.hpp"
 #include "state.hpp"
 #include <UserSig/GenerateTestUserSig.h>
+#include <Poco/JSON/Object.h>
 
 namespace tim {
 
@@ -10,12 +11,12 @@ namespace tim {
 
 	static int TIMInit(lua_State* L) {
 		ARG(1, integer, uint64_t, sdk_app_id);
-		Json::Value root;
-		root["sdk_config_config_file_path"] = utils::GetDataFilePath("ImSDK");
-		root["sdk_config_log_file_path"] = utils::GetDataFilePath("ImSDK");
-		Json::StreamWriterBuilder swb;
-		string str = Json::writeString(swb, root);
-		RET(integer, ::TIMInit(sdk_app_id, str.c_str()));
+		Poco::JSON::Object root;
+		root.set("sdk_config_config_file_path", utils::GetDataFilePath("ImSDK"));
+		root.set("sdk_config_log_file_path", utils::GetDataFilePath("ImSDK"));
+		std::ostringstream ostr;
+		root.stringify(ostr);
+		RET(integer, ::TIMInit(sdk_app_id, ostr.str().c_str()));
 	}
 
 	static int TIMGetServerTime(lua_State* L) {

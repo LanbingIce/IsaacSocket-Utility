@@ -28,9 +28,6 @@
     <Filter Include="libs\imgui">
       <UniqueIdentifier>{d626c85d-7fa2-4a9b-bcf6-fe3af7b67f9f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="libs\json">
-      <UniqueIdentifier>{2d06c144-fe71-4340-8a36-eb99c3c881d9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="源文件\modules">
       <UniqueIdentifier>{d050df09-b033-421e-8c18-9cb48457927a}</UniqueIdentifier>
     </Filter>
@@ -80,9 +77,6 @@
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_stdlib.cpp">
       <Filter>libs\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="libs\json\jsoncpp.cpp">
-      <Filter>libs\json</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
@@ -184,12 +178,6 @@
     </ClInclude>
     <ClInclude Include="libs\imgui\imgui_stdlib.h">
       <Filter>libs\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\json\json.h">
-      <Filter>libs\json</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\json\json-forwards.h">
-      <Filter>libs\json</Filter>
     </ClInclude>
     <ClInclude Include="include\async.hpp">
       <Filter>头文件</Filter>

@@ -65,14 +65,7 @@ namespace state {
 		lua::Lua lua;
 		uint32_t MTRandomLockedValue = 0;
 		bool allocConsole = false;
-		MenuBarDisplayMode menuBarDisplayMode = NEVER;
-		ImGuiStyleColor styleColor = CLASSIC;
-		const string configName = utils::GetDataFilePath("config.json");
-		const string iniFileName = utils::GetDataFilePath("imgui.ini");
-		const string logFileName = utils::GetDataFilePath("imgui_log.txt");
-		string currentPath = ".";
-		string fontFileName;
-		float fontSize;
+		string currentPath = "C:\\Windows\\Fonts";
 		struct
 		{
 			bool ShowDemoWindow = false;

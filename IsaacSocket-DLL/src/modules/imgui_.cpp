@@ -1,6 +1,7 @@
 ﻿#include "module.hpp"
 #include <imgui/imgui.h>
 #include <imgui/imgui_stdlib.h>
+#include "config.hpp"
 
 namespace imgui {
 	static const ::ImVec2 VEC2_0 = ::ImVec2(0, 0);
@@ -169,7 +170,7 @@ namespace imgui {
 	}
 
 	static int StyleColorsDark(lua_State* L) {
-		local.styleColor = state::DARK;
+		config::Set("IsaacSocket.StyleColors", state::DARK);
 		if (local.lua.lua_isnoneornil(L, 1))
 		{
 			ImGui::StyleColorsDark();
@@ -183,6 +184,7 @@ namespace imgui {
 	}
 
 	static int StyleColorsLight(lua_State* L) {
+		config::Set("IsaacSocket.StyleColors", state::LIGHT);
 		if (local.lua.lua_isnoneornil(L, 1))
 		{
 			ImGui::StyleColorsLight();
@@ -196,6 +198,7 @@ namespace imgui {
 	}
 
 	static int StyleColorsClassic(lua_State* L) {
+		config::Set("IsaacSocket.StyleColors", state::CLASSIC);
 		if (local.lua.lua_isnoneornil(L, 1))
 		{
 			ImGui::StyleColorsClassic();
