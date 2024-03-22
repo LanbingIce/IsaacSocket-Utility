@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO.Compression;
 using System.Text;
 
 namespace IsaacSocket.Utils
@@ -131,7 +132,7 @@ namespace IsaacSocket.Utils
         {
             try
             {
-                File.WriteAllBytes(path, resource);
+                File.WriteAllBytes(path, Decompress(resource));
             }
             catch
             {
@@ -219,6 +220,15 @@ namespace IsaacSocket.Utils
                 WinAPIUtil.VirtualFreeEx(isaacProcessHandle, pMem, 0, WinAPIUtil.FreeType.MEM_RELEASE);
             }
             return exitCode != 0;
+        }
+
+        internal static byte[] Decompress(byte[] data)
+        {
+            using MemoryStream input = new(data);
+            using MemoryStream output = new();
+            using DeflateStream dstream = new(input, CompressionMode.Decompress);
+            dstream.CopyTo(output);
+            return output.ToArray();
         }
     }
 }
