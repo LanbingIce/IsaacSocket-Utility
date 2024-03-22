@@ -79,7 +79,12 @@ namespace inject {
 	{
 		__asm {
 			push ecx
+			push[esp + 0x18]
+			push[esp + 0x18]
+			push[esp + 0x18]
+			push ecx
 			call local.callbacks.OnExecuteCommand
+			add esp, 0x10
 			pop ecx
 			test eax, eax
 			jne flag
@@ -111,7 +116,12 @@ namespace inject {
 	{
 		__asm {
 			push ecx
+			push[esp + 0x18]
+			push[esp + 0x18]
+			push[esp + 0x18]
+			push ecx
 			call local.callbacks.OnConsoleOutput
+			add esp, 0x10
 			pop ecx
 			test eax, eax
 			jne flag
@@ -140,7 +150,6 @@ namespace inject {
 	// MT19937随机数生成,这个函数的注入点在尾部，因此不会影响正常的随机序列，且可以获取并覆盖原函数的返回值
 	static __declspec(naked) void _MTRandom()
 	{
-
 		__asm {
 			shr eax, 0x12
 			xor eax, ecx
@@ -155,7 +164,12 @@ namespace inject {
 	__declspec(naked) LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		__asm {
+			push[esp + 0x10]
+			push[esp + 0x10]
+			push[esp + 0x10]
+			push[esp + 0x10]
 			call local.callbacks.PreWndProc
+			add esp, 0x10
 			test eax, eax
 			jne flag
 			push ebp
