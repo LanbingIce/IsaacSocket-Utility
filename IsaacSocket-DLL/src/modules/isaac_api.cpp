@@ -275,19 +275,19 @@ namespace isaac_api {
 		RET(number, ImGui::GetIO().Framerate);
 	}
 
+	//日志输出
+	static int LogOutput(lua_State* L) {
+		ARG(1, string, const char*, text);
+		ARG_DEF(2, integer, int, type, 0);
+		function_::LogOutput(text, type);
+		return 0;
+	}
+
 	//控制台输出
 	static int ConsoleOutput(lua_State* L) {
-		const char* text;
-		size_t len;
-		if (local.lua.lua_isstring(L, 1)) {
-			text = local.lua.lua_tolstring(L, 1, &len);
-		}
-		else {
-			return local.lua.luaL_error(L, "bad argument #1: text should be string");
-		}
+		ARG(1, string, const char*, text);
 		ARG_DEF(2, integer, uint32_t, color, 0xFFD3D3D3);
-		string str = string(text, len);
-		function_::ConsoleOutput(str, color);
+		function_::ConsoleOutput(text, color);
 		return 0;
 	}
 
@@ -337,6 +337,7 @@ namespace isaac_api {
 		MODULE_FUNC(GetFPS);
 
 		MODULE_FUNC(ConsoleOutput);
+		MODULE_FUNC(LogOutput);
 
 		MODULE_END();
 		};

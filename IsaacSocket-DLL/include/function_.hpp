@@ -16,6 +16,11 @@
 #include <UserSig/GenerateTestUserSig.h>
 
 namespace function_ {
+	// 进行一次 “日志输出”
+	static void LogOutput(const char* text, int type = 0)
+	{
+		inject::LogPrintf(type, "%s", text);
+	}
 
 	// 进行一次 “控制台输出”
 	static void ConsoleOutput(string text, uint32_t color = 0xFFD3D3D3)

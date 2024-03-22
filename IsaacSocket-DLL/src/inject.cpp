@@ -27,25 +27,27 @@ namespace inject {
 #ifndef __MINGW32__
 	// MinGW 的内联汇编只支持 AT&T 格式，和 MSVC 的 Intel 格式完全不同，因此改为在 gnuinject.S 中实现
 	// 以下代码仅在 MSVC 下编译
-	static const char* logPreFix = "[LOG(%d)] ";
-	static int tmpRetIP;
-	static int tmpLogLevel;
+	static const char* logPreFix = "[INFO] - \0\0\0\0\0\0\0" "[WARN] - \0\0\0\0\0\0\0""[ERROR] - \0\0\0\0\0\0""[ASSERT] - ";
+	static int tmpRetAddr;
+	static int tmpLogType;
 
 	//输出日志函数
-	__declspec(naked) void LogPrintf(int level, const char* format, ...) {
+	__declspec(naked) void LogPrintf(int type, const char* format, ...) {
 		__asm {
 			call GetConsoleWindow
 			test eax, eax
 			je flag
-			push[esp + 0x04]
-			push logPreFix
+			mov eax, [esp + 0x04]
+			shl eax, 4
+			add eax, logPreFix
+			push eax
 			call _cprintf
-			add esp, 0x08
-			pop tmpRetIP
-			pop tmpLogLevel
+			add esp, 0x04
+			pop tmpRetAddr
+			pop tmpLogType
 			call utils::Utf8Cprintf
-			push tmpLogLevel
-			push tmpRetIP
+			push tmpLogType
+			push tmpRetAddr
 			flag : push ebp
 			mov ebp, esp
 			and esp, -0x08
