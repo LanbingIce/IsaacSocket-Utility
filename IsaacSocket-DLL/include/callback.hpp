@@ -93,7 +93,7 @@ namespace callback {
 	static void ShowSelectFont() {
 		IGFD::FileDialogConfig config;
 		config.path = local.currentPath;
-		ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "选择字体文件", "字体文件 (*.ttf *.otf){.ttf,.otf}", config);
+		ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "选择字体文件", "字体文件 (*.ttf *.otf){.ttf,.otf,.TTF,.OTF}", config);
 	}
 
 #define MENU_BEGIN(name)if (ImGui::BeginMenu(name)){
