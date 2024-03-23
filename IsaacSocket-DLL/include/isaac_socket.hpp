@@ -9,12 +9,7 @@ namespace isaac_socket
 {
 	static int Connect(lua_State* L) {
 		local.connectionState = state::CONNECTED;
-
-		local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
-		local.lua.lua_pushstring(L, "IsaacSocket");
-		local.lua.lua_gettable(L, -2);
-		local.lua.lua_setglobal(L, "IsaacSocket");
-		local.lua.lua_pop(L, 1);
+		DO_STRING("IsaacSocket = _ISAAC_SOCKET.IsaacSocket");
 
 		FAST_MOD_CALLBACK_BEGIN(ISMC_POST_OPEN);
 		FAST_MOD_CALLBACK_END();
@@ -29,8 +24,7 @@ namespace isaac_socket
 		local.isaac->game->console.state += local.isaac->game->console.state < 0 ? 5 : 0;
 		local.isaac->game->pauseMenu.state = std::abs(local.isaac->game->pauseMenu.state);
 		VAR_WRITE(local.isaac->FrameInterval, 1.0 / 60);
-		local.lua.lua_pushnil(L);
-		local.lua.lua_setglobal(L, "IsaacSocket");
+		DO_STRING("IsaacSocket = nil");
 		local.connectionState = state::DISCONNECTED;
 		return 0;
 	}
@@ -42,16 +36,12 @@ namespace isaac_socket
 		int top = local.lua.lua_gettop(L);
 		local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
 
-		local.lua.lua_pushstring(L, "version");
-		local.lua.lua_pushstring(L, global->version);
-		local.lua.lua_settable(L, -3);
-
-		local.lua.lua_pushstring(L, "TaskContinuation");
-		local.lua.lua_newtable(L);
-		local.lua.lua_settable(L, -3);
-
 		MODULE_FUNC(Connect);
 		MODULE_FUNC(Disconnect);
+
+		std::ostringstream oss;
+		oss << "_ISAAC_SOCKET.version=\"" << global->version << "\" _ISAAC_SOCKET.TaskContinuation={}";
+		DO_STRING(oss.str().c_str());
 
 		local.lua.lua_settop(L, top);
 	}

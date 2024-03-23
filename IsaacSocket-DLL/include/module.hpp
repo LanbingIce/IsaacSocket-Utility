@@ -86,6 +86,8 @@ namespace lua {
 #define METATABLE_INDEX_STRING(name)_METATABLE_INDEX(string,name,_obj.name.c_str())
 #define METATABLE_END()return local.lua.luaL_error(L, "Invalid member access.")
 
+#define DO_STRING(code){int _top=local.lua.lua_gettop(L);local.lua.luaL_dostring(L,code);local.lua.lua_settop(L,_top);}
+
 struct Image {
 	std::vector<uint8_t> data;
 	int width = 0, height = 0, channels = 0;

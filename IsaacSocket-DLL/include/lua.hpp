@@ -22,6 +22,9 @@ using isaac::lua_State;
 #define LUA_NUMBER		double
 #define LUA_KCONTEXT	ptrdiff_t
 
+/* option for multiple returns in 'lua_pcall' and 'lua_call' */
+#define LUA_MULTRET	(-1)
+
 //lua状态码
 #define LUA_OK			0
 #define LUA_YIELD		1
@@ -154,6 +157,8 @@ namespace lua {
 		_(const char*, luaL_checklstring, lua_State* L, int arg, size_t* len);
 
 		_(const char*, luaL_optlstring, lua_State* L, int arg, const char* def, size_t* len);
+
+		_(int, luaL_loadstring, lua_State* L, const char* s);
 
 		template <class T>
 		T* luaCPP_getuserdata(lua_State* L, int i) {
@@ -484,6 +489,10 @@ namespace lua {
 			return luaL_optlstring(L, n, d, NULL);
 		}
 
+		int luaL_dostring(lua_State* L, const char* s) const
+		{
+			return (int)(luaL_loadstring(L, s) || lua_pcall(L, 0, LUA_MULTRET, 0));
+		}
 	};
 #pragma warning(default: 6387)//重新启用警告C6387
 #undef _
