@@ -17,9 +17,9 @@
 
 namespace function_ {
 	// 进行一次 “日志输出”
-	static void LogOutput(const char* text, int type = 0)
+	static void LogOutput(const char* text, uint32_t type = 0)
 	{
-		inject::LogPrintf(type, "%s", text);
+		inject::LogPrintf(type % 4, "%s", text);
 	}
 
 	// 进行一次 “控制台输出”
