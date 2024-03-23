@@ -404,20 +404,22 @@ namespace callback {
 
 	static void TIMRecvNewMsgCallback(const char* json_msg_array, const void* user_data)
 	{
-		[=]() {
-			FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_NEW_MSG);
+		[=] {
+			FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_RECV_NEW_MSG);
 			MOD_CALLBACK_ARG(string, json_msg_array);
+			MOD_CALLBACK_ARG(string, (const char*)user_data);
 			FAST_MOD_CALLBACK_END();
 			return 0;
 			}();
 	}
 	static void TIMCommCallback(int32_t code, const char* desc, const char* json_params, const void* user_data)
 	{
-		[=]() {
+		[=] {
 			FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_COMM);
 			MOD_CALLBACK_ARG(integer, code);
 			MOD_CALLBACK_ARG(string, desc);
 			MOD_CALLBACK_ARG(string, json_params);
+			MOD_CALLBACK_ARG(string, (const char*)user_data);
 			FAST_MOD_CALLBACK_END();
 			return 0;
 			}();

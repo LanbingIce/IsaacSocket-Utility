@@ -3,6 +3,7 @@
 #include "lua.hpp"
 #include "state.hpp"
 #include "module.hpp"
+#include <imsdk/TIMManager.h>
 
 namespace isaac_socket
 {
@@ -23,13 +24,14 @@ namespace isaac_socket
 	static int Disconnect(lua_State* L) {
 		FAST_MOD_CALLBACK_BEGIN(ISMC_PRE_CLOSE);
 		FAST_MOD_CALLBACK_END();
-		local.lua.lua_pushnil(L);
-		local.lua.lua_setglobal(L, "IsaacSocket");
-		local.connectionState = state::DISCONNECTED;
+		TIMUninit();
 		local.MTRandomLockedValue = 0;
 		local.isaac->game->console.state += local.isaac->game->console.state < 0 ? 5 : 0;
 		local.isaac->game->pauseMenu.state = std::abs(local.isaac->game->pauseMenu.state);
 		VAR_WRITE(local.isaac->FrameInterval, 1.0 / 60);
+		local.lua.lua_pushnil(L);
+		local.lua.lua_setglobal(L, "IsaacSocket");
+		local.connectionState = state::DISCONNECTED;
 		return 0;
 	}
 
