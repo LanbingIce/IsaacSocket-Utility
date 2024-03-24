@@ -39,13 +39,6 @@
 #include <queue>
 #include <unordered_map>
 
-#include <imsdk/TIMManager.h>
-#include <imsdk/TIMMessageManager.h>
-
-#pragma comment(lib, "bcrypt.lib")
-#pragma comment(lib, "libs/zlib/zlibstatic.lib")
-#pragma comment(lib, "libs/imsdk/ImSDK.lib")
-
 #define POCO_STATIC
 
 #ifdef _MSC_VER

@@ -3,6 +3,7 @@
 #include "lua.hpp"
 #include "pch.h"
 #include <imgui/imgui.h>
+#include <imsdk/TIMMessageManager.h>
 #include <Poco/TaskManager.h>
 
 namespace isaac { struct IsaacImage; }

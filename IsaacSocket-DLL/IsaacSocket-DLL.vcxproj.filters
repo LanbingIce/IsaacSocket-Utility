@@ -13,70 +13,73 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="libs">
-      <UniqueIdentifier>{21bcf4aa-06db-4a96-b17d-dd69a21e3d30}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="libs\glad">
-      <UniqueIdentifier>{6eaf4612-2062-443f-b534-3d35d471f2e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="libs\KHR">
-      <UniqueIdentifier>{b2df792a-12f4-4556-83f5-15d600330856}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="libs\stbi">
-      <UniqueIdentifier>{72d4eced-7b28-43b5-96d6-9ef96d22860c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="libs\imgui">
-      <UniqueIdentifier>{d626c85d-7fa2-4a9b-bcf6-fe3af7b67f9f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="源文件\modules">
       <UniqueIdentifier>{d050df09-b033-421e-8c18-9cb48457927a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="libs\openssl">
-      <UniqueIdentifier>{8fc941d2-7573-40b8-af69-20c4c25fb15a}</UniqueIdentifier>
+    <Filter Include="库">
+      <UniqueIdentifier>{21bcf4aa-06db-4a96-b17d-dd69a21e3d30}</UniqueIdentifier>
     </Filter>
-    <Filter Include="libs\httplib">
-      <UniqueIdentifier>{54f14607-5c5b-40f0-8539-4f0ccbdae822}</UniqueIdentifier>
+    <Filter Include="库\glad">
+      <UniqueIdentifier>{6eaf4612-2062-443f-b534-3d35d471f2e2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="libs\ImGuiFileDialog">
+    <Filter Include="库\stbi">
+      <UniqueIdentifier>{72d4eced-7b28-43b5-96d6-9ef96d22860c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\imgui">
+      <UniqueIdentifier>{d626c85d-7fa2-4a9b-bcf6-fe3af7b67f9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\ImGuiFileDialog">
       <UniqueIdentifier>{1224ee38-055c-4a36-94e1-8b44f4577625}</UniqueIdentifier>
     </Filter>
-    <Filter Include="libs\UserSig">
-      <UniqueIdentifier>{3edf17d9-88a6-484c-8b2e-7d4d992f8b42}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="libs\zlib">
-      <UniqueIdentifier>{c9eda22d-30b5-46c6-a324-6509b42e5c24}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="libs\imsdk">
+    <Filter Include="库\imsdk">
       <UniqueIdentifier>{63fe1ff4-d392-4263-b2b7-f32974eb857a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\Poco">
+      <UniqueIdentifier>{4da322a2-07af-45ab-b57f-1f5f20659eba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\Poco\Dynamic">
+      <UniqueIdentifier>{10eb7aca-333c-409f-8462-e8af007a2bf7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\Poco\JSON">
+      <UniqueIdentifier>{71dedf08-7bfe-43ff-9029-0d492a150e46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\Poco\Net">
+      <UniqueIdentifier>{42c3e667-8c04-49f7-94c2-7c89ded9b339}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\Poco\Util">
+      <UniqueIdentifier>{3cf0385b-ad2f-4b50-8b28-b29cfb2b9210}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\Poco\lib">
+      <UniqueIdentifier>{0b831385-cc80-475a-b2c3-ac51eb9585b9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libs\glad\glad.cpp">
-      <Filter>libs\glad</Filter>
+      <Filter>库\glad</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui.cpp">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_demo.cpp">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_draw.cpp">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_tables.cpp">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_widgets.cpp">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_impl_opengl3.cpp">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_impl_win32.cpp">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_stdlib.cpp">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
@@ -124,60 +127,57 @@
       <Filter>源文件\modules</Filter>
     </ClCompile>
     <ClCompile Include="libs\ImGuiFileDialog\ImGuiFileDialog.cpp">
-      <Filter>libs\ImGuiFileDialog</Filter>
+      <Filter>库\ImGuiFileDialog</Filter>
     </ClCompile>
     <ClCompile Include="src\modules\tim.cpp">
       <Filter>源文件\modules</Filter>
     </ClCompile>
-    <ClCompile Include="libs\UserSig\GenerateTestUserSig.cpp">
-      <Filter>libs\UserSig</Filter>
-    </ClCompile>
-    <ClCompile Include="http2.cpp">
+    <ClCompile Include="src\modules\http2.cpp">
       <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imsdk\GenerateTestUserSig.cpp">
+      <Filter>库\imsdk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="libs\glad\glad.h">
-      <Filter>libs\glad</Filter>
+      <Filter>库\glad</Filter>
     </ClInclude>
     <ClInclude Include="libs\stbi\stb_image_write.h">
-      <Filter>libs\stbi</Filter>
+      <Filter>库\stbi</Filter>
     </ClInclude>
     <ClInclude Include="libs\stbi\stb_image.h">
-      <Filter>libs\stbi</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\KHR\khrplatform.h">
-      <Filter>libs\KHR</Filter>
+      <Filter>库\stbi</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imconfig.h">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imgui.h">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imgui_internal.h">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imstb_rectpack.h">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imstb_textedit.h">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imstb_truetype.h">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imgui_impl_opengl3.h">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imgui_impl_opengl3_loader.h">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imgui_impl_win32.h">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imgui_stdlib.h">
-      <Filter>libs\imgui</Filter>
+      <Filter>库\imgui</Filter>
     </ClInclude>
     <ClInclude Include="include\async.hpp">
       <Filter>头文件</Filter>
@@ -230,388 +230,691 @@
     <ClInclude Include="include\utils.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="libs\httplib\httplib.h">
-      <Filter>libs\httplib</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\aes.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\asn1.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\asn1_mac.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\asn1err.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\asn1t.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\async.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\asyncerr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\bio.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\bioerr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\blowfish.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\bn.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\bnerr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\buffer.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\buffererr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\camellia.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\cast.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\cmac.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\cms.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\cmserr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\comp.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\comperr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\conf.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\conf_api.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\conferr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\crypto.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\cryptoerr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\ct.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\cterr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\des.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\dh.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\dherr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\dsa.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\dsaerr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\dtls1.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\e_os2.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\ebcdic.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\ec.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\ecdh.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\ecdsa.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\ecerr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\engine.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\engineerr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\err.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\evp.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\evperr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\hmac.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\idea.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\kdf.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\kdferr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\lhash.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\md2.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\md4.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\md5.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\mdc2.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\modes.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\obj_mac.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\objects.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\objectserr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\ocsp.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\ocsperr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\opensslconf.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\opensslv.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\ossl_typ.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\pem.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\pem2.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\pemerr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\pkcs7.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\pkcs7err.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\pkcs12.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\pkcs12err.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\rand.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\rand_drbg.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\randerr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\rc2.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\rc4.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\rc5.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\ripemd.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\rsa.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\rsaerr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\safestack.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\seed.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\sha.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\srp.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\srtp.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\ssl.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\ssl2.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\ssl3.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\sslerr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\stack.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\store.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\storeerr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\symhacks.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\tls1.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\ts.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\tserr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\txt_db.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\ui.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\uierr.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\whrlpool.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\x509.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\x509_vfy.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\x509err.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\x509v3.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\openssl\x509v3err.h">
-      <Filter>libs\openssl</Filter>
-    </ClInclude>
     <ClInclude Include="libs\stbi\stb_image_resize2.h">
-      <Filter>libs\stbi</Filter>
+      <Filter>库\stbi</Filter>
     </ClInclude>
     <ClInclude Include="libs\ImGuiFileDialog\ImGuiFileDialog.h">
-      <Filter>libs\ImGuiFileDialog</Filter>
+      <Filter>库\ImGuiFileDialog</Filter>
     </ClInclude>
     <ClInclude Include="libs\ImGuiFileDialog\ImGuiFileDialogConfig.h">
-      <Filter>libs\ImGuiFileDialog</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\UserSig\GenerateTestUserSig.h">
-      <Filter>libs\UserSig</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\zlib\zconf.h">
-      <Filter>libs\zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\zlib\zlib.h">
-      <Filter>libs\zlib</Filter>
+      <Filter>库\ImGuiFileDialog</Filter>
     </ClInclude>
     <ClInclude Include="libs\imsdk\TIMCloud.h">
-      <Filter>libs\imsdk</Filter>
+      <Filter>库\imsdk</Filter>
     </ClInclude>
     <ClInclude Include="libs\imsdk\TIMCloudComm.h">
-      <Filter>libs\imsdk</Filter>
+      <Filter>库\imsdk</Filter>
     </ClInclude>
     <ClInclude Include="libs\imsdk\TIMCloudDef.h">
-      <Filter>libs\imsdk</Filter>
+      <Filter>库\imsdk</Filter>
     </ClInclude>
     <ClInclude Include="libs\imsdk\TIMCommunityManager.h">
-      <Filter>libs\imsdk</Filter>
+      <Filter>库\imsdk</Filter>
     </ClInclude>
     <ClInclude Include="libs\imsdk\TIMConversationManager.h">
-      <Filter>libs\imsdk</Filter>
+      <Filter>库\imsdk</Filter>
     </ClInclude>
     <ClInclude Include="libs\imsdk\TIMErrorCode.h">
-      <Filter>libs\imsdk</Filter>
+      <Filter>库\imsdk</Filter>
     </ClInclude>
     <ClInclude Include="libs\imsdk\TIMExperimentalAPI.h">
-      <Filter>libs\imsdk</Filter>
+      <Filter>库\imsdk</Filter>
     </ClInclude>
     <ClInclude Include="libs\imsdk\TIMFriendshipManager.h">
-      <Filter>libs\imsdk</Filter>
+      <Filter>库\imsdk</Filter>
     </ClInclude>
     <ClInclude Include="libs\imsdk\TIMGroupManager.h">
-      <Filter>libs\imsdk</Filter>
+      <Filter>库\imsdk</Filter>
     </ClInclude>
     <ClInclude Include="libs\imsdk\TIMManager.h">
-      <Filter>libs\imsdk</Filter>
+      <Filter>库\imsdk</Filter>
     </ClInclude>
     <ClInclude Include="libs\imsdk\TIMMessageManager.h">
-      <Filter>libs\imsdk</Filter>
+      <Filter>库\imsdk</Filter>
     </ClInclude>
     <ClInclude Include="libs\imsdk\TIMOfflinePushManager.h">
-      <Filter>libs\imsdk</Filter>
+      <Filter>库\imsdk</Filter>
     </ClInclude>
     <ClInclude Include="libs\imsdk\TIMSignalingManager.h">
-      <Filter>libs\imsdk</Filter>
+      <Filter>库\imsdk</Filter>
     </ClInclude>
     <ClInclude Include="include\task_.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="libs\imsdk\GenerateTestUserSig.h">
+      <Filter>库\imsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\glad\khrplatform.h">
+      <Filter>库\glad</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\ImGuiFileDialog\dirent.h">
+      <Filter>库\ImGuiFileDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\stbi\stb_image_resize.h">
+      <Filter>库\stbi</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Dynamic\Pair.h">
+      <Filter>库\Poco\Dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Dynamic\Struct.h">
+      <Filter>库\Poco\Dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Dynamic\Var.h">
+      <Filter>库\Poco\Dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Dynamic\VarHolder.h">
+      <Filter>库\Poco\Dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Dynamic\VarIterator.h">
+      <Filter>库\Poco\Dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Dynamic\VarVisitor.h">
+      <Filter>库\Poco\Dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\Array.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\Handler.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\JSON.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\JSONException.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\Object.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\ParseHandler.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\Parser.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\ParserImpl.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\PrintHandler.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\Query.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\Stringifier.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\Template.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\TemplateCache.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\AbstractHTTPRequestHandler.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\AcceptCertificateHandler.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\AutoSecBufferDesc.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\CertificateHandlerFactory.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\CertificateHandlerFactoryMgr.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\ConsoleCertificateHandler.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\Context.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\DatagramSocket.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\DatagramSocketImpl.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\DialogSocket.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\DNS.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\EscapeHTMLStream.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\FilePartSource.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\FTPClientSession.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\FTPStreamFactory.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HostEntry.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTMLForm.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPAuthenticationParams.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPBasicCredentials.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPBasicStreamBuf.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPBufferAllocator.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPChunkedStream.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPClientSession.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPCookie.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPCredentials.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPDigestCredentials.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPFixedLengthStream.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPHeaderStream.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPIOStream.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPMessage.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPNTLMCredentials.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPRequest.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPRequestHandler.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPRequestHandlerFactory.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPResponse.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPSClientSession.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPServer.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPServerConnection.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPServerConnectionFactory.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPServerParams.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPServerRequest.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPServerRequestImpl.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPServerResponse.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPServerResponseImpl.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPServerSession.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPSession.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPSessionFactory.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPSessionInstantiator.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPSSessionInstantiator.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPSStreamFactory.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPStream.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\HTTPStreamFactory.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\ICMPClient.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\ICMPEventArgs.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\ICMPPacket.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\ICMPPacketImpl.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\ICMPSocket.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\ICMPSocketImpl.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\ICMPv4PacketImpl.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\InvalidCertificateHandler.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\IPAddress.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\IPAddressImpl.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\KeyConsoleHandler.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\KeyFileHandler.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\MailMessage.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\MailRecipient.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\MailStream.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\MediaType.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\MessageHeader.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\MulticastSocket.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\MultipartReader.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\MultipartWriter.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\MultiSocketPoller.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\NameValueCollection.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\Net.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\NetException.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\NetSSL.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\NetworkInterface.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\NTLMCredentials.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\NTPClient.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\NTPEventArgs.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\NTPPacket.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\NullPartHandler.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\OAuth10Credentials.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\OAuth20Credentials.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\ParallelSocketAcceptor.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\ParallelSocketReactor.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\PartHandler.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\PartSource.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\PartStore.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\PollSet.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\POP3ClientSession.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\PrivateKeyFactory.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\PrivateKeyFactoryMgr.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\PrivateKeyPassphraseHandler.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\QuotedPrintableDecoder.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\QuotedPrintableEncoder.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\RawSocket.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\RawSocketImpl.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\RejectCertificateHandler.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\RemoteSyslogChannel.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\RemoteSyslogListener.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SecureServerSocket.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SecureServerSocketImpl.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SecureSMTPClientSession.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SecureSocketImpl.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SecureStreamSocket.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SecureStreamSocketImpl.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\ServerSocket.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\ServerSocketImpl.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\Session.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SingleSocketPoller.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SMTPChannel.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SMTPClientSession.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\Socket.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SocketAcceptor.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SocketAddress.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SocketAddressImpl.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SocketConnector.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SocketDefs.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SocketImpl.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SocketNotification.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SocketNotifier.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SocketProactor.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SocketReactor.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SocketStream.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SSLException.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SSLManager.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\SSPINTLMCredentials.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\StreamSocket.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\StreamSocketImpl.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\StringPartSource.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\TCPServer.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\TCPServerConnection.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\TCPServerConnectionFactory.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\TCPServerDispatcher.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\TCPServerParams.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\UDPClient.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\UDPHandler.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\UDPServer.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\UDPServerParams.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\UDPSocketReader.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\Utility.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\VerificationErrorArgs.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\WebSocket.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\WebSocketImpl.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Net\X509Certificate.h">
+      <Filter>库\Poco\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\AbstractConfiguration.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\Application.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\ConfigurationMapper.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\ConfigurationView.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\FilesystemConfiguration.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\HelpFormatter.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\IniFileConfiguration.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\IntValidator.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\JSONConfiguration.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\LayeredConfiguration.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\LocalConfigurationView.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\LoggingConfigurator.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\LoggingSubsystem.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\MapConfiguration.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\Option.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\OptionCallback.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\OptionException.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\OptionProcessor.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\OptionSet.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\PropertyFileConfiguration.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\RegExpValidator.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\ServerApplication.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\Subsystem.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\SystemConfiguration.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\Timer.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\TimerTask.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\TimerTaskAdapter.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\Units.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\Util.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\Validator.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\WinRegistryConfiguration.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\WinRegistryKey.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\WinService.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Util\XMLConfiguration.h">
+      <Filter>库\Poco\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="libs\zlib\zlibstatic.lib">
-      <Filter>libs\zlib</Filter>
-    </Library>
     <Library Include="libs\imsdk\ImSDK.lib">
-      <Filter>libs\imsdk</Filter>
+      <Filter>库\imsdk</Filter>
+    </Library>
+    <Library Include="libs\Poco\lib\PocoFoundationmd.lib">
+      <Filter>库\Poco\lib</Filter>
+    </Library>
+    <Library Include="libs\Poco\lib\PocoJSONmd.lib">
+      <Filter>库\Poco\lib</Filter>
+    </Library>
+    <Library Include="libs\Poco\lib\PocoNetmd.lib">
+      <Filter>库\Poco\lib</Filter>
+    </Library>
+    <Library Include="libs\Poco\lib\PocoNetSSLWinmd.lib">
+      <Filter>库\Poco\lib</Filter>
+    </Library>
+    <Library Include="libs\Poco\lib\PocoUtilmd.lib">
+      <Filter>库\Poco\lib</Filter>
+    </Library>
+    <Library Include="libs\Poco\lib\PocoXMLmd.lib">
+      <Filter>库\Poco\lib</Filter>
     </Library>
   </ItemGroup>
 </Project>

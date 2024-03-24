@@ -1,6 +1,7 @@
 ﻿#include "module.hpp"
 #include "state.hpp"
-#include <UserSig/GenerateTestUserSig.h>
+#include <imsdk/TIMManager.h>
+#include <imsdk/GenerateTestUserSig.h>
 #include <Poco/JSON/Object.h>
 
 namespace tim {

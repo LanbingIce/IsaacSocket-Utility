@@ -13,7 +13,6 @@
 #define IMGUI_IMPL_OPENGL_LOADER_CUSTOM // 解决 GL 函数重定义问题
 #include <imgui/imgui_impl_opengl3.h>
 #include <imgui/imgui_impl_win32.h>
-#include <UserSig/GenerateTestUserSig.h>
 
 namespace function_ {
 	// 进行一次 “日志输出”
