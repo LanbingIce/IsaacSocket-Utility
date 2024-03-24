@@ -47,8 +47,8 @@ namespace opengl
 			glMatrixMode(GL_PROJECTION);
 			glPushMatrix();
 			// ((x + 0.5f) / width * 2.0f - 1.0f, (y + 0.5f) / height * 2.0f - 1.0f, 0.0f)
-			float sx = 1.0f / local.isaac->window->width;
-			float sy = 1.0f / local.isaac->window->height;
+			float sx = 1.0f / isaac.window->width;
+			float sy = 1.0f / isaac.window->height;
 			glTranslatef(sx - 1.0f, 1.0f - sy, 0.01f);
 			glScalef(2.0f * sx, -2.0f * sy, 1.0f);
 		}
@@ -261,7 +261,7 @@ namespace opengl
 		return 0;
 	}
 
-	static RegisterModule Init = [] {
+	static RegisterModule InitModules = [] {
 		MODULE_BEGIN(OpenGL);
 		MODULE_FUNC(PutPixel);
 		MODULE_FUNC(DrawLine);

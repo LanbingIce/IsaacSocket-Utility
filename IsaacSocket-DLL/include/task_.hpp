@@ -55,7 +55,7 @@ namespace task_ {
 
 	static void RunCallback() {
 
-		lua_State* L = local.isaac->luaEngine->L;
+		lua_State* L = isaac.luaEngine->L;
 		int top = lua_gettop(L);
 
 		lua_getglobal(L, "_ISAAC_SOCKET");
@@ -90,7 +90,7 @@ namespace task_ {
 	}
 
 	static size_t New() {
-		lua_State* L = local.isaac->luaEngine->L;
+		lua_State* L = isaac.luaEngine->L;
 		auto task = NEW_CPPDATA(Task);
 		return task->id;
 	}

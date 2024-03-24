@@ -5,8 +5,8 @@
 #include <Poco/Util/JSONConfiguration.h>
 
 namespace config {
-	static const string path = utils::GetDataFilePath("config.json");
-	static Poco::Util::JSONConfiguration _config = Poco::Util::JSONConfiguration(path);
+	inline const string path = utils::GetDataFilePath("config.json");
+	inline Poco::Util::JSONConfiguration _config = Poco::Util::JSONConfiguration(path);
 
 	static void Load() {
 		utils::ReadFile(path, "{}");

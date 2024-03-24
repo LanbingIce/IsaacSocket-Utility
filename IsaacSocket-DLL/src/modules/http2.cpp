@@ -43,7 +43,7 @@ namespace http2
 		return 1;
 	}
 
-	static RegisterModule Init = [] {
+	static RegisterModule InitModules = [] {
 		MODULE_BEGIN(HTTP2);
 		MODULE_FUNC(GetAsync);
 		MODULE_END();

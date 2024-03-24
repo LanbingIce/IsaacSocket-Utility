@@ -1,15 +1,14 @@
 ﻿#pragma once
 
-#include "isaac.hpp"
+#include "isaac_image.hpp"
 #include "pch.h"
 #include <imgui/imgui.h>
 #include <imsdk/TIMMessageManager.h>
 #include <Poco/TaskManager.h>
 
-namespace isaac { struct IsaacImage; }
+#pragma warning(disable: 26495 6387)//禁用警告C26495 C6387: 始终初始化成员变量
 
 namespace state {
-#pragma warning(disable: 26495)//禁用警告C26495: 始终初始化成员变量
 	enum ConnectionState
 	{
 		INIT,
@@ -62,17 +61,24 @@ namespace state {
 			TIMCommCallback TIMCommCallback;
 		} callbacks;
 		HWND hWnd;
-		isaac::IsaacImage* isaac;
 		uint32_t MTRandomLockedValue = 0;
 		bool allocConsole = false;
 		_LocalState() {}
 		~_LocalState() {}
 	};
 
-	inline state::_GlobalState* global;
+	inline isaac_image::IsaacImage& isaac = *(isaac_image::IsaacImage*)GetModuleHandleA(NULL);
+	inline lua_State* L = isaac.luaEngine->L;
 	inline state::_LocalState local;
-#pragma warning(default: 26495)//重新启用警告	C26495
+	inline state::_GlobalState& global = *[] {
+		HANDLE hMapFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(_GlobalState), "IsaacSocketSharedMemory");
+		return (state::_GlobalState*)MapViewOfFile(hMapFile, FILE_MAP_WRITE, 0, 0, 0);
+		}();
 }
 
-using state::global;
+#pragma warning(default: 26495 6387)//重新启用警告 C26495 C6387
+
+using state::isaac;
+using state::L;
 using state::local;
+using state::global;

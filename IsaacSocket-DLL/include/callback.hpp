@@ -25,9 +25,9 @@ namespace callback {
     static int reloadCounter = 0; \
     ++reloadCounter; \
     if (reloadCounter>30&&getenv("IsaacSocketFromClient")&&LuaReady()) { \
-        if (global->connectionState == state::DISCONNECTED) { \
+        if (local.connectionState == state::DISCONNECTED) { \
             cw("auto ready"); \
-            global->connectionState=state::CONNECTING; \
+            local.connectionState=state::CONNECTING; \
         } \
         if (reloadCounter % 30 == 0) { \
             if (reloadLibraryMain("IsaacSocket.dll", true)) { \
@@ -37,7 +37,7 @@ namespace callback {
         } \
     }
 	static bool LuaReady() {
-		isaac::LuaEngine* luaEngine = local.isaac->luaEngine;
+		isaac_image::LuaEngine* luaEngine = isaac.luaEngine;
 		if (!luaEngine) {
 			return false;
 		}
@@ -61,13 +61,13 @@ namespace callback {
 	}
 #endif
 	// 小彭老师专用代码结束
-	static string currentPath = "C:\\Windows\\Fonts";
+	inline string currentPath = "C:\\Windows\\Fonts";
 
-	static bool showDemoWindow = false;
-	static	bool showAboutWindow = false;
-	static	bool showDebugLogWindow = false;
-	static	bool showUserGuide = false;
-	static	bool showISAbout = false;
+	inline bool showDemoWindow = false;
+	inline	bool showAboutWindow = false;
+	inline	bool showDebugLogWindow = false;
+	inline	bool showUserGuide = false;
+	inline	bool showISAbout = false;
 
 	static void ShowUserGuide(bool* p_open)
 	{
@@ -187,7 +187,7 @@ namespace callback {
 			ImGuiWindowFlags flags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings;
 			if (ImGui::Begin("关于 IsaacSocket", &showISAbout, flags))
 			{
-				lua_State* L = local.isaac->luaEngine->L;
+				lua_State* L = isaac.luaEngine->L;
 				size_t top = lua_gettop(L);
 				lua_getglobal(L, "_ISAAC_SOCKET");
 				lua_pushstring(L, "modVersion");
@@ -195,7 +195,7 @@ namespace callback {
 				ARG_DEF(-1, string, const char*, ver, "1.0");
 				lua_settop(L, top);
 				ImGui::Text("IsaacSocket");
-				ImGui::Text("版本号：%s-%s", global->version, ver);
+				ImGui::Text("版本号：%s-%s", global.version, ver);
 				ImGui::End();
 			}
 		}
@@ -225,7 +225,7 @@ namespace callback {
 		if (render)
 		{
 			int mode = config::Get<int>("IsaacSocket.MenuBar");
-			if ((local.isaac->game->pauseMenu.state || mode == state::ALWAYS || mode == state::TAB_HOLD && ImGui::IsKeyDown(ImGuiKey_Tab)) && ImGui::BeginMainMenuBar())
+			if ((isaac.game->pauseMenu.state || mode == state::ALWAYS || mode == state::TAB_HOLD && ImGui::IsKeyDown(ImGuiKey_Tab)) && ImGui::BeginMainMenuBar())
 			{
 				ImGuiMainMenuBarRender();
 				FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_MAIN_MENU_BAR_RENDER);
@@ -261,11 +261,11 @@ namespace callback {
 		if (local.connectionState == state::INIT)
 		{
 			local.hWnd = WindowFromDC(hdc);
-			function_::IsaacSocketFirstTimeInit();
+			function_::InitByMainThread();
 			local.connectionState = state::DISCONNECTED;
 		}
 		ImGuiRender(local.connectionState == state::CONNECTED);
-		if (!isaac_socket::CheckInit())
+		if (!isaac_socket::TryInitLua())
 		{
 			return 0;
 		}
@@ -277,11 +277,11 @@ namespace callback {
 			switch (local.reloadLuaState)
 			{
 			case state::EXIT:
-				local.isaac->manager->needExit = true;
+				isaac.manager->needExit = true;
 				local.reloadLuaState = state::SWITCH_PAGE;
 				break;
 			case state::SWITCH_PAGE:
-				local.isaac->mainMenu->page = 3;
+				isaac.mainMenu->page = 3;
 				[[fallthrough]];
 			case state::RELOAD:
 				function_::ReloadLua();
@@ -290,7 +290,7 @@ namespace callback {
 			break;
 		case state::CONNECTED:
 			task_::RunCallback();
-			async::luaPollPromises(local.isaac->luaEngine->L);
+			async::luaPollPromises(isaac.luaEngine->L);
 			MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
 			MOD_CALLBACK_CALL();
 			MOD_CALLBACK_END();
@@ -300,7 +300,7 @@ namespace callback {
 	}
 
 	// 执行控制台指令回调，时机在执行控制台指令函数的起始位置，返回1则取消此次指令
-	static int OnExecuteCommand(const isaac::Console& console, string& text, const int unknow, const LPCVOID unknow_point_guess)
+	static int OnExecuteCommand(const isaac_image::Console& console, string& text, const int unknow, const LPCVOID unknow_point_guess)
 	{
 		CHECK_STATE();
 
@@ -331,7 +331,7 @@ namespace callback {
 	}
 
 	// 控制台输出回调，时机在控制台输出函数的起始位置，返回1则取消此次输出
-	static int OnConsoleOutput(const isaac::Console& console, string& text, const uint32_t color, const int type_guess)
+	static int OnConsoleOutput(const isaac_image::Console& console, string& text, const uint32_t color, const int type_guess)
 	{
 		CHECK_STATE();
 
@@ -350,7 +350,7 @@ namespace callback {
 	}
 
 	// 窗口消息回调，返回1则拦截此次消息
-	static int PreWndProc(const HWND hWnd, const UINT uMsg, const WPARAM wParam, const LPARAM lParam)
+	inline int PreWndProc(const HWND hWnd, const UINT uMsg, const WPARAM wParam, const LPARAM lParam)
 	{
 #define _(name,paramType,...)MOD_CALLBACK_BEGIN(name);MOD_CALLBACK_ARG(paramType,__VA_ARGS__);MOD_CALLBACK_CALL();MOD_CALLBACK_END();
 		CHECK_INIT();

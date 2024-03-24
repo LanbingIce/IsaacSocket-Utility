@@ -110,10 +110,10 @@ namespace memory
 	}
 
 	static int GetImageBase(lua_State* L) {
-		RET(integer, (uint32_t)local.isaac);
+		RET(integer, (uint32_t)&isaac);
 	}
 
-	static RegisterModule Init = [] {
+	static RegisterModule InitModules = [] {
 		MODULE_BEGIN(Memory);
 
 		MODULE_FUNC(ReadMemory);

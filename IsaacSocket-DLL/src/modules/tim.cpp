@@ -76,7 +76,7 @@ namespace tim {
 		return 2;
 	}
 
-	static RegisterModule Init = [] {
+	static RegisterModule InitModules = [] {
 		MODULE_BEGIN(TIM);
 
 		MODULE_FUNC(GenUserSig);

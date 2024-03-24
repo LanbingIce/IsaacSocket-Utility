@@ -170,7 +170,7 @@ namespace image
 	}
 
 
-	static RegisterModule Init = [] {
+	static RegisterModule InitModules = [] {
 		MODULE_BEGIN(Image);
 
 		MODULE_FUNC(LoadFromFile);

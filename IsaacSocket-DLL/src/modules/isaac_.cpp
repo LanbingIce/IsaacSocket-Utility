@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
 #include "module.hpp"
-#include "isaac.hpp"
+#include "isaac_image.hpp"
 #include "lua.hpp"
 #include "state.hpp"
 #include "utils.hpp"
@@ -10,8 +10,8 @@ namespace isaac_ {
 
 	static int p_Options__index(lua_State* L) {
 
-		ARG_UDATA(1, ::isaac::Options*, p_options);
-		METATABLE_BEGIN(isaac::Options, *p_options);
+		ARG_UDATA(1, ::isaac_image::Options*, p_options);
+		METATABLE_BEGIN(isaac_image::Options, *p_options);
 
 		METATABLE_INDEX(integer, AnnouncerVoiceMode);
 		METATABLE_INDEX(boolean, BulletVisibility);
@@ -82,8 +82,8 @@ namespace isaac_ {
 
 	static int p_Options__newindex(lua_State* L) {
 
-		ARG_UDATA(1, ::isaac::Options*, p_options);
-		METATABLE_BEGIN(isaac::Options, *p_options);
+		ARG_UDATA(1, ::isaac_image::Options*, p_options);
+		METATABLE_BEGIN(isaac_image::Options, *p_options);
 
 		METATABLE_NEWINDEX(integer, AnnouncerVoiceMode);
 		METATABLE_NEWINDEX(boolean, BulletVisibility);
@@ -150,9 +150,9 @@ namespace isaac_ {
 		METATABLE_END();
 	}
 
-	static RegisterModule Init = [] {
+	static RegisterModule InitModules = [] {
 		MODULE_BEGIN(Isaac);
-		MODULE_UDATA(Options, isaac::Options, local.isaac->manager->options);
+		MODULE_UDATA(Options, isaac_image::Options, isaac.manager->options);
 		MODULE_END();
 		};
 }

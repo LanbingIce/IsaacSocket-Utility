@@ -1579,7 +1579,7 @@ namespace imgui {
 		RET(boolean, ImGui::DebugCheckVersionAndDataLayout(version_str, sz_io, sz_style, sz_vec2, sz_vec4, sz_drawvert, sz_drawidx));
 	}
 
-	static RegisterModule Init = [] {
+	static RegisterModule InitModules = [] {
 		MODULE_BEGIN(ImGui);
 
 		MODULE_FUNC(ImVec2);

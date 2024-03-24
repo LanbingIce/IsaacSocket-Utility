@@ -105,7 +105,7 @@ static int PcmToFloatArray(lua_State* L) {
     return 1;
 }
 
-static RegisterModule Init = [] {
+static RegisterModule InitModules = [] {
     MODULE_BEGIN(Sound);
     MODULE_FUNC(StopPlayingSound);
     MODULE_FUNC(PlaySoundFromMemory);

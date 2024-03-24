@@ -275,7 +275,7 @@ static int Request(lua_State* L) {
 	end
 	*/
 
-	static RegisterModule Init = [] {
+	static RegisterModule InitModules = [] {
 		MODULE_BEGIN(Http);
 		MODULE_FUNC(Request);
 		MODULE_END();

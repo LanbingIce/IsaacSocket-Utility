@@ -11,7 +11,7 @@
 #endif
 // 小彭老师专用代码结束
 
-namespace isaac {
+namespace isaac_image {
 #pragma warning(disable: 4624)//禁用警告C4624: 已将析构函数隐式定义为“已删除”
 
 	// Lua虚拟机类

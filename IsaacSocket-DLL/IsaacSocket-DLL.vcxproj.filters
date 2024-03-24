@@ -203,7 +203,7 @@
     <ClInclude Include="include\inject.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\isaac.hpp">
+    <ClInclude Include="include\isaac_image.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\isaac_socket.hpp">

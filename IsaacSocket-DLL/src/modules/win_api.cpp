@@ -132,7 +132,7 @@ namespace win_api
 		RET(boolean, ::FindClose(hFindFile));
 	}
 
-	static RegisterModule Init = [] {
+	static RegisterModule InitModules = [] {
 		MODULE_BEGIN(WinAPI);
 		MODULE_FUNC(AllocConsole);
 		MODULE_FUNC(FreeConsole);

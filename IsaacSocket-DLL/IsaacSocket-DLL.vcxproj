@@ -66,7 +66,7 @@
     <ClInclude Include="include\gnucompat.hpp" />
     <ClInclude Include="include\handle.hpp" />
     <ClInclude Include="include\inject.hpp" />
-    <ClInclude Include="include\isaac.hpp" />
+    <ClInclude Include="include\isaac_image.hpp" />
     <ClInclude Include="include\isaac_socket.hpp" />
     <ClInclude Include="include\lua.hpp" />
     <ClInclude Include="include\main.hpp" />

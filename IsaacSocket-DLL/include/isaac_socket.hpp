@@ -21,18 +21,18 @@ namespace isaac_socket
 		FAST_MOD_CALLBACK_END();
 		TIMUninit();
 		local.MTRandomLockedValue = 0;
-		local.isaac->game->console.state += local.isaac->game->console.state < 0 ? 5 : 0;
-		local.isaac->game->pauseMenu.state = std::abs(local.isaac->game->pauseMenu.state);
-		VAR_WRITE(local.isaac->FrameInterval, 1.0 / 60);
+		isaac.game->console.state += isaac.game->console.state < 0 ? 5 : 0;
+		isaac.game->pauseMenu.state = std::abs(isaac.game->pauseMenu.state);
+		VAR_WRITE(isaac.FrameInterval, 1.0 / 60);
 		DO_STRING("IsaacSocket = nil");
 		local.connectionState = state::DISCONNECTED;
 		return 0;
 	}
 
-	static void _Init() {
+	static void _InitLua() {
 		RegisterModule::InitAllModules();
 
-		lua_State* L = local.isaac->luaEngine->L;
+		lua_State* L = isaac.luaEngine->L;
 		int top = lua_gettop(L);
 		lua_getglobal(L, "_ISAAC_SOCKET");
 
@@ -40,14 +40,14 @@ namespace isaac_socket
 		MODULE_FUNC(Disconnect);
 
 		std::ostringstream oss;
-		oss << "_ISAAC_SOCKET.version=\"" << global->version << "\" _ISAAC_SOCKET.TaskContinuation={}";
+		oss << "_ISAAC_SOCKET.version=\"" << global.version << "\" _ISAAC_SOCKET.TaskContinuation={}";
 		DO_STRING(oss.str().c_str());
 
 		lua_settop(L, top);
 	}
 
-	static bool CheckInit() {
-		lua_State* L = local.isaac->luaEngine->L;
+	static bool TryInitLua() {
+		lua_State* L = isaac.luaEngine->L;
 		int top = lua_gettop(L);
 		bool result = false;
 		if (lua_getglobal(L, "_ISAAC_SOCKET") == LUA_TTABLE)
@@ -56,7 +56,7 @@ namespace isaac_socket
 			lua_gettable(L, -2);
 			if (!lua_iscfunction(L, -1))
 			{
-				_Init();
+				_InitLua();
 			}
 			result = true;
 		}

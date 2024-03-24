@@ -9,18 +9,8 @@
 
 namespace main {
 	// 初始化，共享内存和注入
-	static void Init() {
+	static void Main() {
 		setlocale(LC_ALL, ".UTF8");
-		HANDLE hMapFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(*global), "IsaacSocketSharedMemory");
-
-		if (!hMapFile)
-		{
-			return;
-		}
-
-		global = (state::_GlobalState*)MapViewOfFile(hMapFile, FILE_MAP_WRITE, 0, 0, 0);
-		config::Load();
-		local.isaac = (isaac::IsaacImage*)GetModuleHandleA(NULL);
 
 		local.callbacks = {
 			(LPCVOID)callback::PreSwapBuffers,
@@ -31,6 +21,6 @@ namespace main {
 			callback::TIMCommCallback,
 		};
 
-		inject::Init();
+		inject::Inject();
 	}
 }

@@ -25,7 +25,7 @@ namespace system_
 		return 0;
 	}
 
-	static RegisterModule Init = [] {
+	static RegisterModule InitModules = [] {
 		MODULE_BEGIN(System);
 		MODULE_FUNC(ConsoleOutput);
 		MODULE_FUNC(GetClipboard);
