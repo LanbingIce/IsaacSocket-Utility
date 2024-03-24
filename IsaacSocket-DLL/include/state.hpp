@@ -66,15 +66,6 @@ namespace state {
 		lua::Lua lua;
 		uint32_t MTRandomLockedValue = 0;
 		bool allocConsole = false;
-		string currentPath = "C:\\Windows\\Fonts";
-		struct
-		{
-			bool ShowDemoWindow = false;
-			bool ShowAboutWindow = false;
-			bool ShowDebugLogWindow = false;
-			bool ShowUserGuide = false;
-			bool ShowISAbout = false;
-		}imgui;
 		_LocalState() {}
 		~_LocalState() {}
 	};

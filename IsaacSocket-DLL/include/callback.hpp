@@ -15,8 +15,6 @@
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-#define CHECK_INIT()if (local.connectionState == state::INIT)return 0
-#define CHECK_STATE()if (local.connectionState != state::CONNECTED)return 0
 namespace callback {
 
 	// 小彭老师专用代码开始
@@ -63,6 +61,13 @@ namespace callback {
 	}
 #endif
 	// 小彭老师专用代码结束
+	static string currentPath = "C:\\Windows\\Fonts";
+
+	static bool showDemoWindow = false;
+	static	bool showAboutWindow = false;
+	static	bool showDebugLogWindow = false;
+	static	bool showUserGuide = false;
+	static	bool showISAbout = false;
 
 	static void ShowUserGuide(bool* p_open)
 	{
@@ -92,7 +97,7 @@ namespace callback {
 
 	static void ShowSelectFont() {
 		IGFD::FileDialogConfig config;
-		config.path = local.currentPath;
+		config.path = currentPath;
 		ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "选择字体文件", "字体文件 (*.ttf *.otf){.ttf,.otf,.TTF,.OTF}", config);
 	}
 
@@ -110,7 +115,7 @@ namespace callback {
 		MENU_END();
 		MENU_ITEM("打开数据目录", false, ShellExecuteW(nullptr, L"open", utils::GetDataFilePathW(L".").c_str(), nullptr, nullptr, SW_SHOWNORMAL));
 		ImGui::Separator();
-		MENU_ITEM("关于 IsaacSocket", false, local.imgui.ShowISAbout = true);
+		MENU_ITEM("关于 IsaacSocket", false, showISAbout = true);
 		MENU_END();
 		MENU_BEGIN("ImGui");
 		MENU_BEGIN("显示主菜单条");
@@ -146,12 +151,12 @@ namespace callback {
 		MENU_END();
 		ImGui::Separator();
 		MENU_BEGIN("调试工具");
-		MENU_ITEM("示例窗口", local.imgui.ShowDemoWindow, local.imgui.ShowDemoWindow = !local.imgui.ShowDemoWindow);
-		MENU_ITEM("调试日志", local.imgui.ShowDebugLogWindow, local.imgui.ShowDebugLogWindow = !local.imgui.ShowDebugLogWindow);
+		MENU_ITEM("示例窗口", false, showDemoWindow = true);
+		MENU_ITEM("调试日志", false, showDebugLogWindow = true);
 		MENU_END();
 		ImGui::Separator();
-		MENU_ITEM("操作说明", local.imgui.ShowUserGuide, local.imgui.ShowUserGuide = !local.imgui.ShowUserGuide);
-		MENU_ITEM("关于ImGui", local.imgui.ShowAboutWindow, local.imgui.ShowAboutWindow = !local.imgui.ShowAboutWindow);
+		MENU_ITEM("操作说明", false, showUserGuide = true);
+		MENU_ITEM("关于ImGui", false, showAboutWindow = true);
 		MENU_END();
 		return 0;
 	}
@@ -161,26 +166,26 @@ namespace callback {
 #undef MENU_ITEM
 
 	static int ImGuiWindowRender() {
-		if (local.imgui.ShowDemoWindow)
+		if (showDemoWindow)
 		{
-			ImGui::ShowDemoWindow(&local.imgui.ShowDemoWindow);
+			ImGui::ShowDemoWindow(&showDemoWindow);
 		}
-		if (local.imgui.ShowAboutWindow)
+		if (showAboutWindow)
 		{
-			ImGui::ShowAboutWindow(&local.imgui.ShowAboutWindow);
+			ImGui::ShowAboutWindow(&showAboutWindow);
 		}
-		if (local.imgui.ShowDebugLogWindow)
+		if (showDebugLogWindow)
 		{
-			ImGui::ShowDebugLogWindow(&local.imgui.ShowDebugLogWindow);
+			ImGui::ShowDebugLogWindow(&showDebugLogWindow);
 		}
-		if (local.imgui.ShowUserGuide)
+		if (showUserGuide)
 		{
-			ShowUserGuide(&local.imgui.ShowUserGuide);
+			ShowUserGuide(&showUserGuide);
 		}
-		if (local.imgui.ShowISAbout)
+		if (showISAbout)
 		{
 			ImGuiWindowFlags flags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings;
-			if (ImGui::Begin("关于 IsaacSocket", &local.imgui.ShowISAbout, flags))
+			if (ImGui::Begin("关于 IsaacSocket", &showISAbout, flags))
 			{
 				lua_State* L = local.isaac->luaEngine->L;
 				size_t top = local.lua.lua_gettop(L);
@@ -199,7 +204,7 @@ namespace callback {
 		if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
 			if (ImGuiFileDialog::Instance()->IsOk()) { // action if OK
 				string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-				local.currentPath = ImGuiFileDialog::Instance()->GetCurrentPath();
+				currentPath = ImGuiFileDialog::Instance()->GetCurrentPath();
 				config::Set("IsaacSocket.FontFile", filePathName);
 				// action
 			}
@@ -245,6 +250,9 @@ namespace callback {
 
 		return 0;
 	}
+
+#define CHECK_INIT()if (local.connectionState == state::INIT)return 0
+#define CHECK_STATE()if (local.connectionState != state::CONNECTED)return 0
 
 	// SwapBuffers之前，只要游戏进程存在就一直触发，返回1则取消此次交换
 	static int PreSwapBuffers(const HDC hdc)
