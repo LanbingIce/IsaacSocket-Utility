@@ -171,7 +171,7 @@ namespace imgui {
 
 	static int StyleColorsDark(lua_State* L) {
 		config::Set("IsaacSocket.StyleColors", state::DARK);
-		if (local.lua.lua_isnoneornil(L, 1))
+		if (lua_isnoneornil(L, 1))
 		{
 			ImGui::StyleColorsDark();
 		}
@@ -185,7 +185,7 @@ namespace imgui {
 
 	static int StyleColorsLight(lua_State* L) {
 		config::Set("IsaacSocket.StyleColors", state::LIGHT);
-		if (local.lua.lua_isnoneornil(L, 1))
+		if (lua_isnoneornil(L, 1))
 		{
 			ImGui::StyleColorsLight();
 		}
@@ -199,7 +199,7 @@ namespace imgui {
 
 	static int StyleColorsClassic(lua_State* L) {
 		config::Set("IsaacSocket.StyleColors", state::CLASSIC);
-		if (local.lua.lua_isnoneornil(L, 1))
+		if (lua_isnoneornil(L, 1))
 		{
 			ImGui::StyleColorsClassic();
 		}
@@ -216,8 +216,8 @@ namespace imgui {
 		ARG_DEF(2, boolean, bool, open, true);
 		ARG_DEF(3, integer, ImGuiWindowFlags, flags, 0);
 
-		local.lua.lua_pushboolean(L, ImGui::Begin(name, &open, flags));
-		local.lua.lua_pushboolean(L, open);
+		lua_pushboolean(L, ImGui::Begin(name, &open, flags));
+		lua_pushboolean(L, open);
 		return 2;
 	}
 
@@ -265,7 +265,7 @@ namespace imgui {
 	}
 
 	static int SetWindowPos(lua_State* L) {
-		if (local.lua.lua_isstring(L, 1))
+		if (lua_isstring(L, 1))
 		{
 			ARG(1, string, const char*, name);
 			ARG_UDATA(2, ::ImVec2, pos);
@@ -281,7 +281,7 @@ namespace imgui {
 	}
 
 	static int SetWindowSize(lua_State* L) {
-		if (local.lua.lua_isstring(L, 1))
+		if (lua_isstring(L, 1))
 		{
 			ARG(1, string, const char*, name);
 			ARG_UDATA(2, ::ImVec2, size);
@@ -297,7 +297,7 @@ namespace imgui {
 	}
 
 	static int SetWindowFocus(lua_State* L) {
-		if (local.lua.lua_isstring(L, 1))
+		if (lua_isstring(L, 1))
 		{
 			ARG(1, string, const char*, name);
 			ImGui::SetWindowFocus(name);
@@ -356,7 +356,7 @@ namespace imgui {
 
 	static int PushStyleColor(lua_State* L) {
 		ARG(1, integer, ImGuiCol, idx);
-		if (local.lua.lua_isinteger(L, 2))
+		if (lua_isinteger(L, 2))
 		{
 			ARG(2, integer, int, col);
 			ImGui::PushStyleColor(idx, col);
@@ -498,19 +498,19 @@ namespace imgui {
 		ARG(1, string, const char*, label);
 		ARG(2, boolean, bool, v);
 
-		local.lua.lua_pushboolean(L, ImGui::Checkbox(label, &v));
-		local.lua.lua_pushboolean(L, v);
+		lua_pushboolean(L, ImGui::Checkbox(label, &v));
+		lua_pushboolean(L, v);
 		return 2;
 	}
 
 	static int RadioButton(lua_State* L) {
 		ARG(1, string, const char*, label);
-		if (local.lua.lua_isinteger(L, 2))
+		if (lua_isinteger(L, 2))
 		{
 			ARG(2, integer, int, v);
 			ARG(3, integer, int, v_button);
-			local.lua.lua_pushboolean(L, ImGui::RadioButton(label, &v, v_button));
-			local.lua.lua_pushinteger(L, v);
+			lua_pushboolean(L, ImGui::RadioButton(label, &v, v_button));
+			lua_pushinteger(L, v);
 			return 2;
 		}
 		else
@@ -566,11 +566,11 @@ namespace imgui {
 		ARG(1, string, const char*, label);
 		ARG(2, integer, int, current_item);
 
-		if (local.lua.lua_isstring(L, 3))
+		if (lua_isstring(L, 3))
 		{
 			ARG(3, string, const char*, items_separated_by_zeros);
 			ARG_DEF(4, integer, int, height_in_items, -1);
-			local.lua.lua_pushboolean(L, ImGui::Combo(label, &current_item, items_separated_by_zeros, height_in_items));
+			lua_pushboolean(L, ImGui::Combo(label, &current_item, items_separated_by_zeros, height_in_items));
 		}
 		else
 		{
@@ -578,9 +578,9 @@ namespace imgui {
 			ARG(4, integer, size_t, items_count);
 			ARG_DEF(5, integer, int, height_in_items, -1);
 			items.resize(items_count);
-			local.lua.lua_pushboolean(L, ImGui::Combo(label, &current_item, items.data(), items_count, height_in_items));
+			lua_pushboolean(L, ImGui::Combo(label, &current_item, items.data(), items_count, height_in_items));
 		}
-		local.lua.lua_pushinteger(L, current_item);
+		lua_pushinteger(L, current_item);
 		return 2;
 	}
 
@@ -593,8 +593,8 @@ namespace imgui {
 		ARG_DEF(6, string, const char*, format, "%.3f");
 		ARG_DEF(7, integer, ImGuiSliderFlags, flags, 0);
 
-		local.lua.lua_pushboolean(L, ImGui::DragFloat(label, &v, v_speed, v_min, v_max, format, flags));
-		local.lua.lua_pushnumber(L, v);
+		lua_pushboolean(L, ImGui::DragFloat(label, &v, v_speed, v_min, v_max, format, flags));
+		lua_pushnumber(L, v);
 		return 2;
 	}
 
@@ -607,8 +607,8 @@ namespace imgui {
 		ARG_DEF(6, string, const char*, format, "%.3f");
 		ARG_DEF(7, integer, ImGuiSliderFlags, flags, 0);
 		v.resize(2);
-		local.lua.lua_pushboolean(L, ImGui::DragFloat2(label, v.data(), v_speed, v_min, v_max, format, flags));
-		local.lua.lua_pushvectorfloat(L, v);
+		lua_pushboolean(L, ImGui::DragFloat2(label, v.data(), v_speed, v_min, v_max, format, flags));
+		lua_pushvectorfloat(L, v);
 		return 2;
 	}
 
@@ -621,8 +621,8 @@ namespace imgui {
 		ARG_DEF(6, string, const char*, format, "%.3f");
 		ARG_DEF(7, integer, ImGuiSliderFlags, flags, 0);
 		v.resize(3);
-		local.lua.lua_pushboolean(L, ImGui::DragFloat3(label, v.data(), v_speed, v_min, v_max, format, flags));
-		local.lua.lua_pushvectorfloat(L, v);
+		lua_pushboolean(L, ImGui::DragFloat3(label, v.data(), v_speed, v_min, v_max, format, flags));
+		lua_pushvectorfloat(L, v);
 		return 2;
 	}
 
@@ -635,8 +635,8 @@ namespace imgui {
 		ARG_DEF(6, string, const char*, format, "%.3f");
 		ARG_DEF(7, integer, ImGuiSliderFlags, flags, 0);
 		v.resize(4);
-		local.lua.lua_pushboolean(L, ImGui::DragFloat4(label, v.data(), v_speed, v_min, v_max, format, flags));
-		local.lua.lua_pushvectorfloat(L, v);
+		lua_pushboolean(L, ImGui::DragFloat4(label, v.data(), v_speed, v_min, v_max, format, flags));
+		lua_pushvectorfloat(L, v);
 		return 2;
 	}
 
@@ -650,9 +650,9 @@ namespace imgui {
 		ARG_DEF(7, string, const char*, format, "%.3f");
 		ARG_DEF(8, string, const char*, format_max, NULL);
 		ARG_DEF(9, integer, ImGuiSliderFlags, flags, 0);
-		local.lua.lua_pushboolean(L, ImGui::DragFloatRange2(label, &v_current_min, &v_current_max, v_speed, v_min, v_max, format, format_max, flags));
-		local.lua.lua_pushnumber(L, v_current_min);
-		local.lua.lua_pushnumber(L, v_current_max);
+		lua_pushboolean(L, ImGui::DragFloatRange2(label, &v_current_min, &v_current_max, v_speed, v_min, v_max, format, format_max, flags));
+		lua_pushnumber(L, v_current_min);
+		lua_pushnumber(L, v_current_max);
 		return 3;
 	}
 
@@ -664,8 +664,8 @@ namespace imgui {
 		ARG_DEF(5, integer, int, v_max, 0);
 		ARG_DEF(6, string, const char*, format, "%d");
 		ARG_DEF(7, integer, ImGuiSliderFlags, flags, 0);
-		local.lua.lua_pushboolean(L, ImGui::DragInt(label, &v, v_speed, v_min, v_max, format, flags));
-		local.lua.lua_pushinteger(L, v);
+		lua_pushboolean(L, ImGui::DragInt(label, &v, v_speed, v_min, v_max, format, flags));
+		lua_pushinteger(L, v);
 		return 2;
 	}
 
@@ -678,8 +678,8 @@ namespace imgui {
 		ARG_DEF(6, string, const char*, format, "%d");
 		ARG_DEF(7, integer, ImGuiSliderFlags, flags, 0);
 		v.resize(2);
-		local.lua.lua_pushboolean(L, ImGui::DragInt2(label, v.data(), v_speed, v_min, v_max, format, flags));
-		local.lua.lua_pushvectorint(L, v);
+		lua_pushboolean(L, ImGui::DragInt2(label, v.data(), v_speed, v_min, v_max, format, flags));
+		lua_pushvectorint(L, v);
 		return 2;
 	}
 
@@ -692,8 +692,8 @@ namespace imgui {
 		ARG_DEF(6, string, const char*, format, "%d");
 		ARG_DEF(7, integer, ImGuiSliderFlags, flags, 0);
 		v.resize(3);
-		local.lua.lua_pushboolean(L, ImGui::DragInt3(label, v.data(), v_speed, v_min, v_max, format, flags));
-		local.lua.lua_pushvectorint(L, v);
+		lua_pushboolean(L, ImGui::DragInt3(label, v.data(), v_speed, v_min, v_max, format, flags));
+		lua_pushvectorint(L, v);
 		return 2;
 	}
 
@@ -706,8 +706,8 @@ namespace imgui {
 		ARG_DEF(6, string, const char*, format, "%d");
 		ARG_DEF(7, integer, ImGuiSliderFlags, flags, 0);
 		v.resize(4);
-		local.lua.lua_pushboolean(L, ImGui::DragInt4(label, v.data(), v_speed, v_min, v_max, format, flags));
-		local.lua.lua_pushvectorint(L, v);
+		lua_pushboolean(L, ImGui::DragInt4(label, v.data(), v_speed, v_min, v_max, format, flags));
+		lua_pushvectorint(L, v);
 		return 2;
 	}
 
@@ -721,9 +721,9 @@ namespace imgui {
 		ARG_DEF(7, string, const char*, format, "%d");
 		ARG_DEF(8, string, const char*, format_max, NULL);
 		ARG_DEF(9, integer, ImGuiSliderFlags, flags, 0);
-		local.lua.lua_pushboolean(L, ImGui::DragIntRange2(label, &v_current_min, &v_current_max, v_speed, v_min, v_max, format, format_max, flags));
-		local.lua.lua_pushinteger(L, v_current_min);
-		local.lua.lua_pushinteger(L, v_current_max);
+		lua_pushboolean(L, ImGui::DragIntRange2(label, &v_current_min, &v_current_max, v_speed, v_min, v_max, format, format_max, flags));
+		lua_pushinteger(L, v_current_min);
+		lua_pushinteger(L, v_current_max);
 		return 3;
 	}
 
@@ -735,8 +735,8 @@ namespace imgui {
 		ARG_DEF(5, string, const char*, format, "%.3f");
 		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
 
-		local.lua.lua_pushboolean(L, ImGui::SliderFloat(label, &v, v_min, v_max, format, flags));
-		local.lua.lua_pushnumber(L, v);
+		lua_pushboolean(L, ImGui::SliderFloat(label, &v, v_min, v_max, format, flags));
+		lua_pushnumber(L, v);
 		return 2;
 	}
 
@@ -748,8 +748,8 @@ namespace imgui {
 		ARG_DEF(5, string, const char*, format, "%.3f");
 		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
 		v.resize(2);
-		local.lua.lua_pushboolean(L, ImGui::SliderFloat2(label, v.data(), v_min, v_max, format, flags));
-		local.lua.lua_pushvectorfloat(L, v);
+		lua_pushboolean(L, ImGui::SliderFloat2(label, v.data(), v_min, v_max, format, flags));
+		lua_pushvectorfloat(L, v);
 		return 2;
 	}
 
@@ -761,8 +761,8 @@ namespace imgui {
 		ARG_DEF(5, string, const char*, format, "%.3f");
 		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
 		v.resize(3);
-		local.lua.lua_pushboolean(L, ImGui::SliderFloat3(label, v.data(), v_min, v_max, format, flags));
-		local.lua.lua_pushvectorfloat(L, v);
+		lua_pushboolean(L, ImGui::SliderFloat3(label, v.data(), v_min, v_max, format, flags));
+		lua_pushvectorfloat(L, v);
 		return 2;
 	}
 
@@ -774,8 +774,8 @@ namespace imgui {
 		ARG_DEF(5, string, const char*, format, "%.3f");
 		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
 		v.resize(4);
-		local.lua.lua_pushboolean(L, ImGui::SliderFloat4(label, v.data(), v_min, v_max, format, flags));
-		local.lua.lua_pushvectorfloat(L, v);
+		lua_pushboolean(L, ImGui::SliderFloat4(label, v.data(), v_min, v_max, format, flags));
+		lua_pushvectorfloat(L, v);
 		return 2;
 	}
 
@@ -786,8 +786,8 @@ namespace imgui {
 		ARG_DEF(4, number, float, v_degrees_max, +360.0f);
 		ARG_DEF(5, string, const char*, format, "%.0f deg");
 		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
-		local.lua.lua_pushboolean(L, ImGui::SliderAngle(label, &v_rad, v_degrees_min, v_degrees_max, format, flags));
-		local.lua.lua_pushnumber(L, v_rad);
+		lua_pushboolean(L, ImGui::SliderAngle(label, &v_rad, v_degrees_min, v_degrees_max, format, flags));
+		lua_pushnumber(L, v_rad);
 		return 2;
 	}
 
@@ -799,8 +799,8 @@ namespace imgui {
 		ARG_DEF(5, string, const char*, format, "%d");
 		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
 
-		local.lua.lua_pushboolean(L, ImGui::SliderInt(label, &v, v_min, v_max, format, flags));
-		local.lua.lua_pushinteger(L, v);
+		lua_pushboolean(L, ImGui::SliderInt(label, &v, v_min, v_max, format, flags));
+		lua_pushinteger(L, v);
 		return 2;
 	}
 
@@ -812,8 +812,8 @@ namespace imgui {
 		ARG_DEF(5, string, const char*, format, "%d");
 		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
 		v.resize(2);
-		local.lua.lua_pushboolean(L, ImGui::SliderInt2(label, v.data(), v_min, v_max, format, flags));
-		local.lua.lua_pushvectorint(L, v);
+		lua_pushboolean(L, ImGui::SliderInt2(label, v.data(), v_min, v_max, format, flags));
+		lua_pushvectorint(L, v);
 		return 2;
 	}
 
@@ -825,8 +825,8 @@ namespace imgui {
 		ARG_DEF(5, string, const char*, format, "%d");
 		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
 		v.resize(3);
-		local.lua.lua_pushboolean(L, ImGui::SliderInt3(label, v.data(), v_min, v_max, format, flags));
-		local.lua.lua_pushvectorint(L, v);
+		lua_pushboolean(L, ImGui::SliderInt3(label, v.data(), v_min, v_max, format, flags));
+		lua_pushvectorint(L, v);
 		return 2;
 	}
 
@@ -838,8 +838,8 @@ namespace imgui {
 		ARG_DEF(5, string, const char*, format, "%d");
 		ARG_DEF(6, integer, ImGuiSliderFlags, flags, 0);
 		v.resize(4);
-		local.lua.lua_pushboolean(L, ImGui::SliderInt4(label, v.data(), v_min, v_max, format, flags));
-		local.lua.lua_pushvectorint(L, v);
+		lua_pushboolean(L, ImGui::SliderInt4(label, v.data(), v_min, v_max, format, flags));
+		lua_pushvectorint(L, v);
 		return 2;
 	}
 
@@ -847,8 +847,8 @@ namespace imgui {
 		ARG(1, string, const char*, label);
 		ARG(2, string, string, str);
 		ARG_DEF(3, integer, ImGuiInputTextFlags, flags, 0);
-		local.lua.lua_pushboolean(L, ImGui::InputText(label, &str, flags));
-		local.lua.lua_pushstring(L, str.c_str());
+		lua_pushboolean(L, ImGui::InputText(label, &str, flags));
+		lua_pushstring(L, str.c_str());
 		return 2;
 	}
 
@@ -857,8 +857,8 @@ namespace imgui {
 		ARG(2, string, string, str);
 		ARG_UDATA_DEF(3, const ::ImVec2, size, VEC2_0);
 		ARG_DEF(4, integer, ImGuiInputTextFlags, flags, 0);
-		local.lua.lua_pushboolean(L, ImGui::InputTextMultiline(label, &str, size, flags));
-		local.lua.lua_pushstring(L, str.c_str());
+		lua_pushboolean(L, ImGui::InputTextMultiline(label, &str, size, flags));
+		lua_pushstring(L, str.c_str());
 		return 2;
 	}
 
@@ -869,8 +869,8 @@ namespace imgui {
 		ARG_DEF(4, number, float, step_fast, 0.0f);
 		ARG_DEF(5, string, const char*, format, "%.3f");
 		ARG_DEF(6, integer, ImGuiInputTextFlags, flags, 0);
-		local.lua.lua_pushboolean(L, ImGui::InputFloat(label, &v, step, step_fast, format, flags));
-		local.lua.lua_pushnumber(L, v);
+		lua_pushboolean(L, ImGui::InputFloat(label, &v, step, step_fast, format, flags));
+		lua_pushnumber(L, v);
 		return 2;
 	}
 
@@ -880,8 +880,8 @@ namespace imgui {
 		ARG_DEF(3, string, const char*, format, "%.3f");
 		ARG_DEF(4, integer, ImGuiInputTextFlags, flags, 0);
 		v.resize(2);
-		local.lua.lua_pushboolean(L, ImGui::InputFloat2(label, v.data(), format, flags));
-		local.lua.lua_pushvectorfloat(L, v);
+		lua_pushboolean(L, ImGui::InputFloat2(label, v.data(), format, flags));
+		lua_pushvectorfloat(L, v);
 		return 2;
 	}
 
@@ -891,8 +891,8 @@ namespace imgui {
 		ARG_DEF(3, string, const char*, format, "%.3f");
 		ARG_DEF(4, integer, ImGuiInputTextFlags, flags, 0);
 		v.resize(3);
-		local.lua.lua_pushboolean(L, ImGui::InputFloat3(label, v.data(), format, flags));
-		local.lua.lua_pushvectorfloat(L, v);
+		lua_pushboolean(L, ImGui::InputFloat3(label, v.data(), format, flags));
+		lua_pushvectorfloat(L, v);
 		return 2;
 	}
 
@@ -902,8 +902,8 @@ namespace imgui {
 		ARG_DEF(3, string, const char*, format, "%.3f");
 		ARG_DEF(4, integer, ImGuiInputTextFlags, flags, 0);
 		v.resize(4);
-		local.lua.lua_pushboolean(L, ImGui::InputFloat4(label, v.data(), format, flags));
-		local.lua.lua_pushvectorfloat(L, v);
+		lua_pushboolean(L, ImGui::InputFloat4(label, v.data(), format, flags));
+		lua_pushvectorfloat(L, v);
 		return 2;
 	}
 
@@ -914,8 +914,8 @@ namespace imgui {
 		ARG_DEF(4, integer, int, step_fast, 100);
 		ARG_DEF(5, integer, ImGuiInputTextFlags, flags, 0);
 
-		local.lua.lua_pushboolean(L, ImGui::InputInt(label, &v, step_fast, flags));
-		local.lua.lua_pushinteger(L, v);
+		lua_pushboolean(L, ImGui::InputInt(label, &v, step_fast, flags));
+		lua_pushinteger(L, v);
 		return 2;
 	}
 
@@ -924,8 +924,8 @@ namespace imgui {
 		ARG(2, vectorint, vector<int>, v);
 		ARG_DEF(3, integer, ImGuiInputTextFlags, flags, 0);
 		v.resize(2);
-		local.lua.lua_pushboolean(L, ImGui::InputInt2(label, v.data(), flags));
-		local.lua.lua_pushvectorint(L, v);
+		lua_pushboolean(L, ImGui::InputInt2(label, v.data(), flags));
+		lua_pushvectorint(L, v);
 		return 2;
 	}
 
@@ -934,8 +934,8 @@ namespace imgui {
 		ARG(2, vectorint, vector<int>, v);
 		ARG_DEF(3, integer, ImGuiInputTextFlags, flags, 0);
 		v.resize(3);
-		local.lua.lua_pushboolean(L, ImGui::InputInt3(label, v.data(), flags));
-		local.lua.lua_pushvectorint(L, v);
+		lua_pushboolean(L, ImGui::InputInt3(label, v.data(), flags));
+		lua_pushvectorint(L, v);
 		return 2;
 	}
 
@@ -944,8 +944,8 @@ namespace imgui {
 		ARG(2, vectorint, vector<int>, v);
 		ARG_DEF(3, integer, ImGuiInputTextFlags, flags, 0);
 		v.resize(4);
-		local.lua.lua_pushboolean(L, ImGui::InputInt4(label, v.data(), flags));
-		local.lua.lua_pushvectorint(L, v);
+		lua_pushboolean(L, ImGui::InputInt4(label, v.data(), flags));
+		lua_pushvectorint(L, v);
 		return 2;
 	}
 
@@ -956,13 +956,13 @@ namespace imgui {
 		ARG_DEF(4, number, double, step_fast, 0.0);
 		ARG_DEF(5, string, const char*, format, "%.6f");
 		ARG_DEF(6, integer, ImGuiInputTextFlags, flags, 0);
-		local.lua.lua_pushboolean(L, ImGui::InputDouble(label, &v, step, step_fast, format, flags));
-		local.lua.lua_pushnumber(L, v);
+		lua_pushboolean(L, ImGui::InputDouble(label, &v, step, step_fast, format, flags));
+		lua_pushnumber(L, v);
 		return 2;
 	}
 
 	static int TreeNode(lua_State* L) {
-		if (local.lua.lua_isnoneornil(L, 2))
+		if (lua_isnoneornil(L, 2))
 		{
 			ARG(1, string, const char*, label);
 			RET(boolean, ImGui::TreeNode(label));
@@ -977,7 +977,7 @@ namespace imgui {
 
 	static int TreeNodeEx(lua_State* L) {
 		ARG_DEF(2, integer, ImGuiTreeNodeFlags, flags, 0);
-		if (local.lua.lua_isnoneornil(L, 3))
+		if (lua_isnoneornil(L, 3))
 		{
 			ARG(1, string, const char*, label);
 			RET(boolean, ImGui::TreeNodeEx(label, flags));
@@ -1010,8 +1010,8 @@ namespace imgui {
 		ARG(2, boolean, bool, selected);
 		ARG_DEF(3, integer, ImGuiSelectableFlags, flags, 0);
 		ARG_UDATA_DEF(4, const ::ImVec2, size_arg, VEC2_0);
-		local.lua.lua_pushboolean(L, ImGui::Selectable(label, &selected, flags, size_arg));
-		local.lua.lua_pushboolean(L, selected);
+		lua_pushboolean(L, ImGui::Selectable(label, &selected, flags, size_arg));
+		lua_pushboolean(L, selected);
 		return 2;
 	}
 
@@ -1033,8 +1033,8 @@ namespace imgui {
 		ARG(4, integer, int, items_count);
 		ARG_DEF(5, integer, int, height_in_items, -1);
 		items.resize(items_count);
-		local.lua.lua_pushboolean(L, ImGui::ListBox(label, &current_item, items.data(), items_count, height_in_items));
-		local.lua.lua_pushinteger(L, current_item);
+		lua_pushboolean(L, ImGui::ListBox(label, &current_item, items.data(), items_count, height_in_items));
+		lua_pushinteger(L, current_item);
 		return 2;
 	}
 
@@ -1063,8 +1063,8 @@ namespace imgui {
 		ARG_DEF(2, string, const char*, shortcut, NULL);
 		ARG_DEF(3, boolean, bool, selected, false);
 		ARG_DEF(4, boolean, bool, enabled, true);
-		local.lua.lua_pushboolean(L, ImGui::MenuItem(label, shortcut, &selected, enabled));
-		local.lua.lua_pushboolean(L, selected);
+		lua_pushboolean(L, ImGui::MenuItem(label, shortcut, &selected, enabled));
+		lua_pushboolean(L, selected);
 		return 2;
 	}
 
@@ -1106,7 +1106,7 @@ namespace imgui {
 
 	static int OpenPopup(lua_State* L) {
 		ARG_DEF(2, integer, ImGuiPopupFlags, popup_flags, 0);
-		if (local.lua.lua_isinteger(L, 1))
+		if (lua_isinteger(L, 1))
 		{
 			ARG(1, integer, ImGuiID, id);
 			ImGui::OpenPopup(id, popup_flags);
@@ -1226,8 +1226,8 @@ namespace imgui {
 		ARG(1, string, const char*, label);
 		ARG_DEF(2, boolean, bool, open, true);
 		ARG_DEF(3, integer, ImGuiTabItemFlags, flags, 0);
-		local.lua.lua_pushboolean(L, ImGui::BeginTabItem(label, &open, flags));
-		local.lua.lua_pushboolean(L, open);
+		lua_pushboolean(L, ImGui::BeginTabItem(label, &open, flags));
+		lua_pushboolean(L, open);
 		return 2;
 	}
 
@@ -1346,7 +1346,7 @@ namespace imgui {
 	}
 
 	static int IsRectVisible(lua_State* L) {
-		if (local.lua.lua_isnoneornil(L, 2))
+		if (lua_isnoneornil(L, 2))
 		{
 			ARG_UDATA(1, ::ImVec2, size);
 			RET(boolean, ImGui::IsRectVisible(size));
@@ -1400,9 +1400,9 @@ namespace imgui {
 		ARG(3, number, float, b);
 		float h, s, v;
 		ImGui::ColorConvertRGBtoHSV(r, g, b, h, s, v);
-		local.lua.lua_pushnumber(L, h);
-		local.lua.lua_pushnumber(L, s);
-		local.lua.lua_pushnumber(L, v);
+		lua_pushnumber(L, h);
+		lua_pushnumber(L, s);
+		lua_pushnumber(L, v);
 		return 3;
 	}
 
@@ -1412,9 +1412,9 @@ namespace imgui {
 		ARG(3, number, float, v);
 		float r, g, b;
 		ImGui::ColorConvertHSVtoRGB(h, s, v, r, g, b);
-		local.lua.lua_pushnumber(L, r);
-		local.lua.lua_pushnumber(L, g);
-		local.lua.lua_pushnumber(L, b);
+		lua_pushnumber(L, r);
+		lua_pushnumber(L, g);
+		lua_pushnumber(L, b);
 		return 3;
 	}
 
@@ -1478,7 +1478,7 @@ namespace imgui {
 	}
 
 	static int IsMousePosValid(lua_State* L) {
-		if (local.lua.lua_isnoneornil(L, 1))
+		if (lua_isnoneornil(L, 1))
 		{
 			RET(boolean, ImGui::IsMousePosValid());
 		}

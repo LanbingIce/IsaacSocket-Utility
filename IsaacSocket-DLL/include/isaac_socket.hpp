@@ -33,8 +33,8 @@ namespace isaac_socket
 		RegisterModule::InitAllModules();
 
 		lua_State* L = local.isaac->luaEngine->L;
-		int top = local.lua.lua_gettop(L);
-		local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
+		int top = lua_gettop(L);
+		lua_getglobal(L, "_ISAAC_SOCKET");
 
 		MODULE_FUNC(Connect);
 		MODULE_FUNC(Disconnect);
@@ -43,24 +43,24 @@ namespace isaac_socket
 		oss << "_ISAAC_SOCKET.version=\"" << global->version << "\" _ISAAC_SOCKET.TaskContinuation={}";
 		DO_STRING(oss.str().c_str());
 
-		local.lua.lua_settop(L, top);
+		lua_settop(L, top);
 	}
 
 	static bool CheckInit() {
 		lua_State* L = local.isaac->luaEngine->L;
-		int top = local.lua.lua_gettop(L);
+		int top = lua_gettop(L);
 		bool result = false;
-		if (local.lua.lua_getglobal(L, "_ISAAC_SOCKET") == LUA_TTABLE)
+		if (lua_getglobal(L, "_ISAAC_SOCKET") == LUA_TTABLE)
 		{
-			local.lua.lua_pushstring(L, "Connect");
-			local.lua.lua_gettable(L, -2);
-			if (!local.lua.lua_iscfunction(L, -1))
+			lua_pushstring(L, "Connect");
+			lua_gettable(L, -2);
+			if (!lua_iscfunction(L, -1))
 			{
 				_Init();
 			}
 			result = true;
 		}
-		local.lua.lua_settop(L, top);
+		lua_settop(L, top);
 		return result;
 	}
 }

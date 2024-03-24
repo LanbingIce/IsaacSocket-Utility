@@ -56,8 +56,8 @@ namespace tim {
 
 	static int TIMGetLoginUserID(lua_State* L) {
 		char user_id_buffer[128]{};
-		local.lua.lua_pushinteger(L, ::TIMGetLoginUserID(user_id_buffer));
-		local.lua.lua_pushstring(L, user_id_buffer);
+		lua_pushinteger(L, ::TIMGetLoginUserID(user_id_buffer));
+		lua_pushstring(L, user_id_buffer);
 		return 2;
 	}
 
@@ -71,8 +71,8 @@ namespace tim {
 		ARG(3, string, const char*, json_msg_param);
 		ARG_DEF(4, string, const char*, user_data, "");
 		char message_id_buffer[128]{};
-		local.lua.lua_pushinteger(L, ::TIMMsgSendMessage(conv_id, conv_type, json_msg_param, message_id_buffer, local.callbacks.TIMCommCallback, user_data));
-		local.lua.lua_pushstring(L, message_id_buffer);
+		lua_pushinteger(L, ::TIMMsgSendMessage(conv_id, conv_type, json_msg_param, message_id_buffer, local.callbacks.TIMCommCallback, user_data));
+		lua_pushstring(L, message_id_buffer);
 		return 2;
 	}
 

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "lua.hpp"
+#include "isaac.hpp"
 #include "pch.h"
 #include <imgui/imgui.h>
 #include <imsdk/TIMMessageManager.h>
@@ -63,7 +63,6 @@ namespace state {
 		} callbacks;
 		HWND hWnd;
 		isaac::IsaacImage* isaac;
-		lua::Lua lua;
 		uint32_t MTRandomLockedValue = 0;
 		bool allocConsole = false;
 		_LocalState() {}

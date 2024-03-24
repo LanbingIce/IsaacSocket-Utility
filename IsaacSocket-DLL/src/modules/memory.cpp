@@ -43,7 +43,7 @@ namespace memory
 
 		case Memory:
 			ARG(2, string, const char*, value);
-			local.lua.luaL_len(L, 2);
+			luaL_len(L, 2);
 			ARG(-1, integer, size_t, size);
 			std::copy(value, value + size, (char*)address);
 			break;
@@ -76,14 +76,14 @@ namespace memory
 
 		case Memory:
 			ARG(2, integer, size_t, size);
-			local.lua.lua_pushlstring(L, (const char*)address, size);
+			lua_pushlstring(L, (const char*)address, size);
 			break;
 		}
 
 		return 1;
 	}
 
-#define _(type) static int Read##type(lua_State* L) {local.lua.lua_pushinteger(L,(uint32_t)ValueType::type); return Read(L);}static int Write##type(lua_State* L) {local.lua.lua_pushinteger(L,(uint32_t)ValueType::type); return Write(L);}
+#define _(type) static int Read##type(lua_State* L) {lua_pushinteger(L,(uint32_t)ValueType::type); return Read(L);}static int Write##type(lua_State* L) {lua_pushinteger(L,(uint32_t)ValueType::type); return Write(L);}
 	_(Memory);
 	_(Int8);
 	_(UInt8);
@@ -100,7 +100,7 @@ namespace memory
 	static int CalcAddress(lua_State* L) {
 		ARG(1, integer, uint32_t, address);
 		size_t i = 2;
-		while (local.lua.lua_isinteger(L, i))
+		while (lua_isinteger(L, i))
 		{
 			ARG(i, integer, uint32_t, offset);
 			address = *(uint32_t*)address + offset;

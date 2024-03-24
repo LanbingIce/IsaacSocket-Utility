@@ -48,19 +48,19 @@ HandleTable<Coroutine> &promiseTable();
 
 inline int luaPromiseReturn(lua_State *L, Promise promise) {
     Handle h = promiseTable().create(std::make_unique<Coroutine>(std::move(promise)));
-    local.lua.lua_createtable(L, 0, 4);
-    local.lua.lua_pushstring(L, "Id");
-    local.lua.lua_pushinteger(L, (lua_Integer)h);
-    local.lua.lua_settable(L, -3);
-    local.lua.lua_pushstring(L, "Then");
-    local.lua.lua_pushcfunction(L, luaPromiseThen);
-    local.lua.lua_settable(L, -3);
-    local.lua.lua_pushstring(L, "Cancel");
-    local.lua.lua_pushcfunction(L, luaPromiseCancel);
-    local.lua.lua_settable(L, -3);
-    local.lua.lua_pushstring(L, "Status");
-    local.lua.lua_pushcfunction(L, luaPromiseStatus);
-    local.lua.lua_settable(L, -3);
+    lua_createtable(L, 0, 4);
+    lua_pushstring(L, "Id");
+    lua_pushinteger(L, (lua_Integer)h);
+    lua_settable(L, -3);
+    lua_pushstring(L, "Then");
+    lua_pushcfunction(L, luaPromiseThen);
+    lua_settable(L, -3);
+    lua_pushstring(L, "Cancel");
+    lua_pushcfunction(L, luaPromiseCancel);
+    lua_settable(L, -3);
+    lua_pushstring(L, "Status");
+    lua_pushcfunction(L, luaPromiseStatus);
+    lua_settable(L, -3);
     return 1;
 }
 

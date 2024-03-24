@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "pch.h"
 #include "utils.hpp"
+#include "lua.hpp"
 
 // 小彭老师专用代码开始
 #ifdef __MINGW32__
@@ -11,9 +12,6 @@
 // 小彭老师专用代码结束
 
 namespace isaac {
-
-	struct lua_State;
-
 #pragma warning(disable: 4624)//禁用警告C4624: 已将析构函数隐式定义为“已删除”
 
 	// Lua虚拟机类

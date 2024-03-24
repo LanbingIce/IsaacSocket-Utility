@@ -27,17 +27,17 @@ namespace task_ {
 
 		static int Then(lua_State* L) {
 			ARG_CPPDATA(1, Task, task);
-			if (!local.lua.lua_isfunction(L, 2))
+			if (!lua_isfunction(L, 2))
 			{
-				return local.lua.luaL_error(L, "bad argument #2: continuation should be function");
+				return luaL_error(L, "bad argument #2: continuation should be function");
 			}
 
-			local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
-			local.lua.lua_pushstring(L, "TaskContinuation");
-			local.lua.lua_gettable(L, -2);
-			local.lua.lua_pushinteger(L, task->id);
-			local.lua.lua_pushvalue(L, 2);
-			local.lua.lua_settable(L, -3);
+			lua_getglobal(L, "_ISAAC_SOCKET");
+			lua_pushstring(L, "TaskContinuation");
+			lua_gettable(L, -2);
+			lua_pushinteger(L, task->id);
+			lua_pushvalue(L, 2);
+			lua_settable(L, -3);
 			return 0;
 		}
 
@@ -56,37 +56,37 @@ namespace task_ {
 	static void RunCallback() {
 
 		lua_State* L = local.isaac->luaEngine->L;
-		int top = local.lua.lua_gettop(L);
+		int top = lua_gettop(L);
 
-		local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
-		local.lua.lua_pushstring(L, "TaskContinuation");
-		local.lua.lua_gettable(L, -2);
+		lua_getglobal(L, "_ISAAC_SOCKET");
+		lua_pushstring(L, "TaskContinuation");
+		lua_gettable(L, -2);
 
 		std::lock_guard<std::mutex> lock(local.responsesMutex);
 
 		for (auto it = local.map.begin(); it != local.map.end(); ++it) {
-			local.lua.lua_pushinteger(L, it->first);
-			local.lua.lua_gettable(L, -2);
-			local.lua.lua_pushstring(L, it->second.c_str());
-			if (local.lua.lua_isfunction(L, -2) && local.lua.lua_pcall(L, 1, 0, 0) != 0) {
+			lua_pushinteger(L, it->first);
+			lua_gettable(L, -2);
+			lua_pushstring(L, it->second.c_str());
+			if (lua_isfunction(L, -2) && lua_pcall(L, 1, 0, 0) != 0) {
 				string _err;
-				if (local.lua.lua_isstring(L, -1)) {
-					_err = local.lua.lua_tostring(L, -1);
+				if (lua_isstring(L, -1)) {
+					_err = lua_tostring(L, -1);
 				}
 				else {
 					_err = "unknow error!";
 				}
-				local.lua.lua_pop(L, 1);
+				lua_pop(L, 1);
 				_err.append("\n");
 				function_::ConsoleOutput(_err, 0xFFF08080);
 			}
-			local.lua.lua_pushinteger(L, it->first);
-			local.lua.lua_pushnil(L);
-			local.lua.lua_settable(L, -3);
+			lua_pushinteger(L, it->first);
+			lua_pushnil(L);
+			lua_settable(L, -3);
 		}
 
 		local.map.clear();
-		local.lua.lua_settop(L, top);
+		lua_settop(L, top);
 	}
 
 	static size_t New() {

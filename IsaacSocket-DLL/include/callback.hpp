@@ -45,18 +45,18 @@ namespace callback {
 		if (!L) {
 			return false;
 		}
-		int top = local.lua.lua_gettop(L);
-		local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
-		bool ok = !local.lua.lua_isnoneornil(L, -1);
+		int top = lua_gettop(L);
+		lua_getglobal(L, "_ISAAC_SOCKET");
+		bool ok = !lua_isnoneornil(L, -1);
 		if (ok) {
-			local.lua.lua_pushstring(L, "IsaacSocket");
-			local.lua.lua_gettable(L, -2);
-			ok = !local.lua.lua_isnoneornil(L, -1);
+			lua_pushstring(L, "IsaacSocket");
+			lua_gettable(L, -2);
+			ok = !lua_isnoneornil(L, -1);
 			if (ok) {
-				local.lua.lua_setglobal(L, "IsaacSocket");
+				lua_setglobal(L, "IsaacSocket");
 			}
 		}
-		local.lua.lua_settop(L, top);
+		lua_settop(L, top);
 		return ok;
 	}
 #endif
@@ -188,12 +188,12 @@ namespace callback {
 			if (ImGui::Begin("关于 IsaacSocket", &showISAbout, flags))
 			{
 				lua_State* L = local.isaac->luaEngine->L;
-				size_t top = local.lua.lua_gettop(L);
-				local.lua.lua_getglobal(L, "_ISAAC_SOCKET");
-				local.lua.lua_pushstring(L, "modVersion");
-				local.lua.lua_gettable(L, -2);
+				size_t top = lua_gettop(L);
+				lua_getglobal(L, "_ISAAC_SOCKET");
+				lua_pushstring(L, "modVersion");
+				lua_gettable(L, -2);
 				ARG_DEF(-1, string, const char*, ver, "1.0");
-				local.lua.lua_settop(L, top);
+				lua_settop(L, top);
 				ImGui::Text("IsaacSocket");
 				ImGui::Text("版本号：%s-%s", global->version, ver);
 				ImGui::End();
@@ -307,9 +307,9 @@ namespace callback {
 		MOD_CALLBACK_BEGIN(ISMC_PRE_EXECUTE_CMD);
 		MOD_CALLBACK_ARG(lstring, text.c_str(), text.size());
 		MOD_CALLBACK_CALL();
-		if (local.lua.lua_isstring(L, -1))
+		if (lua_isstring(L, -1))
 		{
-			text = local.lua.lua_tolstring(L, -1, nullptr);
+			text = lua_tolstring(L, -1, nullptr);
 		}
 		else MOD_CALLBACK_END();
 		if (text.size() == 0)
@@ -340,9 +340,9 @@ namespace callback {
 		MOD_CALLBACK_ARG(integer, color);
 		MOD_CALLBACK_CALL();
 
-		if (local.lua.lua_isstring(L, -1))
+		if (lua_isstring(L, -1))
 		{
-			text = local.lua.lua_tolstring(L, -1, nullptr);
+			text = lua_tolstring(L, -1, nullptr);
 		}
 		else MOD_CALLBACK_END();
 

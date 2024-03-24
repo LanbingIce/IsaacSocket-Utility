@@ -6,8 +6,6 @@
 #include "utils.hpp"
 #include "function_.hpp"
 
-using isaac::lua_State;
-
 namespace isaac_api {
 
 	static int HistoryItem__index(lua_State* L) {
@@ -86,8 +84,8 @@ namespace isaac_api {
 		ARG_DEF(2, integer, uint32_t, activeId, 0);
 		ARG_RANGE(activeId, 4);
 
-		local.lua.lua_newtable(L);
-#define _(type,name) local.lua.lua_pushstring(L,#name); local.lua.lua_push##type(L, local.isaac->game->players[playerId]->actives[activeId].name); local.lua.lua_settable(L, -3)
+		lua_newtable(L);
+#define _(type,name) lua_pushstring(L,#name); lua_push##type(L, local.isaac->game->players[playerId]->actives[activeId].name); lua_settable(L, -3)
 		_(integer, item);
 		_(integer, charge);
 		_(integer, batteryCharge);
@@ -105,11 +103,11 @@ namespace isaac_api {
 		ARG_RANGE(playerId, local.isaac->game->players.size());
 		ARG_DEF(2, integer, uint32_t, activeId, 0);
 		ARG_RANGE(activeId, 4);
-		if (!local.lua.lua_istable(L, 3))
+		if (!lua_istable(L, 3))
 		{
-			return local.lua.luaL_error(L, "bad argument #3 :active should be table");
+			return luaL_error(L, "bad argument #3 :active should be table");
 		}
-#define _(luaType,type,name) local.lua.lua_pushstring(L, #name); local.lua.lua_gettable(L, 3); if (local.lua.lua_is##luaType(L, -1)){local.isaac->game->players[playerId]->actives[activeId].name = (type)local.lua.lua_to##luaType(L, -1);}
+#define _(luaType,type,name) lua_pushstring(L, #name); lua_gettable(L, 3); if (lua_is##luaType(L, -1)){local.isaac->game->players[playerId]->actives[activeId].name = (type)lua_to##luaType(L, -1);}
 		_(integer, int32_t, item);
 		_(integer, int32_t, charge);
 		_(integer, int32_t, batteryCharge);
@@ -260,11 +258,11 @@ namespace isaac_api {
 		RET_TABLE();
 
 		for (size_t i = 0; i < historyItems.size(); i++) {
-			local.lua.lua_pushinteger(L, (LUA_INTEGER)(i + 1));
+			lua_pushinteger(L, (LUA_INTEGER)(i + 1));
 
 			NEW_UDATA(isaac::HistoryItem, item, HistoryItem);
 			item = historyItems[i];
-			local.lua.lua_settable(L, -3);
+			lua_settable(L, -3);
 		}
 
 		RET_TABLE_END();

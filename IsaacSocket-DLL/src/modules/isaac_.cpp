@@ -6,8 +6,6 @@
 #include "utils.hpp"
 #include "function_.hpp"
 
-using isaac::lua_State;
-
 namespace isaac_ {
 
 	static int p_Options__index(lua_State* L) {

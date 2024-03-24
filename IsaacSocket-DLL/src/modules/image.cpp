@@ -60,7 +60,7 @@ namespace image
 		ARG_DEF(4, boolean, bool, useCached, true);
 		auto img = NEW_CPPDATA(Image);
 		if (!load_image(img, path, channels, flipOnLoad)) {
-			local.lua.lua_pop(L, 1);
+			lua_pop(L, 1);
 			return 0;
 		}
 		return 1;
@@ -81,7 +81,7 @@ namespace image
 		ARG_DEF(3, boolean, bool, flipOnLoad, true);
 		auto img = NEW_CPPDATA(Image);
 		if (!load_image_from_memory(img, data.data(), data.size(), channels, flipOnLoad)) {
-			local.lua.lua_pop(L, 1);
+			lua_pop(L, 1);
 			return 0;
 		}
 		return 1;
