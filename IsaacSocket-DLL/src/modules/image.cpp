@@ -2,6 +2,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_STATIC
 #include <stbi/stb_image.h>
+#include "udata.hpp"
 
 namespace image
 {
@@ -20,14 +21,14 @@ namespace image
 		}
 	};
 
-	static void create_image(Image* img, int width, int height, int channels) {
+	static void create_image(udata::Image* img, int width, int height, int channels) {
 		img->width = width;
 		img->height = height;
 		img->channels = channels;
 		img->data.resize(img->width * img->height * img->channels);
 	}
 
-	static bool load_image(Image* img, const char* filename, int channels = 0, bool flipOnLoad = false) {
+	static bool load_image(udata::Image* img, const char* filename, int channels = 0, bool flipOnLoad = false) {
 		FileGuard fileGuard(filename);
 		if (!fileGuard.fp) [[unlikely]] {
 			return false;
@@ -42,7 +43,7 @@ namespace image
 		return true;
 	}
 
-	static bool load_image_from_memory(Image* img, const char* data, size_t size, int channels = 0, bool flipOnLoad = false) {
+	static bool load_image_from_memory(udata::Image* img, const char* data, size_t size, int channels = 0, bool flipOnLoad = false) {
 		stbi_set_flip_vertically_on_load(flipOnLoad);
 		uint8_t* p = stbi_load_from_memory((const stbi_uc*)data, size, &img->width, &img->height, &img->channels, channels);
 		if (!p) [[unlikely]] {

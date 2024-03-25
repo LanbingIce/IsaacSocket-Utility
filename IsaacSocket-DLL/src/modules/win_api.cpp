@@ -1,23 +1,10 @@
 ﻿#include "module.hpp"
 #include "state.hpp"
+#include "udata.hpp"
 #undef MessageBox
 
 namespace win_api
 {
-	struct LUA_WIN32_FIND_DATAW {
-		WIN32_FIND_DATAW data;
-		static int lua_index(lua_State* L) {
-
-			ARG_CPPDATA(1, LUA_WIN32_FIND_DATAW, data);
-			METATABLE_BEGIN(WIN32_FIND_DATAW, (*data).data);
-			METATABLE_INDEX(stdwstring, cFileName);
-			METATABLE_END();
-		}
-		static int lua_newindex(lua_State* L) {
-			METATABLE_END();
-		}
-
-	};
 	static int AllocConsole(lua_State* L) {
 		local.allocConsole = true;
 		::AllocConsole();

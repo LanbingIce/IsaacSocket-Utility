@@ -4,7 +4,7 @@
 #include <state.hpp>
 #include "module.hpp"
 #include "function_.hpp"
-
+#include "udata.hpp"
 
 namespace task_ {
 	struct _Task : Poco::Task {
@@ -13,43 +13,6 @@ namespace task_ {
 		std::function < void()> callback;
 		void runTask() {
 			callback();
-		}
-	};
-
-	struct Task {
-		inline static std::mutex mutex;
-		inline static size_t nextId;
-		size_t id;
-		Task() {
-			std::lock_guard lock(mutex);
-			id = ++nextId;
-		}
-
-		static int Then(lua_State* L) {
-			ARG_CPPDATA(1, Task, task);
-			if (!lua_isfunction(L, 2))
-			{
-				return luaL_error(L, "bad argument #2: continuation should be function");
-			}
-
-			lua_getglobal(L, "_ISAAC_SOCKET");
-			lua_pushstring(L, "TaskContinuation");
-			lua_gettable(L, -2);
-			lua_pushinteger(L, task->id);
-			lua_pushvalue(L, 2);
-			lua_settable(L, -3);
-			return 0;
-		}
-
-		static int lua_index(lua_State* L) {
-			ARG_CPPDATA(1, Task, task);
-			METATABLE_BEGIN(Task, *task);
-			METATABLE_INDEX(cfunction, Then);
-			METATABLE_END();
-		}
-
-		static int lua_newindex(lua_State* L) {
-			METATABLE_END();
 		}
 	};
 

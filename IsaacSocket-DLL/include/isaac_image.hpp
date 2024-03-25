@@ -11,6 +11,8 @@
 #endif
 // 小彭老师专用代码结束
 
+#define FIELD(address,type,name) struct{char pad_##address[address];type name;}
+
 namespace isaac_image {
 #pragma warning(disable: 4624)//禁用警告C4624: 已将析构函数隐式定义为“已删除”
 
@@ -288,6 +290,8 @@ namespace isaac_image {
 		};
 	};
 }
+
+#undef FIELD
 
 // 小彭老师专用代码开始
 #ifdef __MINGW32__

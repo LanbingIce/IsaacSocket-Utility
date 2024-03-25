@@ -2,6 +2,7 @@
 #include "handle.hpp"
 #include "function_.hpp"
 #include "async.hpp"
+#include "lua.hpp"
 
 namespace http {
 

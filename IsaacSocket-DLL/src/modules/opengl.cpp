@@ -1,5 +1,6 @@
 ﻿#include "module.hpp"
 #include <glad/glad.h>
+#include "udata.hpp"
 
 #define CHECK_GL(x) do { (x); opengl_check_error(__FILE__, __LINE__, #x); } while (0)
 
@@ -99,32 +100,6 @@ namespace opengl
 		float a = (rgba & 0xFF) / 255.0f;
 		glColor4f(r, g, b, a);
 	}
-
-
-	struct Texture {
-		GLuint textureId = 0;
-
-		static int lua_index(lua_State* L) {
-			ARG_CPPDATA(1, Texture, texture);
-			METATABLE_BEGIN(Texture, *texture);
-			METATABLE_INDEX(integer, textureId);
-			METATABLE_END();
-		}
-
-		static int lua_newindex(lua_State* L) {
-			METATABLE_END();
-		}
-
-		Texture& operator=(Texture&&) = delete;
-		~Texture() {
-			if (textureId) {
-				glDeleteTextures(1, &textureId);
-				textureId = 0;
-			}
-		}
-	};
-
-
 
 	static void gl_draw_image(const uint8_t* data, int width, int height, int channels) {
 		if (channels < 1 || channels > 4) [[unlikely]] {

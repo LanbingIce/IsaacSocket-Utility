@@ -3,41 +3,14 @@
 #include "lua.hpp"
 #include "state.hpp"
 
-namespace lua {
-#define NEW_CPPDATA(type) new (luaCPP_newuserdata<type>(L, type::lua_index,type::lua_newindex, lua::lua_cppdata_gc<type>)) type
-#define ARG_CPPDATA(index,type,name) type *name = luaCPP_getuserdata<type>(L, index)
-
-	template <class T>
-	static int lua_cppdata_gc(lua_State* L) {
-		T* p = luaCPP_getuserdata<T>(L, 1);
-		p->~T();
-		return 0;
-	}
-
-	template <int (*fp)(lua_State*)>
-	static int (*lua_cppfunction())(lua_State*) {
-		return [](lua_State* L) noexcept -> int {
-			try {
-				return fp(L);
-			}
-			catch (std::exception const& e) {
-				cw("Exception in cpp function:", e.what());
-				return luaL_error(L, "Exception in cpp function: %s", e.what());
-			}
-			catch (...) {
-				cw("Exception in cpp function: unknown exception");
-				return luaL_error(L, "Exception in cpp function: unknown exception");
-			}
-			};
-	}
-
-}
+#define NEW_CPPDATA(type) new (luaCPP_newuserdata<udata::type>(L, udata::type::lua_index,udata::type::lua_newindex, lua_cppdata_gc<udata::type>)) udata::type
+#define ARG_CPPDATA(index,type,name) udata::type *name = luaCPP_getuserdata<udata::type>(L, index)
 #define _SET_METATABLE(udataName,type) if(luaL_newmetatable(L, typeid(type).name())){luaL_Reg mt_##udataName[] = { { "__index", udataName##__index },{ "__newindex", udataName##__newindex },{ NULL, NULL } };luaL_setfuncs(L, mt_##udataName, 0);}lua_setmetatable(L, -2)
 
 #define NEW_UDATA(type,name,udataName) type& name = *(type*)lua_newuserdata(L, sizeof(type));_SET_METATABLE(udataName,type)
 
 #define MODULE_BEGIN(name) int top = lua_gettop(L); lua_getglobal(L, "_ISAAC_SOCKET"); lua_pushstring(L, "IsaacSocket"); lua_gettable(L, -2); lua_pushstring(L, #name); lua_newtable(L)
-#define MODULE_FUNC(name) lua_pushstring(L, #name);lua_pushcfunction(L, lua::lua_cppfunction<name>()); lua_settable(L, -3)
+#define MODULE_FUNC(name) lua_pushstring(L, #name);lua_pushcfunction(L, lua_cppfunction<name>()); lua_settable(L, -3)
 #define MODULE_UDATA(name,type,value)lua_pushstring(L, #name);type** pp_##name = (type**)lua_newuserdata(L, sizeof(type*));_SET_METATABLE(p_##name,type*);*pp_##name = &value;lua_settable(L, -3)
 #define MODULE_END() lua_settable(L, -3); lua_settop(L, top)
 
@@ -87,24 +60,6 @@ namespace lua {
 #define METATABLE_END()return luaL_error(L, "Invalid member access.")
 
 #define DO_STRING(code){int _top=lua_gettop(L);luaL_dostring(L,code);lua_settop(L,_top);}
-
-struct Image {
-	std::vector<uint8_t> data;
-	int width = 0, height = 0, channels = 0;
-
-	static int lua_index(lua_State* L) {
-		ARG_CPPDATA(1, Image, image);
-		METATABLE_BEGIN(Image, *image);
-		METATABLE_INDEX(integer, width);
-		METATABLE_INDEX(integer, height);
-		METATABLE_INDEX(integer, channels);
-		METATABLE_END();
-	}
-
-	static int lua_newindex(lua_State* L) {
-		METATABLE_END();
-	}
-};
 
 struct RegisterModule {
 	inline static std::vector<std::function<void()>> initCallbacks;

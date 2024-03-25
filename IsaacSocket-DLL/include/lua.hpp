@@ -491,5 +491,30 @@ static int luaL_dostring(lua_State* L, const char* s)
 {
 	return (int)(luaL_loadstring(L, s) || lua_pcall(L, 0, LUA_MULTRET, 0));
 }
+
+template <class T>
+static int lua_cppdata_gc(lua_State* L) {
+	T* p = luaCPP_getuserdata<T>(L, 1);
+	p->~T();
+	return 0;
+}
+
+template <int (*fp)(lua_State*)>
+static int (*lua_cppfunction())(lua_State*) {
+	return [](lua_State* L) noexcept -> int {
+		try {
+			return fp(L);
+		}
+		catch (std::exception const& e) {
+			cw("Exception in cpp function:", e.what());
+			return luaL_error(L, "Exception in cpp function: %s", e.what());
+		}
+		catch (...) {
+			cw("Exception in cpp function: unknown exception");
+			return luaL_error(L, "Exception in cpp function: unknown exception");
+		}
+		};
+}
+
 #pragma warning(default: 6387)//重新启用警告C6387
 #undef _

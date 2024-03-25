@@ -75,6 +75,7 @@
     <ClInclude Include="include\reload.hpp" />
     <ClInclude Include="include\state.hpp" />
     <ClInclude Include="include\task_.hpp" />
+    <ClInclude Include="include\udata.hpp" />
     <ClInclude Include="include\utils.hpp" />
     <ClInclude Include="libs\glad\glad.h" />
     <ClInclude Include="libs\glad\khrplatform.h" />
@@ -328,6 +329,7 @@
     <ClCompile Include="src\async.cpp" />
     <ClCompile Include="src\dllmain.cpp" />
     <ClCompile Include="src\inject.cpp" />
+    <ClCompile Include="src\isaac_socket.cpp" />
     <ClCompile Include="src\modules\http.cpp" />
     <ClCompile Include="src\modules\http2.cpp" />
     <ClCompile Include="src\modules\image.cpp" />
@@ -341,6 +343,7 @@
     <ClCompile Include="src\modules\system_.cpp" />
     <ClCompile Include="src\modules\win_api.cpp" />
     <ClCompile Include="src\reload.cpp" />
+    <ClCompile Include="src\callback.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="libs\imsdk\ImSDK.lib" />
