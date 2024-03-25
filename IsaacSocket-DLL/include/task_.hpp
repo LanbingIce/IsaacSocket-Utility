@@ -53,7 +53,7 @@ namespace task_ {
 		}
 	};
 
-	static void RunCallback() {
+	static int RunCallback() {
 
 		int top = lua_gettop(L);
 
@@ -66,19 +66,15 @@ namespace task_ {
 		for (auto it = local.map.begin(); it != local.map.end(); ++it) {
 			lua_pushinteger(L, it->first);
 			lua_gettable(L, -2);
-			lua_pushstring(L, it->second.c_str());
-			if (lua_isfunction(L, -2) && lua_pcall(L, 1, 0, 0) != 0) {
-				string _err;
-				if (lua_isstring(L, -1)) {
-					_err = lua_tostring(L, -1);
-				}
-				else {
-					_err = "unknow error!";
-				}
+			if (!lua_isfunction(L, -1))
+			{
 				lua_pop(L, 1);
-				_err.append("\n");
-				function_::ConsoleOutput(_err, 0xFFF08080);
+				continue;
 			}
+			lua_pushstring(L, it->second.c_str());
+
+			_LUA_PCALL(1,0);
+
 			lua_pushinteger(L, it->first);
 			lua_pushnil(L);
 			lua_settable(L, -3);
@@ -86,6 +82,7 @@ namespace task_ {
 
 		local.map.clear();
 		lua_settop(L, top);
+		return 0;
 	}
 
 	static size_t New() {

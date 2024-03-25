@@ -50,7 +50,7 @@ namespace lua {
 #define ARG_UDATA(index,type,name)type* p_##name; _CHECK_ARG_UDATA(index,type,name)
 #define ARG_UDATA_DEF(index,type,name,def)type* p_##name;if(lua_isnoneornil(L,index)){p_##name=&def;}else _CHECK_ARG_UDATA(index,type,name)
 
-#define _LUA_PCALL(paramNum,resultNum)if(lua_pcall(L, paramNum, resultNum, 0)!=LUA_OK){ARG_DEF(-1,stdstring,string,_err,"unknow error!");lua_pop(L, 1);for(int i=0;i<resultNum;i++){lua_pushnil(L);}_err.append("\n");function_::ConsoleOutput(_err, 0xFFF08080);}
+#define _LUA_PCALL(paramNum,resultNum)if(lua_pcall(L, paramNum, resultNum, 0)!=LUA_OK){ARG_DEF(-1,stdstring,string,_err,"unknow error!");lua_pop(L, 1);if constexpr(resultNum) for(int i=0;i<resultNum;i++){lua_pushnil(L);}_err.append("\n");function_::ConsoleOutput(_err, 0xFFF08080);}
 
 #define RET(type,value) lua_push##type(L,value);return 1
 
