@@ -59,10 +59,10 @@ namespace callback {
 	inline string currentPath = "C:\\Windows\\Fonts";
 
 	inline bool showDemoWindow = false;
-	inline	bool showAboutWindow = false;
-	inline	bool showDebugLogWindow = false;
-	inline	bool showUserGuide = false;
-	inline	bool showISAbout = false;
+	inline bool showAboutWindow = false;
+	inline bool showDebugLogWindow = false;
+	inline bool showUserGuide = false;
+	inline bool showISAbout = false;
 
 	static void ShowUserGuide(bool* p_open)
 	{
@@ -258,12 +258,17 @@ namespace callback {
 			function_::InitByMainThread();
 			local.connectionState = state::DISCONNECTED;
 		}
-		ImGuiRender(local.connectionState == state::CONNECTED);
 		if (!isaac_socket::TryInitLua())
 		{
 			return 0;
 		}
 		FAST_MOD_CALLBACK_BEGIN(_ISAAC_SOCKET_UPDATE);
+		if (luaL_len(L, -5) != 1)
+		{
+			lua_settop(L, top);
+			return 0;
+		}
+		ImGuiRender(local.connectionState == state::CONNECTED);
 		FAST_MOD_CALLBACK_END();
 		switch (local.connectionState)
 		{
