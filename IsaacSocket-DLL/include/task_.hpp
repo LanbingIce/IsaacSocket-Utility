@@ -36,7 +36,7 @@ namespace task_ {
 			}
 			lua_pushstring(L, it->second.c_str());
 
-			_LUA_PCALL(1,0);
+			LUA_PCALL(1,0);
 
 			lua_pushinteger(L, it->first);
 			lua_pushnil(L);
@@ -49,8 +49,8 @@ namespace task_ {
 	}
 
 	static size_t New() {
-		auto task = NEW_CPPDATA(Task);
-		return task->id;
+		auto& task = NEW_UDATA(Task);
+		return task.id;
 	}
 
 	static void Run(std::function <void()> callback)

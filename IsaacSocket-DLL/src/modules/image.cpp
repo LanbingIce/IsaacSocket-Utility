@@ -59,8 +59,8 @@ namespace image
 		ARG_DEF(2, integer, int, channels, 0);
 		ARG_DEF(3, boolean, bool, flipOnLoad, false);
 		ARG_DEF(4, boolean, bool, useCached, true);
-		auto img = NEW_CPPDATA(Image);
-		if (!load_image(img, path, channels, flipOnLoad)) {
+		auto& img = NEW_UDATA(Image);
+		if (!load_image(&img, path, channels, flipOnLoad)) {
 			lua_pop(L, 1);
 			return 0;
 		}
@@ -71,8 +71,8 @@ namespace image
 		ARG(1, integer, int, width);
 		ARG(2, integer, int, height);
 		ARG(3, integer, int, channels);
-		auto img = NEW_CPPDATA(Image);
-		create_image(img, width, height, channels);
+		auto& img = NEW_UDATA(Image);
+		create_image(&img, width, height, channels);
 		return 1;
 	}
 
@@ -80,8 +80,8 @@ namespace image
 		ARG(1, stdstringview, std::string_view, data);
 		ARG_DEF(2, integer, int, channels, 0);
 		ARG_DEF(3, boolean, bool, flipOnLoad, true);
-		auto img = NEW_CPPDATA(Image);
-		if (!load_image_from_memory(img, data.data(), data.size(), channels, flipOnLoad)) {
+		auto& img = NEW_UDATA(Image);
+		if (!load_image_from_memory(&img, data.data(), data.size(), channels, flipOnLoad)) {
 			lua_pop(L, 1);
 			return 0;
 		}
@@ -89,31 +89,31 @@ namespace image
 	}
 
 	static int Duplicate(lua_State* L) {
-		ARG_CPPDATA(1, Image, image);
-		*NEW_CPPDATA(Image) = *image;
+		auto& image = ARG_UDATA(1, udata::Image);
+		NEW_UDATA(Image) = image;
 		return 1;
 	}
 
 	static int Resize(lua_State* L) {
-		ARG_CPPDATA(1, Image, image);
+		auto& image = ARG_UDATA(1, udata::Image);
 		ARG_DEF(2, number, uint32_t, width, 0);
 		ARG_DEF(3, number, uint32_t, height, 0);
 
-		if (width == 0) width = image->width;
-		if (height == 0) height = image->height;
-		if (width != image->width || height != image->height) {
-			std::vector<uint8_t> newData(width * height * image->channels);
+		if (width == 0) width = image.width;
+		if (height == 0) height = image.height;
+		if (width != image.width || height != image.height) {
+			std::vector<uint8_t> newData(width * height * image.channels);
 			auto unroll = [image, width, height,
-				scaleWidth = (float)image->width / width, scaleHeight = (float)image->height / height,
-				oldData = image->data.data(), newData = newData.data()] <int channels> {
-				if (image->channels == channels) {
+				scaleWidth = (float)image.width / width, scaleHeight = (float)image.height / height,
+				oldData = image.data.data(), newData = newData.data()] <int channels> {
+				if (image.channels == channels) {
 					for (size_t y = 0; y < height; y++) {
-						uint8_t* oldLine = oldData + (uint32_t)(y * scaleHeight) * image->width * image->channels;
-						uint8_t* newLine = newData + y * width * image->channels;
+						uint8_t* oldLine = oldData + (uint32_t)(y * scaleHeight) * image.width * image.channels;
+						uint8_t* newLine = newData + y * width * image.channels;
 						for (size_t x = 0; x < width; x++) {
 							uint32_t oldX = (uint32_t)(x * scaleWidth);
-							uint8_t* oldPixel = oldLine + oldX * image->channels;
-							uint8_t* newPixel = newLine + x * image->channels;
+							uint8_t* oldPixel = oldLine + oldX * image.channels;
+							uint8_t* newPixel = newLine + x * image.channels;
 							memcpy(newPixel, oldPixel, channels * sizeof(uint8_t));
 						}
 					}
@@ -123,9 +123,9 @@ namespace image
 			unroll.operator() < 2 > ();
 			unroll.operator() < 3 > ();
 			unroll.operator() < 4 > ();
-			image->data = std::move(newData);
-			image->width = width;
-			image->height = height;
+			image.data = std::move(newData);
+			image.width = width;
+			image.height = height;
 		}
 
 		return 0;
@@ -133,38 +133,38 @@ namespace image
 
 
 	static int PutPixel(lua_State* L) {
-		ARG_CPPDATA(1, Image, image);
+		auto& image = ARG_UDATA(1, udata::Image);
 		ARG(2, number, uint32_t, x);
 		ARG(3, number, uint32_t, y);
 		ARG_DEF(4, integer, uint32_t, color, 0xFFFFFFFF);
 
-		uint8_t* pixel = image->data.data() + (y * image->width + x) * image->channels;
-		if (image->channels > 0) [[likely]]
+		uint8_t* pixel = image.data.data() + (y * image.width + x) * image.channels;
+		if (image.channels > 0) [[likely]]
 			pixel[0] = (color >> 24) & 0xFF;
-			if (image->channels > 1) [[likely]]
+			if (image.channels > 1) [[likely]]
 				pixel[1] = (color >> 16) & 0xFF;
-				if (image->channels > 2) [[likely]]
+				if (image.channels > 2) [[likely]]
 					pixel[2] = (color >> 8) & 0xFF;
-					if (image->channels > 3)
+					if (image.channels > 3)
 						pixel[3] = color & 0xFF;
 
 					return 0;
 	}
 
 	static int GetPixel(lua_State* L) {
-		ARG_CPPDATA(1, Image, image);
+		auto& image = ARG_UDATA(1, udata::Image);
 		ARG(2, number, uint32_t, x);
 		ARG(3, number, uint32_t, y);
 
 		uint32_t color = 0;
-		uint8_t const* pixel = image->data.data() + (y * image->width + x) * image->channels;
-		if (image->channels > 0) [[likely]]
+		uint8_t const* pixel = image.data.data() + (y * image.width + x) * image.channels;
+		if (image.channels > 0) [[likely]]
 			color |= pixel[0] << 24;
-			if (image->channels > 1) [[likely]]
+			if (image.channels > 1) [[likely]]
 				color |= pixel[1] << 16;
-				if (image->channels > 2) [[likely]]
+				if (image.channels > 2) [[likely]]
 					color |= pixel[2] << 8;
-					if (image->channels > 3)
+					if (image.channels > 3)
 						color |= pixel[3];
 
 					RET(integer, color);

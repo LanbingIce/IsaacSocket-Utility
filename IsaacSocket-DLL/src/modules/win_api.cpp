@@ -100,16 +100,16 @@ namespace win_api
 #undef FindFirstFile
 	static int FindFirstFile(lua_State* L) {
 		ARG(1, stdwstring, std::wstring, lpFileName);
-		auto findData = NEW_CPPDATA(LUA_WIN32_FIND_DATAW);
-		lua_pushinteger(L, (LUA_INTEGER)FindFirstFileW(lpFileName.c_str(), &(*findData).data));
+		auto& findData = NEW_UDATA(LUA_WIN32_FIND_DATAW);
+		lua_pushinteger(L, (LUA_INTEGER)FindFirstFileW(lpFileName.c_str(), &findData.data));
 		lua_pushvalue(L, -2);
 		return 2;
 	}
 #undef FindNextFile
 	static int FindNextFile(lua_State* L) {
 		ARG(1, integer, HANDLE, hFindFile);
-		auto findData = NEW_CPPDATA(LUA_WIN32_FIND_DATAW);
-		lua_pushboolean(L, FindNextFileW(hFindFile, &(*findData).data));
+		auto& findData = NEW_UDATA(LUA_WIN32_FIND_DATAW);
+		lua_pushboolean(L, FindNextFileW(hFindFile, &findData.data));
 		lua_pushvalue(L, -2);
 		return 2;
 	}

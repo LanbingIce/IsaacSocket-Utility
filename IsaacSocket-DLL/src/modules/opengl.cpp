@@ -111,7 +111,7 @@ namespace opengl
 	}
 
 	static int ImageTexture(lua_State* L) {
-		ARG_CPPDATA(1, Image, image);
+		auto& image = ARG_UDATA(1, udata::Image);
 
 		GLStateGuard _;
 		GLuint texture = 0;
@@ -124,10 +124,10 @@ namespace opengl
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		static const GLenum formatTable[] = { GL_LUMINANCE, GL_LUMINANCE_ALPHA, GL_RGB, GL_RGBA };
-		glTexImage2D(GL_TEXTURE_2D, 0, formatTable[image->channels - 1], image->width, image->height, 0, formatTable[image->channels - 1], GL_UNSIGNED_BYTE, image->data.data());
+		glTexImage2D(GL_TEXTURE_2D, 0, formatTable[image.channels - 1], image.width, image.height, 0, formatTable[image.channels - 1], GL_UNSIGNED_BYTE, image.data.data());
 
-		auto tex = NEW_CPPDATA(Texture);
-		tex->textureId = texture;
+		auto& tex = NEW_UDATA(Texture);
+		tex.textureId = texture;
 		return 1;
 	}
 
@@ -139,14 +139,14 @@ namespace opengl
 	static int DrawImage(lua_State* L) {
 		ARG(1, number, float, x);
 		ARG(2, number, float, y);
-		ARG_CPPDATA(3, Image, image);
+		auto& image = ARG_UDATA(3, udata::Image);
 		ARG_DEF(4, number, float, zoomX, 1);
 		ARG_DEF(5, number, float, zoomY, 1);
 
 		GLStateGuard _;
 		glPixelZoom(zoomX, zoomY);
 		glRasterPos2f(x, y);
-		gl_draw_image(image->data.data(), image->width, image->height, image->channels);
+		gl_draw_image(image.data.data(), image.width, image.height, image.channels);
 
 		return 0;
 	}

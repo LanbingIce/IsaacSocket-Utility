@@ -6,8 +6,8 @@ namespace udata {
 		GLuint textureId = 0;
 
 		static int lua_index(lua_State* L) {
-			ARG_CPPDATA(1, Texture, texture);
-			METATABLE_BEGIN(Texture, *texture);
+			auto& texture = ARG_UDATA(1, udata::Texture);
+			METATABLE_BEGIN(Texture, texture);
 			METATABLE_INDEX(integer, textureId);
 			METATABLE_END();
 		}
@@ -29,8 +29,8 @@ namespace udata {
 		WIN32_FIND_DATAW data;
 		static int lua_index(lua_State* L) {
 
-			ARG_CPPDATA(1, LUA_WIN32_FIND_DATAW, data);
-			METATABLE_BEGIN(WIN32_FIND_DATAW, (*data).data);
+			auto& data = ARG_UDATA(1, udata::LUA_WIN32_FIND_DATAW);
+			METATABLE_BEGIN(WIN32_FIND_DATAW, (data).data);
 			METATABLE_INDEX(stdwstring, cFileName);
 			METATABLE_END();
 		}
@@ -50,7 +50,7 @@ namespace udata {
 		}
 
 		static int Then(lua_State* L) {
-			ARG_CPPDATA(1, Task, task);
+			auto& task = ARG_UDATA(1, udata::Task);
 			if (!lua_isfunction(L, 2))
 			{
 				return luaL_error(L, "bad argument #2: continuation should be function");
@@ -59,15 +59,15 @@ namespace udata {
 			lua_getglobal(L, "_ISAAC_SOCKET");
 			lua_pushstring(L, "TaskContinuation");
 			lua_gettable(L, -2);
-			lua_pushinteger(L, task->id);
+			lua_pushinteger(L, task.id);
 			lua_pushvalue(L, 2);
 			lua_settable(L, -3);
 			return 0;
 		}
 
 		static int lua_index(lua_State* L) {
-			ARG_CPPDATA(1, Task, task);
-			METATABLE_BEGIN(Task, *task);
+			auto& task = ARG_UDATA(1, udata::Task);
+			METATABLE_BEGIN(Task, task);
 			METATABLE_INDEX(cfunction, Then);
 			METATABLE_END();
 		}
@@ -82,8 +82,8 @@ namespace udata {
 		int width = 0, height = 0, channels = 0;
 
 		static int lua_index(lua_State* L) {
-			ARG_CPPDATA(1, Image, image);
-			METATABLE_BEGIN(Image, *image);
+			auto& image = ARG_UDATA(1, udata::Image);
+			METATABLE_BEGIN(Image, image);
 			METATABLE_INDEX(integer, width);
 			METATABLE_INDEX(integer, height);
 			METATABLE_INDEX(integer, channels);

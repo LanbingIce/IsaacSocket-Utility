@@ -3,27 +3,27 @@
 #include "lua.hpp"
 #include "state.hpp"
 
-#define NEW_CPPDATA(type) new (luaCPP_newuserdata<udata::type>(L, udata::type::lua_index,udata::type::lua_newindex, lua_cppdata_gc<udata::type>)) udata::type
-#define ARG_CPPDATA(index,type,name) udata::type *name = luaCPP_getuserdata<udata::type>(L, index)
 #define _SET_METATABLE(udataName,type) if(luaL_newmetatable(L, typeid(type).name())){luaL_Reg mt_##udataName[] = { { "__index", udataName##__index },{ "__newindex", udataName##__newindex },{ NULL, NULL } };luaL_setfuncs(L, mt_##udataName, 0);}lua_setmetatable(L, -2)
 
-#define NEW_UDATA(type,name,udataName) type& name = *(type*)lua_newuserdata(L, sizeof(type));_SET_METATABLE(udataName,type)
+#define _CHECK_ARG(index,luaType,type,name) if(lua_is##luaType(L,index)){name = (type)lua_to##luaType(L,index);}else{return luaL_error(L, "bad argument #"#index": "#name" should be "#luaType);}
+#define _CHECK_ARG_UDATA(index,type)p = luaCPP_getuserdata<type>(L, index) ;return p
+
+#define NEW_UDATA(type)*new (luaCPP_newuserdata<udata::type>(L, udata::type::lua_index,udata::type::lua_newindex, lua_cppdata_gc<udata::type>)) udata::type
+#define NEW_UDATA_META(type,metaName)*[L]{auto p=(type*)lua_newuserdata(L, sizeof(type));_SET_METATABLE(metaName,type);return p;}()
+
+#define ARG_UDATA(index,type)*[L]{type* p; _CHECK_ARG_UDATA(index,type);}()
+#define ARG_UDATA_DEF(index,type,def)*[L]{type* p; if(lua_isnoneornil(L,index)){p=&def;}else _CHECK_ARG_UDATA(index,type);}()
+
+#define ARG(index,luaType,type,name) type name; _CHECK_ARG(index,luaType,type,name)
+#define ARG_DEF(index,luaType,type,name,def) type name;if(lua_isnoneornil(L,index)){name=def;}else _CHECK_ARG(index,luaType,type,name)
+#define ARG_RANGE(name,minValue,maxValue) if (name<minValue || name>maxValue){return luaL_error(L, ((string)("invalid "#name": ")+std::to_string(name)).c_str());}
 
 #define MODULE_BEGIN(name) int top = lua_gettop(L); lua_getglobal(L, "_ISAAC_SOCKET"); lua_pushstring(L, "IsaacSocket"); lua_gettable(L, -2); lua_pushstring(L, #name); lua_newtable(L)
 #define MODULE_FUNC(name) lua_pushstring(L, #name);lua_pushcfunction(L, lua_cppfunction<name>()); lua_settable(L, -3)
 #define MODULE_UDATA(name,type,value)lua_pushstring(L, #name);type** pp_##name = (type**)lua_newuserdata(L, sizeof(type*));_SET_METATABLE(p_##name,type*);*pp_##name = &value;lua_settable(L, -3)
 #define MODULE_END() lua_settable(L, -3); lua_settop(L, top)
 
-#define _CHECK_ARG(index,luaType,type,name) if(lua_is##luaType(L,index)){name = (type)lua_to##luaType(L,index);}else{return luaL_error(L, "bad argument #"#index": "#name" should be "#luaType);}
-#define ARG(index,luaType,type,name) type name; _CHECK_ARG(index,luaType,type,name)
-#define ARG_DEF(index,luaType,type,name,def) type name;if(lua_isnoneornil(L,index)){name=def;}else _CHECK_ARG(index,luaType,type,name)
-#define ARG_RANGE(name,range) if (name >= range){std::ostringstream oss;oss<<"invalid "#name": "<<std::to_string(name); return luaL_error(L, oss.str().c_str());}
-
-#define _CHECK_ARG_UDATA(index,type,_name)p_##_name = (type*)luaL_checkudata(L, index, typeid(type).name());type& _name = *p_##_name
-#define ARG_UDATA(index,type,name)type* p_##name; _CHECK_ARG_UDATA(index,type,name)
-#define ARG_UDATA_DEF(index,type,name,def)type* p_##name;if(lua_isnoneornil(L,index)){p_##name=&def;}else _CHECK_ARG_UDATA(index,type,name)
-
-#define _LUA_PCALL(paramNum,resultNum)if(lua_pcall(L, paramNum, resultNum, 0)!=LUA_OK){ARG_DEF(-1,stdstring,string,_err,"unknow error!");lua_pop(L, 1);if constexpr(resultNum) for(int i=0;i<resultNum;i++){lua_pushnil(L);}_err.append("\n");function_::ConsoleOutput(_err, 0xFFF08080);}
+#define LUA_PCALL(paramNum,resultNum)if(lua_pcall(L, paramNum, resultNum, 0)!=LUA_OK){string _err;if(lua_type(L,-1)==LUA_TSTRING)_err=lua_tostring(L,-1);else _err="unknow error!";lua_pop(L, 1);if constexpr(resultNum) for(int i=0;i<resultNum;i++){lua_pushnil(L);}function_::ConsoleOutput(_err+"\n", 0xFFF08080);}
 
 #define RET(type,value) lua_push##type(L,value);return 1
 
@@ -31,10 +31,10 @@
 #define RET_TABLE_KEY(keyType,key,valueType,value) lua_push##keyType(L,key);lua_push##valueType(L,value);lua_settable(L,-3)
 #define RET_TABLE_END() return 1
 
-#define _MOD_CALLBACK_BEGIN(name)size_t top = lua_gettop(L);lua_getglobal(L, "Isaac");lua_pushstring(L, "GetCallbacks");lua_gettable(L, -2);lua_pushstring(L, #name);_LUA_PCALL(1, 1);lua_pushnil(L);while(lua_next(L, -2) != 0){lua_pushstring(L, "Function");lua_gettable(L, -2);lua_pushstring(L, "Mod");lua_gettable(L, -3);size_t paramNum = 1
+#define _MOD_CALLBACK_BEGIN(name)int top = lua_gettop(L);lua_getglobal(L, "Isaac");lua_pushstring(L, "GetCallbacks");lua_gettable(L, -2);lua_pushstring(L, #name);LUA_PCALL(1, 1);lua_pushnil(L);while(lua_next(L, -2) != 0){lua_pushstring(L, "Function");lua_gettable(L, -2);lua_pushstring(L, "Mod");lua_gettable(L, -3);size_t paramNum = 1
 #define MOD_CALLBACK_BEGIN(name){bool terminate = false;_MOD_CALLBACK_BEGIN(name)
 #define MOD_CALLBACK_ARG(paramType,...)lua_push##paramType(L, __VA_ARGS__);paramNum++
-#define MOD_CALLBACK_CALL()_LUA_PCALL(paramNum, 1)
+#define MOD_CALLBACK_CALL()LUA_PCALL(paramNum, 1)
 #define MOD_CALLBACK_END()if(!lua_isnil(L, -1)){terminate = true;}lua_pop(L, 2);}lua_settop(L, top);if(terminate){return 1;}}
 
 #define FAST_MOD_CALLBACK_BEGIN(name){_MOD_CALLBACK_BEGIN(name)

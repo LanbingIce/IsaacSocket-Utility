@@ -9,7 +9,7 @@
 namespace isaac_api {
 
 	static int HistoryItem__index(lua_State* L) {
-		ARG_UDATA(1, isaac_image::HistoryItem, item);
+		auto& item = ARG_UDATA(1, isaac_image::HistoryItem);
 		METATABLE_BEGIN(isaac_image::HistoryItem, item);
 		METATABLE_INDEX(integer, time);
 		METATABLE_INDEX(boolean, isTrinket);
@@ -22,7 +22,7 @@ namespace isaac_api {
 	}
 
 	static int HistoryItem__newindex(lua_State* L) {
-		ARG_UDATA(1, isaac_image::HistoryItem, item);
+		auto& item = ARG_UDATA(1, isaac_image::HistoryItem);
 		METATABLE_BEGIN(isaac_image::HistoryItem, item);
 		METATABLE_END();
 	}
@@ -71,7 +71,7 @@ namespace isaac_api {
 	//设置能否射击
 	static int SetCanShoot(lua_State* L) {
 		ARG_DEF(1, integer, uint32_t, playerId, 0);
-		ARG_RANGE(playerId, isaac.game->players.size());
+		ARG_RANGE(playerId, 0, isaac.game->players.size() - 1);
 		ARG_DEF(2, boolean, bool, canShoot, true);
 		isaac.game->players[playerId]->canShoot = canShoot;
 		return 0;
@@ -80,9 +80,9 @@ namespace isaac_api {
 	//获取主动
 	static int GetActive(lua_State* L) {
 		ARG_DEF(1, integer, uint32_t, playerId, 0);
-		ARG_RANGE(playerId, isaac.game->players.size());
+		ARG_RANGE(playerId, 0, isaac.game->players.size() - 1);
 		ARG_DEF(2, integer, uint32_t, activeId, 0);
-		ARG_RANGE(activeId, 4);
+		ARG_RANGE(activeId, 0, 3);
 
 		lua_newtable(L);
 #define _(type,name) lua_pushstring(L,#name); lua_push##type(L, isaac.game->players[playerId]->actives[activeId].name); lua_settable(L, -3)
@@ -100,9 +100,9 @@ namespace isaac_api {
 	//设置主动
 	static int SetActive(lua_State* L) {
 		ARG_DEF(1, integer, uint32_t, playerId, 0);
-		ARG_RANGE(playerId, isaac.game->players.size());
+		ARG_RANGE(playerId, 0, isaac.game->players.size() - 1);
 		ARG_DEF(2, integer, uint32_t, activeId, 0);
-		ARG_RANGE(activeId, 4);
+		ARG_RANGE(activeId, 0, 3);
 		if (!lua_istable(L, 3))
 		{
 			return luaL_error(L, "bad argument #3 :active should be table");
@@ -136,25 +136,25 @@ namespace isaac_api {
 	//获取错误道具触发器
 	static int GetGlitchedItemTrigger(lua_State* L) {
 		ARG_DEF(1, integer, uint32_t, itemId, 0);
-		ARG_RANGE(itemId, isaac.game->glitchedItems.size());
+		ARG_RANGE(itemId, 0, isaac.game->glitchedItems.size() - 1);
 		ARG_DEF(2, integer, uint32_t, eventId, 0);
-		ARG_RANGE(eventId, isaac.game->glitchedItems[itemId]->glitchedEvents.size());
+		ARG_RANGE(eventId, 0, isaac.game->glitchedItems[itemId]->glitchedEvents.size() - 1);
 		RET(integer, isaac.game->glitchedItems[itemId]->glitchedEvents[eventId]->trigger);
 	}
 
 	//获取错误道具效果
 	static int GetGlitchedItemEffect(lua_State* L) {
 		ARG_DEF(1, integer, uint32_t, itemId, 0);
-		ARG_RANGE(itemId, isaac.game->glitchedItems.size());
+		ARG_RANGE(itemId, 0, isaac.game->glitchedItems.size() - 1);
 		ARG_DEF(2, integer, uint32_t, eventId, 0);
-		ARG_RANGE(eventId, isaac.game->glitchedItems[itemId]->glitchedEvents.size());
+		ARG_RANGE(eventId, 0, isaac.game->glitchedItems[itemId]->glitchedEvents.size() - 1);
 		RET(integer, isaac.game->glitchedItems[itemId]->glitchedEvents[eventId]->trigger);
 	}
 
 	//解锁成就
 	static int UnlockAchievement(lua_State* L) {
 		ARG(1, integer, uint32_t, achievementId);
-		ARG_RANGE(achievementId, std::size(isaac.manager->persistentGameData.achievements));
+		ARG_RANGE(achievementId, 0, std::size(isaac.manager->persistentGameData.achievements) - 1);
 		ARG_DEF(2, boolean, bool, unlock, true);
 		if (achievementId == 0)
 		{
@@ -173,7 +173,7 @@ namespace isaac_api {
 	//成就是否已解锁
 	static int IsAchievementUnlocked(lua_State* L) {
 		ARG_DEF(1, integer, uint32_t, achievementId, 0);
-		ARG_RANGE(achievementId, std::size(isaac.manager->persistentGameData.achievements));
+		ARG_RANGE(achievementId, 0, std::size(isaac.manager->persistentGameData.achievements) - 1);
 		if (achievementId == 0)
 		{
 			for (size_t i = 1; i < std::size(isaac.manager->persistentGameData.achievements); i++)
@@ -251,7 +251,7 @@ namespace isaac_api {
 	//获取被动道具列表
 	static int GetHistoryItems(lua_State* L) {
 		ARG_DEF(1, integer, uint32_t, playerId, 0);
-		ARG_RANGE(playerId, isaac.game->players.size());
+		ARG_RANGE(playerId, 0, isaac.game->players.size() - 1);
 
 		vector<isaac_image::HistoryItem>& historyItems = isaac.game->players[playerId]->history.historyItems;
 
@@ -260,7 +260,7 @@ namespace isaac_api {
 		for (size_t i = 0; i < historyItems.size(); i++) {
 			lua_pushinteger(L, (LUA_INTEGER)(i + 1));
 
-			NEW_UDATA(isaac_image::HistoryItem, item, HistoryItem);
+			auto& item = NEW_UDATA_META(isaac_image::HistoryItem, HistoryItem);
 			item = historyItems[i];
 			lua_settable(L, -3);
 		}
