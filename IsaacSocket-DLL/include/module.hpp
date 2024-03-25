@@ -36,7 +36,7 @@ namespace lua {
 
 #define NEW_UDATA(type,name,udataName) type& name = *(type*)lua_newuserdata(L, sizeof(type));_SET_METATABLE(udataName,type)
 
-#define MODULE_BEGIN(name) lua_State* L = isaac.luaEngine->L; int top = lua_gettop(L); lua_getglobal(L, "_ISAAC_SOCKET"); lua_pushstring(L, "IsaacSocket"); lua_gettable(L, -2); lua_pushstring(L, #name); lua_newtable(L)
+#define MODULE_BEGIN(name) int top = lua_gettop(L); lua_getglobal(L, "_ISAAC_SOCKET"); lua_pushstring(L, "IsaacSocket"); lua_gettable(L, -2); lua_pushstring(L, #name); lua_newtable(L)
 #define MODULE_FUNC(name) lua_pushstring(L, #name);lua_pushcfunction(L, lua::lua_cppfunction<name>()); lua_settable(L, -3)
 #define MODULE_UDATA(name,type,value)lua_pushstring(L, #name);type** pp_##name = (type**)lua_newuserdata(L, sizeof(type*));_SET_METATABLE(p_##name,type*);*pp_##name = &value;lua_settable(L, -3)
 #define MODULE_END() lua_settable(L, -3); lua_settop(L, top)
@@ -58,7 +58,7 @@ namespace lua {
 #define RET_TABLE_KEY(keyType,key,valueType,value) lua_push##keyType(L,key);lua_push##valueType(L,value);lua_settable(L,-3)
 #define RET_TABLE_END() return 1
 
-#define _MOD_CALLBACK_BEGIN(name)lua_State* L = isaac.luaEngine->L;size_t top = lua_gettop(L);lua_getglobal(L, "Isaac");lua_pushstring(L, "GetCallbacks");lua_gettable(L, -2);lua_pushstring(L, #name);_LUA_PCALL(1, 1);lua_pushnil(L);while(lua_next(L, -2) != 0){lua_pushstring(L, "Function");lua_gettable(L, -2);lua_pushstring(L, "Mod");lua_gettable(L, -3);size_t paramNum = 1
+#define _MOD_CALLBACK_BEGIN(name)size_t top = lua_gettop(L);lua_getglobal(L, "Isaac");lua_pushstring(L, "GetCallbacks");lua_gettable(L, -2);lua_pushstring(L, #name);_LUA_PCALL(1, 1);lua_pushnil(L);while(lua_next(L, -2) != 0){lua_pushstring(L, "Function");lua_gettable(L, -2);lua_pushstring(L, "Mod");lua_gettable(L, -3);size_t paramNum = 1
 #define MOD_CALLBACK_BEGIN(name){bool terminate = false;_MOD_CALLBACK_BEGIN(name)
 #define MOD_CALLBACK_ARG(paramType,...)lua_push##paramType(L, __VA_ARGS__);paramNum++
 #define MOD_CALLBACK_CALL()_LUA_PCALL(paramNum, 1)

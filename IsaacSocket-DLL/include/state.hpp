@@ -68,7 +68,7 @@ namespace state {
 	};
 
 	inline isaac_image::IsaacImage& isaac = *(isaac_image::IsaacImage*)GetModuleHandleA(NULL);
-	inline lua_State* L = isaac.luaEngine->L;
+	inline lua_State*& L = isaac.luaEngine->L;
 	inline state::_LocalState local;
 	inline state::_GlobalState& global = *[] {
 		HANDLE hMapFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(_GlobalState), "IsaacSocketSharedMemory");

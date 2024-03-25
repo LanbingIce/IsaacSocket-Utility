@@ -187,7 +187,6 @@ namespace callback {
 			ImGuiWindowFlags flags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings;
 			if (ImGui::Begin("关于 IsaacSocket", &showISAbout, flags))
 			{
-				lua_State* L = isaac.luaEngine->L;
 				size_t top = lua_gettop(L);
 				lua_getglobal(L, "_ISAAC_SOCKET");
 				lua_pushstring(L, "modVersion");

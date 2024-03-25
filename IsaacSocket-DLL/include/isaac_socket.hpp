@@ -32,7 +32,6 @@ namespace isaac_socket
 	static void _InitLua() {
 		RegisterModule::InitAllModules();
 
-		lua_State* L = isaac.luaEngine->L;
 		int top = lua_gettop(L);
 		lua_getglobal(L, "_ISAAC_SOCKET");
 
@@ -47,7 +46,6 @@ namespace isaac_socket
 	}
 
 	static bool TryInitLua() {
-		lua_State* L = isaac.luaEngine->L;
 		int top = lua_gettop(L);
 		bool result = false;
 		if (lua_getglobal(L, "_ISAAC_SOCKET") == LUA_TTABLE)
