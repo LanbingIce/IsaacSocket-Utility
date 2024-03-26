@@ -58,13 +58,15 @@ namespace callback {
 	}
 #endif
 	// 小彭老师专用代码结束
-	inline string currentPath = "C:\\Windows\\Fonts";
+	static string currentPath = "C:\\Windows\\Fonts";
 
-	inline bool showDemoWindow = false;
-	inline bool showAboutWindow = false;
-	inline bool showDebugLogWindow = false;
-	inline bool showUserGuide = false;
-	inline bool showISAbout = false;
+	static bool showDemoWindow = false;
+	static bool showAboutWindow = false;
+	static bool showDebugLogWindow = false;
+	static bool showUserGuide = false;
+	static bool showISAbout = false;
+
+	static double lastMoveTime;
 
 	static void ShowUserGuide(bool* p_open)
 	{
@@ -115,12 +117,6 @@ namespace callback {
 		MENU_ITEM("关于 IsaacSocket", false, showISAbout = true);
 		MENU_END();
 		MENU_BEGIN("ImGui");
-		MENU_BEGIN("显示主菜单条");
-		int menuBar = config::Get<int>("IsaacSocket.MenuBar");
-		MENU_ITEM("默认", menuBar == state::NEVER, config::Set("IsaacSocket.MenuBar", 0));
-		MENU_ITEM("按下Tab键时", menuBar == state::TAB_HOLD, config::Set("IsaacSocket.MenuBar", 1));
-		MENU_ITEM("总是显示", menuBar == state::ALWAYS, config::Set("IsaacSocket.MenuBar", 2));
-		MENU_END();
 		MENU_BEGIN("配色");
 		int styleColors = config::Get<int>("IsaacSocket.StyleColors");
 		MENU_ITEM("默认", styleColors == state::CLASSIC, ImGui::StyleColorsClassic(); config::Set("IsaacSocket.StyleColors", 0));
@@ -210,6 +206,15 @@ namespace callback {
 		return 0;
 	}
 
+	static bool IsMouseMove() {
+		ImGuiIO& io = ImGui::GetIO();
+		if (io.MousePos.x >= 0 && io.MousePos.y >= 0 && io.MousePos.x < io.DisplaySize.x && io.MousePos.y < io.DisplaySize.y && (io.MouseDelta.x != 0 || io.MouseDelta.y != 0))
+		{
+			lastMoveTime = ImGui::GetTime();
+		}
+		return ImGui::GetTime() - lastMoveTime <= 1;
+	}
+
 	static int ImGuiRender(bool render) {
 
 		ImGui_ImplOpenGL3_NewFrame();
@@ -218,13 +223,27 @@ namespace callback {
 
 		if (render)
 		{
-			int mode = config::Get<int>("IsaacSocket.MenuBar");
-			if ((isaac.game->pauseMenu.state || mode == state::ALWAYS || mode == state::TAB_HOLD && ImGui::IsKeyDown(ImGuiKey_Tab)) && ImGui::BeginMainMenuBar())
+			if (IsMouseMove())
 			{
-				ImGuiMainMenuBarRender();
-				FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_MAIN_MENU_BAR_RENDER);
-				FAST_MOD_CALLBACK_END();
-				ImGui::EndMainMenuBar();
+				static bool show = true;
+
+				ImGui::Begin("##IsaacSocket悬浮窗", &show, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
+				ImGui::Text("IsaacSocket");
+				ImGui::SetWindowFontScale(1.0f);
+
+				if (ImGui::IsWindowHovered())
+				{
+					lastMoveTime = ImGui::GetTime();
+				}
+				if (ImGui::BeginPopupContextWindow())
+				{
+					lastMoveTime = ImGui::GetTime();
+					ImGuiMainMenuBarRender();
+					FAST_MOD_CALLBACK_BEGIN(ISMC_IMGUI_MAIN_MENU_BAR_RENDER);
+					FAST_MOD_CALLBACK_END();
+					ImGui::EndPopup();
+				}
+				ImGui::End();
 			}
 
 			ImGuiWindowRender();

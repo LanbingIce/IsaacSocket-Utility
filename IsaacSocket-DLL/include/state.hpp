@@ -26,13 +26,6 @@ namespace state {
 		RELOAD
 	};
 
-	enum MenuBarDisplayMode
-	{
-		NEVER,
-		TAB_HOLD,
-		ALWAYS
-	};
-
 	enum ImGuiStyleColor
 	{
 		CLASSIC,
