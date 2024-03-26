@@ -5,29 +5,9 @@
 #include "state.hpp"
 #include "utils.hpp"
 #include "function_.hpp"
+#include "udata.hpp"
 
 namespace isaac_api {
-
-	static int HistoryItem__index(lua_State* L) {
-		auto& item = ARG_UDATA(1, isaac_image::HistoryItem);
-		METATABLE_BEGIN(isaac_image::HistoryItem, item);
-		METATABLE_INDEX(integer, time);
-		METATABLE_INDEX(boolean, isTrinket);
-		METATABLE_INDEX(integer, id);
-		METATABLE_INDEX(integer, levelStage);
-		METATABLE_INDEX(integer, stageType);
-		METATABLE_INDEX(integer, roomType);
-		METATABLE_INDEX(integer, itemPoolType);
-		METATABLE_END();
-	}
-
-	static int HistoryItem__newindex(lua_State* L) {
-		auto& item = ARG_UDATA(1, isaac_image::HistoryItem);
-		METATABLE_BEGIN(isaac_image::HistoryItem, item);
-		METATABLE_END();
-	}
-
-
 	//是否强制暂停
 	static int IsForcePaused(lua_State* L) {
 		RET(boolean, isaac.game->console.state < 0);
@@ -260,7 +240,7 @@ namespace isaac_api {
 		for (size_t i = 0; i < historyItems.size(); i++) {
 			lua_pushinteger(L, (LUA_INTEGER)(i + 1));
 
-			auto& item = NEW_UDATA_META(isaac_image::HistoryItem, HistoryItem);
+			auto& item = NEW_UDATA_META(isaac_image::HistoryItem, udata::HistoryItem);
 			item = historyItems[i];
 			lua_settable(L, -3);
 		}

@@ -2,6 +2,34 @@
 #include "module.hpp"
 #include <glad/glad.h>
 namespace udata {
+	struct HistoryItem
+	{
+		static int __index(lua_State* L) {
+			auto& item = ARG_UDATA(1, isaac_image::HistoryItem);
+			METATABLE_BEGIN(isaac_image::HistoryItem, item);
+			METATABLE_INDEX(integer, time);
+			METATABLE_INDEX(boolean, isTrinket);
+			METATABLE_INDEX(integer, id);
+			METATABLE_INDEX(integer, levelStage);
+			METATABLE_INDEX(integer, stageType);
+			METATABLE_INDEX(integer, roomType);
+			METATABLE_INDEX(integer, itemPoolType);
+			METATABLE_END();
+		}
+
+		static int __newindex(lua_State* L) {
+			auto& item = ARG_UDATA(1, isaac_image::HistoryItem);
+			METATABLE_BEGIN(isaac_image::HistoryItem, item);
+			METATABLE_END();
+		}
+	};
+
+	struct p_Options
+	{
+		static int __index(lua_State* L);
+		static int __newindex(lua_State* L);
+	};
+
 	struct Texture {
 		GLuint textureId = 0;
 
@@ -91,6 +119,102 @@ namespace udata {
 		}
 
 		static int lua_newindex(lua_State* L) {
+			METATABLE_END();
+		}
+	};
+
+	struct p_ImVec2
+	{
+		static int __index(lua_State* L) {
+			auto& p_vec = ARG_UDATA(1, ::ImVec2*);
+			METATABLE_BEGIN(::ImVec2, *p_vec);
+			METATABLE_INDEX(number, x);
+			METATABLE_INDEX(number, y);
+			METATABLE_END();
+		}
+
+		static int __newindex(lua_State* L) {
+			auto& p_vec = ARG_UDATA(1, ::ImVec2*);
+			METATABLE_BEGIN(::ImVec2, *p_vec);
+			METATABLE_NEWINDEX(number, x);
+			METATABLE_NEWINDEX(number, y);
+			METATABLE_END();
+		}
+	};
+
+	struct ImVec2
+	{
+		static int __index(lua_State* L) {
+			auto& vec = ARG_UDATA(1, ::ImVec2);
+			METATABLE_BEGIN(::ImVec2, vec);
+			METATABLE_INDEX(number, x);
+			METATABLE_INDEX(number, y);
+			METATABLE_END();
+		}
+
+		static int __newindex(lua_State* L) {
+			auto& vec = ARG_UDATA(1, ::ImVec2);
+			METATABLE_BEGIN(::ImVec2, vec);
+			METATABLE_NEWINDEX(number, x);
+			METATABLE_NEWINDEX(number, y);
+			METATABLE_END();
+		}
+	};
+
+	struct ImVec4
+	{
+		static int __index(lua_State* L) {
+			auto& vec = ARG_UDATA(1, ::ImVec4);
+			METATABLE_BEGIN(::ImVec4, vec);
+			METATABLE_INDEX(number, x);
+			METATABLE_INDEX(number, y);
+			METATABLE_INDEX(number, z);
+			METATABLE_INDEX(number, w);
+			METATABLE_END();
+		}
+
+		static int __newindex(lua_State* L) {
+			auto& vec = ARG_UDATA(1, ::ImVec4);
+			METATABLE_BEGIN(::ImVec4, vec);
+			METATABLE_NEWINDEX(number, x);
+			METATABLE_NEWINDEX(number, y);
+			METATABLE_NEWINDEX(number, z);
+			METATABLE_NEWINDEX(number, w);
+			METATABLE_END();
+		}
+	};
+
+	struct p_ImGuiIO
+	{
+		static int __index(lua_State* L) {
+			auto& p_io = ARG_UDATA(1, ImGuiIO*);
+			METATABLE_BEGIN(::ImGuiIO, *p_io);
+			METATABLE_INDEX(number, DeltaTime);
+			METATABLE_INDEX_UDATA_P(udata::p_ImVec2, DisplaySize, ::ImVec2*);
+
+			METATABLE_END();
+		}
+
+		static int __newindex(lua_State* L) {
+			auto& p_io = ARG_UDATA(1, ImGuiIO*);
+			METATABLE_BEGIN(::ImGuiIO, *p_io);
+			METATABLE_END();
+		}
+	};
+
+	struct p_ImFont
+	{
+		static int __index(lua_State* L) {
+			auto& p_font = ARG_UDATA(1, ImFont*);
+			METATABLE_BEGIN(ImFont, *p_font);
+			METATABLE_INDEX(number, Scale);
+			METATABLE_END();
+		}
+
+		static int __newindex(lua_State* L) {
+			auto& p_font = ARG_UDATA(1, ImFont*);
+			METATABLE_BEGIN(ImFont, *p_font);
+			METATABLE_NEWINDEX(number, Scale);
 			METATABLE_END();
 		}
 	};

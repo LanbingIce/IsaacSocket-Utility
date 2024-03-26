@@ -3,99 +3,19 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_stdlib.h>
 #include "config.hpp"
+#include "udata.hpp"
 
-namespace imgui {
+namespace imgui_ {
 	static const ::ImVec2 VEC2_0 = ::ImVec2(0, 0);
 	static const ::ImVec4 VEC4_0 = ::ImVec4(0, 0, 0, 0);
 	static const ::ImVec2 VEC2_1 = ::ImVec2(1, 1);
 	static const ::ImVec4 VEC4_1 = ::ImVec4(1, 1, 1, 1);
 	static const ::ImVec2 VEC2_NEG_MIN_0 = ::ImVec2(-FLT_MIN, 0);
 
-	static int p_ImVec2__index(lua_State* L) {
-		auto& p_vec = ARG_UDATA(1, ::ImVec2*);
-		METATABLE_BEGIN(::ImVec2, *p_vec);
-		METATABLE_INDEX(number, x);
-		METATABLE_INDEX(number, y);
-		METATABLE_END();
-	}
-
-	static int p_ImVec2__newindex(lua_State* L) {
-		auto& p_vec = ARG_UDATA(1, ::ImVec2*);
-		METATABLE_BEGIN(::ImVec2, *p_vec);
-		METATABLE_NEWINDEX(number, x);
-		METATABLE_NEWINDEX(number, y);
-		METATABLE_END();
-	}
-
-	static int ImVec2__index(lua_State* L) {
-		auto& vec = ARG_UDATA(1, ::ImVec2);
-		METATABLE_BEGIN(::ImVec2, vec);
-		METATABLE_INDEX(number, x);
-		METATABLE_INDEX(number, y);
-		METATABLE_END();
-	}
-
-	static int ImVec2__newindex(lua_State* L) {
-		auto& vec = ARG_UDATA(1, ::ImVec2);
-		METATABLE_BEGIN(::ImVec2, vec);
-		METATABLE_NEWINDEX(number, x);
-		METATABLE_NEWINDEX(number, y);
-		METATABLE_END();
-	}
-
-	static int ImVec4__index(lua_State* L) {
-		auto& vec = ARG_UDATA(1, ::ImVec4);
-		METATABLE_BEGIN(::ImVec4, vec);
-		METATABLE_INDEX(number, x);
-		METATABLE_INDEX(number, y);
-		METATABLE_INDEX(number, z);
-		METATABLE_INDEX(number, w);
-		METATABLE_END();
-	}
-
-	static int ImVec4__newindex(lua_State* L) {
-		auto& vec = ARG_UDATA(1, ::ImVec4);
-		METATABLE_BEGIN(::ImVec4, vec);
-		METATABLE_NEWINDEX(number, x);
-		METATABLE_NEWINDEX(number, y);
-		METATABLE_NEWINDEX(number, z);
-		METATABLE_NEWINDEX(number, w);
-		METATABLE_END();
-	}
-
-	static int p_ImGuiIO__index(lua_State* L) {
-		auto& p_io = ARG_UDATA(1, ImGuiIO*);
-		METATABLE_BEGIN(::ImGuiIO, *p_io);
-		METATABLE_INDEX(number, DeltaTime);
-		METATABLE_INDEX_UDATA_P(p_ImVec2, DisplaySize, ::ImVec2*);
-
-		METATABLE_END();
-	}
-
-	static int p_ImGuiIO__newindex(lua_State* L) {
-		auto& p_io = ARG_UDATA(1, ImGuiIO*);
-		METATABLE_BEGIN(::ImGuiIO, *p_io);
-		METATABLE_END();
-	}
-
-	static int p_ImFont__index(lua_State* L) {
-		auto& p_font = ARG_UDATA(1, ImFont*);
-		METATABLE_BEGIN(ImFont, *p_font);
-		METATABLE_INDEX(number, Scale);
-		METATABLE_END();
-	}
-
-	static int p_ImFont__newindex(lua_State* L) {
-		auto& p_font = ARG_UDATA(1, ImFont*);
-		METATABLE_BEGIN(ImFont, *p_font);
-		METATABLE_NEWINDEX(number, Scale);
-		METATABLE_END();
-	}
-
 	static int ImVec2(lua_State* L) {
 		ARG(1, number, float, x);
 		ARG(2, number, float, y);
-		auto& vec = NEW_UDATA_META(::ImVec2, ImVec2);
+		auto& vec = NEW_UDATA_META(::ImVec2, udata::ImVec2);
 		vec.x = x;
 		vec.y = y;
 		return 1;
@@ -106,7 +26,7 @@ namespace imgui {
 		ARG(2, number, float, y);
 		ARG(3, number, float, z);
 		ARG(4, number, float, w);
-		auto& vec = NEW_UDATA_META(::ImVec4, ImVec4);
+		auto& vec = NEW_UDATA_META(::ImVec4, udata::ImVec4);
 		vec.x = x;
 		vec.y = y;
 		vec.z = z;
@@ -115,7 +35,7 @@ namespace imgui {
 	}
 
 	static int GetIO(lua_State* L) {
-		auto& p_io = NEW_UDATA_META(ImGuiIO*, p_ImGuiIO);
+		auto& p_io = NEW_UDATA_META(ImGuiIO*, udata::p_ImGuiIO);
 		p_io = &ImGui::GetIO();
 		return 1;
 	}
@@ -246,13 +166,13 @@ namespace imgui {
 	}
 
 	static int GetWindowPos(lua_State* L) {
-		auto& vec = NEW_UDATA_META(::ImVec2, ImVec2);
+		auto& vec = NEW_UDATA_META(::ImVec2, udata::ImVec2);
 		vec = ImGui::GetWindowPos();
 		return 1;
 	}
 
 	static int GetWindowSize(lua_State* L) {
-		auto& vec = NEW_UDATA_META(::ImVec2, ImVec2);
+		auto& vec = NEW_UDATA_META(::ImVec2, udata::ImVec2);
 		vec = ImGui::GetWindowSize();
 		return 1;
 	}
@@ -377,7 +297,7 @@ namespace imgui {
 	}
 
 	static int GetFont(lua_State* L) {
-		auto& p_font = NEW_UDATA_META(ImFont*, p_ImFont);
+		auto& p_font = NEW_UDATA_META(ImFont*, udata::p_ImFont);
 		p_font = ImGui::GetFont();
 		return 1;
 	}
@@ -1329,19 +1249,19 @@ namespace imgui {
 	}
 
 	static int GetItemRectMin(lua_State* L) {
-		auto& vec = NEW_UDATA_META(::ImVec2, ImVec2);
+		auto& vec = NEW_UDATA_META(::ImVec2, udata::ImVec2);
 		vec = ImGui::GetItemRectMin();
 		return 1;
 	}
 
 	static int GetItemRectMax(lua_State* L) {
-		auto& vec = NEW_UDATA_META(::ImVec2, ImVec2);
+		auto& vec = NEW_UDATA_META(::ImVec2, udata::ImVec2);
 		vec = ImGui::GetItemRectMax();
 		return 1;
 	}
 
 	static int GetItemRectSize(lua_State* L) {
-		auto& vec = NEW_UDATA_META(::ImVec2, ImVec2);
+		auto& vec = NEW_UDATA_META(::ImVec2, udata::ImVec2);
 		vec = ImGui::GetItemRectSize();
 		return 1;
 	}
@@ -1378,14 +1298,14 @@ namespace imgui {
 		ARG_DEF(2, string, const char*, text_end, NULL);
 		ARG_DEF(3, boolean, bool, hide_text_after_double_hash, false);
 		ARG_DEF(4, number, float, wrap_width, -1.0f);
-		auto& vec = NEW_UDATA_META(::ImVec2, ImVec2);
+		auto& vec = NEW_UDATA_META(::ImVec2, udata::ImVec2);
 		vec = ImGui::CalcTextSize(text, text_end, hide_text_after_double_hash, wrap_width);
 		return 1;
 	}
 
 	static int ColorConvertU32ToFloat4(lua_State* L) {
 		ARG(1, integer, ImU32, in);
-		auto& vec = NEW_UDATA_META(::ImVec4, ImVec4);
+		auto& vec = NEW_UDATA_META(::ImVec4, udata::ImVec4);
 		vec = ImGui::ColorConvertU32ToFloat4(in);
 		return 1;
 	}
@@ -1495,13 +1415,13 @@ namespace imgui {
 	}
 
 	static int GetMousePos(lua_State* L) {
-		auto& vec = NEW_UDATA_META(::ImVec2, ImVec2);
+		auto& vec = NEW_UDATA_META(::ImVec2, udata::ImVec2);
 		vec = ImGui::GetMousePos();
 		return 1;
 	}
 
 	static int GetMousePosOnOpeningCurrentPopup(lua_State* L) {
-		auto& vec = NEW_UDATA_META(::ImVec2, ImVec2);
+		auto& vec = NEW_UDATA_META(::ImVec2, udata::ImVec2);
 		vec = ImGui::GetMousePosOnOpeningCurrentPopup();
 		return 1;
 	}
@@ -1515,7 +1435,7 @@ namespace imgui {
 	static int GetMouseDragDelta(lua_State* L) {
 		ARG_DEF(1, integer, ImGuiMouseButton, button, 0);
 		ARG_DEF(2, number, float, lock_threshold, -1.0f);
-		auto& vec = NEW_UDATA_META(::ImVec2, ImVec2);
+		auto& vec = NEW_UDATA_META(::ImVec2, udata::ImVec2);
 		vec = ImGui::GetMouseDragDelta(button, lock_threshold);
 		return 1;
 	}
