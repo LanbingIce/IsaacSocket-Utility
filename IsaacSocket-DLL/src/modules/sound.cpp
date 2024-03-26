@@ -1,4 +1,4 @@
-#include "module.hpp"
+﻿#include "module.hpp"
 #include "state.hpp"
 #include <mmsystem.h>
 #undef PlaySound
