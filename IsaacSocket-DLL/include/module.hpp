@@ -58,6 +58,8 @@
 #define METATABLE_INDEX_STRING(name)_METATABLE_INDEX(string,name,_obj.name.c_str())
 #define METATABLE_END()return luaL_error(L, "Invalid member access.")
 
+#define CHECK_PLAYERS()if (!isaac.game->players.size())return 0
+
 struct LuaGuard
 {
 	int top;

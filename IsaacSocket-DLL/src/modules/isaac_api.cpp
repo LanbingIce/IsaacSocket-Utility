@@ -50,6 +50,7 @@ namespace isaac_api {
 
 	//设置能否射击
 	static int SetCanShoot(lua_State* L) {
+		CHECK_PLAYERS();
 		ARG_DEF(1, integer, uint32_t, playerId, 0);
 		ARG_RANGE(playerId, 0, isaac.game->players.size() - 1);
 		ARG_DEF(2, boolean, bool, canShoot, true);
@@ -59,6 +60,7 @@ namespace isaac_api {
 
 	//获取主动
 	static int GetActive(lua_State* L) {
+		CHECK_PLAYERS();
 		ARG_DEF(1, integer, uint32_t, playerId, 0);
 		ARG_RANGE(playerId, 0, isaac.game->players.size() - 1);
 		ARG_DEF(2, integer, uint32_t, activeId, 0);
@@ -79,6 +81,7 @@ namespace isaac_api {
 
 	//设置主动
 	static int SetActive(lua_State* L) {
+		CHECK_PLAYERS();
 		ARG_DEF(1, integer, uint32_t, playerId, 0);
 		ARG_RANGE(playerId, 0, isaac.game->players.size() - 1);
 		ARG_DEF(2, integer, uint32_t, activeId, 0);
@@ -230,6 +233,7 @@ namespace isaac_api {
 
 	//获取被动道具列表
 	static int GetHistoryItems(lua_State* L) {
+		CHECK_PLAYERS();
 		ARG_DEF(1, integer, uint32_t, playerId, 0);
 		ARG_RANGE(playerId, 0, isaac.game->players.size() - 1);
 
