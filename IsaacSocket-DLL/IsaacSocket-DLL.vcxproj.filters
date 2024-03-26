@@ -905,6 +905,9 @@
     <ClInclude Include="include\udata.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\result.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="libs\imsdk\ImSDK.lib">

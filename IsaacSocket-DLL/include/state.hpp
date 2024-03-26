@@ -2,6 +2,7 @@
 
 #include "isaac_image.hpp"
 #include "pch.h"
+#include "result.hpp"
 
 #include <imgui/imgui.h>
 #include <imsdk/TIMMessageManager.h>
@@ -38,30 +39,11 @@ namespace state {
 		const char version[8]{};
 	};
 
-	struct TaskResult {
-		size_t id;
-		string result;
-	};
-
-	struct TIMRecvNewMsg
-	{
-		string json_msg_array;
-		string user_data;
-	};
-
-	struct TIMComm
-	{
-		int32_t code;
-		string desc;
-		string json_params;
-		string user_data;
-	};
-
 	struct _LocalState
 	{
-		vector<TIMRecvNewMsg> msgs;
-		vector<TIMComm> comms;
-		vector<TaskResult> tasks;
+		vector<result::TIMRecvNewMsg> msgs;
+		vector<result::TIMComm> comms;
+		vector<result::TaskResult> tasks;
 		Poco::Util::JSONConfiguration _config;
 		union { Poco::TaskManager taskManager; };
 		std::mutex mutex;

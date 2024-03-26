@@ -13,7 +13,7 @@ namespace http2
 {
 	static void SetResult(size_t id, string s) {
 		std::lock_guard lock(local.mutex);
-		local.tasks.push_back(state::TaskResult(id, s));
+		local.tasks.push_back(result::TaskResult(id, s));
 	}
 
 	static int GetAsync(lua_State* L) {
