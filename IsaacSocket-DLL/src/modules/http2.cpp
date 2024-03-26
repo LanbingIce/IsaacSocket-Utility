@@ -1,5 +1,6 @@
 ﻿#include "task_.hpp"
 #include "module.hpp"
+#include "state.hpp"
 
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/Net/HTTPRequest.h>
@@ -7,7 +8,6 @@
 #include <Poco/URI.h>
 #include <Poco/TaskManager.h>
 #include <Poco/Task.h>
-#include "function_.hpp"
 
 namespace http2
 {

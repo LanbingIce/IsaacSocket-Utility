@@ -62,7 +62,6 @@
     <ClInclude Include="include\callback.hpp" />
     <ClInclude Include="include\config.hpp" />
     <ClInclude Include="include\framework.h" />
-    <ClInclude Include="include\function_.hpp" />
     <ClInclude Include="include\gnucompat.hpp" />
     <ClInclude Include="include\handle.hpp" />
     <ClInclude Include="include\inject.hpp" />
@@ -327,6 +326,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\async.cpp" />
+    <ClCompile Include="src\config.cpp" />
     <ClCompile Include="src\dllmain.cpp" />
     <ClCompile Include="src\inject.cpp" />
     <ClCompile Include="src\isaac_socket.cpp" />
@@ -344,6 +344,7 @@
     <ClCompile Include="src\modules\win_api.cpp" />
     <ClCompile Include="src\reload.cpp" />
     <ClCompile Include="src\callback.cpp" />
+    <ClCompile Include="src\task_.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="libs\imsdk\ImSDK.lib" />

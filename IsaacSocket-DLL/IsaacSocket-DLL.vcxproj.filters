@@ -144,6 +144,12 @@
     <ClCompile Include="src\isaac_socket.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\task_.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\config.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="libs\glad\glad.h">
@@ -195,9 +201,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\framework.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\function_.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\gnucompat.hpp">

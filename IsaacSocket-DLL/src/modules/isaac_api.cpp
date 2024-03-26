@@ -4,7 +4,7 @@
 #include "lua.hpp"
 #include "state.hpp"
 #include "utils.hpp"
-#include "function_.hpp"
+#include "isaac_socket.hpp"
 #include "udata.hpp"
 
 namespace isaac_api {
@@ -257,7 +257,7 @@ namespace isaac_api {
 	static int LogOutput(lua_State* L) {
 		ARG(1, string, const char*, text);
 		ARG_DEF(2, integer, int, type, 0);
-		function_::LogOutput(text, type);
+		isaac_socket::LogOutput(text, type);
 		return 0;
 	}
 
@@ -265,7 +265,7 @@ namespace isaac_api {
 	static int ConsoleOutput(lua_State* L) {
 		ARG(1, string, const char*, text);
 		ARG_DEF(2, integer, uint32_t, color, 0xFFD3D3D3);
-		function_::ConsoleOutput(text, color);
+		isaac_socket::ConsoleOutput(text, color);
 		return 0;
 	}
 

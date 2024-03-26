@@ -1,8 +1,10 @@
 #include "module.hpp"
+#include "udata.hpp"
+#include "state.hpp"
+
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_STATIC
 #include <stbi/stb_image.h>
-#include "udata.hpp"
 
 namespace image
 {

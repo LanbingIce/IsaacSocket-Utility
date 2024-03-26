@@ -1,7 +1,5 @@
 ﻿#pragma once
-
-#include "lua.hpp"
-#include "state.hpp"
+#include "pch.h"
 
 #define _SET_METATABLE(udataName,type) if(luaL_newmetatable(L, typeid(type).name())){luaL_Reg _metatable[] = { { "__index", udataName::__index },{ "__newindex", udataName::__newindex },{ NULL, NULL } };luaL_setfuncs(L, _metatable, 0);}lua_setmetatable(L, -2)
 
@@ -23,7 +21,7 @@
 #define MODULE_UDATA(name,type,value)lua_pushstring(L, #name);type** pp_##name = (type**)lua_newuserdata(L, sizeof(type*));_SET_METATABLE(udata::p_##name,type*);*pp_##name = &value;lua_settable(L, -3)
 #define MODULE_END() lua_settable(L, -3); lua_settop(L, top)
 
-#define LUA_PCALL(paramNum,resultNum)if(lua_pcall(L, paramNum, resultNum, 0)!=LUA_OK){string _err;if(lua_type(L,-1)==LUA_TSTRING)_err=lua_tostring(L,-1);else _err="unknow error!";lua_pop(L, 1);if constexpr(resultNum) for(int i=0;i<resultNum;i++){lua_pushnil(L);}function_::ConsoleOutput(_err+"\n", 0xFFF08080);}
+#define LUA_PCALL(paramNum,resultNum)if(lua_pcall(L, paramNum, resultNum, 0)!=LUA_OK){string _err;if(lua_type(L,-1)==LUA_TSTRING)_err=lua_tostring(L,-1);else _err="unknow error!";lua_pop(L, 1);if constexpr(resultNum) for(int i=0;i<resultNum;i++){lua_pushnil(L);}isaac_socket::ConsoleOutput(_err+"\n", 0xFFF08080);}
 
 #define RET(type,value) lua_push##type(L,value);return 1
 

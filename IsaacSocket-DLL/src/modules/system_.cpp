@@ -1,4 +1,7 @@
 ﻿#include "module.hpp"
+#include "lua.hpp"
+#include "imgui/imgui.h"
+#include "state.hpp"
 
 namespace system_
 {

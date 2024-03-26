@@ -1,5 +1,9 @@
 ﻿#pragma once
 #include "module.hpp"
+#include "lua.hpp"
+#include "isaac_image.hpp"
+
+#include <imgui/imgui.h>
 #include <glad/glad.h>
 namespace udata {
 	struct HistoryItem

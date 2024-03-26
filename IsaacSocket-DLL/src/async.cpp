@@ -1,6 +1,6 @@
 ﻿#include "module.hpp"
 #include "async.hpp"
-#include "function_.hpp"
+#include "isaac_socket.hpp"
 
 namespace async {
 
@@ -114,7 +114,7 @@ void luaPollPromises(lua_State *L) {
             n = -1;
         }
         if (n >= 0 && !lua_isnoneornil(L, -1 - n)) [[likely]] {
-            if(lua_pcall(L, n, 0, 0)!=LUA_OK){std::string _err="?";if(lua_isstring(L,-1)){_err=lua_tostring(L,-1);};lua_pop(L, 1);_err.append("\n");function_::ConsoleOutput(_err, 0xFFF08080);cw("Error in async callback:", _err.c_str());}
+            if(lua_pcall(L, n, 0, 0)!=LUA_OK){std::string _err="?";if(lua_isstring(L,-1)){_err=lua_tostring(L,-1);};lua_pop(L, 1);_err.append("\n");isaac_socket::ConsoleOutput(_err, 0xFFF08080);cw("Error in async callback:", _err.c_str());}
         }
         lua_settop(L, top);
         promiseTable().destroy(h);

@@ -1,6 +1,8 @@
 ﻿#include "module.hpp"
-#include <glad/glad.h>
 #include "udata.hpp"
+#include "state.hpp"
+
+#include <glad/glad.h>
 
 #define CHECK_GL(x) do { (x); opengl_check_error(__FILE__, __LINE__, #x); } while (0)
 

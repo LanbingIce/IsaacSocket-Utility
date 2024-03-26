@@ -1,9 +1,7 @@
 ﻿#pragma once
 
 #include "pch.h"
-#include "lua.hpp"
 #include "state.hpp"
-#include "function_.hpp"
 #include "inject.hpp"
 #include "callback.hpp"
 

@@ -1,4 +1,6 @@
 ﻿#include "module.hpp"
+#include "lua.hpp"
+#include "state.hpp"
 
 namespace memory
 {

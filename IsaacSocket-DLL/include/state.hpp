@@ -2,9 +2,11 @@
 
 #include "isaac_image.hpp"
 #include "pch.h"
+
 #include <imgui/imgui.h>
 #include <imsdk/TIMMessageManager.h>
 #include <Poco/TaskManager.h>
+#include <Poco/Util/JSONConfiguration.h>
 
 #pragma warning(disable: 26495 6387)//禁用警告C26495 C6387: 始终初始化成员变量
 
@@ -45,6 +47,7 @@ namespace state {
 
 	struct _LocalState
 	{
+		Poco::Util::JSONConfiguration _config;
 		std::unordered_map<size_t, string> map;
 		union { Poco::TaskManager taskManager; };
 		std::mutex responsesMutex;

@@ -1,9 +1,11 @@
 ﻿#include "module.hpp"
 #include "lua.hpp"
-#include <imgui/imgui.h>
-#include <imgui/imgui_stdlib.h>
 #include "config.hpp"
 #include "udata.hpp"
+#include "state.hpp"
+
+#include <imgui/imgui.h>
+#include <imgui/imgui_stdlib.h>
 
 namespace imgui_ {
 	static const ::ImVec2 VEC2_0 = ::ImVec2(0, 0);

@@ -2,11 +2,14 @@
 #include "async.hpp"
 #include "state.hpp"
 #include "utils.hpp"
-#include "function_.hpp"
+#include "isaac_socket.hpp"
 #include "config.hpp"
 #include "task_.hpp"
-
+#include "module.hpp"
 #include "isaac_socket.hpp"
+
+#include <imgui/imgui_impl_opengl3.h>
+#include <imgui/imgui_impl_win32.h>
 #include <imgui/imgui.h>
 #include <ImGuiFileDialog/ImGuiFileDialog.h>
 
@@ -103,7 +106,7 @@ namespace callback {
 	static int ImGuiMainMenuBarRender() {
 
 		MENU_BEGIN("IsaacSocket");
-		MENU_ITEM("启用系统控制台", local.allocConsole, local.allocConsole = !local.allocConsole; if (local.allocConsole)function_::AllocConsole(); else function_::FreeConsole(););
+		MENU_ITEM("启用系统控制台", local.allocConsole, local.allocConsole = !local.allocConsole; if (local.allocConsole)isaac_socket::AllocConsole(); else isaac_socket::FreeConsole(););
 		MENU_ITEM("小退并重载Lua环境", false, local.connectionState = state::RELOAD_LUA; local.reloadLuaState = state::EXIT);
 		MENU_BEGIN("实验性功能");
 		MENU_ITEM("重载Lua环境", false, local.connectionState = state::RELOAD_LUA; local.reloadLuaState = state::RELOAD);
@@ -255,7 +258,7 @@ namespace callback {
 		if (local.connectionState == state::INIT)
 		{
 			local.hWnd = WindowFromDC(hdc);
-			function_::InitByMainThread();
+			isaac_socket::InitByMainThread();
 			local.connectionState = state::DISCONNECTED;
 		}
 		if (!isaac_socket::TryInitLua())
@@ -283,7 +286,7 @@ namespace callback {
 				isaac.mainMenu->page = 3;
 				[[fallthrough]];
 			case state::RELOAD:
-				function_::ReloadLua();
+				isaac_socket::ReloadLua();
 				break;
 			}
 			break;

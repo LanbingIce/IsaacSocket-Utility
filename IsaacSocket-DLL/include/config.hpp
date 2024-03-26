@@ -1,27 +1,13 @@
 ﻿#pragma once
 #include "pch.h"
 #include "state.hpp"
-#include "utils.hpp"
-#include <Poco/Util/JSONConfiguration.h>
 
 namespace config {
-	inline const string path = utils::GetDataFilePath("config.json");
-	inline Poco::Util::JSONConfiguration _config = Poco::Util::JSONConfiguration(path);
+	void Load();
 
-	static void Load() {
-		utils::ReadFile(path, "{}");
-		_config.load(path);
-	}
+	void Save();
 
-	static void Save() {
-		std::ofstream ofs(path);
-		if (ofs)
-		{
-			_config.save(ofs);
-		}
-	}
-
-#define _(type,Type,def) if constexpr (std::is_same_v<T, type>){return (type)_config.get##Type(path,def);}
+#define _(type,Type,def) if constexpr (std::is_same_v<T, type>){return (type)local._config.get##Type(path,def);}
 	template <typename T>
 	static T Get(const string& path) {
 		_(int, Int, 0);
@@ -32,7 +18,7 @@ namespace config {
 	}
 #undef _
 
-#define _(type,Type) if constexpr (std::is_same_v<T, type>) {if (Get<type>(path)==value)return;_config.set##Type(path,value);Save();return;}
+#define _(type,Type) if constexpr (std::is_same_v<T, type>) {if (Get<type>(path)==value)return;local._config.set##Type(path,value);Save();return;}
 	template <typename T>
 	static void Set(const string& path, T value) {
 		_(int, Int);
