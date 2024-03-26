@@ -188,6 +188,17 @@ namespace udata {
 		}
 	};
 
+	struct ImColor
+	{
+		static int __index(lua_State* L) {
+			METATABLE_END();
+		}
+
+		static int __newindex(lua_State* L) {
+			METATABLE_END();
+		}
+	};
+
 	struct p_ImGuiIO
 	{
 		static int __index(lua_State* L) {

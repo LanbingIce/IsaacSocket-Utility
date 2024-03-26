@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "pch.h"
+#include "state.hpp"
 
 #define _SET_METATABLE(udataName,type) if(luaL_newmetatable(L, typeid(type).name())){luaL_Reg _metatable[] = { { "__index", udataName::__index },{ "__newindex", udataName::__newindex },{ NULL, NULL } };luaL_setfuncs(L, _metatable, 0);}lua_setmetatable(L, -2)
 
@@ -16,10 +17,10 @@
 #define ARG_DEF(index,luaType,type,name,def) type name;if(lua_isnoneornil(L,index)){name=def;}else _CHECK_ARG(index,luaType,type,name)
 #define ARG_RANGE(name,minValue,maxValue) if (name<minValue || name>maxValue){return luaL_error(L, ((string)("invalid "#name": ")+std::to_string(name)).c_str());}
 
-#define MODULE_BEGIN(name) int top = lua_gettop(L); lua_getglobal(L, "_ISAAC_SOCKET"); lua_pushstring(L, "IsaacSocket"); lua_gettable(L, -2); lua_pushstring(L, #name); lua_newtable(L)
+#define MODULE_BEGIN(name)lua_getglobal(L, "_ISAAC_SOCKET"); lua_pushstring(L, "IsaacSocket"); lua_gettable(L, -2); lua_pushstring(L, #name); lua_newtable(L)
 #define MODULE_FUNC(name) lua_pushstring(L, #name);lua_pushcfunction(L, lua_cppfunction<name>()); lua_settable(L, -3)
 #define MODULE_UDATA(name,type,value)lua_pushstring(L, #name);type** pp_##name = (type**)lua_newuserdata(L, sizeof(type*));_SET_METATABLE(udata::p_##name,type*);*pp_##name = &value;lua_settable(L, -3)
-#define MODULE_END() lua_settable(L, -3); lua_settop(L, top)
+#define MODULE_END() lua_settable(L, -3)
 
 #define LUA_PCALL(paramNum,resultNum)if(lua_pcall(L, paramNum, resultNum, 0)!=LUA_OK){string _err;if(lua_type(L,-1)==LUA_TSTRING)_err=lua_tostring(L,-1);else _err="unknow error!";lua_pop(L, 1);if constexpr(resultNum) for(int i=0;i<resultNum;i++){lua_pushnil(L);}isaac_socket::ConsoleOutput(_err+"\n", 0xFFF08080);}
 
@@ -29,14 +30,14 @@
 #define RET_TABLE_KEY(keyType,key,valueType,value) lua_push##keyType(L,key);lua_push##valueType(L,value);lua_settable(L,-3)
 #define RET_TABLE_END() return 1
 
-#define _MOD_CALLBACK_BEGIN(name)int top = lua_gettop(L);lua_getglobal(L, "Isaac");lua_pushstring(L, "GetCallbacks");lua_gettable(L, -2);lua_pushstring(L, #name);LUA_PCALL(1, 1);lua_pushnil(L);while(lua_next(L, -2) != 0){lua_pushstring(L, "Function");lua_gettable(L, -2);lua_pushstring(L, "Mod");lua_gettable(L, -3);size_t paramNum = 1
+#define _MOD_CALLBACK_BEGIN(name)lua_getglobal(L, "Isaac");lua_pushstring(L, "GetCallbacks");lua_gettable(L, -2);lua_pushstring(L, #name);LUA_PCALL(1, 1);lua_pushnil(L);while(lua_next(L, -2) != 0){lua_pushstring(L, "Function");lua_gettable(L, -2);lua_pushstring(L, "Mod");lua_gettable(L, -3);size_t paramNum = 1
 #define MOD_CALLBACK_BEGIN(name){bool terminate = false;_MOD_CALLBACK_BEGIN(name)
 #define MOD_CALLBACK_ARG(paramType,...)lua_push##paramType(L, __VA_ARGS__);paramNum++
 #define MOD_CALLBACK_CALL()LUA_PCALL(paramNum, 1)
-#define MOD_CALLBACK_END()if(!lua_isnil(L, -1)){terminate = true;}lua_pop(L, 2);}lua_settop(L, top);if(terminate){return 1;}}
+#define MOD_CALLBACK_END()if(!lua_isnil(L, -1)){terminate = true;}lua_pop(L, 2);}if(terminate){return 1;}}
 
 #define FAST_MOD_CALLBACK_BEGIN(name){_MOD_CALLBACK_BEGIN(name)
-#define FAST_MOD_CALLBACK_END()MOD_CALLBACK_CALL();lua_pop(L, 2);}lua_settop(L, top);}
+#define FAST_MOD_CALLBACK_END()MOD_CALLBACK_CALL();lua_pop(L, 2);}}
 
 #define _METATABLE_ERROR(luaType,name)else{return luaL_error(L, "bad value, "#name" should be "#luaType);}}
 #define _METATABLE_INDEX(luaType,name,result)if(strcmp(key, #name) == 0){RET(luaType,result);}
@@ -57,7 +58,16 @@
 #define METATABLE_INDEX_STRING(name)_METATABLE_INDEX(string,name,_obj.name.c_str())
 #define METATABLE_END()return luaL_error(L, "Invalid member access.")
 
-#define DO_STRING(code){int _top=lua_gettop(L);luaL_dostring(L,code);lua_settop(L,_top);}
+struct LuaGuard
+{
+	int top;
+	LuaGuard() {
+		top = lua_gettop(L);
+	}
+	~LuaGuard() {
+		lua_settop(L, top);
+	}
+};
 
 struct RegisterModule {
 	inline static std::vector<std::function<void()>> initCallbacks;

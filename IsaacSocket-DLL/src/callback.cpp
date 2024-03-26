@@ -43,7 +43,7 @@ namespace callback {
 		if (!L) {
 			return false;
 		}
-		int top = lua_gettop(L);
+		auto luaGuard = LuaGuard();
 		lua_getglobal(L, "_ISAAC_SOCKET");
 		bool ok = !lua_isnoneornil(L, -1);
 		if (ok) {
@@ -54,7 +54,6 @@ namespace callback {
 				lua_setglobal(L, "IsaacSocket");
 			}
 		}
-		lua_settop(L, top);
 		return ok;
 	}
 #endif
@@ -185,12 +184,10 @@ namespace callback {
 			ImGuiWindowFlags flags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings;
 			if (ImGui::Begin("关于 IsaacSocket", &showISAbout, flags))
 			{
-				size_t top = lua_gettop(L);
 				lua_getglobal(L, "_ISAAC_SOCKET");
 				lua_pushstring(L, "modVersion");
 				lua_gettable(L, -2);
 				ARG_DEF(-1, string, const char*, ver, "1.0");
-				lua_settop(L, top);
 				ImGui::Text("IsaacSocket");
 				ImGui::Text("版本号：%s-%s", global.version, ver);
 				ImGui::End();
@@ -248,6 +245,54 @@ namespace callback {
 		return 0;
 	}
 
+	static void RunTaskCallbacks() {
+		std::lock_guard<std::mutex> lock(local.mutex);
+		auto luaGuard = LuaGuard();
+
+		lua_getglobal(L, "_ISAAC_SOCKET");
+		lua_pushstring(L, "TaskContinuation");
+		lua_gettable(L, -2);
+
+		for (auto it = local.tasks.begin(); it != local.tasks.end(); ++it) {
+			auto& v = *it;
+			lua_pushinteger(L, v.id);
+			lua_gettable(L, -2);
+			if (!lua_isfunction(L, -1))
+			{
+				lua_pop(L, 1);
+				continue;
+			}
+			lua_pushstring(L, v.result.c_str());
+
+			LUA_PCALL(1, 0);
+
+			lua_pushinteger(L, v.id);
+			lua_pushnil(L);
+			lua_settable(L, -3);
+		}
+		local.tasks.clear();
+
+		for (auto it = local.msgs.begin(); it != local.msgs.end(); ++it) {
+			auto& v = *it;
+			FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_RECV_NEW_MSG);
+			MOD_CALLBACK_ARG(string, v.json_msg_array.c_str());
+			MOD_CALLBACK_ARG(string, v.user_data.c_str());
+			FAST_MOD_CALLBACK_END();
+		}
+		local.msgs.clear();
+
+		for (auto it = local.comms.begin(); it != local.comms.end(); ++it) {
+			auto& v = *it;
+			FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_COMM);
+			MOD_CALLBACK_ARG(integer, v.code);
+			MOD_CALLBACK_ARG(string, v.desc.c_str());
+			MOD_CALLBACK_ARG(string, v.json_params.c_str());
+			MOD_CALLBACK_ARG(string, v.user_data.c_str());
+			FAST_MOD_CALLBACK_END();
+		}
+		local.comms.clear();
+	}
+
 #define CHECK_INIT()if (local.connectionState == state::INIT)return 0
 #define CHECK_STATE()if (local.connectionState != state::CONNECTED)return 0
 
@@ -261,6 +306,7 @@ namespace callback {
 			isaac_socket::InitByMainThread();
 			local.connectionState = state::DISCONNECTED;
 		}
+		auto luaGuard = LuaGuard();
 		if (!isaac_socket::TryInitLua())
 		{
 			return 0;
@@ -268,11 +314,12 @@ namespace callback {
 		FAST_MOD_CALLBACK_BEGIN(_ISAAC_SOCKET_UPDATE);
 		if (luaL_len(L, -5) != 1)
 		{
-			lua_settop(L, top);
 			return 0;
 		}
-		ImGuiRender(local.connectionState == state::CONNECTED);
 		FAST_MOD_CALLBACK_END();
+
+		ImGuiRender(local.connectionState == state::CONNECTED);
+
 		switch (local.connectionState)
 		{
 		case state::RELOAD_LUA:
@@ -291,7 +338,7 @@ namespace callback {
 			}
 			break;
 		case state::CONNECTED:
-			task_::RunCallback();
+			RunTaskCallbacks();
 			async::luaPollPromises(isaac.luaEngine->L);
 			MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
 			MOD_CALLBACK_CALL();
@@ -305,7 +352,7 @@ namespace callback {
 	int OnExecuteCommand(const isaac_image::Console& console, string& text, const int unknow, const LPCVOID unknow_point_guess)
 	{
 		CHECK_STATE();
-
+		auto luaGuard = LuaGuard();
 		MOD_CALLBACK_BEGIN(ISMC_PRE_EXECUTE_CMD);
 		MOD_CALLBACK_ARG(lstring, text.c_str(), text.size());
 		MOD_CALLBACK_CALL();
@@ -336,7 +383,7 @@ namespace callback {
 	int OnConsoleOutput(const isaac_image::Console& console, string& text, const uint32_t color, const int type_guess)
 	{
 		CHECK_STATE();
-
+		auto luaGuard = LuaGuard();
 		MOD_CALLBACK_BEGIN(ISMC_PRE_CONSOLE_OUTPUT);
 		MOD_CALLBACK_ARG(lstring, text.c_str(), text.size());
 		MOD_CALLBACK_ARG(integer, color);
@@ -394,6 +441,7 @@ namespace callback {
 			return 1;
 		}
 
+		auto luaGuard = LuaGuard();
 		switch (uMsg)
 		{
 		case WM_CHAR:
@@ -410,29 +458,6 @@ namespace callback {
 		}
 		return 0;
 #undef _
-	}
-
-	void TIMRecvNewMsgCallback(const char* json_msg_array, const void* user_data)
-	{
-		[=] {
-			FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_RECV_NEW_MSG);
-			MOD_CALLBACK_ARG(string, json_msg_array);
-			MOD_CALLBACK_ARG(string, (const char*)user_data);
-			FAST_MOD_CALLBACK_END();
-			return 0;
-			}();
-	}
-	void TIMCommCallback(int32_t code, const char* desc, const char* json_params, const void* user_data)
-	{
-		[=] {
-			FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_COMM);
-			MOD_CALLBACK_ARG(integer, code);
-			MOD_CALLBACK_ARG(string, desc);
-			MOD_CALLBACK_ARG(string, json_params);
-			MOD_CALLBACK_ARG(string, (const char*)user_data);
-			FAST_MOD_CALLBACK_END();
-			return 0;
-			}();
 	}
 }
 #undef CHECK_STATE

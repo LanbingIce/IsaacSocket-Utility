@@ -46,7 +46,6 @@ int luaPromiseThen(lua_State *L) {
         return 0;
     }
     // _ISAAC_SOCKET._PROMISES[promiseHandle] = arg1
-    auto top = lua_gettop(L);
     lua_getglobal(L, "_ISAAC_SOCKET");
     lua_pushstring(L, "_PROMISES");
     lua_gettable(L, -2);
@@ -61,7 +60,6 @@ int luaPromiseThen(lua_State *L) {
     /* lua_pushstdstring(L, std::to_string(h)); */
     lua_pushvalue(L, 2);
     lua_settable(L, -3);
-    lua_settop(L, top);
     lua_pop(L, 1);
     return 1;
 }
@@ -81,7 +79,6 @@ void luaPollPromises(lua_State *L) {
         if (!p || !p->isReady()) [[unlikely]] {
             continue;
         }
-        auto top = lua_gettop(L);
         /* lua_pushinteger(L, 42); */
         // _ISAAC_SOCKET._PROMISES[promiseHandle](results...)
         lua_getglobal(L, "_ISAAC_SOCKET");
@@ -116,7 +113,6 @@ void luaPollPromises(lua_State *L) {
         if (n >= 0 && !lua_isnoneornil(L, -1 - n)) [[likely]] {
             if(lua_pcall(L, n, 0, 0)!=LUA_OK){std::string _err="?";if(lua_isstring(L,-1)){_err=lua_tostring(L,-1);};lua_pop(L, 1);_err.append("\n");isaac_socket::ConsoleOutput(_err, 0xFFF08080);cw("Error in async callback:", _err.c_str());}
         }
-        lua_settop(L, top);
         promiseTable().destroy(h);
     }
 }

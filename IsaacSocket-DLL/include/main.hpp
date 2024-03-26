@@ -14,9 +14,7 @@ namespace main {
 			(LPCVOID)callback::PreSwapBuffers,
 			(LPCVOID)callback::OnExecuteCommand,
 			(LPCVOID)callback::OnConsoleOutput,
-			(LPCVOID)callback::PreWndProc,
-			callback::TIMRecvNewMsgCallback,
-			callback::TIMCommCallback,
+			(LPCVOID)callback::PreWndProc
 		};
 
 		inject::Inject();

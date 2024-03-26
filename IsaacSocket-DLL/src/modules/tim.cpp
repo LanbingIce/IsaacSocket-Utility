@@ -5,6 +5,18 @@
 #include <Poco/JSON/Object.h>
 
 namespace tim {
+	static void TIMRecvNewMsgCallback(const char* json_msg_array, const void* user_data)
+	{
+		std::lock_guard lock(local.mutex);
+		local.msgs.push_back(state::TIMRecvNewMsg(json_msg_array, (const char*)user_data));
+	}
+
+	static void TIMCommCallback(int32_t code, const char* desc, const char* json_params, const void* user_data)
+	{
+		std::lock_guard lock(local.mutex);
+		local.comms.push_back(state::TIMComm(code, desc, json_params, (const char*)user_data));
+	}
+
 	static int GenUserSig(lua_State* L) {
 		ARG(1, string, const char*, user_id);
 		ARG(2, integer, uint32_t, sdk_app_id);
@@ -37,21 +49,21 @@ namespace tim {
 	static int TIMSetConfig(lua_State* L) {
 		ARG(1, string, const char*, json_config);
 		ARG_DEF(2, string, const char*, user_data, "");
-		RET(integer, ::TIMSetConfig(json_config, local.callbacks.TIMCommCallback, user_data));
+		RET(integer, ::TIMSetConfig(json_config, TIMCommCallback, user_data));
 	}
 
 	static int TIMLogin(lua_State* L) {
 		ARG(1, string, const char*, user_id);
 		ARG(2, string, const char*, user_sig);
 		ARG_DEF(3, string, const char*, user_data, "");
-		RET(integer, ::TIMLogin(user_id, user_sig, local.callbacks.TIMCommCallback, user_data));
+		RET(integer, ::TIMLogin(user_id, user_sig, TIMCommCallback, user_data));
 	}
 
 	static int TIMLogout(lua_State* L) {
 		ARG(1, string, const char*, user_id);
 		ARG(2, string, const char*, user_sig);
 		ARG_DEF(3, string, const char*, user_data, "");
-		RET(integer, ::TIMLogin(user_id, user_sig, local.callbacks.TIMCommCallback, user_data));
+		RET(integer, ::TIMLogin(user_id, user_sig, TIMCommCallback, user_data));
 	}
 
 	static int TIMGetLoginUserID(lua_State* L) {
@@ -71,12 +83,19 @@ namespace tim {
 		ARG(3, string, const char*, json_msg_param);
 		ARG_DEF(4, string, const char*, user_data, "");
 		char message_id_buffer[128]{};
-		lua_pushinteger(L, ::TIMMsgSendMessage(conv_id, conv_type, json_msg_param, message_id_buffer, local.callbacks.TIMCommCallback, user_data));
+		lua_pushinteger(L, ::TIMMsgSendMessage(conv_id, conv_type, json_msg_param, message_id_buffer, TIMCommCallback, user_data));
 		lua_pushstring(L, message_id_buffer);
 		return 2;
 	}
 
 	static RegisterModule InitModules = [] {
+		static bool initialized;
+		if (!initialized)
+		{
+			TIMAddRecvNewMsgCallback(TIMRecvNewMsgCallback, "");
+			initialized = true;
+		}
+
 		MODULE_BEGIN(TIM);
 
 		MODULE_FUNC(GenUserSig);

@@ -14,6 +14,42 @@ namespace imgui_ {
 	static const ::ImVec4 VEC4_1 = ::ImVec4(1, 1, 1, 1);
 	static const ::ImVec2 VEC2_NEG_MIN_0 = ::ImVec2(-FLT_MIN, 0);
 
+	static int ImColor(lua_State* L) {
+		lua_settop(L, 4);
+		auto& color = NEW_UDATA_META(::ImColor, udata::ImColor);
+		if (lua_isnoneornil(L, 1))
+		{
+			new (&color) ::ImColor();
+		}
+		else if (lua_isinteger(L, 2))
+		{
+			ARG(1, integer, int, r);
+			ARG(2, integer, int, g);
+			ARG(3, integer, int, b);
+			ARG_DEF(4, integer, int, a, 255);
+			new (&color) ::ImColor(r, g, b, a);
+		}
+		else if (lua_isinteger(L, 1))
+		{
+			ARG(1, integer, ImU32, rgba);
+			new (&color) ::ImColor(rgba);
+		}
+		else if (lua_isnumber(L, 1))
+		{
+			ARG(1, number, float, r);
+			ARG(2, number, float, g);
+			ARG(3, number, float, b);
+			ARG_DEF(4, number, float, a, 1.0f);
+			new (&color) ::ImColor(r, g, b, a);
+		}
+		else
+		{
+			auto& col = ARG_UDATA(1, ::ImVec4);
+			new (&color) ::ImColor(col);
+		}
+		return 1;
+	}
+
 	static int ImVec2(lua_State* L) {
 		ARG(1, number, float, x);
 		ARG(2, number, float, y);
@@ -1505,6 +1541,7 @@ namespace imgui_ {
 	static RegisterModule InitModules = [] {
 		MODULE_BEGIN(ImGui);
 
+		MODULE_FUNC(ImColor);
 		MODULE_FUNC(ImVec2);
 		MODULE_FUNC(ImVec4);
 

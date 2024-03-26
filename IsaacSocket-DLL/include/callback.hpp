@@ -20,8 +20,4 @@ namespace callback {
 
 	// 窗口消息回调，返回1则拦截此次消息
 	int PreWndProc(const HWND hWnd, const UINT uMsg, const WPARAM wParam, const LPARAM lParam);
-
-	void TIMRecvNewMsgCallback(const char* json_msg_array, const void* user_data);
-
-	void TIMCommCallback(int32_t code, const char* desc, const char* json_params, const void* user_data);
 }

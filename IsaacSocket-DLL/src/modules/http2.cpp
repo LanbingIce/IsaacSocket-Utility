@@ -12,8 +12,8 @@
 namespace http2
 {
 	static void SetResult(size_t id, string s) {
-		std::lock_guard lock(local.responsesMutex);
-		local.map[id] = s;
+		std::lock_guard lock(local.mutex);
+		local.tasks.push_back(state::TaskResult(id, s));
 	}
 
 	static int GetAsync(lua_State* L) {

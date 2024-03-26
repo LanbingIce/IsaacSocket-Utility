@@ -45,12 +45,33 @@ namespace state {
 		const char version[8]{};
 	};
 
+	struct TaskResult {
+		size_t id;
+		string result;
+	};
+
+	struct TIMRecvNewMsg
+	{
+		string json_msg_array;
+		string user_data;
+	};
+
+	struct TIMComm
+	{
+		int32_t code;
+		string desc;
+		string json_params;
+		string user_data;
+	};
+
 	struct _LocalState
 	{
+		vector<TIMRecvNewMsg> msgs;
+		vector<TIMComm> comms;
+		vector<TaskResult> tasks;
 		Poco::Util::JSONConfiguration _config;
-		std::unordered_map<size_t, string> map;
 		union { Poco::TaskManager taskManager; };
-		std::mutex responsesMutex;
+		std::mutex mutex;
 		ConnectionState connectionState = INIT;
 		ReloadLuaState reloadLuaState;
 		bool isRepentogon = GetModuleHandleA("Lua5.4.dll");
