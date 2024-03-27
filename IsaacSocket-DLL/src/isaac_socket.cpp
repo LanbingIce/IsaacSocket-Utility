@@ -142,7 +142,6 @@ namespace isaac_socket
 
 	void InitByMainThread() {
 		config::Load();
-		new (&local.taskManager)Poco::TaskManager();
 		gladLoadGL();
 		SetGLFWCharacter();
 

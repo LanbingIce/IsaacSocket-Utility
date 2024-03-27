@@ -5,7 +5,6 @@
 #include "result.hpp"
 
 #include <imsdk/TIMMessageManager.h>
-#include <Poco/TaskManager.h>
 #include <Poco/Util/JSONConfiguration.h>
 
 #pragma warning(disable: 26495)//禁用警告C26495: 始终初始化成员变量
@@ -44,7 +43,6 @@ namespace state {
 		vector<result::TIMComm> comms;
 		vector<result::TaskResult> tasks;
 		Poco::Util::JSONConfiguration _config;
-		union { Poco::TaskManager taskManager; };
 		std::mutex mutex;
 		ConnectionState connectionState = INIT;
 		ReloadLuaState reloadLuaState;
@@ -61,8 +59,6 @@ namespace state {
 		HWND hWnd;
 		uint32_t MTRandomLockedValue = 0;
 		bool allocConsole = false;
-		_LocalState() {}
-		~_LocalState() {}
 	};
 
 	extern isaac_image::IsaacImage& isaac;

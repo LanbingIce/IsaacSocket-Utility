@@ -8,8 +8,7 @@
 
 namespace task_ {
 	struct _Task : Poco::Task {
-		_Task(std::function<void()> callback) : Task(""), callback(callback) {
-		}
+		_Task(std::function<void()> callback) : Task(""), callback(callback) {}
 		std::function < void()> callback;
 		void runTask() {
 			callback();
@@ -23,6 +22,7 @@ namespace task_ {
 
 	void Run(std::function <void()> callback)
 	{
-		local.taskManager.start(new _Task(callback));
+		static Poco::TaskManager taskManager;
+		taskManager.start(new _Task(callback));
 	}
 }
