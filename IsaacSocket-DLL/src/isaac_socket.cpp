@@ -37,6 +37,10 @@ namespace _isaac_socket
 		VAR_WRITE(isaac.FrameInterval, 1.0 / 60);
 		luaL_dostring(L, "IsaacSocket = nil");
 		local.connectionState = state::DISCONNECTED;
+		std::lock_guard lock(local.mutex);
+		local.msgs.clear();
+		local.comms.clear();
+		local.tasks.clear();
 		return 0;
 	}
 

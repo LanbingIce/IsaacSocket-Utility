@@ -31,6 +31,7 @@ namespace tim {
 		root.set("sdk_config_log_file_path", utils::GetDataFilePath("ImSDK"));
 		std::ostringstream ostr;
 		root.stringify(ostr);
+		TIMAddRecvNewMsgCallback(TIMRecvNewMsgCallback, "");
 		RET(integer, ::TIMInit(sdk_app_id, ostr.str().c_str()));
 	}
 
@@ -89,13 +90,6 @@ namespace tim {
 	}
 
 	static RegisterModule InitModules = [] {
-		static bool initialized;
-		if (!initialized)
-		{
-			TIMAddRecvNewMsgCallback(TIMRecvNewMsgCallback, "");
-			initialized = true;
-		}
-
 		MODULE_BEGIN(TIM);
 
 		MODULE_FUNC(GenUserSig);
