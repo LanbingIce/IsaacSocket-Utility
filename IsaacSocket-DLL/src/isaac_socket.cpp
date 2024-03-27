@@ -141,7 +141,6 @@ namespace isaac_socket
 	}
 
 	void InitByMainThread() {
-		config::Load();
 		gladLoadGL();
 		SetGLFWCharacter();
 

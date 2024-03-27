@@ -5,17 +5,22 @@
 
 namespace config {
 	static const string path = utils::GetDataFilePath("config.json");
+	Poco::Util::JSONConfiguration _config = Poco::Util::JSONConfiguration();
 
-	void Load() {
-		utils::ReadFile(path, "{}");
-		local._config.load(path);
+	void _CheckConfigLoad() {
+		static bool initialized;
+		if (!initialized)
+		{
+			utils::ReadFile(path, "{}");
+			_config.load(path);
+		}
 	}
 
-	void Save() {
+	void _Save() {
 		std::ofstream ofs(path);
 		if (ofs)
 		{
-			local._config.save(ofs);
+			_config.save(ofs);
 		}
 	}
 }

@@ -42,7 +42,6 @@ namespace state {
 		vector<result::TIMRecvNewMsg> msgs;
 		vector<result::TIMComm> comms;
 		vector<result::TaskResult> tasks;
-		Poco::Util::JSONConfiguration _config;
 		std::mutex mutex;
 		ConnectionState connectionState = INIT;
 		ReloadLuaState reloadLuaState;
