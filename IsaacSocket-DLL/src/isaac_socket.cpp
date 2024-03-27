@@ -38,9 +38,10 @@ namespace _isaac_socket
 		luaL_dostring(L, "IsaacSocket = nil");
 		local.connectionState = state::DISCONNECTED;
 		std::lock_guard lock(local.mutex);
-		local.msgs.clear();
-		local.comms.clear();
-		local.tasks.clear();
+		for (auto pResult : local.pResults) {
+			delete pResult;
+		}
+		local.pResults.clear();
 		return 0;
 	}
 

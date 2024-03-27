@@ -49,9 +49,7 @@ namespace state {
 	{
 		bool isRepentogon;
 		bool allocConsole = false;
-		vector<result::TIMRecvNewMsg> msgs;
-		vector<result::TIMComm> comms;
-		vector<result::TaskResult> tasks;
+		vector<result::Result*> pResults{};
 		std::mutex mutex;
 		ConnectionState connectionState = INIT;
 		ReloadLuaState reloadLuaState;

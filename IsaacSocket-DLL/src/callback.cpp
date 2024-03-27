@@ -265,51 +265,57 @@ namespace callback {
 	}
 
 	static void RunTaskCallbacks() {
-		std::lock_guard<std::mutex> lock(local.mutex);
 		auto luaGuard = LuaGuard();
 
 		lua_getglobal(L, "_ISAAC_SOCKET");
 		lua_pushstring(L, "TaskContinuation");
 		lua_gettable(L, -2);
 
-		for (auto it = local.tasks.begin(); it != local.tasks.end(); ++it) {
-			auto& v = *it;
-			lua_pushinteger(L, v.id);
-			lua_gettable(L, -2);
-			if (!lua_isfunction(L, -1))
+		std::lock_guard<std::mutex> lock(local.mutex);
+
+		for (auto pResult : local.pResults) {
+			auto typeName = typeid(*pResult).name();
+			if (typeName == typeid(result::TaskResult).name())
 			{
-				lua_pop(L, 1);
-				continue;
+				auto& result = (result::TaskResult&)*pResult;
+				lua_pushinteger(L, result.id);
+				lua_gettable(L, -2);
+				if (lua_isfunction(L, -1))
+				{
+					lua_pushstring(L, result.result.c_str());
+
+					LUA_PCALL(1, 0);
+
+					lua_pushinteger(L, result.id);
+					lua_pushnil(L);
+					lua_settable(L, -3);
+				}
+				else
+				{
+					lua_pop(L, 1);
+				}
 			}
-			lua_pushstring(L, v.result.c_str());
-
-			LUA_PCALL(1, 0);
-
-			lua_pushinteger(L, v.id);
-			lua_pushnil(L);
-			lua_settable(L, -3);
+			else if (typeName == typeid(result::TIMRecvNewMsg).name())
+			{
+				auto& result = (result::TIMRecvNewMsg&)*pResult;
+				FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_RECV_NEW_MSG);
+				MOD_CALLBACK_ARG(string, result.json_msg_array.c_str());
+				MOD_CALLBACK_ARG(string, result.user_data.c_str());
+				FAST_MOD_CALLBACK_END();
+			}
+			else if (typeName == typeid(result::TIMComm).name())
+			{
+				auto& result = (result::TIMComm&)*pResult;
+				FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_COMM);
+				MOD_CALLBACK_ARG(integer, result.code);
+				MOD_CALLBACK_ARG(string, result.desc.c_str());
+				MOD_CALLBACK_ARG(string, result.json_params.c_str());
+				MOD_CALLBACK_ARG(string, result.user_data.c_str());
+				FAST_MOD_CALLBACK_END();
+			}
+			delete pResult;
 		}
-		local.tasks.clear();
-
-		for (auto it = local.msgs.begin(); it != local.msgs.end(); ++it) {
-			auto& v = *it;
-			FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_RECV_NEW_MSG);
-			MOD_CALLBACK_ARG(string, v.json_msg_array.c_str());
-			MOD_CALLBACK_ARG(string, v.user_data.c_str());
-			FAST_MOD_CALLBACK_END();
-		}
-		local.msgs.clear();
-
-		for (auto it = local.comms.begin(); it != local.comms.end(); ++it) {
-			auto& v = *it;
-			FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_COMM);
-			MOD_CALLBACK_ARG(integer, v.code);
-			MOD_CALLBACK_ARG(string, v.desc.c_str());
-			MOD_CALLBACK_ARG(string, v.json_params.c_str());
-			MOD_CALLBACK_ARG(string, v.user_data.c_str());
-			FAST_MOD_CALLBACK_END();
-		}
-		local.comms.clear();
+		local.pResults.clear();
 	}
 
 #define CHECK_INIT()if (local.connectionState == state::INIT)return 0

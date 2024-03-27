@@ -1,6 +1,7 @@
 ﻿#include "task_.hpp"
 #include "module.hpp"
 #include "state.hpp"
+#include "result.hpp"
 
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/Net/HTTPRequest.h>
@@ -11,11 +12,6 @@
 
 namespace http2
 {
-	static void SetResult(size_t id, string s) {
-		std::lock_guard lock(local.mutex);
-		local.tasks.push_back(result::TaskResult(id, s));
-	}
-
 	static int GetAsync(lua_State* L) {
 		ARG(1, string, const char*, url);
 		size_t id = task_::New();
@@ -31,13 +27,13 @@ namespace http2
 				std::istream& is = session.receiveResponse(response);
 				std::ostringstream oss;
 				oss << is.rdbuf();
-				SetResult(id, oss.str());
+				local.pResults.push_back(new result::TaskResult{id, oss.str() });
 			}
 			catch (Poco::Exception& ex) {
-				SetResult(id, ex.displayText());
+				local.pResults.push_back(new result::TaskResult(id, ex.displayText()));
 			}
 			catch (std::exception& ex) {
-				SetResult(id, ex.what());
+				local.pResults.push_back(new result::TaskResult(id, ex.what()));
 			}
 			});
 		return 1;

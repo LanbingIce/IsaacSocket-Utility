@@ -8,13 +8,13 @@ namespace tim {
 	static void TIMRecvNewMsgCallback(const char* json_msg_array, const void* user_data)
 	{
 		std::lock_guard lock(local.mutex);
-		local.msgs.push_back(result::TIMRecvNewMsg(json_msg_array, (const char*)user_data));
+		local.pResults.push_back(new result::TIMRecvNewMsg(json_msg_array, (const char*)user_data));
 	}
 
 	static void TIMCommCallback(int32_t code, const char* desc, const char* json_params, const void* user_data)
 	{
 		std::lock_guard lock(local.mutex);
-		local.comms.push_back(result::TIMComm(code, desc, json_params, (const char*)user_data));
+		local.pResults.push_back(new result::TIMComm(code, desc, json_params, (const char*)user_data));
 	}
 
 	static int GenUserSig(lua_State* L) {
