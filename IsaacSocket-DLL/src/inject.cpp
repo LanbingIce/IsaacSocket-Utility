@@ -27,9 +27,9 @@ namespace inject {
 #ifndef __MINGW32__
 	// MinGW 的内联汇编只支持 AT&T 格式，和 MSVC 的 Intel 格式完全不同，因此改为在 gnuinject.S 中实现
 	// 以下代码仅在 MSVC 下编译
-	inline const char* logPreFix = "[INFO] - \0\0\0\0\0\0\0" "[WARN] - \0\0\0\0\0\0\0""[ERROR] - \0\0\0\0\0\0""[ASSERT] - ";
-	inline int tmpRetAddr;
-	inline int tmpLogType;
+	static const char* logPreFix = "[INFO] - \0\0\0\0\0\0\0" "[WARN] - \0\0\0\0\0\0\0""[ERROR] - \0\0\0\0\0\0""[ASSERT] - ";
+	static int tmpRetAddr;
+	static int tmpLogType;
 
 	//输出日志函数
 	__declspec(naked) void LogPrintf(int type, const char* format, ...) {

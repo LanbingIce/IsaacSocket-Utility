@@ -73,11 +73,10 @@ namespace udata {
 	};
 
 	struct Task {
-		inline static std::mutex mutex;
 		inline static size_t nextId;
 		size_t id;
 		Task() {
-			std::lock_guard lock(mutex);
+			std::lock_guard lock(local.mutex);
 			id = ++nextId;
 		}
 

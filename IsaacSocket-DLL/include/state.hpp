@@ -47,16 +47,16 @@ namespace state {
 
 	struct _LocalState
 	{
+		bool isRepentogon;
+		bool allocConsole = false;
 		vector<result::TIMRecvNewMsg> msgs;
 		vector<result::TIMComm> comms;
 		vector<result::TaskResult> tasks;
 		std::mutex mutex;
 		ConnectionState connectionState = INIT;
 		ReloadLuaState reloadLuaState;
-		bool isRepentogon = GetModuleHandleA("Lua5.4.dll");
 		HWND hWnd;
 		uint32_t MTRandomLockedValue = 0;
-		bool allocConsole = false;
 	};
 
 	extern Callbacks callbacks;

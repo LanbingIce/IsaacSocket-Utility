@@ -57,10 +57,9 @@ typedef struct luaL_Reg {
 	lua_CFunction func;
 } luaL_Reg;
 
-#define _(ret,name,...)inline ret(*name)(__VA_ARGS__)=(decltype(name))GetProcAddress(hLuaModule, #name)
 #pragma warning(disable: 6387)//禁用警告	C6387	“hLuaModule”可能是“0” : 这不符合函数“GetProcAddress”的规范。
 
-inline HMODULE hLuaModule = [] {auto h = GetModuleHandleA("Lua5.4.dll"); if (!h)h = GetModuleHandleA("Lua5.3.3r.dll"); return h; }();
+#define _(ret,name,...)inline ret(*name)(__VA_ARGS__)=(decltype(name))GetProcAddress([] {auto h = GetModuleHandleA("Lua5.4.dll"); if (!h)h = GetModuleHandleA("Lua5.3.3r.dll"); return h; }(), #name)
 
 _(const lua_Number*, lua_version, lua_State* L);
 

@@ -5,7 +5,7 @@
 
 namespace config {
 	static const string path = utils::GetDataFilePath("config.json");
-	Poco::Util::JSONConfiguration _config = Poco::Util::JSONConfiguration();
+	Poco::Util::JSONConfiguration _config{};
 
 	void _CheckConfigLoad() {
 		static bool initialized;
