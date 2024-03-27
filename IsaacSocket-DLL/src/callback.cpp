@@ -273,7 +273,7 @@ namespace callback {
 
 		std::lock_guard<std::mutex> lock(local.mutex);
 
-		for (auto pResult : local.pResults) {
+		for (auto& pResult : local.pResults) {
 			auto typeName = typeid(*pResult).name();
 			if (typeName == typeid(result::TaskResult).name())
 			{
@@ -313,7 +313,6 @@ namespace callback {
 				MOD_CALLBACK_ARG(string, result.user_data.c_str());
 				FAST_MOD_CALLBACK_END();
 			}
-			delete pResult;
 		}
 		local.pResults.clear();
 	}

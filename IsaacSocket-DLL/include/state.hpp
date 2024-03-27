@@ -49,7 +49,7 @@ namespace state {
 	{
 		bool isRepentogon;
 		bool allocConsole = false;
-		vector<result::Result*> pResults{};
+		vector<std::shared_ptr<result::Result>> pResults{};
 		std::mutex mutex;
 		ConnectionState connectionState = INIT;
 		ReloadLuaState reloadLuaState;
