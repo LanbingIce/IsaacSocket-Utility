@@ -1,9 +1,16 @@
 ﻿#include "state.hpp"
 #include "isaac_image.hpp"
+#include "callback.hpp"
 
 #pragma warning(disable: 6387)//禁用警告 C6387
 
 namespace state {
+	Callbacks callbacks = {
+			(LPCVOID)callback::PreSwapBuffers,
+			(LPCVOID)callback::OnExecuteCommand,
+			(LPCVOID)callback::OnConsoleOutput,
+			(LPCVOID)callback::PreWndProc
+	};
 	isaac_image::IsaacImage& isaac = *(isaac_image::IsaacImage*)GetModuleHandleA(NULL);
 	lua_State*& L = isaac.luaEngine->L;
 	state::_LocalState local = state::_LocalState();

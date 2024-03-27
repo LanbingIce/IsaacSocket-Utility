@@ -61,7 +61,7 @@ namespace inject {
 	static __declspec(naked) void _SwapBuffers()
 	{
 		__asm {
-			call local.callbacks.PreSwapBuffers
+			call callbacks.PreSwapBuffers
 			test eax, eax
 			je flag_r0
 			add esp, 0x04
@@ -85,7 +85,7 @@ namespace inject {
 			push[esp + 0x18]
 			push[esp + 0x18]
 			push ecx
-			call local.callbacks.OnExecuteCommand
+			call callbacks.OnExecuteCommand
 			add esp, 0x10
 			pop ecx
 			test eax, eax
@@ -122,7 +122,7 @@ namespace inject {
 			push[esp + 0x18]
 			push[esp + 0x18]
 			push ecx
-			call local.callbacks.OnConsoleOutput
+			call callbacks.OnConsoleOutput
 			add esp, 0x10
 			pop ecx
 			test eax, eax
@@ -170,7 +170,7 @@ namespace inject {
 			push[esp + 0x10]
 			push[esp + 0x10]
 			push[esp + 0x10]
-			call local.callbacks.PreWndProc
+			call callbacks.PreWndProc
 			add esp, 0x10
 			test eax, eax
 			jne flag

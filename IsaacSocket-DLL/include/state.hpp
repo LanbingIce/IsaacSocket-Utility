@@ -32,6 +32,14 @@ namespace state {
 		DARK
 	};
 
+	struct Callbacks
+	{
+		LPCVOID PreSwapBuffers;
+		LPCVOID OnExecuteCommand;
+		LPCVOID OnConsoleOutput;
+		LPCVOID PreWndProc;
+	};
+
 	struct _GlobalState
 	{
 		const char version[8]{};
@@ -46,20 +54,12 @@ namespace state {
 		ConnectionState connectionState = INIT;
 		ReloadLuaState reloadLuaState;
 		bool isRepentogon = GetModuleHandleA("Lua5.4.dll");
-		struct
-		{
-			LPCVOID PreSwapBuffers;
-			LPCVOID OnExecuteCommand;
-			LPCVOID OnConsoleOutput;
-			LPCVOID PreWndProc;
-			TIMRecvNewMsgCallback TIMRecvNewMsgCallback;
-			TIMCommCallback TIMCommCallback;
-		} callbacks;
 		HWND hWnd;
 		uint32_t MTRandomLockedValue = 0;
 		bool allocConsole = false;
 	};
 
+	extern Callbacks callbacks;
 	extern isaac_image::IsaacImage& isaac;
 	extern lua_State*& L;
 	extern state::_LocalState local;
@@ -68,6 +68,7 @@ namespace state {
 
 #pragma warning(default: 26495)//重新启用警告 C26495
 
+using state::callbacks;
 using state::isaac;
 using state::L;
 using state::local;
