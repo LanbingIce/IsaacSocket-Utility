@@ -40,13 +40,13 @@ namespace http2
 				std::istream& is = session.receiveResponse(response);
 				std::ostringstream oss;
 				oss << is.rdbuf();
-				local.pResults.push_back(std::make_shared< result::TaskResult>(id, oss.str()));
+				local.pResults.push_back(std::make_shared<result::ResponseResult>(id, oss.str(), response));
 			}
 			catch (Poco::Exception& ex) {
-				local.pResults.push_back(std::make_shared< result::TaskResult>(id, ex.displayText()));
+				local.pResults.push_back(std::make_shared< result::ResponseResult>(id, ex.displayText()));
 			}
 			catch (std::exception& ex) {
-				local.pResults.push_back(std::make_shared< result::TaskResult>(id, ex.what()));
+				local.pResults.push_back(std::make_shared< result::ResponseResult>(id, ex.what()));
 			}
 			});
 		return 1;

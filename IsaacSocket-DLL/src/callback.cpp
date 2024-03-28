@@ -275,14 +275,14 @@ namespace callback {
 
 		for (auto& pResult : local.pResults) {
 			auto typeName = typeid(*pResult).name();
-			if (typeName == typeid(result::TaskResult).name())
+			if (typeName == typeid(result::ResponseResult).name())
 			{
-				auto& result = (result::TaskResult&)*pResult;
+				auto& result = (result::ResponseResult&)*pResult;
 				lua_pushinteger(L, result.id);
 				lua_gettable(L, -2);
 				if (lua_isfunction(L, -1))
 				{
-					lua_pushstring(L, result.result.c_str());
+					lua_pushstring(L, result.body.c_str());
 
 					LUA_PCALL(1, 0);
 
@@ -295,17 +295,17 @@ namespace callback {
 					lua_pop(L, 1);
 				}
 			}
-			else if (typeName == typeid(result::TIMRecvNewMsg).name())
+			else if (typeName == typeid(result::TIMRecvNewMsgResult).name())
 			{
-				auto& result = (result::TIMRecvNewMsg&)*pResult;
+				auto& result = (result::TIMRecvNewMsgResult&)*pResult;
 				FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_RECV_NEW_MSG);
 				MOD_CALLBACK_ARG(string, result.json_msg_array.c_str());
 				MOD_CALLBACK_ARG(string, result.user_data.c_str());
 				FAST_MOD_CALLBACK_END();
 			}
-			else if (typeName == typeid(result::TIMComm).name())
+			else if (typeName == typeid(result::TIMCommResult).name())
 			{
-				auto& result = (result::TIMComm&)*pResult;
+				auto& result = (result::TIMCommResult&)*pResult;
 				FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_COMM);
 				MOD_CALLBACK_ARG(integer, result.code);
 				MOD_CALLBACK_ARG(string, result.desc.c_str());
