@@ -20,7 +20,20 @@ namespace http2
 
 			try {
 				Poco::URI uri(url);
-				Poco::Net::HTTPSClientSession session(uri.getHost(), uri.getPort());
+
+				Poco::Net::HTTPSClientSession https(uri.getHost(), uri.getPort());
+				Poco::Net::HTTPClientSession http(uri.getHost(), uri.getPort());
+
+				Poco::Net::HTTPClientSession* p;
+				p = &http;
+
+				if (uri.getScheme() == "https")
+				{
+					p = &https;
+				}
+
+				auto& session = *p;
+
 				Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, uri.getPath(), Poco::Net::HTTPRequest::HTTP_1_1);
 				session.sendRequest(request);
 				Poco::Net::HTTPResponse response;
