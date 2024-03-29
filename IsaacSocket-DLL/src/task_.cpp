@@ -1,10 +1,4 @@
-﻿#include "task_.hpp"
-#include "state.hpp"
-#include "module.hpp"
-#include "isaac_socket.hpp"
-#include "udata.hpp"
-
-#include <Poco/TaskManager.h>
+﻿#include <Poco/TaskManager.h>
 
 namespace task_ {
 	struct _Task : Poco::Task {
@@ -14,11 +8,6 @@ namespace task_ {
 			callback();
 		}
 	};
-
-	size_t New() {
-		auto& task = NEW_UDATA(Task);
-		return task.id;
-	}
 
 	void Run(std::function <void()> callback)
 	{

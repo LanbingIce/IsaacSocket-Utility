@@ -51,7 +51,7 @@ namespace _isaac_socket
 		MODULE_FUNC(Disconnect);
 
 		std::ostringstream oss;
-		oss << "_ISAAC_SOCKET.version=\"" << global.version << "\" _ISAAC_SOCKET.TaskContinuation={}";
+		oss << "_ISAAC_SOCKET.version=\"" << global.version << "\" _ISAAC_SOCKET.TaskContinuation={} _ISAAC_SOCKET.Tasks={}";
 		luaL_dostring(L, oss.str().c_str());
 	}
 }

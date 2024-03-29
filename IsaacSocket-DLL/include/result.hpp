@@ -12,6 +12,12 @@ namespace result {
 		TaskResult(size_t id) :id(id) {}
 	};
 
+	struct ErrorResult :TaskResult
+	{
+		string error;
+		ErrorResult(size_t id, string error) :TaskResult(id), error(error) {};
+	};
+
 	struct TIMRecvNewMsgResult :Result
 	{
 		string json_msg_array;
@@ -32,7 +38,6 @@ namespace result {
 	{
 		string body;
 		Poco::Net::HTTPResponse response;
-		ResponseResult(size_t id, string body) :TaskResult(id), body(body) {};
 		ResponseResult(size_t id, string body, Poco::Net::HTTPResponse response) :TaskResult(id), body(body), response(response) {};
 	};
 }

@@ -14,9 +14,16 @@ namespace http2
 {
 	static int GetAsync(lua_State* L) {
 		ARG(1, string, const char*, url);
-		size_t id = task_::New();
+		// _ISAAC_SOCKET.Tasks[id] = task
+		lua_getglobal(L, "_ISAAC_SOCKET");
+		lua_pushstring(L, "Tasks");
+		lua_gettable(L, -2);
+		auto& task = NEW_UDATA(Task);
+		lua_pushinteger(L, task.id);
+		lua_pushvalue(L, -2);
+		lua_settable(L, -4);
 
-		task_::Run([id, url] {
+		task_::Run([&task, url] {
 
 			try {
 				Poco::URI uri(url);
@@ -40,13 +47,18 @@ namespace http2
 				std::istream& is = session.receiveResponse(response);
 				std::ostringstream oss;
 				oss << is.rdbuf();
-				local.pResults.push_back(std::make_shared<result::ResponseResult>(id, oss.str(), response));
+				{
+					std::lock_guard lock(local.mutex);
+					local.pResults.push_back(std::make_shared<result::ResponseResult>(task.id, oss.str(), response));
+				}
 			}
 			catch (Poco::Exception& ex) {
-				local.pResults.push_back(std::make_shared< result::ResponseResult>(id, ex.displayText()));
+				std::lock_guard lock(local.mutex);
+				local.pResults.push_back(std::make_shared<result::ErrorResult>(task.id, ex.displayText()));
 			}
 			catch (std::exception& ex) {
-				local.pResults.push_back(std::make_shared< result::ResponseResult>(id, ex.what()));
+				std::lock_guard lock(local.mutex);
+				local.pResults.push_back(std::make_shared<result::ErrorResult>(task.id, ex.what()));
 			}
 			});
 		return 1;
