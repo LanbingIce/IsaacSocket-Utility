@@ -8,10 +8,10 @@
 #define _CHECK_ARG_UDATA(index,type)p = luaCPP_getuserdata<type>(L, index) ;return p
 
 #define NEW_UDATA(type)*new (luaCPP_newuserdata<udata::type>(L, udata::type::lua_index,udata::type::lua_newindex, lua_cppdata_gc<udata::type>)) udata::type
-#define NEW_UDATA_META(type,metaName)*[L]{auto p=(type*)lua_newuserdata(L, sizeof(type));_SET_METATABLE(metaName,type);return p;}()
+#define NEW_UDATA_META(type,metaName)*[=]{auto p=(type*)lua_newuserdata(L, sizeof(type));_SET_METATABLE(metaName,type);return p;}()
 
-#define ARG_UDATA(index,type)*[L]{type* p; _CHECK_ARG_UDATA(index,type);}()
-#define ARG_UDATA_DEF(index,type,def)*[L]{type* p; if(lua_isnoneornil(L,index)){p=&def;}else _CHECK_ARG_UDATA(index,type);}()
+#define ARG_UDATA(index,type)*[=]{type* p; _CHECK_ARG_UDATA(index,type);}()
+#define ARG_UDATA_DEF(index,type,def)*[=]{type* p; if(lua_isnoneornil(L,index)){p=&def;}else _CHECK_ARG_UDATA(index,type);}()
 
 #define ARG(index,luaType,type,name) type name; _CHECK_ARG(index,luaType,type,name)
 #define ARG_DEF(index,luaType,type,name,def) type name;if(lua_isnoneornil(L,index)){name=def;}else _CHECK_ARG(index,luaType,type,name)
@@ -62,25 +62,25 @@
 
 struct LuaGuard
 {
-	int top;
-	LuaGuard() {
-		top = lua_gettop(L);
-	}
-	~LuaGuard() {
-		lua_settop(L, top);
-	}
+    int top;
+    LuaGuard() {
+        top = lua_gettop(L);
+    }
+    ~LuaGuard() {
+        lua_settop(L, top);
+    }
 };
 
 struct RegisterModule {
-	inline static std::vector<std::function<void()>> initCallbacks;
+    inline static std::vector<std::function<void()>> initCallbacks;
 
-	RegisterModule(auto&& f) {
-		initCallbacks.emplace_back(std::move(f));
-	}
+    RegisterModule(auto&& f) {
+        initCallbacks.emplace_back(std::move(f));
+    }
 
-	static void InitAllModules() {
-		for (auto const& callback : initCallbacks) {
-			callback();
-		}
-	}
+    static void InitAllModules() {
+        for (auto const& callback : initCallbacks) {
+            callback();
+        }
+    }
 };
