@@ -153,6 +153,9 @@
     <ClCompile Include="src\state.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\modules\web_socket.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="libs\glad\glad.h">

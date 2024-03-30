@@ -7,6 +7,7 @@
 #include "module.hpp"
 #include "isaac_socket.hpp"
 #include "udata.hpp"
+#include "result.hpp"
 
 #include <imgui/imgui_impl_opengl3.h>
 #include <imgui/imgui_impl_win32.h>
@@ -43,7 +44,7 @@ namespace callback {
         if (!L) {
             return false;
         }
-        auto luaGuard = LuaGuard();
+        LuaGuard luaGuard;
         lua_getglobal(L, "_ISAAC_SOCKET");
         bool ok = !lua_isnoneornil(L, -1);
         if (ok) {
@@ -286,13 +287,28 @@ namespace callback {
         }
     }
 
-    static void RunTaskCallbacks() {
-        auto luaGuard = LuaGuard();
+    static udata::WebSocketClient* GetWebSocketClientUserdata(size_t id, lua_State* L = ::L) {
+        LuaGuard luaGuard;
+        lua_getglobal(L, "_ISAAC_SOCKET");
+        lua_pushstring(L, "webSocketClients");
+        lua_gettable(L, -2);
+        lua_pushinteger(L, id);
+        lua_gettable(L, -2);
+        if (lua_isuserdata(L, -1))
+        {
+            auto& uws = ARG_UDATA(-1, udata::WebSocketClient);
+            return &uws;
+        }
+        return nullptr;
+    }
+
+    static void RunTaskCallbacks(lua_State* L = ::L) {
+        LuaGuard luaGuard;
 
         lua_getglobal(L, "_ISAAC_SOCKET");
-        lua_pushstring(L, "Tasks");
+        lua_pushstring(L, "tasks");
         lua_gettable(L, -2);
-        lua_pushstring(L, "TaskContinuation");
+        lua_pushstring(L, "taskCallbacks");
         lua_gettable(L, -3);
 
         std::lock_guard lock(local.mutex);
@@ -321,7 +337,7 @@ namespace callback {
                 if (lua_isuserdata(L, -1))
                 {
                     auto& task = ARG_UDATA(-1, udata::Task);
-                    
+
                     task.state = task.COMPLETED;
                     task.pResult = std::static_pointer_cast<result::TaskResult>(pResult);
 
@@ -348,6 +364,69 @@ namespace callback {
                 MOD_CALLBACK_ARG(string, result.user_data.c_str());
                 FAST_MOD_CALLBACK_END();
             }
+            else if (typeName == typeid(result::WebSocketOpenResult).name())
+            {
+                LuaGuard luaGuard;
+                auto& result = (result::WebSocketOpenResult&)*pResult;
+                size_t id = result.id;
+                auto pws = GetWebSocketClientUserdata(id);
+                if (pws)
+                {
+                    auto& uws = *pws;
+                    uws.state = uws.OPEN;
+                    RESULT_CALLBACK_BEGIN(openCallbacks);
+                    RESULT_CALLBACK_END();
+                }
+            }
+            else if (typeName == typeid(result::WebSocketMessageResult).name())
+            {
+                LuaGuard luaGuard;
+                auto& result = (result::WebSocketMessageResult&)*pResult;
+                size_t id = result.id;
+                auto pws = GetWebSocketClientUserdata(id);
+                if (pws)
+                {
+                    auto& uws = *pws;
+                    if (uws.state == uws.OPEN)
+                    {
+                        RESULT_CALLBACK_BEGIN(messageCallbacks);
+                        MOD_CALLBACK_ARG(lstring, result.message.c_str(), result.len);
+                        MOD_CALLBACK_ARG(boolean, result.isBinary);
+                        RESULT_CALLBACK_END();
+                    }
+                }
+            }
+            else if (typeName == typeid(result::WebSocketClosedResult).name())
+            {
+                LuaGuard luaGuard;
+                auto& result = (result::WebSocketClosedResult&)*pResult;
+                size_t id = result.id;
+                auto pws = GetWebSocketClientUserdata(id);
+                if (pws)
+                {
+                    auto& uws = *pws;
+                    uws.state = uws.CLOSED;
+                    RESULT_CALLBACK_BEGIN(closedCallbacks);
+                    MOD_CALLBACK_ARG(integer, result.closeStatus);
+                    MOD_CALLBACK_ARG(string, result.statusDescription.c_str());
+                    RESULT_CALLBACK_END();
+                }
+            }
+            else if (typeName == typeid(result::WebSocketErrorResult).name())
+            {
+                LuaGuard luaGuard;
+                auto& result = (result::WebSocketErrorResult&)*pResult;
+                size_t id = result.id;
+                auto pws = GetWebSocketClientUserdata(id);
+                if (pws)
+                {
+                    auto& uws = *pws;
+                    uws.state = uws.CLOSED;
+                    RESULT_CALLBACK_BEGIN(errorCallbacks);
+                    MOD_CALLBACK_ARG(string, result.message.c_str());
+                    RESULT_CALLBACK_END();
+                }
+            }
         }
         local.pResults.clear();
     }
@@ -365,7 +444,7 @@ namespace callback {
             isaac_socket::InitByMainThread();
             local.connectionState = state::DISCONNECTED;
         }
-        auto luaGuard = LuaGuard();
+        LuaGuard luaGuard;
         if (!isaac_socket::TryInitLua())
         {
             return 0;
@@ -411,7 +490,7 @@ namespace callback {
     int OnExecuteCommand(const isaac_image::Console& console, string& text, const int unknow, const LPCVOID unknow_point_guess)
     {
         CHECK_STATE();
-        auto luaGuard = LuaGuard();
+        LuaGuard luaGuard;
         MOD_CALLBACK_BEGIN(ISMC_PRE_EXECUTE_CMD);
         MOD_CALLBACK_ARG(lstring, text.c_str(), text.size());
         MOD_CALLBACK_CALL();
@@ -442,7 +521,7 @@ namespace callback {
     int OnConsoleOutput(const isaac_image::Console& console, string& text, const uint32_t color, const int type_guess)
     {
         CHECK_STATE();
-        auto luaGuard = LuaGuard();
+        LuaGuard luaGuard;
         MOD_CALLBACK_BEGIN(ISMC_PRE_CONSOLE_OUTPUT);
         MOD_CALLBACK_ARG(lstring, text.c_str(), text.size());
         MOD_CALLBACK_ARG(integer, color);
@@ -500,7 +579,7 @@ namespace callback {
             return 1;
         }
 
-        auto luaGuard = LuaGuard();
+        LuaGuard luaGuard;
         switch (uMsg)
         {
         case WM_CHAR:

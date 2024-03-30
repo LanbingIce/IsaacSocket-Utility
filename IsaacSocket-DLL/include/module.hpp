@@ -4,14 +4,16 @@
 
 #define _SET_METATABLE(udataName,type) if(luaL_newmetatable(L, typeid(type).name())){luaL_Reg _metatable[] = { { "__index", udataName::__index },{ "__newindex", udataName::__newindex },{ NULL, NULL } };luaL_setfuncs(L, _metatable, 0);}lua_setmetatable(L, -2)
 
+#define ARG_CALLBACK(index,name) if(!lua_isfunction(L,index)&&!lua_isnoneornil(L,index))return luaL_error(L, "bad argument #"#index": "#name" should be function or nil")
+#define SET_CALLBACK(index,tableName) lua_getglobal(L, "_ISAAC_SOCKET");lua_pushstring(L, #tableName);lua_gettable(L, -2);lua_pushinteger(L, id);lua_pushvalue(L, index);lua_settable(L, -3);lua_pop(L,2)
 #define _CHECK_ARG(index,luaType,type,name) if(lua_is##luaType(L,index)){name = (type)lua_to##luaType(L,index);}else{return luaL_error(L, "bad argument #"#index": "#name" should be "#luaType);}
 #define _CHECK_ARG_UDATA(index,type)p = luaCPP_getuserdata<type>(L, index) ;return p
 
-#define NEW_UDATA(type)*new (luaCPP_newuserdata<udata::type>(L, udata::type::lua_index,udata::type::lua_newindex, lua_cppdata_gc<udata::type>)) udata::type
-#define NEW_UDATA_META(type,metaName)*[=]{auto p=(type*)lua_newuserdata(L, sizeof(type));_SET_METATABLE(metaName,type);return p;}()
+#define NEW_UDATA(type,...)*new (luaCPP_newuserdata<udata::type>(L, udata::type::lua_index,udata::type::lua_newindex, lua_cppdata_gc<udata::type>)) udata::type(__VA_ARGS__)
+#define NEW_UDATA_META(type,metaName)*[L]{auto p=(type*)lua_newuserdata(L, sizeof(type));_SET_METATABLE(metaName,type);return p;}()
 
-#define ARG_UDATA(index,type)*[=]{type* p; _CHECK_ARG_UDATA(index,type);}()
-#define ARG_UDATA_DEF(index,type,def)*[=]{type* p; if(lua_isnoneornil(L,index)){p=&def;}else _CHECK_ARG_UDATA(index,type);}()
+#define ARG_UDATA(index,type)*[L]{type* p; _CHECK_ARG_UDATA(index,type);}()
+#define ARG_UDATA_DEF(index,type,def)*[L]{type* p; if(lua_isnoneornil(L,index)){p=&def;}else _CHECK_ARG_UDATA(index,type);}()
 
 #define ARG(index,luaType,type,name) type name; _CHECK_ARG(index,luaType,type,name)
 #define ARG_DEF(index,luaType,type,name,def) type name;if(lua_isnoneornil(L,index)){name=def;}else _CHECK_ARG(index,luaType,type,name)
@@ -35,6 +37,9 @@
 #define MOD_CALLBACK_ARG(paramType,...)lua_push##paramType(L, __VA_ARGS__);paramNum++
 #define MOD_CALLBACK_CALL()LUA_PCALL(paramNum, 1)
 #define MOD_CALLBACK_END()if(!lua_isnil(L, -1)){terminate = true;}lua_pop(L, 2);}if(terminate){return 1;}}
+
+#define RESULT_CALLBACK_BEGIN(name) {size_t id = result.id;lua_getglobal(L,"_ISAAC_SOCKET");lua_pushstring(L,#name);lua_gettable(L, -2);lua_pushinteger(L, id);lua_gettable(L, -2);if(lua_isfunction(L,-1)){int paramNum = 0
+#define RESULT_CALLBACK_END()MOD_CALLBACK_CALL();}lua_pop(L, 3);}
 
 #define FAST_MOD_CALLBACK_BEGIN(name){_MOD_CALLBACK_BEGIN(name)
 #define FAST_MOD_CALLBACK_END()MOD_CALLBACK_CALL();lua_pop(L, 2);}}

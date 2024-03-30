@@ -1,7 +1,8 @@
 ﻿#pragma once
 #include "pch.h"
-#include "udata.hpp"
+
+#include <Poco/Task.h>
 
 namespace task_ {
-	void Run(std::function <void()> callback);
+    Poco::Task* Run(std::function <void()> callback);
 }

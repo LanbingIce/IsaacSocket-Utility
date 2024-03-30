@@ -342,6 +342,7 @@
     <ClCompile Include="src\modules\opengl.cpp" />
     <ClCompile Include="src\modules\sound.cpp" />
     <ClCompile Include="src\modules\system_.cpp" />
+    <ClCompile Include="src\modules\web_socket.cpp" />
     <ClCompile Include="src\modules\win_api.cpp" />
     <ClCompile Include="src\reload.cpp" />
     <ClCompile Include="src\callback.cpp" />
