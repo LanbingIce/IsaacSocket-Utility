@@ -52,6 +52,9 @@
     <Filter Include="库\Poco\lib">
       <UniqueIdentifier>{0b831385-cc80-475a-b2c3-ac51eb9585b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="库\myws">
+      <UniqueIdentifier>{13dfa12f-7148-4d24-932d-473e54b00691}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libs\glad\glad.cpp">
@@ -155,6 +158,9 @@
     </ClCompile>
     <ClCompile Include="src\modules\web_socket.cpp">
       <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\myws\myws.cpp">
+      <Filter>库\myws</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -913,6 +919,9 @@
     </ClInclude>
     <ClInclude Include="include\result.hpp">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\myws\myws.hpp">
+      <Filter>库\myws</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -106,6 +106,7 @@
     <ClInclude Include="libs\imsdk\TIMMessageManager.h" />
     <ClInclude Include="libs\imsdk\TIMOfflinePushManager.h" />
     <ClInclude Include="libs\imsdk\TIMSignalingManager.h" />
+    <ClInclude Include="libs\myws\myws.hpp" />
     <ClInclude Include="libs\Poco\Dynamic\Pair.h" />
     <ClInclude Include="libs\Poco\Dynamic\Struct.h" />
     <ClInclude Include="libs\Poco\Dynamic\Var.h" />
@@ -323,6 +324,7 @@
     <ClCompile Include="libs\imgui\imgui_tables.cpp" />
     <ClCompile Include="libs\imgui\imgui_widgets.cpp" />
     <ClCompile Include="libs\imsdk\GenerateTestUserSig.cpp" />
+    <ClCompile Include="libs\myws\myws.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
