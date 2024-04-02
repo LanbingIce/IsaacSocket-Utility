@@ -13,10 +13,10 @@ namespace myws {
     class MyWS
     {
     public:
-        std::function<void()> OnOpen = [] {};
-        std::function<void(const char* message, int len, int flags)> OnMessage = [](const char*, int, int) {};
-        std::function<void(short closeStatus, const string& statusDescription)> OnClose = [](short, const string&) {};
-        std::function<void(const string& error)> OnError = [](const string&) {};
+        void (*OnOpen)() = [] {};
+        void (*OnMessage)(const char* message, int len, int flags) = [](const char*, int, int) {};
+        void (*OnClose)(short closeStatus, const string& statusDescription) = [](short, const string&) {};
+        void (*OnError)(const string& error) = [](const string&) {};
 
         int Send(const char* message, int len, bool isBinary = false);
         bool Close(short closeStatus = 1000, const string& statusDescription = "");
