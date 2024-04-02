@@ -1,14 +1,18 @@
 ﻿#include "myws.hpp"
 
-#include <Poco/URI.h>
-#include <Poco/Net/HTTPClientSession.h>
-#include <Poco/Net/HTTPRequest.h>
-#include <Poco/Net/HTTPMessage.h>
-#include <Poco/Net/HTTPResponse.h>
 #include <Poco/Buffer.h>
 #include <Poco/Task.h>
 #include <Poco/TaskManager.h>
 #include <Poco/ThreadPool.h>
+#include <Poco/URI.h>
+
+#include <Poco/Net/ConsoleCertificateHandler.h>
+#include <Poco/Net/HTTPClientSession.h>
+#include <Poco/Net/HTTPMessage.h>
+#include <Poco/Net/HTTPRequest.h>
+#include <Poco/Net/HTTPResponse.h>
+#include <Poco/Net/HTTPSClientSession.h>
+#include <Poco/Net/SSLManager.h>
 
 namespace myws {
     class _Task :public Poco::Task
@@ -26,10 +30,24 @@ namespace myws {
         try
         {
             Poco::URI uri(url);
-            Poco::Net::HTTPClientSession session(uri.getHost(), uri.getPort());
-            Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, "/?encoding=text", Poco::Net::HTTPMessage::HTTP_1_1);
-            request.set("origin", "http://www.websocket.org");
+            std::shared_ptr<Poco::Net::HTTPClientSession> pSession;
+
+            if (uri.getScheme() == "wss")
+            {
+                Poco::Net::SSLManager::InvalidCertificateHandlerPtr ptrCert = new Poco::Net::ConsoleCertificateHandler(true);
+                Poco::Net::Context::Ptr ptrContext = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "");
+                Poco::Net::SSLManager::instance().initializeClient(0, ptrCert, ptrContext);
+                pSession = std::make_shared<Poco::Net::HTTPSClientSession>(uri.getHost(), uri.getPort());
+            }
+            else
+            {
+                pSession = std::make_shared<Poco::Net::HTTPClientSession>(uri.getHost(), uri.getPort());
+            }
+
+            Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, uri.getPath(), Poco::Net::HTTPMessage::HTTP_1_1);
             Poco::Net::HTTPResponse response;
+            Poco::Net::HTTPClientSession& session = *pSession;
+
             _pws = std::make_shared<Poco::Net::WebSocket>(session, request, response);
             _pws->setReceiveTimeout(0);
             Poco::Buffer<char> _buffer(0);
@@ -52,6 +70,14 @@ namespace myws {
                     _pws->sendFrame(buffer, len, flags);
                     _SetState(CLOSED);
                     OnClose(closeStatus, string(buffer + 2, len - 2));
+                    break;
+                }
+                else if (flags == 0)
+                {
+                    _SetState(CLOSING);
+                    _pws->sendFrame(buffer, len, flags);
+                    _SetState(CLOSED);
+                    OnClose(1006, "");
                     break;
                 }
                 else
