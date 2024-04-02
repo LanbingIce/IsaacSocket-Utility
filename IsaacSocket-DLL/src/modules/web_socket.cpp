@@ -24,6 +24,7 @@ namespace udata {
         ws.OnError = [](const string& msg) {
             cw(msg);
             };
+        ws.Connect();
 
     }
 

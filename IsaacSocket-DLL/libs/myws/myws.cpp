@@ -89,13 +89,9 @@ namespace myws {
 
         _pws->shutdown(closeStatus, statusDescription);
 
-        while (true)
+        while (GetState() == CLOSING)
         {
             Sleep(1);
-            if (GetState() != CLOSING)
-            {
-                break;
-            }
         }
         return true;
     }
@@ -110,12 +106,18 @@ namespace myws {
         _state = state;
     }
 
-    MyWS::MyWS(const string& url) {
-        static Poco::ThreadPool pool(2, 256);
+    void MyWS::Connect() {
+        static Poco::ThreadPool pool(1, INT_MAX);
         static Poco::TaskManager taskManager(pool);
-        taskManager.start(new _Task([this, url] {
-            _Connect(url);
+        taskManager.start(new _Task([this] {
+            _Connect(_url);
             }));
+        while (GetState() == CONNECTING)
+        {
+            Sleep(1);
+        }
     }
+
+    MyWS::MyWS(const string& url) :_url(url) {}
 }
 #undef LOCK_GUARD

@@ -18,6 +18,7 @@ namespace myws {
         void (*OnClose)(short closeStatus, const string& statusDescription) = [](short, const string&) {};
         void (*OnError)(const string& error) = [](const string&) {};
 
+        void Connect();
         int Send(const char* message, int len, bool isBinary = false);
         bool Close(short closeStatus = 1000, const string& statusDescription = "");
 
@@ -27,6 +28,7 @@ namespace myws {
     private:
         void _SetState(WebSocketState state);
         void _Connect(const string& url);
+        const string _url;
         std::shared_ptr<Poco::Net::WebSocket> _pws;
         std::mutex _mutex;
         WebSocketState _state = CONNECTING;
