@@ -58,8 +58,7 @@ namespace _isaac_socket
             << "_ISAAC_SOCKET.openCallbacks={}"
             << "_ISAAC_SOCKET.messageCallbacks={}"
             << "_ISAAC_SOCKET.closedCallbacks={}"
-            << "_ISAAC_SOCKET.errorCallbacks={}"
-            << "_ISAAC_SOCKET.webSocketClients={}";
+            << "_ISAAC_SOCKET.errorCallbacks={}";
         luaL_dostring(L, oss.str().c_str());
     }
 }

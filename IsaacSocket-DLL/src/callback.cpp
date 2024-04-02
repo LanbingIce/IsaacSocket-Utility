@@ -287,21 +287,6 @@ namespace callback {
         }
     }
 
-    static udata::WebSocketClient* GetWebSocketClientUserdata(size_t id, lua_State* L = ::L) {
-        LuaGuard luaGuard;
-        lua_getglobal(L, "_ISAAC_SOCKET");
-        lua_pushstring(L, "webSocketClients");
-        lua_gettable(L, -2);
-        lua_pushinteger(L, id);
-        lua_gettable(L, -2);
-        if (lua_isuserdata(L, -1))
-        {
-            auto& uws = ARG_UDATA(-1, udata::WebSocketClient);
-            return &uws;
-        }
-        return nullptr;
-    }
-
     static void RunTaskCallbacks(lua_State* L = ::L) {
         LuaGuard luaGuard;
 
@@ -369,63 +354,38 @@ namespace callback {
                 LuaGuard luaGuard;
                 auto& result = (result::WebSocketOpenResult&)*pResult;
                 size_t id = result.id;
-                auto pws = GetWebSocketClientUserdata(id);
-                if (pws)
-                {
-                    auto& uws = *pws;
-                    uws.state = uws.OPEN;
-                    RESULT_CALLBACK_BEGIN(openCallbacks);
-                    RESULT_CALLBACK_END();
-                }
+                RESULT_CALLBACK_BEGIN(openCallbacks);
+                RESULT_CALLBACK_END();
             }
             else if (typeName == typeid(result::WebSocketMessageResult).name())
             {
                 LuaGuard luaGuard;
                 auto& result = (result::WebSocketMessageResult&)*pResult;
                 size_t id = result.id;
-                auto pws = GetWebSocketClientUserdata(id);
-                if (pws)
-                {
-                    auto& uws = *pws;
-                    if (uws.state == uws.OPEN)
-                    {
-                        RESULT_CALLBACK_BEGIN(messageCallbacks);
-                        MOD_CALLBACK_ARG(lstring, result.message.c_str(), result.len);
-                        MOD_CALLBACK_ARG(boolean, result.isBinary);
-                        RESULT_CALLBACK_END();
-                    }
-                }
+                RESULT_CALLBACK_BEGIN(messageCallbacks);
+                MOD_CALLBACK_ARG(lstring, result.message.c_str(), result.len);
+                MOD_CALLBACK_ARG(boolean, result.isBinary);
+                RESULT_CALLBACK_END();
+
             }
             else if (typeName == typeid(result::WebSocketClosedResult).name())
             {
                 LuaGuard luaGuard;
                 auto& result = (result::WebSocketClosedResult&)*pResult;
                 size_t id = result.id;
-                auto pws = GetWebSocketClientUserdata(id);
-                if (pws)
-                {
-                    auto& uws = *pws;
-                    uws.state = uws.CLOSED;
-                    RESULT_CALLBACK_BEGIN(closedCallbacks);
-                    MOD_CALLBACK_ARG(integer, result.closeStatus);
-                    MOD_CALLBACK_ARG(string, result.statusDescription.c_str());
-                    RESULT_CALLBACK_END();
-                }
+                RESULT_CALLBACK_BEGIN(closedCallbacks);
+                MOD_CALLBACK_ARG(integer, result.closeStatus);
+                MOD_CALLBACK_ARG(string, result.statusDescription.c_str());
+                RESULT_CALLBACK_END();
             }
             else if (typeName == typeid(result::WebSocketErrorResult).name())
             {
                 LuaGuard luaGuard;
                 auto& result = (result::WebSocketErrorResult&)*pResult;
                 size_t id = result.id;
-                auto pws = GetWebSocketClientUserdata(id);
-                if (pws)
-                {
-                    auto& uws = *pws;
-                    uws.state = uws.CLOSED;
-                    RESULT_CALLBACK_BEGIN(errorCallbacks);
-                    MOD_CALLBACK_ARG(string, result.message.c_str());
-                    RESULT_CALLBACK_END();
-                }
+                RESULT_CALLBACK_BEGIN(errorCallbacks);
+                MOD_CALLBACK_ARG(string, result.message.c_str());
+                RESULT_CALLBACK_END();
             }
         }
         local.pResults.clear();

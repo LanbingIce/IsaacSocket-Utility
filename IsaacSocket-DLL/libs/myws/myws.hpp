@@ -21,11 +21,11 @@ namespace myws {
         int Send(const char* message, int len, bool isBinary = false);
         bool Close(short closeStatus = 1000, const string& statusDescription = "");
 
-        void SetState(WebSocketState state);
         WebSocketState GetState();
 
         MyWS(const string& url);
     private:
+        void _SetState(WebSocketState state);
         void _Connect(const string& url);
         std::shared_ptr<Poco::Net::WebSocket> _pws;
         std::mutex _mutex;

@@ -33,7 +33,7 @@ namespace myws {
             _pws = std::make_shared<Poco::Net::WebSocket>(session, request, response);
             _pws->setReceiveTimeout(0);
             Poco::Buffer<char> _buffer(0);
-            SetState(OPEN);
+            _SetState(OPEN);
             OnOpen();
             while (true)
             {
@@ -43,14 +43,14 @@ namespace myws {
                 const char* buffer = _buffer.begin();
                 if (flags & _pws->FRAME_OP_CLOSE)
                 {
-                    SetState(CLOSING);
+                    _SetState(CLOSING);
                     short closeStatus = 0;
                     char* p = (char*)&closeStatus;
                     //反转字节序
                     p[0] = buffer[1];
                     p[1] = buffer[0];
                     _pws->sendFrame(buffer, len, flags);
-                    SetState(CLOSED);
+                    _SetState(CLOSED);
                     OnClose(closeStatus, string(buffer + 2, len - 2));
                     break;
                 }
@@ -62,12 +62,12 @@ namespace myws {
         }
         catch (Poco::Exception& e)
         {
-            SetState(CLOSED);
+            _SetState(CLOSED);
             OnError(e.displayText());
         }
         catch (const std::exception& e)
         {
-            SetState(CLOSED);
+            _SetState(CLOSED);
             OnError(e.what());
         }
     }
@@ -85,7 +85,7 @@ namespace myws {
         {
             return false;
         }
-        SetState(CLOSING);
+        _SetState(CLOSING);
 
         _pws->shutdown(closeStatus, statusDescription);
 
@@ -105,7 +105,7 @@ namespace myws {
         return _state;
     }
 
-    void MyWS::SetState(WebSocketState state) {
+    void MyWS::_SetState(WebSocketState state) {
         std::lock_guard lock(_mutex);
         _state = state;
     }

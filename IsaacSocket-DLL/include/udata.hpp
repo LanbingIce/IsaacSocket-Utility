@@ -2,9 +2,9 @@
 #include "lua.hpp"
 #include "result.hpp"
 
+#include <myws/myws.hpp>
 #include <glad/glad.h>
 #include <Poco/Net/HTTPResponse.h>
-#include <Poco/Net/WebSocket.h>
 namespace udata {
     struct HistoryItem
     {
@@ -64,16 +64,8 @@ namespace udata {
     struct WebSocketClient {
         inline static size_t nextId;
         size_t id;
-        Poco::Net::WebSocket* pWebSocket = nullptr;
-        enum State
-        {
-            CONNECTING,
-            OPEN,
-            CLOSING,
-            CLOSED
-        }state = CONNECTING;
+        myws::MyWS ws;
         WebSocketClient(const string& url);
-        ~WebSocketClient();
         static int IsOpen(lua_State* L);
         static int IsClosed(lua_State* L);
         static int Send(lua_State* L);
