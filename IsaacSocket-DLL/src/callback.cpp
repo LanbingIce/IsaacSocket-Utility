@@ -298,7 +298,7 @@ namespace callback {
 
         std::lock_guard lock(local.mutex);
 
-        for (auto& pResult : local.pResults) {
+        while (auto pResult = result::Pop()) {
             auto typeName = typeid(*pResult).name();
             if (typeName == typeid(result::ErrorResult).name())
             {
@@ -363,7 +363,7 @@ namespace callback {
                 auto& result = (result::WebSocketMessageResult&)*pResult;
                 size_t id = result.id;
                 RESULT_CALLBACK_BEGIN(messageCallbacks);
-                MOD_CALLBACK_ARG(lstring, result.message.c_str(), result.len);
+                MOD_CALLBACK_ARG(lstring, result.message.c_str(), result.message.length());
                 MOD_CALLBACK_ARG(boolean, result.isBinary);
                 RESULT_CALLBACK_END();
 
@@ -388,7 +388,6 @@ namespace callback {
                 RESULT_CALLBACK_END();
             }
         }
-        local.pResults.clear();
     }
 
 #define CHECK_INIT()if (local.connectionState == state::INIT)return 0

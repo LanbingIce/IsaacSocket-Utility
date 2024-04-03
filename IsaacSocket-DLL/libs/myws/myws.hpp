@@ -4,20 +4,21 @@
 namespace myws {
     enum WebSocketState
     {
-        NONE,
-        CONNECTING,
-        OPEN,
-        CLOSING,
-        CLOSED
+        NONE = 0,
+        CONNECTING = 1,
+        OPEN = 2,
+        CLOSING = 3,
+        CLOSED = 4,
+        DEAD = 5
     };
 
     class MyWS
     {
     public:
-        void (*OnOpen)() = [] {};
-        void (*OnMessage)(const char* message, int len, int flags) = [](const char*, int, int) {};
-        void (*OnClose)(short closeStatus, const string& statusDescription) = [](short, const string&) {};
-        void (*OnError)(const string& error) = [](const string&) {};
+        std::function<void()>OnOpen = [] {};
+        std::function<void(const char*, int, bool)>OnMessage = [](const char*, int, bool = false) {};
+        std::function<void(short, const string&)>OnClose = [](short = 1000, const string & = "") {};
+        std::function<void(const string&) >OnError = [](const string & = "") {};
 
         void Connect();
         int Send(const char* message, int len, bool isBinary = false);

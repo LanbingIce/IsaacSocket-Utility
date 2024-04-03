@@ -7,6 +7,10 @@ namespace result {
         virtual ~Result() {}
     };
 
+    void Push(const std::shared_ptr<result::Result>& result);
+    std::shared_ptr<result::Result> Pop();
+    void Clear();
+
     struct TaskResult :Result {
         size_t id;
         TaskResult(size_t id) :id(id) {}
@@ -54,10 +58,9 @@ namespace result {
     };
     struct WebSocketMessageResult :WebSocketResult
     {
-        size_t len;
         string message;
         bool isBinary;
-        WebSocketMessageResult(size_t id, size_t len, const string& message, bool isBinary) :WebSocketResult(id), len(len), message(message), isBinary(isBinary) {}
+        WebSocketMessageResult(size_t id, size_t len, const char* message, bool isBinary) :WebSocketResult(id), message(message, len), isBinary(isBinary) {}
     };
     struct WebSocketClosedResult :WebSocketResult
     {

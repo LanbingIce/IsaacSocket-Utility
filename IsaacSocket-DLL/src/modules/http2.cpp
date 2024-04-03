@@ -51,15 +51,15 @@ namespace http2
                 string body;
                 session.receiveResponse(response) >> body;
                 std::lock_guard lock(local.mutex);
-                local.pResults.push_back(std::make_shared<result::ResponseResult>(task.id, body, response));
+                result::Push(std::make_shared<result::ResponseResult>(task.id, body, response));
             }
             catch (Poco::Exception& ex) {
                 std::lock_guard lock(local.mutex);
-                local.pResults.push_back(std::make_shared<result::ErrorResult>(task.id, ex.displayText()));
+                result::Push(std::make_shared<result::ErrorResult>(task.id, ex.displayText()));
             }
             catch (std::exception& ex) {
                 std::lock_guard lock(local.mutex);
-                local.pResults.push_back(std::make_shared<result::ErrorResult>(task.id, ex.what()));
+                result::Push(std::make_shared<result::ErrorResult>(task.id, ex.what()));
             }
             });
         return 1;

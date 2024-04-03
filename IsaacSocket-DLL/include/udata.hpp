@@ -66,6 +66,7 @@ namespace udata {
         size_t id;
         myws::MyWS ws;
         WebSocketClient(const string& url);
+        ~WebSocketClient();
         static int IsOpen(lua_State* L);
         static int IsClosed(lua_State* L);
         static int Send(lua_State* L);

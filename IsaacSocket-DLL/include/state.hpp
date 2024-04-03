@@ -46,7 +46,6 @@ namespace state {
     {
         bool isRepentogon = (bool)GetModuleHandleA("Lua5.4.dll");
         bool allocConsole = false;
-        vector<std::shared_ptr<result::Result>> pResults{};
         std::mutex mutex;
         ConnectionState connectionState = INIT;
         ReloadLuaState reloadLuaState = EXIT;

@@ -14,6 +14,9 @@
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/Net/SSLManager.h>
 
+using FrameOpcodes = Poco::Net::WebSocket::FrameOpcodes;
+using FrameFlags = Poco::Net::WebSocket::FrameFlags;
+
 namespace myws {
     class _Task :public Poco::Task
     {
@@ -34,6 +37,7 @@ namespace myws {
     void MyWS::_Connect() {
         try
         {
+            _SetState(CONNECTING);
             Poco::URI uri(_url);
             std::shared_ptr<Poco::Net::HTTPClientSession> pSession;
 
@@ -58,40 +62,68 @@ namespace myws {
             Poco::Net::HTTPClientSession& session = *pSession;
             session.setTimeout(3 * 1000 * 1000);
             Poco::Buffer<char> buffer(0);
-            _SetState(CONNECTING);
+            int flags = 0;
             _pws = std::make_shared<Poco::Net::WebSocket>(session, request, response);
             _pws->setReceiveTimeout(0);
             _SetState(OPEN);
             OnOpen();
             while (true)
             {
-                int flags = 0;
-                _pws->receiveFrame(buffer, flags);
-                if (flags == 0)
+                int len = _pws->receiveFrame(buffer, flags);
+                bool fin = flags & FrameFlags::FRAME_FLAG_FIN;
+                bool rsv1 = flags & FrameFlags::FRAME_FLAG_RSV1;
+                bool rsv2 = flags & FrameFlags::FRAME_FLAG_RSV2;
+                bool rsv3 = flags & FrameFlags::FRAME_FLAG_RSV3;
+
+                FrameOpcodes opcodes = (FrameOpcodes)(flags & FrameOpcodes::FRAME_OP_BITMASK);
+
+                if (rsv1 || rsv2 || rsv3) // rsv必须全部为0
                 {
                     _Close(1006);
                     break;
                 }
-                else if (flags & _pws->FRAME_OP_CLOSE)
+
+                if (!fin)  // 不是终包
+                {
+                    if (len)  //长度不为0则缓存，等待下一分片
+                    {
+                        continue;
+                    }
+                    _Close(1006); //长度为0说明消息有误
+                    break;
+                }
+
+                // 以下为终包 fin = true
+
+                if (opcodes == FrameOpcodes::FRAME_OP_CONT) // 终包和续包是互斥的
+                {
+                    _Close(1006);
+                    break;
+                }
+                else if (opcodes == FrameOpcodes::FRAME_OP_TEXT)//文本
+                {
+                    OnMessage(buffer.begin(), buffer.size(), false);
+                }
+                else if (opcodes == FrameOpcodes::FRAME_OP_BINARY)//二进制
+                {
+                    OnMessage(buffer.begin(), buffer.size(), true);
+                }
+                else if (opcodes == FrameOpcodes::FRAME_OP_CLOSE)//关闭
                 {
                     short closeStatus = 0;
                     char* p = (char*)&closeStatus;
-                    string statusDescription = string(buffer.begin() + 2, buffer.size() - 2);
+                    string statusDescription{ buffer.begin() + 2, buffer.size() - 2 };
                     //反转字节序
                     p[0] = buffer[1];
                     p[1] = buffer[0];
                     _Close(closeStatus, statusDescription);
                     break;
                 }
-                else if (flags & _pws->FRAME_FLAG_FIN)
+                else if (opcodes == FrameOpcodes::FRAME_OP_PING)//PING
                 {
-                    OnMessage(buffer.begin(), buffer.size(), flags);
-                    buffer.resize(0);
+                    _pws->sendFrame(buffer.begin(), buffer.size(), FrameFlags::FRAME_FLAG_FIN | FrameOpcodes::FRAME_OP_PONG);
                 }
-                else
-                {
-                    throw std::exception("Unknow Message");
-                }
+                buffer.resize(0);
             }
         }
         catch (Poco::Exception& e)
@@ -108,6 +140,7 @@ namespace myws {
             _SetState(CLOSED);
             OnError("Unknow Exception");
         }
+        _SetState(DEAD);
     }
 
     void MyWS::_Close(short closeStatus, const string& statusDescription) {
@@ -164,6 +197,7 @@ namespace myws {
     MyWS::MyWS(const string& url) :_url(url) {}
 
     MyWS::~MyWS() {
+        // 只有构造时才是NONE，调用了Connect会立刻变为CONNECTING
         while (GetState() == CONNECTING)
         {
             Sleep(1);
@@ -173,7 +207,7 @@ namespace myws {
             _SetState(CLOSING);
             _pws->close();
         }
-        while (GetState() == CLOSING)
+        while (GetState() != DEAD)
         {
             Sleep(1);
         }

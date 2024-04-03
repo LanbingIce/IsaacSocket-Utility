@@ -38,7 +38,7 @@
 #define MOD_CALLBACK_CALL()LUA_PCALL(paramNum, 1)
 #define MOD_CALLBACK_END()if(!lua_isnil(L, -1)){terminate = true;}lua_pop(L, 2);}if(terminate){return 1;}}
 
-#define RESULT_CALLBACK_BEGIN(name) {size_t id = result.id;lua_getglobal(L,"_ISAAC_SOCKET");lua_pushstring(L,#name);lua_gettable(L, -2);lua_pushinteger(L, id);lua_gettable(L, -2);if(lua_isfunction(L,-1)){int paramNum = 0
+#define RESULT_CALLBACK_BEGIN(name) {lua_getglobal(L,"_ISAAC_SOCKET");lua_pushstring(L,#name);lua_gettable(L, -2);lua_pushinteger(L, id);lua_gettable(L, -2);if(lua_isfunction(L,-1)){int paramNum = 0
 #define RESULT_CALLBACK_END()MOD_CALLBACK_CALL();}lua_pop(L, 3);}
 
 #define FAST_MOD_CALLBACK_BEGIN(name){_MOD_CALLBACK_BEGIN(name)
