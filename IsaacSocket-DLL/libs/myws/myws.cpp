@@ -52,11 +52,11 @@ namespace myws {
             {
                 throw std::exception("Bad Scheme");
             }
-
-            Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, uri.getPath(), Poco::Net::HTTPMessage::HTTP_1_1);
+            const string& path = uri.getPath();
+            Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, path.empty() ? "/" : path, Poco::Net::HTTPMessage::HTTP_1_1);
             Poco::Net::HTTPResponse response;
             Poco::Net::HTTPClientSession& session = *pSession;
-            session.setTimeout(1 * 1000 * 1000);
+            session.setTimeout(3 * 1000 * 1000);
             Poco::Buffer<char> buffer(0);
             _SetState(CONNECTING);
             _pws = std::make_shared<Poco::Net::WebSocket>(session, request, response);
