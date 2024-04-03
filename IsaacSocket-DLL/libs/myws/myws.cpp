@@ -39,9 +39,13 @@ namespace myws {
                 Poco::Net::SSLManager::instance().initializeClient(0, ptrCert, ptrContext);
                 pSession = std::make_shared<Poco::Net::HTTPSClientSession>(uri.getHost(), uri.getPort());
             }
-            else
+            else if (uri.getScheme() == "ws")
             {
                 pSession = std::make_shared<Poco::Net::HTTPClientSession>(uri.getHost(), uri.getPort());
+            }
+            else
+            {
+                throw std::exception("Bad Scheme");
             }
 
             Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, uri.getPath(), Poco::Net::HTTPMessage::HTTP_1_1);
@@ -95,6 +99,10 @@ namespace myws {
         {
             _SetState(CLOSED);
             OnError(e.what());
+        }
+        catch (...) {
+            _SetState(CLOSED);
+            OnError("Unknow Exception");
         }
     }
 
