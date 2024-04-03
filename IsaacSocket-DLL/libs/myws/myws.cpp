@@ -18,18 +18,23 @@ namespace myws {
     class _Task :public Poco::Task
     {
     public:
-        _Task(std::function<void()> callback) : Task(""), _callback(callback) {}
+        static void Run(const std::function<void()>& callback) {
+            static Poco::ThreadPool pool(1, INT_MAX);
+            static Poco::TaskManager taskManager(pool);
+            taskManager.start(new _Task(callback));
+        }
+    private:
+        _Task(const std::function<void()>& callback) : Task(""), _callback(callback) {}
         void runTask() {
             _callback();
         }
-    private:
         std::function <void()> _callback;
     };
 
-    void MyWS::_Connect(const string& url) {
+    void MyWS::_Connect() {
         try
         {
-            Poco::URI uri(url);
+            Poco::URI uri(_url);
             std::shared_ptr<Poco::Net::HTTPClientSession> pSession;
 
             if (uri.getScheme() == "wss")
@@ -54,39 +59,37 @@ namespace myws {
 
             _pws = std::make_shared<Poco::Net::WebSocket>(session, request, response);
             _pws->setReceiveTimeout(0);
-            Poco::Buffer<char> _buffer(0);
+            Poco::Buffer<char> buffer(0);
             _SetState(OPEN);
             OnOpen();
             while (true)
             {
-                _buffer.resize(0);
                 int flags = 0;
-                int len = _pws->receiveFrame(_buffer, flags);
-                const char* buffer = _buffer.begin();
-                if (flags & _pws->FRAME_OP_CLOSE)
+                _pws->receiveFrame(buffer, flags);
+                if (flags == 0)
                 {
-                    _SetState(CLOSING);
+                    _Close(1006);
+                    break;
+                }
+                else if (flags & _pws->FRAME_OP_CLOSE)
+                {
                     short closeStatus = 0;
                     char* p = (char*)&closeStatus;
+                    string statusDescription = string(buffer.begin() + 2, buffer.size() - 2);
                     //反转字节序
                     p[0] = buffer[1];
                     p[1] = buffer[0];
-                    _pws->sendFrame(buffer, len, flags);
-                    _SetState(CLOSED);
-                    OnClose(closeStatus, string(buffer + 2, len - 2));
+                    _Close(closeStatus, statusDescription);
                     break;
                 }
-                else if (flags == 0)
+                else if (flags & _pws->FRAME_FLAG_FIN)
                 {
-                    _SetState(CLOSING);
-                    _pws->sendFrame(buffer, len, flags);
-                    _SetState(CLOSED);
-                    OnClose(1006, "");
-                    break;
+                    OnMessage(buffer.begin(), buffer.size(), flags);
+                    buffer.resize(0);
                 }
                 else
                 {
-                    OnMessage(buffer, len, flags);
+                    throw std::exception("Unknow Message");
                 }
             }
         }
@@ -104,6 +107,13 @@ namespace myws {
             _SetState(CLOSED);
             OnError("Unknow Exception");
         }
+    }
+
+    void MyWS::_Close(short closeStatus, const string& statusDescription) {
+        _SetState(CLOSING);
+        _pws->shutdown(closeStatus, statusDescription);
+        _SetState(CLOSED);
+        OnClose(closeStatus, statusDescription);
     }
 
     int MyWS::Send(const char* message, int len, bool isBinary) {
@@ -143,9 +153,7 @@ namespace myws {
     void MyWS::Connect() {
         static Poco::ThreadPool pool(1, INT_MAX);
         static Poco::TaskManager taskManager(pool);
-        taskManager.start(new _Task([this] {
-            _Connect(_url);
-            }));
+        _Task::Run([this] {_Connect(); });
         while (GetState() == CONNECTING)
         {
             Sleep(1);

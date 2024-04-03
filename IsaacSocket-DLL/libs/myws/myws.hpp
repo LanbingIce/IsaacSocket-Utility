@@ -27,7 +27,8 @@ namespace myws {
         MyWS(const string& url);
     private:
         void _SetState(WebSocketState state);
-        void _Connect(const string& url);
+        void _Connect();
+        void _Close(short closeStatus = 1000, const string& statusDescription = "");
         const string _url;
         std::shared_ptr<Poco::Net::WebSocket> _pws;
         std::mutex _mutex;
