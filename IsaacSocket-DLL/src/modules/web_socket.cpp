@@ -14,7 +14,7 @@ namespace udata {
             };
 
         ws.OnMessage = [](const char* msg, int len, int flags) {
-            cw(msg, len, flags);
+            cw(string(msg, len), len, flags);
             };
 
         ws.OnClose = [](short status, const string& msg) {

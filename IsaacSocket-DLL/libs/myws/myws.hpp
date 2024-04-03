@@ -4,6 +4,7 @@
 namespace myws {
     enum WebSocketState
     {
+        NONE,
         CONNECTING,
         OPEN,
         CLOSING,
@@ -25,6 +26,7 @@ namespace myws {
         WebSocketState GetState();
 
         MyWS(const string& url);
+        ~MyWS();
     private:
         void _SetState(WebSocketState state);
         void _Connect();
@@ -32,6 +34,6 @@ namespace myws {
         const string _url;
         std::shared_ptr<Poco::Net::WebSocket> _pws;
         std::mutex _mutex;
-        WebSocketState _state = CONNECTING;
+        WebSocketState _state = NONE;
     };
 }

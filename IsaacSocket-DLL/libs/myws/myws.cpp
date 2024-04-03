@@ -56,10 +56,11 @@ namespace myws {
             Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, uri.getPath(), Poco::Net::HTTPMessage::HTTP_1_1);
             Poco::Net::HTTPResponse response;
             Poco::Net::HTTPClientSession& session = *pSession;
-
+            session.setTimeout(1 * 1000 * 1000);
+            Poco::Buffer<char> buffer(0);
+            _SetState(CONNECTING);
             _pws = std::make_shared<Poco::Net::WebSocket>(session, request, response);
             _pws->setReceiveTimeout(0);
-            Poco::Buffer<char> buffer(0);
             _SetState(OPEN);
             OnOpen();
             while (true)
@@ -154,12 +155,28 @@ namespace myws {
         static Poco::ThreadPool pool(1, INT_MAX);
         static Poco::TaskManager taskManager(pool);
         _Task::Run([this] {_Connect(); });
-        while (GetState() == CONNECTING)
+        while (GetState() == NONE)
         {
             Sleep(1);
         }
     }
 
     MyWS::MyWS(const string& url) :_url(url) {}
+
+    MyWS::~MyWS() {
+        while (GetState() == CONNECTING)
+        {
+            Sleep(1);
+        }
+        if (GetState() == OPEN)
+        {
+            _SetState(CLOSING);
+            _pws->close();
+        }
+        while (GetState() == CLOSING)
+        {
+            Sleep(1);
+        }
+    }
 }
 #undef LOCK_GUARD
