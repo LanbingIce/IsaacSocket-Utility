@@ -10,7 +10,8 @@ namespace udata {
             return  ++nextId;
         }())
     {
-        SET_CALLBACK(lua_gettop(L), tasks);
+        int top = lua_gettop(L);
+        SET_CALLBACK(top, tasks);
     }
 
     int Task::IsCompletedSuccessfully(lua_State* L) {
