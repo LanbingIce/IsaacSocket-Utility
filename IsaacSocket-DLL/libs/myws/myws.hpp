@@ -16,9 +16,9 @@ namespace myws {
     {
     public:
         std::function<void()>OnOpen = [] {};
-        std::function<void(const char*, int, bool)>OnMessage = [](const char*, int, bool = false) {};
-        std::function<void(short, const string&)>OnClose = [](short = 1000, const string & = "") {};
-        std::function<void(const string&) >OnError = [](const string & = "") {};
+        std::function<void(const char*, int, bool)>OnMessage = [](const char*, int, bool) {};
+        std::function<void(short, const string&)>OnClose = [](short, const string&) {};
+        std::function<void(const string&) >OnError = [](const string&) {};
 
         void Connect();
         int Send(const char* message, int len, bool isBinary = false);
