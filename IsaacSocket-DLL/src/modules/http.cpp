@@ -1,8 +1,8 @@
-﻿#include "task_.hpp"
-#include "module.hpp"
-#include "state.hpp"
+﻿#include "module.hpp"
 #include "result.hpp"
 #include "udata.hpp"
+
+#include <mytask/mytask.hpp>
 
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/Net/HTTPRequest.h>
@@ -27,8 +27,7 @@ namespace http
         auto& task = NEW_UDATA(Task);
         int id = task.id;
         SET_CALLBACK(2, tasks);
-
-        task_::Run([&task, url] {
+        mytask::Run([&task, url] {
             try {
                 Poco::URI uri(url);
 

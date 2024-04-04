@@ -1,7 +1,5 @@
 ﻿#include "udata.hpp"
 #include "module.hpp"
-#include "state.hpp"
-#include <Poco/TaskManager.h>
 
 udata::Task::Task() {
     std::lock_guard lock(_mutex);
@@ -72,22 +70,4 @@ int udata::Task::lua_index(lua_State* L) {
 
 int udata::Task::lua_newindex(lua_State* L) {
     METATABLE_END();
-}
-
-namespace task_ {
-    struct _Task : Poco::Task {
-        _Task(std::function<void()> callback) : Task(""), callback(callback) {}
-        std::function < void()> callback;
-        void runTask() {
-            callback();
-        }
-    };
-
-    Poco::Task* Run(std::function <void()> callback)
-    {
-        static Poco::TaskManager taskManager;
-        auto pTask = new _Task(callback);
-        taskManager.start(pTask);
-        return pTask;
-    }
 }

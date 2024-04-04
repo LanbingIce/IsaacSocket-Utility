@@ -72,7 +72,6 @@
     <ClInclude Include="include\reload.hpp" />
     <ClInclude Include="include\result.hpp" />
     <ClInclude Include="include\state.hpp" />
-    <ClInclude Include="include\task_.hpp" />
     <ClInclude Include="include\udata.hpp" />
     <ClInclude Include="include\utils.hpp" />
     <ClInclude Include="libs\glad\glad.h" />
@@ -104,6 +103,8 @@
     <ClInclude Include="libs\imsdk\TIMMessageManager.h" />
     <ClInclude Include="libs\imsdk\TIMOfflinePushManager.h" />
     <ClInclude Include="libs\imsdk\TIMSignalingManager.h" />
+    <ClInclude Include="libs\myhttp\myhttp.hpp" />
+    <ClInclude Include="libs\mytask\mytask.hpp" />
     <ClInclude Include="libs\myws\myws.hpp" />
     <ClInclude Include="libs\Poco\Dynamic\Pair.h" />
     <ClInclude Include="libs\Poco\Dynamic\Struct.h" />
@@ -322,6 +323,8 @@
     <ClCompile Include="libs\imgui\imgui_tables.cpp" />
     <ClCompile Include="libs\imgui\imgui_widgets.cpp" />
     <ClCompile Include="libs\imsdk\GenerateTestUserSig.cpp" />
+    <ClCompile Include="libs\myhttp\mythttp.cpp" />
+    <ClCompile Include="libs\mytask\mytask.cpp" />
     <ClCompile Include="libs\myws\myws.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

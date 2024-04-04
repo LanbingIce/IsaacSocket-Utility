@@ -55,6 +55,12 @@
     <Filter Include="库\myws">
       <UniqueIdentifier>{13dfa12f-7148-4d24-932d-473e54b00691}</UniqueIdentifier>
     </Filter>
+    <Filter Include="库\myhttp">
+      <UniqueIdentifier>{9787fbba-4200-4fb2-be86-5f661b116ea8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\mytask">
+      <UniqueIdentifier>{6ff892b4-0d07-468b-ae6b-689065f7e3ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libs\glad\glad.cpp">
@@ -158,6 +164,12 @@
     </ClCompile>
     <ClCompile Include="src\result.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\myhttp\mythttp.cpp">
+      <Filter>库\myhttp</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\mytask\mytask.cpp">
+      <Filter>库\mytask</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -289,9 +301,6 @@
     </ClInclude>
     <ClInclude Include="libs\imsdk\TIMSignalingManager.h">
       <Filter>库\imsdk</Filter>
-    </ClInclude>
-    <ClInclude Include="include\task_.hpp">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="libs\imsdk\GenerateTestUserSig.h">
       <Filter>库\imsdk</Filter>
@@ -913,6 +922,12 @@
     </ClInclude>
     <ClInclude Include="libs\myws\myws.hpp">
       <Filter>库\myws</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\myhttp\myhttp.hpp">
+      <Filter>库\myhttp</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\mytask\mytask.hpp">
+      <Filter>库\mytask</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

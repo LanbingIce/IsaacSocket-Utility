@@ -1,5 +1,7 @@
 ﻿#include "myws.hpp"
 
+#include <mytask/mytask.hpp>
+
 #include <Poco/Buffer.h>
 #include <Poco/Task.h>
 #include <Poco/TaskManager.h>
@@ -18,22 +20,6 @@ using FrameOpcodes = Poco::Net::WebSocket::FrameOpcodes;
 using FrameFlags = Poco::Net::WebSocket::FrameFlags;
 
 namespace myws {
-    class _Task :public Poco::Task
-    {
-    public:
-        static void Run(const std::function<void()>& callback) {
-            static Poco::ThreadPool pool(1, INT_MAX);
-            static Poco::TaskManager taskManager(pool);
-            taskManager.start(new _Task(callback));
-        }
-    private:
-        _Task(const std::function<void()>& callback) : Task(""), _callback(callback) {}
-        void runTask() {
-            _callback();
-        }
-        std::function <void()> _callback;
-    };
-
     void MyWS::_Connect() {
         try
         {
@@ -187,7 +173,7 @@ namespace myws {
     void MyWS::Connect() {
         static Poco::ThreadPool pool(1, INT_MAX);
         static Poco::TaskManager taskManager(pool);
-        _Task::Run([this] {_Connect(); });
+        mytask::Run([this] {_Connect(); });
         while (GetState() == NONE)
         {
             Sleep(1);
