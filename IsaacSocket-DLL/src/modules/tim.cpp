@@ -1,5 +1,5 @@
 ﻿#include "module.hpp"
-#include "state.hpp"
+#include "isaac_socket.hpp"
 #include <imsdk/TIMManager.h>
 #include <imsdk/TIMMessageManager.h>
 #include <imsdk/GenerateTestUserSig.h>
@@ -108,4 +108,32 @@ namespace tim {
 
         MODULE_END();
         };
+
+    static result::RegisterResultType HandleResult(
+        [](const std::any& aResult, lua_State* L)
+        {
+            if (aResult.type() == typeid(result::TIMRecvNewMsgResult))
+            {
+                const auto& result = std::any_cast<result::TIMRecvNewMsgResult>(aResult);
+                FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_RECV_NEW_MSG);
+                MOD_CALLBACK_ARG(string, result.json_msg_array.c_str());
+                MOD_CALLBACK_ARG(string, result.user_data.c_str());
+                FAST_MOD_CALLBACK_END();
+            }
+            else if (aResult.type() == typeid(result::TIMCommResult))
+            {
+                const auto& result = std::any_cast<result::TIMCommResult>(aResult);
+                FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_COMM);
+                MOD_CALLBACK_ARG(integer, result.code);
+                MOD_CALLBACK_ARG(string, result.desc.c_str());
+                MOD_CALLBACK_ARG(string, result.json_params.c_str());
+                MOD_CALLBACK_ARG(string, result.user_data.c_str());
+                FAST_MOD_CALLBACK_END();
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        });
 }

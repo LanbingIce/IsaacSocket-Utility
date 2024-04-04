@@ -1,7 +1,16 @@
 ﻿#pragma once
 #include "pch.h"
+#include "lua.hpp"
 #include "Poco/Net/HTTPResponse.h"
 namespace result {
+    struct RegisterResultType {
+        inline static std::vector<std::function<bool(const std::any&, lua_State*)>> resultCallbacks;
+
+        RegisterResultType(std::function<bool(const std::any&, lua_State*)>&& f) {
+            resultCallbacks.emplace_back(std::move(f));
+        }
+    };
+
     struct Result
     {
         virtual ~Result() = 0 {}

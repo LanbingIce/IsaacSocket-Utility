@@ -264,28 +264,6 @@ namespace callback {
         return 0;
     }
 
-    static void TaskCallbackAndSetNil(size_t id) {
-        LUA_PCALL(1, 0);
-
-        lua_pushinteger(L, id);
-        lua_pushnil(L);
-        lua_settable(L, -3);
-
-        lua_pushinteger(L, id);
-        lua_pushnil(L);
-        lua_settable(L, -4);
-    }
-
-    static void GetTaskAndTaskCallback(size_t id) {
-        lua_pushinteger(L, id);
-        lua_gettable(L, -2);
-        if (lua_isfunction(L, -1))
-        {
-            lua_pushinteger(L, id);
-            lua_gettable(L, -4);
-        }
-    }
-
     static void RunTaskCallbacks(lua_State* L = ::L) {
         LuaGuard luaGuard;
 
@@ -301,85 +279,12 @@ namespace callback {
             {
                 break;
             }
-            if (_result.type() == typeid(result::ErrorResult))
+            for (auto& f : result::RegisterResultType::resultCallbacks)
             {
-                const auto& result = std::any_cast<result::ErrorResult>(_result);
-
-                GetTaskAndTaskCallback(result.id);
-                if (lua_isuserdata(L, -1))
+                if (f(_result, L))
                 {
-                    auto& task = ARG_UDATA(-1, udata::Task);
-                    task.state = task.FAULTED;
-                    task.error = result.error;
-
-                    TaskCallbackAndSetNil(result.id);
+                    break;
                 }
-            }
-            else if (_result.type() == typeid(result::ResponseResult))
-            {
-                const auto& result = std::any_cast<result::ResponseResult>(_result);
-
-                GetTaskAndTaskCallback(result.id);
-                if (lua_isuserdata(L, -1))
-                {
-                    auto& task = ARG_UDATA(-1, udata::Task);
-
-                    task.state = task.COMPLETED;
-                    task.result = result;
-                    TaskCallbackAndSetNil(result.id);
-                }
-            }
-            else if (_result.type() == typeid(result::TIMRecvNewMsgResult))
-            {
-                const auto& result = std::any_cast<result::TIMRecvNewMsgResult>(_result);
-                FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_RECV_NEW_MSG);
-                MOD_CALLBACK_ARG(string, result.json_msg_array.c_str());
-                MOD_CALLBACK_ARG(string, result.user_data.c_str());
-                FAST_MOD_CALLBACK_END();
-            }
-            else if (_result.type() == typeid(result::TIMCommResult))
-            {
-                const auto& result = std::any_cast<result::TIMCommResult>(_result);
-                FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_COMM);
-                MOD_CALLBACK_ARG(integer, result.code);
-                MOD_CALLBACK_ARG(string, result.desc.c_str());
-                MOD_CALLBACK_ARG(string, result.json_params.c_str());
-                MOD_CALLBACK_ARG(string, result.user_data.c_str());
-                FAST_MOD_CALLBACK_END();
-            }
-            else if (_result.type() == typeid(result::WebSocketOpenResult))
-            {
-                const auto& result = std::any_cast<result::WebSocketOpenResult>(_result);
-                size_t id = result.id;
-                RESULT_CALLBACK_BEGIN(openCallbacks);
-                RESULT_CALLBACK_END();
-            }
-            else if (_result.type() == typeid(result::WebSocketMessageResult))
-            {
-                const auto& result = std::any_cast<result::WebSocketMessageResult>(_result);
-                size_t id = result.id;
-                RESULT_CALLBACK_BEGIN(messageCallbacks);
-                MOD_CALLBACK_ARG(lstring, result.message.c_str(), result.message.length());
-                MOD_CALLBACK_ARG(boolean, result.isBinary);
-                RESULT_CALLBACK_END();
-
-            }
-            else if (_result.type() == typeid(result::WebSocketClosedResult))
-            {
-                const auto& result = std::any_cast<result::WebSocketClosedResult>(_result);
-                size_t id = result.id;
-                RESULT_CALLBACK_BEGIN(closedCallbacks);
-                MOD_CALLBACK_ARG(integer, result.closeStatus);
-                MOD_CALLBACK_ARG(string, result.statusDescription.c_str());
-                RESULT_CALLBACK_END();
-            }
-            else if (_result.type() == typeid(result::WebSocketErrorResult))
-            {
-                const auto& result = std::any_cast<result::WebSocketErrorResult>(_result);
-                size_t id = result.id;
-                RESULT_CALLBACK_BEGIN(errorCallbacks);
-                MOD_CALLBACK_ARG(string, result.message.c_str());
-                RESULT_CALLBACK_END();
             }
         }
     }

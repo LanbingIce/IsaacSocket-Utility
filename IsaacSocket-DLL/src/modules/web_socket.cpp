@@ -116,4 +116,47 @@ namespace web_socket
         MODULE_FUNC(Client);
         MODULE_END();
         };
+
+    static result::RegisterResultType HandleResult(
+        [](const std::any& aResult, lua_State* L)
+        {
+            if (aResult.type() == typeid(result::WebSocketOpenResult))
+            {
+                const auto& result = std::any_cast<result::WebSocketOpenResult>(aResult);
+                int id = result.id;
+                RESULT_CALLBACK_BEGIN(openCallbacks);
+                RESULT_CALLBACK_END();
+            }
+            else if (aResult.type() == typeid(result::WebSocketMessageResult))
+            {
+                const auto& result = std::any_cast<result::WebSocketMessageResult>(aResult);
+                int id = result.id;
+                RESULT_CALLBACK_BEGIN(messageCallbacks);
+                MOD_CALLBACK_ARG(lstring, result.message.c_str(), result.message.length());
+                MOD_CALLBACK_ARG(boolean, result.isBinary);
+                RESULT_CALLBACK_END();
+            }
+            else if (aResult.type() == typeid(result::WebSocketClosedResult))
+            {
+                const auto& result = std::any_cast<result::WebSocketClosedResult>(aResult);
+                int id = result.id;
+                RESULT_CALLBACK_BEGIN(closedCallbacks);
+                MOD_CALLBACK_ARG(integer, result.closeStatus);
+                MOD_CALLBACK_ARG(string, result.statusDescription.c_str());
+                RESULT_CALLBACK_END();
+            }
+            else if (aResult.type() == typeid(result::WebSocketErrorResult))
+            {
+                const auto& result = std::any_cast<result::WebSocketErrorResult>(aResult);
+                int id = result.id;
+                RESULT_CALLBACK_BEGIN(errorCallbacks);
+                MOD_CALLBACK_ARG(string, result.message.c_str());
+                RESULT_CALLBACK_END();
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        });
 };

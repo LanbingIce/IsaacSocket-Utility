@@ -1,6 +1,7 @@
 ﻿#include "module.hpp"
 #include "result.hpp"
 #include "udata.hpp"
+#include "isaac_socket.hpp"
 
 #include <mytask/mytask.hpp>
 
@@ -63,4 +64,29 @@ namespace http
         MODULE_FUNC(GetAsync);
         MODULE_END();
         };
+
+    static result::RegisterResultType HandleResult(
+        [](const std::any& aResult, lua_State* L)
+        {
+            if (aResult.type() == typeid(result::ResponseResult))
+            {
+                const auto& result = std::any_cast<result::ResponseResult>(aResult);
+
+                GET_TASK_AND_TASK_CALLBACK(result.id);
+                if (lua_isuserdata(L, -1))
+                {
+                    auto& task = ARG_UDATA(-1, udata::Task);
+
+                    task.state = task.COMPLETED;
+                    task.result = result;
+                    TASK_CALLBACK_AND_SET_NIL(result.id);
+                }
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        });
+
 };

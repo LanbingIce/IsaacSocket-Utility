@@ -65,6 +65,9 @@
 
 #define CHECK_PLAYERS()if (!isaac.game->players.size())return 0
 
+#define TASK_CALLBACK_AND_SET_NIL(id) LUA_PCALL(1, 0);lua_pushinteger(L, id);lua_pushnil(L);lua_settable(L, -3);lua_pushinteger(L, id);lua_pushnil(L);lua_settable(L, -4)
+#define GET_TASK_AND_TASK_CALLBACK(id) lua_pushinteger(L, id);lua_gettable(L, -2);if (lua_isfunction(L, -1)){lua_pushinteger(L, id);lua_gettable(L, -4);}
+
 struct LuaGuard
 {
     int top;

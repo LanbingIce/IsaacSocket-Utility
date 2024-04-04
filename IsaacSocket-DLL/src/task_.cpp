@@ -1,4 +1,5 @@
 ﻿#include "udata.hpp"
+#include "isaac_socket.hpp"
 #include "module.hpp"
 
 namespace udata {
@@ -79,4 +80,30 @@ namespace udata {
     int Task::lua_newindex(lua_State* L) {
         METATABLE_END();
     }
+}
+
+namespace task_ {
+    static result::RegisterResultType HandleResult(
+        [](const std::any& aResult, lua_State* L)
+        {
+            if (aResult.type() == typeid(result::ErrorResult))
+            {
+                const auto& result = std::any_cast<result::ErrorResult>(aResult);
+
+                GET_TASK_AND_TASK_CALLBACK(result.id);
+                if (lua_isuserdata(L, -1))
+                {
+                    auto& task = ARG_UDATA(-1, udata::Task);
+                    task.state = task.FAULTED;
+                    task.error = result.error;
+
+                    TASK_CALLBACK_AND_SET_NIL(result.id);
+                }
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        });
 }
