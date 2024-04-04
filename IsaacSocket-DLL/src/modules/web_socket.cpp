@@ -21,19 +21,19 @@ namespace udata {
         SET_CALLBACK(5, errorCallbacks);
 
         ws.OnOpen = [this] {
-            result::Push(std::make_shared<result::WebSocketOpenResult>(id));
+            result::Push(result::WebSocketOpenResult(id));
             };
 
         ws.OnMessage = [this](const char* message, int len, bool isBinary) {
-            result::Push(std::make_shared <result::WebSocketMessageResult>(id, len, message, isBinary));
+            result::Push(result::WebSocketMessageResult(id, len, message, isBinary));
             };
 
         ws.OnClose = [this](short closeStatus, const string& statusDescription) {
-            result::Push(std::make_shared <result::WebSocketClosedResult>(id, closeStatus, statusDescription));
+            result::Push(result::WebSocketClosedResult(id, closeStatus, statusDescription));
             };
 
         ws.OnError = [this](const string& message) {
-            result::Push(std::make_shared <result::WebSocketErrorResult>(id, message));
+            result::Push(result::WebSocketErrorResult(id, message));
             };
         ws.Connect();
 

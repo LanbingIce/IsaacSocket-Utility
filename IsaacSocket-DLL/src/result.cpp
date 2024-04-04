@@ -2,27 +2,27 @@
 
 namespace result {
     static std::mutex _resultMutex;
-    static std::queue<std::shared_ptr<result::Result>> pResults;
-    void Push(const std::shared_ptr<result::Result>& result) {
+    static std::queue<std::any> _results;
+    void Push(const std::any& result) {
         std::lock_guard lock(_resultMutex);
-        pResults.push(result);
+        _results.push(result);
     }
 
-    std::shared_ptr<result::Result> Pop() {
+    std::any Pop() {
         std::lock_guard lock(_resultMutex);
-        if (pResults.empty())
+        if (_results.empty())
         {
-            return nullptr;
+            return std::any{};
         }
-        auto p = pResults.front();
-        pResults.pop();
-        return p;
+        std::any result = _results.front();
+        _results.pop();
+        return result;
     }
 
     void Clear() {
         std::lock_guard lock(_resultMutex);
-        while (!pResults.empty()) {
-            pResults.pop();
+        while (!_results.empty()) {
+            _results.pop();
         }
     }
 }

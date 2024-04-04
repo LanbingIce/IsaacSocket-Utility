@@ -49,7 +49,7 @@ namespace udata {
         }state = RUNNING;
         int id;
         string error;
-        std::shared_ptr<result::TaskResult> pResult;
+        std::any result;
         Task();
         static int IsCompletedSuccessfully(lua_State* L);
         static int IsFaulted(lua_State* L);

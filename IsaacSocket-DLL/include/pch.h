@@ -38,6 +38,7 @@
 #include <shellapi.h>
 #include <queue>
 #include <unordered_map>
+#include <any>
 
 #define POCO_STATIC
 

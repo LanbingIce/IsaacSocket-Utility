@@ -4,11 +4,11 @@
 namespace result {
     struct Result
     {
-        virtual ~Result() {}
+        virtual ~Result() = 0 {}
     };
 
-    void Push(const std::shared_ptr<result::Result>& result);
-    std::shared_ptr<result::Result> Pop();
+    void Push(const std::any& result);
+    std::any Pop();
     void Clear();
 
     struct TaskResult :Result {

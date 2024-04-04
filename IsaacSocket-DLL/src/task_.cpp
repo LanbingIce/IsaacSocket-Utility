@@ -41,11 +41,11 @@ namespace udata {
             lua_pushnil(L);
             break;
         case COMPLETED:
-            if (typeid(*task.pResult).name() == typeid(result::ResponseResult).name())
+            if (task.result.type() == typeid(result::ResponseResult))
             {
 
                 auto& response = NEW_UDATA(ResponseResult);
-                auto& result = (result::ResponseResult&)*task.pResult;
+                const auto& result = std::any_cast<result::ResponseResult>(task.result);
                 response.body = result.body;
             }
             break;

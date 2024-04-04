@@ -46,13 +46,13 @@ namespace http
                 Poco::Net::HTTPResponse response;
                 string body;
                 session.receiveResponse(response) >> body;
-                result::Push(std::make_shared<result::ResponseResult>(task.id, body, response));
+                result::Push(result::ResponseResult(task.id, body, response));
             }
             catch (Poco::Exception& ex) {
-                result::Push(std::make_shared<result::ErrorResult>(task.id, ex.displayText()));
+                result::Push(result::ErrorResult(task.id, ex.displayText()));
             }
             catch (std::exception& ex) {
-                result::Push(std::make_shared<result::ErrorResult>(task.id, ex.what()));
+                result::Push(result::ErrorResult(task.id, ex.what()));
             }
             });
         return 1;
