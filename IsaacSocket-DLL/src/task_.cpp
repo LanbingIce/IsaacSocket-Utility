@@ -4,7 +4,7 @@
 #include <Poco/TaskManager.h>
 
 udata::Task::Task() {
-    std::lock_guard lock(local.mutex);
+    std::lock_guard lock(_mutex);
     id = ++nextId;
 }
 

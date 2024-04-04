@@ -41,6 +41,7 @@ namespace udata {
     };
 
     struct Task {
+        inline static std::mutex _mutex;
         inline static size_t nextId;
         enum State
         {
@@ -62,6 +63,7 @@ namespace udata {
     };
 
     struct WebSocketClient {
+        inline static std::mutex _mutex;
         inline static size_t nextId;
         size_t id;
         myws::MyWS ws;

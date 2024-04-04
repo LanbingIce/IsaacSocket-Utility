@@ -108,12 +108,6 @@
     <ClCompile Include="src\modules\win_api.cpp">
       <Filter>源文件\modules</Filter>
     </ClCompile>
-    <ClCompile Include="src\modules\http.cpp">
-      <Filter>源文件\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\async.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\dllmain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -135,7 +129,7 @@
     <ClCompile Include="src\modules\tim.cpp">
       <Filter>源文件\modules</Filter>
     </ClCompile>
-    <ClCompile Include="src\modules\http2.cpp">
+    <ClCompile Include="src\modules\http.cpp">
       <Filter>源文件\modules</Filter>
     </ClCompile>
     <ClCompile Include="libs\imsdk\GenerateTestUserSig.cpp">
@@ -206,9 +200,6 @@
     <ClInclude Include="libs\imgui\imgui_stdlib.h">
       <Filter>库\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="include\async.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\callback.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -219,9 +210,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\gnucompat.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\handle.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\inject.hpp">

@@ -1,5 +1,4 @@
 ﻿#include "callback.hpp"
-#include "async.hpp"
 #include "state.hpp"
 #include "utils.hpp"
 #include "isaac_socket.hpp"
@@ -296,8 +295,6 @@ namespace callback {
         lua_pushstring(L, "taskCallbacks");
         lua_gettable(L, -3);
 
-        std::lock_guard lock(local.mutex);
-
         while (auto pResult = result::Pop()) {
             auto typeName = typeid(*pResult).name();
             if (typeName == typeid(result::ErrorResult).name())
@@ -436,7 +433,6 @@ namespace callback {
             break;
         case state::CONNECTED:
             RunTaskCallbacks();
-            async::luaPollPromises(isaac.luaEngine->L);
             MOD_CALLBACK_BEGIN(ISMC_PRE_SWAP_BUFFERS);
             MOD_CALLBACK_CALL();
             MOD_CALLBACK_END();
@@ -466,13 +462,6 @@ namespace callback {
         {
 
         }
-
-        if (text == "lualua")
-        {
-            local.connectionState = state::RELOAD_LUA;
-            local.reloadLuaState = state::RELOAD;
-        }
-
         return 0;
     }
 

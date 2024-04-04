@@ -7,7 +7,7 @@
 
 namespace udata {
     WebSocketClient::WebSocketClient(const string& url) : ws(url) {
-        std::lock_guard lock(local.mutex);
+        std::lock_guard lock(_mutex);
         id = ++nextId;
 
         ws.OnOpen = [this] {

@@ -46,7 +46,6 @@ namespace state {
     {
         bool isRepentogon = (bool)GetModuleHandleA("Lua5.4.dll");
         bool allocConsole = false;
-        std::mutex mutex;
         ConnectionState connectionState = INIT;
         ReloadLuaState reloadLuaState = EXIT;
         HWND hWnd = 0;
