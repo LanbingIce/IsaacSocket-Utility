@@ -3,9 +3,6 @@
 #include <mytask/mytask.hpp>
 
 #include <Poco/Buffer.h>
-#include <Poco/Task.h>
-#include <Poco/TaskManager.h>
-#include <Poco/ThreadPool.h>
 #include <Poco/URI.h>
 
 #include <Poco/Net/ConsoleCertificateHandler.h>
@@ -23,6 +20,10 @@ namespace myws {
     void MyWS::_Connect() {
         try
         {
+            if (GetState() != NONE)
+            {
+                return;
+            }
             _SetState(CONNECTING);
             Poco::URI uri(_url);
             std::unique_ptr<Poco::Net::HTTPClientSession> pSession;
@@ -130,6 +131,10 @@ namespace myws {
     }
 
     void MyWS::_Close(short closeStatus, const string& statusDescription) {
+        if (GetState() != OPEN)
+        {
+            return;
+        }
         _SetState(CLOSING);
         _pws->shutdown(closeStatus, statusDescription);
         _SetState(CLOSED);
@@ -167,12 +172,18 @@ namespace myws {
 
     void MyWS::_SetState(WebSocketState state) {
         std::lock_guard lock(_mutex);
+        if (state <= _state)
+        {
+            return;
+        }
         _state = state;
     }
 
     void MyWS::Connect() {
-        static Poco::ThreadPool pool(1, INT_MAX);
-        static Poco::TaskManager taskManager(pool);
+        if (GetState() != NONE)
+        {
+            return;
+        }
         mytask::Run([this] {_Connect(); });
         while (GetState() == NONE)
         {
@@ -199,4 +210,3 @@ namespace myws {
         }
     }
 }
-#undef LOCK_GUARD
