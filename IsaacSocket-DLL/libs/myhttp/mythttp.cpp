@@ -16,15 +16,15 @@ namespace myhttp {
         {
             _SetState(CONNECTING);
             Poco::URI uri(_url);
-            std::shared_ptr<Poco::Net::HTTPClientSession> pSession;
+            std::unique_ptr<Poco::Net::HTTPClientSession> pSession;
 
             if (uri.getScheme() == "https")
             {
-                pSession = std::make_shared<Poco::Net::HTTPSClientSession>(uri.getHost(), uri.getPort());
+                pSession = std::make_unique<Poco::Net::HTTPSClientSession>(uri.getHost(), uri.getPort());
             }
             else if (uri.getScheme() == "http")
             {
-                pSession = std::make_shared<Poco::Net::HTTPClientSession>(uri.getHost(), uri.getPort());
+                pSession = std::make_unique<Poco::Net::HTTPClientSession>(uri.getHost(), uri.getPort());
             }
             else
             {

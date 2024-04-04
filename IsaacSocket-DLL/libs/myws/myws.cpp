@@ -25,18 +25,18 @@ namespace myws {
         {
             _SetState(CONNECTING);
             Poco::URI uri(_url);
-            std::shared_ptr<Poco::Net::HTTPClientSession> pSession;
+            std::unique_ptr<Poco::Net::HTTPClientSession> pSession;
 
             if (uri.getScheme() == "wss")
             {
                 Poco::Net::SSLManager::InvalidCertificateHandlerPtr ptrCert = new Poco::Net::ConsoleCertificateHandler(true);
                 Poco::Net::Context::Ptr ptrContext = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "");
                 Poco::Net::SSLManager::instance().initializeClient(0, ptrCert, ptrContext);
-                pSession = std::make_shared<Poco::Net::HTTPSClientSession>(uri.getHost(), uri.getPort());
+                pSession = std::make_unique<Poco::Net::HTTPSClientSession>(uri.getHost(), uri.getPort());
             }
             else if (uri.getScheme() == "ws")
             {
-                pSession = std::make_shared<Poco::Net::HTTPClientSession>(uri.getHost(), uri.getPort());
+                pSession = std::make_unique<Poco::Net::HTTPClientSession>(uri.getHost(), uri.getPort());
             }
             else
             {
