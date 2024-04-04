@@ -23,10 +23,7 @@ namespace http
 {
     static int GetAsync(lua_State* L) {
         ARG(1, string, const char*, url);
-        lua_settop(L, 1);
         auto& task = NEW_UDATA(Task);
-        int id = task.id;
-        SET_CALLBACK(2, tasks);
         mytask::Run([&task, url] {
             try {
                 Poco::URI uri(url);
@@ -62,7 +59,7 @@ namespace http
     }
 
     static RegisterModule InitModules = [] {
-        MODULE_BEGIN(HTTP2);
+        MODULE_BEGIN(HTTP);
         MODULE_FUNC(GetAsync);
         MODULE_END();
         };

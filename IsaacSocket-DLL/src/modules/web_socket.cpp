@@ -6,9 +6,19 @@
 #include <myws/myws.hpp>
 
 namespace udata {
-    WebSocketClient::WebSocketClient(const string& url) : ws(url) {
-        std::lock_guard lock(_mutex);
-        id = ++nextId;
+    WebSocketClient::WebSocketClient(const string& url) : ws(url), id([]
+        {
+            static int nextId;
+            static std::mutex _mutex;
+            std::lock_guard lock(_mutex);
+            return  ++nextId;
+        }())
+    {
+
+        SET_CALLBACK(2, openCallbacks);
+        SET_CALLBACK(3, messageCallbacks);
+        SET_CALLBACK(4, closedCallbacks);
+        SET_CALLBACK(5, errorCallbacks);
 
         ws.OnOpen = [this] {
             result::Push(std::make_shared<result::WebSocketOpenResult>(id));
@@ -97,14 +107,7 @@ namespace web_socket
         ARG_CALLBACK(5, callbackOnError);
 
         lua_settop(L, 5);
-
-        auto& uws = NEW_UDATA(WebSocketClient, url);//6
-        int id = uws.id;
-        SET_CALLBACK(2, openCallbacks);
-        SET_CALLBACK(3, messageCallbacks);
-        SET_CALLBACK(4, closedCallbacks);
-        SET_CALLBACK(5, errorCallbacks);
-
+        auto& _ = NEW_UDATA(WebSocketClient, url);
         return 1;
     }
 

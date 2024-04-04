@@ -41,15 +41,13 @@ namespace udata {
     };
 
     struct Task {
-        inline static std::mutex _mutex;
-        inline static size_t nextId;
         enum State
         {
             RUNNING,
             COMPLETED,
             FAULTED
         }state = RUNNING;
-        size_t id;
+        int id;
         string error;
         std::shared_ptr<result::TaskResult> pResult;
         Task();
@@ -63,9 +61,7 @@ namespace udata {
     };
 
     struct WebSocketClient {
-        inline static std::mutex _mutex;
-        inline static size_t nextId;
-        size_t id;
+        int id;
         myws::MyWS ws;
         WebSocketClient(const string& url);
         ~WebSocketClient();
