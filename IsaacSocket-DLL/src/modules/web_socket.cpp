@@ -84,7 +84,7 @@ namespace udata {
         if (ws.GetState() < myws::CLOSED)
         {
             RESULT_CALLBACK_BEGIN(errorCallbacks);
-            MOD_CALLBACK_ARG(string, "IsaacSocket Disconnected");
+            MOD_CALLBACK_ARG(string, "The WebSocket object has been released.");
             RESULT_CALLBACK_END();
         }
 

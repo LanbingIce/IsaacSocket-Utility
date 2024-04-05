@@ -5,13 +5,11 @@
 #include <Poco/Buffer.h>
 #include <Poco/URI.h>
 
-#include <Poco/Net/ConsoleCertificateHandler.h>
 #include <Poco/Net/HTTPClientSession.h>
 #include <Poco/Net/HTTPMessage.h>
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/Net/HTTPResponse.h>
 #include <Poco/Net/HTTPSClientSession.h>
-#include <Poco/Net/SSLManager.h>
 
 using FrameOpcodes = Poco::Net::WebSocket::FrameOpcodes;
 using FrameFlags = Poco::Net::WebSocket::FrameFlags;
@@ -20,19 +18,11 @@ namespace myws {
     void MyWS::_Connect() {
         try
         {
-            if (GetState() != NONE)
-            {
-                return;
-            }
-            _SetState(CONNECTING);
             Poco::URI uri(_url);
             std::unique_ptr<Poco::Net::HTTPClientSession> pSession;
 
             if (uri.getScheme() == "wss")
             {
-                Poco::Net::SSLManager::InvalidCertificateHandlerPtr ptrCert = new Poco::Net::ConsoleCertificateHandler(true);
-                Poco::Net::Context::Ptr ptrContext = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "");
-                Poco::Net::SSLManager::instance().initializeClient(0, ptrCert, ptrContext);
                 pSession = std::make_unique<Poco::Net::HTTPSClientSession>(uri.getHost(), uri.getPort());
             }
             else if (uri.getScheme() == "ws")
@@ -52,11 +42,20 @@ namespace myws {
             int flags = 0;
             _pws = std::make_shared<Poco::Net::WebSocket>(session, request, response);
             _pws->setReceiveTimeout(0);
-            _SetState(OPEN);
-            OnOpen();
+            {
+                std::lock_guard lock(_mutex);
+                if (_state != CONNECTING)
+                {
+                    _state = CLOSED;
+                    throw std::exception("Wrong State!");
+                }
+                _state = OPEN;
+                OnOpen();
+            }
             while (true)
             {
                 int len = _pws->receiveFrame(buffer, flags);
+                std::lock_guard lock(_mutex);
                 bool fin = flags & FrameFlags::FRAME_FLAG_FIN;
                 bool rsv1 = flags & FrameFlags::FRAME_FLAG_RSV1;
                 bool rsv2 = flags & FrameFlags::FRAME_FLAG_RSV2;
@@ -66,7 +65,7 @@ namespace myws {
 
                 if (rsv1 || rsv2 || rsv3) // rsv必须全部为0
                 {
-                    _Close(1006);
+                    _OnClose(1008);
                     break;
                 }
 
@@ -76,7 +75,7 @@ namespace myws {
                     {
                         continue;
                     }
-                    _Close(1006); //长度为0说明消息有误
+                    _OnClose(1008); //长度为0说明消息有误
                     break;
                 }
 
@@ -84,7 +83,7 @@ namespace myws {
 
                 if (opcodes == FrameOpcodes::FRAME_OP_CONT) // 终包和续包是互斥的
                 {
-                    _Close(1006);
+                    _OnClose(1008);
                     break;
                 }
                 else if (opcodes == FrameOpcodes::FRAME_OP_TEXT)//文本
@@ -97,13 +96,18 @@ namespace myws {
                 }
                 else if (opcodes == FrameOpcodes::FRAME_OP_CLOSE)//关闭
                 {
+                    if (buffer.size() < 2)
+                    {
+                        _OnClose(1008);
+                        break;
+                    }
                     short closeStatus = 0;
                     char* p = (char*)&closeStatus;
                     string statusDescription{ buffer.begin() + 2, buffer.size() - 2 };
                     //反转字节序
                     p[0] = buffer[1];
                     p[1] = buffer[0];
-                    _Close(closeStatus, statusDescription);
+                    _OnClose(closeStatus, statusDescription);
                     break;
                 }
                 else if (opcodes == FrameOpcodes::FRAME_OP_PING)//PING
@@ -115,52 +119,63 @@ namespace myws {
         }
         catch (Poco::Exception& e)
         {
-            _SetState(CLOSED);
+            std::lock_guard lock(_mutex);
+            _state = CLOSED;
             OnError(e.displayText());
         }
         catch (const std::exception& e)
         {
-            _SetState(CLOSED);
+            std::lock_guard lock(_mutex);
+            _state = CLOSED;
             OnError(e.what());
         }
         catch (...) {
-            _SetState(CLOSED);
+            std::lock_guard lock(_mutex);
+            _state = CLOSED;
             OnError("Unknow Exception");
         }
-        _SetState(DEAD);
+        std::lock_guard lock(_mutex);
+        _state = DEAD;
     }
 
-    void MyWS::_Close(short closeStatus, const string& statusDescription) {
-        if (GetState() != OPEN)
+    void MyWS::_OnClose(short closeStatus, const string& statusDescription) {
+        if (_state != OPEN)
         {
             return;
         }
-        _SetState(CLOSING);
         _pws->shutdown(closeStatus, statusDescription);
-        _SetState(CLOSED);
+        _state = CLOSED;
         OnClose(closeStatus, statusDescription);
     }
 
     int MyWS::Send(const char* message, int len, bool isBinary) {
-        if (GetState() != OPEN)
+        std::lock_guard lock(_mutex);
+        if (_state != OPEN)
         {
             return -1;
         }
-        return  _pws->sendFrame(message, len, isBinary ? Poco::Net::WebSocket::FRAME_BINARY : Poco::Net::WebSocket::FRAME_TEXT);
+        return _pws->sendFrame(message, len, isBinary ? Poco::Net::WebSocket::FRAME_BINARY : Poco::Net::WebSocket::FRAME_TEXT);
     }
 
     bool MyWS::Close(short closeStatus, const string& statusDescription) {
-        if (GetState() != OPEN)
         {
-            return false;
+            std::lock_guard lock(_mutex);
+            if (_state != OPEN)
+            {
+                return false;
+            }
+            _state = CLOSING;
+            _pws->shutdown(closeStatus, statusDescription);
         }
-        _SetState(CLOSING);
 
-        _pws->shutdown(closeStatus, statusDescription);
-
-        while (GetState() == CLOSING)
+        while (true)
         {
             Sleep(1);
+            std::lock_guard lock(_mutex);
+            if (_state != CLOSING)
+            {
+                break;
+            }
         }
         return true;
     }
@@ -170,43 +185,37 @@ namespace myws {
         return _state;
     }
 
-    void MyWS::_SetState(WebSocketState state) {
-        std::lock_guard lock(_mutex);
-        if (state <= _state)
-        {
-            return;
-        }
-        _state = state;
-    }
-
     void MyWS::Connect() {
-        if (GetState() != NONE)
+        std::lock_guard lock(_mutex);
+        if (_state != NONE)
         {
             return;
         }
+        _state = CONNECTING;
         mytask::Run([this] {_Connect(); });
-        while (GetState() == NONE)
-        {
-            Sleep(1);
-        }
     }
 
     MyWS::MyWS(const string& url) :_url(url) {}
 
     MyWS::~MyWS() {
-        // 只有构造时才是NONE，调用了Connect会立刻变为CONNECTING
-        while (GetState() == CONNECTING)
+        for (int i = NONE; i < DEAD; i++)
         {
-            Sleep(1);
-        }
-        if (GetState() == OPEN)
-        {
-            _SetState(CLOSING);
-            _pws->close();
-        }
-        while (GetState() != DEAD)
-        {
-            Sleep(1);
+            while (true)
+            {
+                {
+                    std::lock_guard lock(_mutex);
+                    if (_state != i)
+                    {
+                        break;
+                    }
+                    else if (_state == OPEN)
+                    {
+                        _state = CLOSING;
+                        _pws->close();
+                    }
+                }
+                Sleep(1);
+            }
         }
     }
 }
