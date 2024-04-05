@@ -46,7 +46,7 @@ namespace udata {
             {
 
                 auto& response = NEW_UDATA(ResponseResult);
-                const auto& result = std::any_cast<result::ResponseResult>(task.result);
+                const auto& result = std::any_cast<result::ResponseResult&>(task.result);
                 response.body = result.body;
             }
             break;
@@ -88,7 +88,7 @@ namespace task_ {
         {
             if (aResult.type() == typeid(result::ErrorResult))
             {
-                const auto& result = std::any_cast<result::ErrorResult>(aResult);
+                const auto& result = std::any_cast<const result::ErrorResult&>(aResult);
 
                 GET_TASK_AND_TASK_CALLBACK(result.id);
                 if (lua_isuserdata(L, -1))

@@ -122,14 +122,14 @@ namespace web_socket
         {
             if (aResult.type() == typeid(result::WebSocketOpenResult))
             {
-                const auto& result = std::any_cast<result::WebSocketOpenResult>(aResult);
+                const auto& result = std::any_cast<const result::WebSocketOpenResult&>(aResult);
                 int id = result.id;
                 RESULT_CALLBACK_BEGIN(openCallbacks);
                 RESULT_CALLBACK_END();
             }
             else if (aResult.type() == typeid(result::WebSocketMessageResult))
             {
-                const auto& result = std::any_cast<result::WebSocketMessageResult>(aResult);
+                const auto& result = std::any_cast<const result::WebSocketMessageResult&>(aResult);
                 int id = result.id;
                 RESULT_CALLBACK_BEGIN(messageCallbacks);
                 MOD_CALLBACK_ARG(lstring, result.message.c_str(), result.message.length());
@@ -138,7 +138,7 @@ namespace web_socket
             }
             else if (aResult.type() == typeid(result::WebSocketClosedResult))
             {
-                const auto& result = std::any_cast<result::WebSocketClosedResult>(aResult);
+                const auto& result = std::any_cast<const result::WebSocketClosedResult&>(aResult);
                 int id = result.id;
                 RESULT_CALLBACK_BEGIN(closedCallbacks);
                 MOD_CALLBACK_ARG(integer, result.closeStatus);
@@ -147,7 +147,7 @@ namespace web_socket
             }
             else if (aResult.type() == typeid(result::WebSocketErrorResult))
             {
-                const auto& result = std::any_cast<result::WebSocketErrorResult>(aResult);
+                const auto& result = std::any_cast<const result::WebSocketErrorResult&>(aResult);
                 int id = result.id;
                 RESULT_CALLBACK_BEGIN(errorCallbacks);
                 MOD_CALLBACK_ARG(string, result.message.c_str());

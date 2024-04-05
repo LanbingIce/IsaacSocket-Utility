@@ -114,7 +114,7 @@ namespace tim {
         {
             if (aResult.type() == typeid(result::TIMRecvNewMsgResult))
             {
-                const auto& result = std::any_cast<result::TIMRecvNewMsgResult>(aResult);
+                const auto& result = std::any_cast<const result::TIMRecvNewMsgResult&>(aResult);
                 FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_RECV_NEW_MSG);
                 MOD_CALLBACK_ARG(string, result.json_msg_array.c_str());
                 MOD_CALLBACK_ARG(string, result.user_data.c_str());
@@ -122,7 +122,7 @@ namespace tim {
             }
             else if (aResult.type() == typeid(result::TIMCommResult))
             {
-                const auto& result = std::any_cast<result::TIMCommResult>(aResult);
+                const auto& result = std::any_cast<const result::TIMCommResult&>(aResult);
                 FAST_MOD_CALLBACK_BEGIN(ISMC_TIM_COMM);
                 MOD_CALLBACK_ARG(integer, result.code);
                 MOD_CALLBACK_ARG(string, result.desc.c_str());

@@ -70,7 +70,7 @@ namespace http
         {
             if (aResult.type() == typeid(result::ResponseResult))
             {
-                const auto& result = std::any_cast<result::ResponseResult>(aResult);
+                const auto& result = std::any_cast<const result::ResponseResult&>(aResult);
 
                 GET_TASK_AND_TASK_CALLBACK(result.id);
                 if (lua_isuserdata(L, -1))
