@@ -39,9 +39,11 @@ namespace myhttp {
             std::ostringstream oss;
             oss << session.receiveResponse(response).rdbuf();
             std::map<string, string> headers(response.begin(), response.end());
-            std::lock_guard lock(_mutex);
-            _state = COMPLETED;
-            OnComplete(response.getStatus(), response.getReason(), headers, oss.str());
+            {
+                std::lock_guard lock(_mutex);
+                _state = COMPLETED;
+                OnComplete(response.getStatus(), response.getReason(), headers, oss.str());
+            }
         }
         catch (Poco::Exception& e)
         {
