@@ -66,19 +66,38 @@ namespace udata {
         SET_CALLBACK(5, errorCallbacks);
 
         ws.OnOpen = [this] {
-            result::Push(result::WebSocketOpenResult(id));
+            std::lock_guard lock(_mutex);
+            if (state == CONNECTING)
+            {
+                state = OPEN;
+                result::Push(result::WebSocketOpenResult(id));
+            }
             };
 
         ws.OnMessage = [this](const char* message, int len, bool isBinary) {
-            result::Push(result::WebSocketMessageResult(id, len, message, isBinary));
+            std::lock_guard lock(_mutex);
+            if (state == OPEN)
+            {
+                result::Push(result::WebSocketMessageResult(id, len, message, isBinary));
+            }
             };
 
         ws.OnClose = [this](short closeStatus, const string& statusDescription) {
-            result::Push(result::WebSocketClosedResult(id, closeStatus, statusDescription));
+            std::lock_guard lock(_mutex);
+            if (state == OPEN || state == CLOSING)
+            {
+                state = CLOSED;
+                result::Push(result::WebSocketClosedResult(id, closeStatus, statusDescription));
+            }
             };
 
         ws.OnError = [this](const string& message) {
-            result::Push(result::WebSocketErrorResult(id, message));
+            std::lock_guard lock(_mutex);
+            if (state != CLOSED)
+            {
+                state = CLOSED;
+                result::Push(result::WebSocketErrorResult(id, message));
+            }
             };
         ws.Connect();
 
@@ -86,18 +105,23 @@ namespace udata {
 
     int WebSocketClient::IsOpen(lua_State* L) {
         auto& uws = ARG_UDATA(1, WebSocketClient);
-        RET(boolean, uws.ws.GetState() == myws::OPEN);
+        RET(boolean, uws.state == OPEN);
     }
 
     int WebSocketClient::IsClosed(lua_State* L) {
         auto& uws = ARG_UDATA(1, WebSocketClient);
-        RET(boolean, uws.ws.GetState() >= myws::CLOSED);
+        RET(boolean, uws.state == CLOSED);
     }
 
     int WebSocketClient::Send(lua_State* L) {
         auto& uws = ARG_UDATA(1, WebSocketClient);
         ARG(2, string, const char*, msg);
         ARG_DEF(3, boolean, bool, isBinary, false);
+        std::lock_guard lock(uws._mutex);
+        if (uws.state != OPEN)
+        {
+            return 0;
+        }
         int len = (int)luaL_len(L, 2);
         RET(integer, uws.ws.Send(msg, len, isBinary));
     }
@@ -106,6 +130,12 @@ namespace udata {
         auto& uws = ARG_UDATA(1, WebSocketClient);
         ARG_DEF(2, integer, short, closeStatus, 1000);
         ARG_DEF(3, string, const char*, statusDescription, "");
+        std::lock_guard lock(uws._mutex);
+        if (uws.state != OPEN)
+        {
+            return 0;
+        }
+        uws.state = CLOSING;
         RET(boolean, uws.ws.Close(closeStatus, statusDescription));
     }
 
@@ -126,7 +156,7 @@ namespace udata {
     WebSocketClient::~WebSocketClient() {
         LuaGuard luaGuard;
 
-        if (ws.GetState() < myws::CLOSED)
+        if (state != CLOSED)
         {
             RESULT_CALLBACK_BEGIN(errorCallbacks);
             MOD_CALLBACK_ARG(string, "The WebSocket object has been released.");

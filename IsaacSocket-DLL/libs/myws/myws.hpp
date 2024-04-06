@@ -24,11 +24,10 @@ namespace myws {
         int Send(const char* message, int len, bool isBinary = false);
         bool Close(short closeStatus = 1000, const string& statusDescription = "");
 
-        WebSocketState GetState();
-
         MyWS(const string& url);
         ~MyWS();
     private:
+        WebSocketState _GetState();
         void _Connect();
         void _OnClose(short closeStatus = 1000, const string& statusDescription = "");
         const string _url;

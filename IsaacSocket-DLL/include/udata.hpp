@@ -61,7 +61,15 @@ namespace udata {
     };
 
     struct WebSocketClient {
+        enum State
+        {
+            CONNECTING,
+            OPEN,
+            CLOSING,
+            CLOSED
+        }state = CONNECTING;
         int id;
+        std::mutex _mutex;
         myws::MyWS ws;
         WebSocketClient(const string& url);
         ~WebSocketClient();

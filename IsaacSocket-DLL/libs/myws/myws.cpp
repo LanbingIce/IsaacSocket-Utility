@@ -180,7 +180,7 @@ namespace myws {
         return true;
     }
 
-    WebSocketState MyWS::GetState() {
+    WebSocketState MyWS::_GetState() {
         std::lock_guard lock(_mutex);
         return _state;
     }
