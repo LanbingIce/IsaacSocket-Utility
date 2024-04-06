@@ -10,14 +10,42 @@
 #include <Poco/Net/HTTPResponse.h>
 #include <Poco/URI.h>
 
-int udata::ResponseResult::lua_index(lua_State* L) {
-    auto& result = ARG_UDATA(1, udata::ResponseResult);
-    METATABLE_BEGIN(ResponseResult, result);
-    METATABLE_INDEX(stdstring, body);
-    METATABLE_END();
+namespace udata {
+    int ResponseResult::lua_index(lua_State* L) {
+        auto& result = ARG_UDATA(1, udata::ResponseResult);
+        METATABLE_BEGIN(ResponseResult, result);
+        METATABLE_INDEX(stdstring, body);
+        METATABLE_END();
+    }
+    int ResponseResult::lua_newindex(lua_State* L) {
+        METATABLE_END();
+    }
 }
-int udata::ResponseResult::lua_newindex(lua_State* L) {
-    METATABLE_END();
+
+namespace result {
+    static RegisterResultType HandleResult(
+        [](const std::any& aResult, lua_State* L)
+        {
+            if (aResult.type() == typeid(result::ResponseResult))
+            {
+                const auto& result = std::any_cast<const result::ResponseResult&>(aResult);
+
+                GET_TASK_AND_TASK_CALLBACK(result.id);
+                if (lua_isuserdata(L, -1))
+                {
+                    auto& task = ARG_UDATA(-1, udata::Task);
+
+                    task.state = task.COMPLETED;
+                    task.result = result;
+                    TASK_CALLBACK_AND_SET_NIL(result.id);
+                }
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        });
 }
 
 namespace http
@@ -64,29 +92,4 @@ namespace http
         MODULE_FUNC(GetAsync);
         MODULE_END();
         };
-
-    static result::RegisterResultType HandleResult(
-        [](const std::any& aResult, lua_State* L)
-        {
-            if (aResult.type() == typeid(result::ResponseResult))
-            {
-                const auto& result = std::any_cast<const result::ResponseResult&>(aResult);
-
-                GET_TASK_AND_TASK_CALLBACK(result.id);
-                if (lua_isuserdata(L, -1))
-                {
-                    auto& task = ARG_UDATA(-1, udata::Task);
-
-                    task.state = task.COMPLETED;
-                    task.result = result;
-                    TASK_CALLBACK_AND_SET_NIL(result.id);
-                }
-            }
-            else
-            {
-                return false;
-            }
-            return true;
-        });
-
 };
