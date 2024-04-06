@@ -30,7 +30,8 @@ namespace myhttp {
             }
             Poco::Net::HTTPClientSession& session = *pSession;
             session.setTimeout(3 * 1000 * 1000);
-            Poco::Net::HTTPRequest request(_post ? Poco::Net::HTTPRequest::HTTP_POST : Poco::Net::HTTPRequest::HTTP_GET, uri.getPathAndQuery(), Poco::Net::HTTPRequest::HTTP_1_1);
+            const string& path = uri.getPathAndQuery();
+            Poco::Net::HTTPRequest request(_post ? Poco::Net::HTTPRequest::HTTP_POST : Poco::Net::HTTPRequest::HTTP_GET, path.empty() ? "/" : path, Poco::Net::HTTPMessage::HTTP_1_1);
             for (const auto& header : _headers) {
                 request.set(header.first, header.second);
             }
