@@ -323,7 +323,7 @@
     <ClCompile Include="libs\imgui\imgui_tables.cpp" />
     <ClCompile Include="libs\imgui\imgui_widgets.cpp" />
     <ClCompile Include="libs\imsdk\GenerateTestUserSig.cpp" />
-    <ClCompile Include="libs\myhttp\mythttp.cpp" />
+    <ClCompile Include="libs\myhttp\myhttp.cpp" />
     <ClCompile Include="libs\mytask\mytask.cpp" />
     <ClCompile Include="libs\myws\myws.cpp" />
     <ClCompile Include="pch.cpp">

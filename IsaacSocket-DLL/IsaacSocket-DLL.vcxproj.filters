@@ -165,7 +165,7 @@
     <ClCompile Include="src\result.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="libs\myhttp\mythttp.cpp">
+    <ClCompile Include="libs\myhttp\myhttp.cpp">
       <Filter>库\myhttp</Filter>
     </ClCompile>
     <ClCompile Include="libs\mytask\mytask.cpp">

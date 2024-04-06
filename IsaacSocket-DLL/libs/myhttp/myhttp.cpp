@@ -1,8 +1,7 @@
 ﻿#include "myhttp.hpp"
 
 #include <mytask/mytask.hpp>
-#include <Poco/TaskManager.h>
-#include <Poco/ThreadPool.h>
+
 #include <Poco/URI.h>
 
 #include <Poco/Net/HTTPClientSession.h>
@@ -14,7 +13,6 @@ namespace myhttp {
     void MyHTTP::_Connect() {
         try
         {
-            _SetState(CONNECTING);
             Poco::URI uri(_url);
             std::unique_ptr<Poco::Net::HTTPClientSession> pSession;
 
@@ -30,32 +28,39 @@ namespace myhttp {
             {
                 throw std::exception("Bad Scheme");
             }
-
             Poco::Net::HTTPClientSession& session = *pSession;
-            Poco::Net::HTTPResponse response;
             session.setTimeout(3 * 1000 * 1000);
             Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, uri.getPathAndQuery(), Poco::Net::HTTPRequest::HTTP_1_1);
             session.sendRequest(request);
+            Poco::Net::HTTPResponse response;
             string body;
             session.receiveResponse(response) >> body;
-            _SetState(CLOSED);
-            OnClose(response, body);
+            std::lock_guard lock(_mutex);
+            _state = COMPLETED;
+            OnComplete(response, body);
         }
         catch (Poco::Exception& e)
         {
-            _SetState(CLOSED);
+            std::lock_guard lock(_mutex);
+            _state = COMPLETED;
+            _fault = true;
             OnError(e.displayText());
         }
         catch (const std::exception& e)
         {
-            _SetState(CLOSED);
+            std::lock_guard lock(_mutex);
+            _state = COMPLETED;
+            _fault = true;
             OnError(e.what());
         }
         catch (...) {
-            _SetState(CLOSED);
+            std::lock_guard lock(_mutex);
+            _state = COMPLETED;
+            _fault = true;
             OnError("Unknow Exception");
         }
-        _SetState(DEAD);
+        std::lock_guard lock(_mutex);
+        _state = DEAD;
     }
 
     HTTPState MyHTTP::GetState() {
@@ -63,33 +68,38 @@ namespace myhttp {
         return _state;
     }
 
-    void MyHTTP::_SetState(HTTPState state) {
+    bool MyHTTP::IsFaulted() {
         std::lock_guard lock(_mutex);
-        _state = state;
+        return _fault;
     }
 
-    void MyHTTP::Connect() {
-        static Poco::ThreadPool pool(1, INT_MAX);
-        static Poco::TaskManager taskManager(pool);
-        mytask::Run([this] {_Connect(); });
-        while (GetState() == NONE)
+    void MyHTTP::Send() {
+        std::lock_guard lock(_mutex);
+        if (_state != NONE)
         {
-            Sleep(1);
+            return;
         }
+        _state = RUNNING;
+        mytask::Run([this] {_Connect(); });
     }
 
-    MyHTTP::MyHTTP(const string& url) :_url(url) {}
+    MyHTTP::MyHTTP(const string& url, bool post) :_url(url), _post(post) {}
+    MyHTTP::MyHTTP(const MyHTTP& http) :_url(http._url), _post(http._post) {}
 
     MyHTTP::~MyHTTP() {
-        // 只有构造时才是NONE，调用了Connect会立刻变为CONNECTING
-        while (GetState() == CONNECTING)
+        for (int i = NONE; i < DEAD; i++)
         {
-            Sleep(1);
-        }
-        while (GetState() != DEAD)
-        {
-            Sleep(1);
+            while (true)
+            {
+                {
+                    std::lock_guard lock(_mutex);
+                    if (_state != i)
+                    {
+                        break;
+                    }
+                }
+                Sleep(1);
+            }
         }
     }
 }
-#undef LOCK_GUARD

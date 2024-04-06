@@ -4,29 +4,30 @@
 namespace myhttp {
     enum HTTPState
     {
-        NONE,
-        CONNECTING,
-        OPEN,
-        CLOSED,
-        DEAD
+        NONE = 0,
+        RUNNING = 1,
+        COMPLETED = 2,
+        DEAD = 3
     };
 
     class MyHTTP
     {
     public:
-        std::function<void(const Poco::Net::HTTPResponse&, const string&)>OnClose = [](const Poco::Net::HTTPResponse&, const string&) {};
-        std::function<void(const string&) >OnError = [](const string & = "") {};
+        std::function<void(Poco::Net::HTTPResponse&, const string&)>OnComplete = [](Poco::Net::HTTPResponse&, const string&) {};
+        std::function<void(const string&) >OnError = [](const string&) {};
 
-        void Connect();
+        void Send();
 
         HTTPState GetState();
-
-        MyHTTP(const string& url);
+        bool IsFaulted();
+        MyHTTP(const string& url, bool post);
+        MyHTTP(const MyHTTP&);
         ~MyHTTP();
     private:
-        void _SetState(HTTPState state);
         void _Connect();
         const string _url;
+        bool _post;
+        bool _fault = false;
         std::mutex _mutex;
         HTTPState _state = NONE;
     };
