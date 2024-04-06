@@ -50,6 +50,8 @@ namespace udata {
         int id;
         string error;
         std::any result;
+        std::any executor;
+        std::mutex _mutex;
         Task();
         static int IsCompletedSuccessfully(lua_State* L);
         static int IsFaulted(lua_State* L);

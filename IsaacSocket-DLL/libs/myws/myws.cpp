@@ -198,7 +198,7 @@ namespace myws {
     MyWS::MyWS(const string& url) :_url(url) {}
 
     MyWS::~MyWS() {
-        for (int i = NONE; i < DEAD; i++)
+        for (int i = NONE + 1; i < DEAD; i++)
         {
             while (true)
             {

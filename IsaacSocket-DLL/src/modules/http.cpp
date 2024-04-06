@@ -3,12 +3,8 @@
 #include "udata.hpp"
 #include "isaac_socket.hpp"
 
-#include <mytask/mytask.hpp>
-
-#include <Poco/Net/HTTPSClientSession.h>
-#include <Poco/Net/HTTPRequest.h>
+#include <myhttp/myhttp.hpp>
 #include <Poco/Net/HTTPResponse.h>
-#include <Poco/URI.h>
 
 namespace udata {
     int ResponseResult::lua_index(lua_State* L) {
@@ -34,8 +30,6 @@ namespace result {
                 if (lua_isuserdata(L, -1))
                 {
                     auto& task = ARG_UDATA(-1, udata::Task);
-
-                    task.state = task.COMPLETED;
                     task.result = result;
                     TASK_CALLBACK_AND_SET_NIL(result.id);
                 }
@@ -53,37 +47,26 @@ namespace http
     static int GetAsync(lua_State* L) {
         ARG(1, string, const char*, url);
         auto& task = NEW_UDATA(Task);
-        mytask::Run([&task, url] {
-            try {
-                Poco::URI uri(url);
+        task.executor = myhttp::MyHTTP(url, false);
+        auto& http = std::any_cast<myhttp::MyHTTP&>(task.executor);
 
-                Poco::Net::HTTPSClientSession https(uri.getHost(), uri.getPort());
-                Poco::Net::HTTPClientSession http(uri.getHost(), uri.getPort());
-
-                Poco::Net::HTTPClientSession* p;
-                p = &http;
-
-                if (uri.getScheme() == "https")
-                {
-                    p = &https;
-                }
-
-                auto& session = *p;
-
-                Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, uri.getPath(), Poco::Net::HTTPRequest::HTTP_1_1);
-                session.sendRequest(request);
-                Poco::Net::HTTPResponse response;
-                string body;
-                session.receiveResponse(response) >> body;
+        http.OnComplete = [&task](Poco::Net::HTTPResponse& response, const string& body) {
+            std::lock_guard lock(task._mutex);
+            if (task.state == task.RUNNING)
+            {
+                task.state = task.COMPLETED;
                 result::Push(result::ResponseResult(task.id, response, body));
             }
-            catch (Poco::Exception& ex) {
-                result::Push(result::ErrorResult(task.id, ex.displayText()));
+            };
+        http.OnError = [&task](const string& error) {
+            std::lock_guard lock(task._mutex);
+            if (task.state == task.RUNNING)
+            {
+                task.state = task.FAULTED;
+                result::Push(result::ErrorResult(task.id, error));
             }
-            catch (std::exception& ex) {
-                result::Push(result::ErrorResult(task.id, ex.what()));
-            }
-            });
+            };
+        http.Send();
         return 1;
     }
 

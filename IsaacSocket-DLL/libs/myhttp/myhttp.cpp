@@ -87,7 +87,7 @@ namespace myhttp {
     MyHTTP::MyHTTP(const MyHTTP& http) :_url(http._url), _post(http._post) {}
 
     MyHTTP::~MyHTTP() {
-        for (int i = NONE; i < DEAD; i++)
+        for (int i = NONE + 1; i < DEAD; i++)
         {
             while (true)
             {
