@@ -68,6 +68,8 @@
 #define TASK_CALLBACK_AND_SET_NIL(id) LUA_PCALL(1, 0);lua_pushinteger(L, id);lua_pushnil(L);lua_settable(L, -3);lua_pushinteger(L, id);lua_pushnil(L);lua_settable(L, -4)
 #define GET_TASK_AND_TASK_CALLBACK(id) lua_pushinteger(L, id);lua_gettable(L, -2);if (lua_isfunction(L, -1)){lua_pushinteger(L, id);lua_gettable(L, -4);}
 
+#define STATIC_INIT()void __static_init_function(); static int __static_init=[] {__static_init_function(); return 0; }();void __static_init_function()
+
 struct LuaGuard
 {
     int top;
