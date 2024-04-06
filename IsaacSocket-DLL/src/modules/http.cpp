@@ -47,7 +47,7 @@ namespace http
                 Poco::Net::HTTPResponse response;
                 string body;
                 session.receiveResponse(response) >> body;
-                result::Push(result::ResponseResult(task.id, body, response));
+                result::Push(result::ResponseResult(task.id, response, body));
             }
             catch (Poco::Exception& ex) {
                 result::Push(result::ErrorResult(task.id, ex.displayText()));

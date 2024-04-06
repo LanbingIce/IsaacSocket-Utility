@@ -52,7 +52,7 @@ namespace result {
     {
         string body;
         Poco::Net::HTTPResponse response;
-        ResponseResult(int id, const string& body, const Poco::Net::HTTPResponse& response) :TaskResult(id), body(body), response(response) {}
+        ResponseResult(int id, const Poco::Net::HTTPResponse& response, const string& body) :TaskResult(id), body(body), response(response) {}
     };
 
     struct WebSocketOpenResult :TaskResult
