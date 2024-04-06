@@ -3,6 +3,10 @@
 #include "lua.hpp"
 #include "Poco/Net/HTTPResponse.h"
 namespace result {
+    void Push(const std::any& result);
+    std::any Pop();
+    void Clear();
+
     struct RegisterResultType {
         inline static std::vector<std::function<bool(const std::any&, lua_State*)>> resultCallbacks;
 
@@ -16,20 +20,16 @@ namespace result {
         virtual ~Result() = 0 {}
     };
 
-    void Push(const std::any& result);
-    std::any Pop();
-    void Clear();
-
     struct TaskResult :Result {
-        size_t id;
-        TaskResult(size_t id) :id(id) {}
-        virtual ~TaskResult() {}
+        int id;
+        TaskResult(int id) :id(id) {}
+        virtual ~TaskResult() = 0 {}
     };
 
     struct ErrorResult :TaskResult
     {
         string error;
-        ErrorResult(size_t id, const string& error) :TaskResult(id), error(error) {}
+        ErrorResult(int id, const string& error) :TaskResult(id), error(error) {}
     };
 
     struct TIMRecvNewMsgResult :Result
@@ -52,34 +52,28 @@ namespace result {
     {
         string body;
         Poco::Net::HTTPResponse response;
-        ResponseResult(size_t id, const string& body, const Poco::Net::HTTPResponse& response) :TaskResult(id), body(body), response(response) {}
+        ResponseResult(int id, const string& body, const Poco::Net::HTTPResponse& response) :TaskResult(id), body(body), response(response) {}
     };
 
-    struct WebSocketResult :Result {
-        size_t id;
-        WebSocketResult(size_t id) :id(id) {}
-        virtual ~WebSocketResult() {}
-    };
-
-    struct WebSocketOpenResult :WebSocketResult
+    struct WebSocketOpenResult :TaskResult
     {
-        WebSocketOpenResult(size_t id) :WebSocketResult(id) {}
+        WebSocketOpenResult(int id) :TaskResult(id) {}
     };
-    struct WebSocketMessageResult :WebSocketResult
+    struct WebSocketMessageResult :TaskResult
     {
         string message;
         bool isBinary;
-        WebSocketMessageResult(size_t id, size_t len, const char* message, bool isBinary) :WebSocketResult(id), message(message, len), isBinary(isBinary) {}
+        WebSocketMessageResult(int id, int len, const char* message, bool isBinary) :TaskResult(id), message(message, len), isBinary(isBinary) {}
     };
-    struct WebSocketClosedResult :WebSocketResult
+    struct WebSocketClosedResult :TaskResult
     {
         short closeStatus;
         string statusDescription;
-        WebSocketClosedResult(size_t id, short closeStatus, const string& statusDescription) :WebSocketResult(id), closeStatus(closeStatus), statusDescription(statusDescription) {}
+        WebSocketClosedResult(int id, short closeStatus, const string& statusDescription) :TaskResult(id), closeStatus(closeStatus), statusDescription(statusDescription) {}
     };
-    struct WebSocketErrorResult :WebSocketResult
+    struct WebSocketErrorResult :TaskResult
     {
         string message;
-        WebSocketErrorResult(size_t id, const string& message) :WebSocketResult(id), message(message) {}
+        WebSocketErrorResult(int id, const string& message) :TaskResult(id), message(message) {}
     };
 }
