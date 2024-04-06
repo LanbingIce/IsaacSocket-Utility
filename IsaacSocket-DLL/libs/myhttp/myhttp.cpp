@@ -36,12 +36,12 @@ namespace myhttp {
             }
             session.sendRequest(request) << _body;
             Poco::Net::HTTPResponse response;
-            string body;
-            session.receiveResponse(response) >> body;
+            std::ostringstream oss;
+            oss << session.receiveResponse(response).rdbuf();
             std::map<string, string> headers(response.begin(), response.end());
             std::lock_guard lock(_mutex);
             _state = COMPLETED;
-            OnComplete(response.getStatus(), response.getReason(), headers, body);
+            OnComplete(response.getStatus(), response.getReason(), headers, oss.str());
         }
         catch (Poco::Exception& e)
         {
