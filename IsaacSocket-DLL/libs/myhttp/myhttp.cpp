@@ -34,6 +34,7 @@ namespace myhttp {
             for (const auto& header : _headers) {
                 request.set(header.first, header.second);
             }
+            request.setContentLength(_body.length());
             session.sendRequest(request) << _body;
             Poco::Net::HTTPResponse response;
             std::ostringstream oss;
@@ -90,7 +91,7 @@ namespace myhttp {
     }
 
     MyHTTP::MyHTTP(const string& url, const std::map<string, string>& headers, const string& body, bool post) :_url(url), _headers(headers), _body(body), _post(post) {}
-    MyHTTP::MyHTTP(const MyHTTP& http) :_url(http._url), _headers(http._headers), _body(_body), _post(http._post) {}
+    MyHTTP::MyHTTP(const MyHTTP& http) :_url(http._url), _headers(http._headers), _body(http._body), _post(http._post) {}
 
     MyHTTP::~MyHTTP() {
         for (int i = NONE + 1; i < DEAD; i++)
