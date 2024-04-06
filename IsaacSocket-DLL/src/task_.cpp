@@ -35,7 +35,7 @@ namespace udata {
 
     int Task::GetResult(lua_State* L) {
         auto& task = ARG_UDATA(1, udata::Task);
-
+        std::lock_guard lock(task._mutex);
         switch (task.state)
         {
         case RUNNING:
@@ -47,6 +47,9 @@ namespace udata {
 
                 auto& response = NEW_UDATA(ResponseResult);
                 const auto& result = std::any_cast<result::ResponseResult&>(task.result);
+                response.statusCode = result.statusCode;
+                response.reasonPhrase = result.reasonPhrase;
+                response.headers = result.headers;
                 response.body = result.body;
             }
             break;

@@ -5,11 +5,14 @@
 
 #include <myhttp/myhttp.hpp>
 #include <Poco/Net/HTTPResponse.h>
-
+using MapStringString = std::map<string, string>;
 namespace udata {
     int ResponseResult::lua_index(lua_State* L) {
         auto& result = ARG_UDATA(1, udata::ResponseResult);
         METATABLE_BEGIN(ResponseResult, result);
+        METATABLE_INDEX(integer, statusCode);
+        METATABLE_INDEX(stdstring, reasonPhrase);
+        METATABLE_INDEX(mapstringstring, headers);
         METATABLE_INDEX(stdstring, body);
         METATABLE_END();
     }
@@ -44,18 +47,17 @@ namespace result {
 
 namespace http
 {
-    static int GetAsync(lua_State* L) {
-        ARG(1, string, const char*, url);
+    static int SendRequest(lua_State* L, const string& url, const MapStringString& headers, const string& body = "", bool post = false) {
         auto& task = NEW_UDATA(Task);
-        task.executor = myhttp::MyHTTP(url, false);
+        task.executor = myhttp::MyHTTP(url, headers, body, post);
         auto& http = std::any_cast<myhttp::MyHTTP&>(task.executor);
 
-        http.OnComplete = [&task](Poco::Net::HTTPResponse& response, const string& body) {
+        http.OnComplete = [&task](Poco::Net::HTTPResponse::HTTPStatus statusCode, const string& reasonPhrase, const std::map<string, string>& headers, const string& body) {
             std::lock_guard lock(task._mutex);
             if (task.state == task.RUNNING)
             {
                 task.state = task.COMPLETED;
-                result::Push(result::ResponseResult(task.id, response, body));
+                result::Push(result::ResponseResult(task.id, statusCode, reasonPhrase, headers, body));
             }
             };
         http.OnError = [&task](const string& error) {
@@ -70,9 +72,23 @@ namespace http
         return 1;
     }
 
+    static int GetAsync(lua_State* L) {
+        ARG(1, string, const char*, url);
+        ARG_DEF(2, mapstringstring, MapStringString, headers, MapStringString{});
+        return SendRequest(L, url, headers);
+    }
+
+    static int PostAsync(lua_State* L) {
+        ARG(1, string, const char*, url);
+        ARG_DEF(2, mapstringstring, MapStringString, headers, MapStringString{});
+        ARG_DEF(3, string, string, body, "");
+        return SendRequest(L, url, headers, body, true);
+    }
+
     static RegisterModule InitModules = [] {
         MODULE_BEGIN(HTTP);
         MODULE_FUNC(GetAsync);
+        MODULE_FUNC(PostAsync);
         MODULE_END();
         };
 };

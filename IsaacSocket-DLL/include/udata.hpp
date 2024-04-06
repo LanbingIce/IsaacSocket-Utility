@@ -34,6 +34,9 @@ namespace udata {
 
     struct ResponseResult
     {
+        Poco::Net::HTTPResponse::HTTPStatus statusCode;
+        string reasonPhrase;
+        std::map<string, string> headers;
         string body;
         Poco::Net::HTTPResponse response;
         static int lua_index(lua_State* L);

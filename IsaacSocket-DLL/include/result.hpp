@@ -50,9 +50,11 @@ namespace result {
 
     struct ResponseResult :TaskResult
     {
+        Poco::Net::HTTPResponse::HTTPStatus statusCode;
+        string reasonPhrase;
+        std::map<string, string> headers;
         string body;
-        Poco::Net::HTTPResponse response;
-        ResponseResult(int id, const Poco::Net::HTTPResponse& response, const string& body) :TaskResult(id), body(body), response(response) {}
+        ResponseResult(int id, Poco::Net::HTTPResponse::HTTPStatus statusCode, const string& reasonPhrase, const std::map<string, string>& headers, const string& body) :TaskResult(id), statusCode(statusCode), reasonPhrase(reasonPhrase), headers(headers), body(body) {}
     };
 
     struct WebSocketOpenResult :TaskResult

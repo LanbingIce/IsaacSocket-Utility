@@ -30,14 +30,18 @@ namespace myhttp {
             }
             Poco::Net::HTTPClientSession& session = *pSession;
             session.setTimeout(3 * 1000 * 1000);
-            Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, uri.getPathAndQuery(), Poco::Net::HTTPRequest::HTTP_1_1);
-            session.sendRequest(request);
+            Poco::Net::HTTPRequest request(_post ? Poco::Net::HTTPRequest::HTTP_POST : Poco::Net::HTTPRequest::HTTP_GET, uri.getPathAndQuery(), Poco::Net::HTTPRequest::HTTP_1_1);
+            for (const auto& header : _headers) {
+                request.set(header.first, header.second);
+            }
+            session.sendRequest(request) << _body;
             Poco::Net::HTTPResponse response;
             string body;
             session.receiveResponse(response) >> body;
+            std::map<string, string> headers(response.begin(), response.end());
             std::lock_guard lock(_mutex);
             _state = COMPLETED;
-            OnComplete(response, body);
+            OnComplete(response.getStatus(), response.getReason(), headers, body);
         }
         catch (Poco::Exception& e)
         {
@@ -83,8 +87,8 @@ namespace myhttp {
         mytask::Run([this] {_Connect(); });
     }
 
-    MyHTTP::MyHTTP(const string& url, bool post) :_url(url), _post(post) {}
-    MyHTTP::MyHTTP(const MyHTTP& http) :_url(http._url), _post(http._post) {}
+    MyHTTP::MyHTTP(const string& url, const std::map<string, string>& headers, const string& body, bool post) :_url(url), _headers(headers), _body(body), _post(post) {}
+    MyHTTP::MyHTTP(const MyHTTP& http) :_url(http._url), _headers(http._headers), _body(_body), _post(http._post) {}
 
     MyHTTP::~MyHTTP() {
         for (int i = NONE + 1; i < DEAD; i++)
