@@ -6,6 +6,7 @@ namespace result {
     void Push(const std::any& result);
     std::any Pop();
     void Clear();
+    bool IsEmpty();
 
     struct RegisterResultType {
         inline static std::vector<std::function<bool(const std::any&, lua_State*)>> resultCallbacks;

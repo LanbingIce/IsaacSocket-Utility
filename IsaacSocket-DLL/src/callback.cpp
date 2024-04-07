@@ -273,12 +273,8 @@ namespace callback {
         lua_pushstring(L, "taskCallbacks");
         lua_gettable(L, -3);
 
-        while (true) {
+        while (!result::IsEmpty()) {
             const auto& _result = result::Pop();
-            if (!_result.has_value())
-            {
-                break;
-            }
             for (auto& f : result::RegisterResultType::resultCallbacks)
             {
                 if (f(_result, L))

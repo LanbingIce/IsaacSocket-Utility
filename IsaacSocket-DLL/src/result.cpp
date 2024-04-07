@@ -25,4 +25,9 @@ namespace result {
             _results.pop();
         }
     }
+
+    bool IsEmpty() {
+        std::lock_guard lock(_resultMutex);
+        return _results.empty();
+    }
 }
