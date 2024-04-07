@@ -144,7 +144,7 @@ namespace isaac_socket
         isaac.window->character = (char*)&isaac + 0x25ECE0;
     }
 
-    void InitByMainThread() {
+    void InitByMainThread(HWND hWnd) {
         gladLoadGL();
         SetGLFWCharacter();
 
@@ -195,19 +195,17 @@ namespace isaac_socket
         }
 
         // Setup Platform/Renderer backends
-        ImGui_ImplWin32_InitForOpenGL(local.hWnd);
+        ImGui_ImplWin32_InitForOpenGL(hWnd);
         ImGui_ImplOpenGL3_Init();
     }
 
     void AllocConsole() {
         ::AllocConsole();
-        SetForegroundWindow(local.hWnd);
-        cw("已启用系统控制台！");
-        cw("如需关闭此窗口，请先禁用系统控制台！否则游戏也会退出");
+        EnableMenuItem(GetSystemMenu(GetConsoleWindow(), FALSE), SC_CLOSE, MF_GRAYED);
     }
 
     void FreeConsole() {
-        cw("已禁用系统控制台，请手动关闭此窗口");
+        ShowWindow(GetConsoleWindow(), SW_HIDE);
         ::FreeConsole();
     }
 

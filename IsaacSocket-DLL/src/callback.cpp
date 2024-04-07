@@ -107,7 +107,7 @@ namespace callback {
     static int ImGuiMainMenuBarRender() {
 
         MENU_BEGIN("IsaacSocket");
-        MENU_ITEM("启用系统控制台", local.allocConsole, local.allocConsole = !local.allocConsole; if (local.allocConsole)isaac_socket::AllocConsole(); else isaac_socket::FreeConsole(););
+        MENU_ITEM("启用系统控制台", GetConsoleWindow(), if (GetConsoleWindow())isaac_socket::FreeConsole(); else isaac_socket::AllocConsole(););
         MENU_ITEM("小退并重载Lua环境", false, local.connectionState = state::RELOAD_LUA; local.reloadLuaState = state::EXIT);
         MENU_BEGIN("实验性功能");
         MENU_ITEM("重载Lua环境", false, local.connectionState = state::RELOAD_LUA; local.reloadLuaState = state::RELOAD);
@@ -298,8 +298,7 @@ namespace callback {
         CHECK_RELOAD();
         if (local.connectionState == state::INIT)
         {
-            local.hWnd = WindowFromDC(hdc);
-            isaac_socket::InitByMainThread();
+            isaac_socket::InitByMainThread(WindowFromDC(hdc));
             local.connectionState = state::DISCONNECTED;
         }
         LuaGuard luaGuard;

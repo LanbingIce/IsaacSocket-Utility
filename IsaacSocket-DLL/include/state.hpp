@@ -45,10 +45,8 @@ namespace state {
     struct _LocalState
     {
         bool isRepentogon = (bool)GetModuleHandleA("Lua5.4.dll");
-        bool allocConsole = false;
         ConnectionState connectionState = INIT;
         ReloadLuaState reloadLuaState = EXIT;
-        HWND hWnd = 0;
         uint32_t MTRandomLockedValue = 0;
     };
 
