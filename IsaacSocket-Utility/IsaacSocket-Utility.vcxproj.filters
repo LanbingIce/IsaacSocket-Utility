@@ -21,9 +21,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\IsaacSocket-DLL\libs\imgui\imgui.cpp">
       <Filter>库\imgui</Filter>
     </ClCompile>
@@ -47,6 +44,12 @@
     </ClCompile>
     <ClCompile Include="..\IsaacSocket-DLL\libs\imgui\imgui_widgets.cpp">
       <Filter>库\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\render.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="..\IsaacSocket-DLL\libs\imgui\imstb_truetype.h">
       <Filter>库\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\render.hpp">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

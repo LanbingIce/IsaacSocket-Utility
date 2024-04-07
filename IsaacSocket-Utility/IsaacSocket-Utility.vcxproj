@@ -49,7 +49,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\IsaacSocket-DLL\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\IsaacSocket-DLL\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -64,7 +64,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\IsaacSocket-DLL\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\IsaacSocket-DLL\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -82,7 +82,8 @@
     <ClCompile Include="..\IsaacSocket-DLL\libs\imgui\imgui_stdlib.cpp" />
     <ClCompile Include="..\IsaacSocket-DLL\libs\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\IsaacSocket-DLL\libs\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\render.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\IsaacSocket-DLL\libs\imgui\imconfig.h" />
@@ -95,6 +96,7 @@
     <ClInclude Include="..\IsaacSocket-DLL\libs\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\IsaacSocket-DLL\libs\imgui\imstb_textedit.h" />
     <ClInclude Include="..\IsaacSocket-DLL\libs\imgui\imstb_truetype.h" />
+    <ClInclude Include="include\render.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
