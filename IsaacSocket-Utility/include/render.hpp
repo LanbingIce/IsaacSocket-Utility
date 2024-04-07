@@ -1,5 +1,5 @@
 #pragma once
 
-namespace render {
-    void Render();
+namespace render_ {
+    bool Render();
 }

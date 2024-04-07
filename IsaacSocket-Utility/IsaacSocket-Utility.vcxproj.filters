@@ -21,70 +21,70 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\IsaacSocket-DLL\libs\imgui\imgui.cpp">
-      <Filter>库\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\IsaacSocket-DLL\libs\imgui\imgui_demo.cpp">
-      <Filter>库\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\IsaacSocket-DLL\libs\imgui\imgui_draw.cpp">
-      <Filter>库\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\IsaacSocket-DLL\libs\imgui\imgui_impl_opengl3.cpp">
-      <Filter>库\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\IsaacSocket-DLL\libs\imgui\imgui_impl_win32.cpp">
-      <Filter>库\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\IsaacSocket-DLL\libs\imgui\imgui_stdlib.cpp">
-      <Filter>库\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\IsaacSocket-DLL\libs\imgui\imgui_tables.cpp">
-      <Filter>库\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\IsaacSocket-DLL\libs\imgui\imgui_widgets.cpp">
-      <Filter>库\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\render.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="libs\imgui\imgui.cpp">
+      <Filter>库\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_demo.cpp">
+      <Filter>库\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_draw.cpp">
+      <Filter>库\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_impl_opengl3.cpp">
+      <Filter>库\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_impl_win32.cpp">
+      <Filter>库\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_stdlib.cpp">
+      <Filter>库\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_tables.cpp">
+      <Filter>库\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_widgets.cpp">
+      <Filter>库\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\IsaacSocket-DLL\libs\imgui\imconfig.h">
-      <Filter>库\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\IsaacSocket-DLL\libs\imgui\imgui.h">
-      <Filter>库\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\IsaacSocket-DLL\libs\imgui\imgui_impl_opengl3.h">
-      <Filter>库\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\IsaacSocket-DLL\libs\imgui\imgui_impl_opengl3_loader.h">
-      <Filter>库\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\IsaacSocket-DLL\libs\imgui\imgui_impl_win32.h">
-      <Filter>库\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\IsaacSocket-DLL\libs\imgui\imgui_internal.h">
-      <Filter>库\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\IsaacSocket-DLL\libs\imgui\imgui_stdlib.h">
-      <Filter>库\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\IsaacSocket-DLL\libs\imgui\imstb_rectpack.h">
-      <Filter>库\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\IsaacSocket-DLL\libs\imgui\imstb_textedit.h">
-      <Filter>库\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\IsaacSocket-DLL\libs\imgui\imstb_truetype.h">
-      <Filter>库\imgui</Filter>
-    </ClInclude>
     <ClInclude Include="include\render.hpp">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imconfig.h">
+      <Filter>库\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imgui.h">
+      <Filter>库\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imgui_impl_opengl3.h">
+      <Filter>库\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imgui_impl_opengl3_loader.h">
+      <Filter>库\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imgui_impl_win32.h">
+      <Filter>库\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imgui_internal.h">
+      <Filter>库\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imgui_stdlib.h">
+      <Filter>库\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imstb_rectpack.h">
+      <Filter>库\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imstb_textedit.h">
+      <Filter>库\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imstb_truetype.h">
+      <Filter>库\imgui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
