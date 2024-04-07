@@ -1,6 +1,9 @@
 /IsaacSocket/bin/
 /IsaacSocket/obj/
 /IsaacSocket-DLL/Release
+/IsaacSocket-Utility/Release
+/IsaacSocket-Utility/Debug
+/Debug
 /Release
 
 # 忽略 Visual Studio 的一些文件

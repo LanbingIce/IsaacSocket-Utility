@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IsaacSocket-Utility", "IsaacSocket-Utility\IsaacSocket-Utility.vcxproj", "{2356E229-1B13-4C29-A5EA-BBC81DF6ACDB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -25,6 +27,10 @@ Global
 		{2A65B58F-1973-48AB-B6CF-B11C5367E001}.Debug|x86.ActiveCfg = Release|Win32
 		{2A65B58F-1973-48AB-B6CF-B11C5367E001}.Release|x86.ActiveCfg = Release|Win32
 		{2A65B58F-1973-48AB-B6CF-B11C5367E001}.Release|x86.Build.0 = Release|Win32
+		{2356E229-1B13-4C29-A5EA-BBC81DF6ACDB}.Debug|x86.ActiveCfg = Debug|Win32
+		{2356E229-1B13-4C29-A5EA-BBC81DF6ACDB}.Debug|x86.Build.0 = Debug|Win32
+		{2356E229-1B13-4C29-A5EA-BBC81DF6ACDB}.Release|x86.ActiveCfg = Release|Win32
+		{2356E229-1B13-4C29-A5EA-BBC81DF6ACDB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
