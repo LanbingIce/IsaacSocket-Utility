@@ -19,6 +19,9 @@
     <Filter Include="库\imgui">
       <UniqueIdentifier>{cf82c524-1d02-40b4-950e-c170ca50e288}</UniqueIdentifier>
     </Filter>
+    <Filter Include="库\zlib">
+      <UniqueIdentifier>{3552db66-219e-4c80-ae5f-9dec279724f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -86,5 +89,16 @@
     <ClInclude Include="libs\imgui\imstb_truetype.h">
       <Filter>库\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="libs\zlib\zconf.h">
+      <Filter>库\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\zlib\zlib.h">
+      <Filter>库\zlib</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="libs\zlib\zlibstatic.lib">
+      <Filter>库\zlib</Filter>
+    </Library>
   </ItemGroup>
 </Project>

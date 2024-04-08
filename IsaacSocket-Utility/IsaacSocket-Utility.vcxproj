@@ -97,6 +97,11 @@
     <ClInclude Include="libs\imgui\imstb_rectpack.h" />
     <ClInclude Include="libs\imgui\imstb_textedit.h" />
     <ClInclude Include="libs\imgui\imstb_truetype.h" />
+    <ClInclude Include="libs\zlib\zconf.h" />
+    <ClInclude Include="libs\zlib\zlib.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="libs\zlib\zlibstatic.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
