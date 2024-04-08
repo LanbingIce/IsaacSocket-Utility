@@ -1787,9 +1787,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="libs\imgui\imgui.cpp">
       <Filter>库\imgui</Filter>
     </ClCompile>
@@ -1893,6 +1890,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\task_.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
