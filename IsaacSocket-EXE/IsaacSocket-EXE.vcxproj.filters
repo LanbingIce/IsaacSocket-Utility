@@ -54,6 +54,9 @@
     <ClCompile Include="libs\imgui\imgui_widgets.cpp">
       <Filter>库\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="src\pch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\render.hpp">
@@ -94,6 +97,12 @@
     </ClInclude>
     <ClInclude Include="libs\zlib\zlib.h">
       <Filter>库\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\framework.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
