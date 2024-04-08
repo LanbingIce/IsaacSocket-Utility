@@ -14,13 +14,13 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="库">
-      <UniqueIdentifier>{079542ae-4fea-4af2-88f2-2b3800304c40}</UniqueIdentifier>
+      <UniqueIdentifier>{b16e9a47-197a-4ff8-aec5-76b39015b573}</UniqueIdentifier>
     </Filter>
     <Filter Include="库\imgui">
-      <UniqueIdentifier>{cf82c524-1d02-40b4-950e-c170ca50e288}</UniqueIdentifier>
+      <UniqueIdentifier>{6a362742-5794-44f8-9b41-90d74fc0adf0}</UniqueIdentifier>
     </Filter>
     <Filter Include="库\zlib">
-      <UniqueIdentifier>{3552db66-219e-4c80-ae5f-9dec279724f7}</UniqueIdentifier>
+      <UniqueIdentifier>{e4c854ea-3de7-4d55-9242-d4b450bdca7a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

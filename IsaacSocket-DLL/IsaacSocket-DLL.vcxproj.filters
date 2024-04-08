@@ -13,191 +13,63 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="源文件\modules">
-      <UniqueIdentifier>{d050df09-b033-421e-8c18-9cb48457927a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="库">
-      <UniqueIdentifier>{21bcf4aa-06db-4a96-b17d-dd69a21e3d30}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="库\glad">
-      <UniqueIdentifier>{6eaf4612-2062-443f-b534-3d35d471f2e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="库\stbi">
-      <UniqueIdentifier>{72d4eced-7b28-43b5-96d6-9ef96d22860c}</UniqueIdentifier>
+      <UniqueIdentifier>{ec25f25e-990a-4953-bce2-234b65c41eff}</UniqueIdentifier>
     </Filter>
     <Filter Include="库\imgui">
-      <UniqueIdentifier>{d626c85d-7fa2-4a9b-bcf6-fe3af7b67f9f}</UniqueIdentifier>
+      <UniqueIdentifier>{a2eaafc0-9959-4f29-be7b-236064a8851a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="库\ImGuiFileDialog">
-      <UniqueIdentifier>{1224ee38-055c-4a36-94e1-8b44f4577625}</UniqueIdentifier>
+    <Filter Include="库\glad">
+      <UniqueIdentifier>{d561a6c8-b24a-4658-b8df-976609159b2f}</UniqueIdentifier>
     </Filter>
     <Filter Include="库\imsdk">
-      <UniqueIdentifier>{63fe1ff4-d392-4263-b2b7-f32974eb857a}</UniqueIdentifier>
+      <UniqueIdentifier>{b48d3357-cb47-4c26-85d1-9134ab419910}</UniqueIdentifier>
     </Filter>
-    <Filter Include="库\Poco">
-      <UniqueIdentifier>{4da322a2-07af-45ab-b57f-1f5f20659eba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="库\Poco\Dynamic">
-      <UniqueIdentifier>{10eb7aca-333c-409f-8462-e8af007a2bf7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="库\Poco\JSON">
-      <UniqueIdentifier>{71dedf08-7bfe-43ff-9029-0d492a150e46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="库\Poco\Net">
-      <UniqueIdentifier>{42c3e667-8c04-49f7-94c2-7c89ded9b339}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="库\Poco\Util">
-      <UniqueIdentifier>{3cf0385b-ad2f-4b50-8b28-b29cfb2b9210}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="库\Poco\lib">
-      <UniqueIdentifier>{0b831385-cc80-475a-b2c3-ac51eb9585b9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="库\myws">
-      <UniqueIdentifier>{13dfa12f-7148-4d24-932d-473e54b00691}</UniqueIdentifier>
+    <Filter Include="库\ImGuiFileDialog">
+      <UniqueIdentifier>{05ddc066-b295-4f50-891e-72ca7cc262f7}</UniqueIdentifier>
     </Filter>
     <Filter Include="库\myhttp">
-      <UniqueIdentifier>{9787fbba-4200-4fb2-be86-5f661b116ea8}</UniqueIdentifier>
+      <UniqueIdentifier>{ff2b396d-bab7-4d81-8122-da96394c8436}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\myws">
+      <UniqueIdentifier>{b6173ec5-0297-49d6-8ea4-63fe3abbd772}</UniqueIdentifier>
     </Filter>
     <Filter Include="库\mytask">
-      <UniqueIdentifier>{6ff892b4-0d07-468b-ae6b-689065f7e3ad}</UniqueIdentifier>
+      <UniqueIdentifier>{3a00f5ee-3582-41ef-8c30-645efa60c237}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\Poco">
+      <UniqueIdentifier>{1d5ba7a5-42db-4b34-9084-01557e660faf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\Poco\Dynamic">
+      <UniqueIdentifier>{8381aee2-b318-45b8-8d56-c1be047a8d6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\Poco\JSON">
+      <UniqueIdentifier>{184e33f7-0ed8-45b1-916b-10d995dc4952}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\Poco\lib">
+      <UniqueIdentifier>{aa2440cb-881f-4da2-956c-93d7ad2a4cfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\Poco\Net">
+      <UniqueIdentifier>{49dc2f9a-352a-42e1-81ba-eaaa3defd00c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\Poco\Util">
+      <UniqueIdentifier>{23c94ab3-cd5d-4e8c-9d3f-9a8a8140891b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\Poco\Foundation">
+      <UniqueIdentifier>{f9e7cab3-3bba-4e7e-83d5-f875a42fef22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="库\stbi">
+      <UniqueIdentifier>{09dfe1c1-a923-4f38-9bdc-2479bd450d8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\modules">
+      <UniqueIdentifier>{4ea09b03-b791-47f5-80b8-efce838ad5eb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="libs\glad\glad.cpp">
-      <Filter>库\glad</Filter>
-    </ClCompile>
-    <ClCompile Include="libs\imgui\imgui.cpp">
-      <Filter>库\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="libs\imgui\imgui_demo.cpp">
-      <Filter>库\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="libs\imgui\imgui_draw.cpp">
-      <Filter>库\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="libs\imgui\imgui_tables.cpp">
-      <Filter>库\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="libs\imgui\imgui_widgets.cpp">
-      <Filter>库\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="libs\imgui\imgui_impl_opengl3.cpp">
-      <Filter>库\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="libs\imgui\imgui_impl_win32.cpp">
-      <Filter>库\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="libs\imgui\imgui_stdlib.cpp">
-      <Filter>库\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\modules\imgui_.cpp">
-      <Filter>源文件\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\modules\isaac_.cpp">
-      <Filter>源文件\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\modules\isaac_api.cpp">
-      <Filter>源文件\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\modules\memory.cpp">
-      <Filter>源文件\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\modules\opengl.cpp">
-      <Filter>源文件\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\modules\system_.cpp">
-      <Filter>源文件\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\modules\win_api.cpp">
-      <Filter>源文件\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\dllmain.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\inject.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\reload.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\modules\image.cpp">
-      <Filter>源文件\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\modules\sound.cpp">
-      <Filter>源文件\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="libs\ImGuiFileDialog\ImGuiFileDialog.cpp">
-      <Filter>库\ImGuiFileDialog</Filter>
-    </ClCompile>
-    <ClCompile Include="src\modules\tim.cpp">
-      <Filter>源文件\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\modules\http.cpp">
-      <Filter>源文件\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="libs\imsdk\GenerateTestUserSig.cpp">
-      <Filter>库\imsdk</Filter>
-    </ClCompile>
-    <ClCompile Include="src\callback.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\isaac_socket.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\task_.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\config.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\state.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\modules\web_socket.cpp">
-      <Filter>源文件\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="libs\myws\myws.cpp">
-      <Filter>库\myws</Filter>
-    </ClCompile>
-    <ClCompile Include="src\result.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="libs\myhttp\myhttp.cpp">
-      <Filter>库\myhttp</Filter>
-    </ClCompile>
-    <ClCompile Include="libs\mytask\mytask.cpp">
-      <Filter>库\mytask</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="libs\glad\glad.h">
-      <Filter>库\glad</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\stbi\stb_image_write.h">
-      <Filter>库\stbi</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\stbi\stb_image.h">
-      <Filter>库\stbi</Filter>
-    </ClInclude>
     <ClInclude Include="libs\imgui\imconfig.h">
       <Filter>库\imgui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imgui.h">
-      <Filter>库\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\imgui\imgui_internal.h">
-      <Filter>库\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\imgui\imstb_rectpack.h">
-      <Filter>库\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\imgui\imstb_textedit.h">
-      <Filter>库\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\imgui\imstb_truetype.h">
       <Filter>库\imgui</Filter>
     </ClInclude>
     <ClInclude Include="libs\imgui\imgui_impl_opengl3.h">
@@ -209,59 +81,29 @@
     <ClInclude Include="libs\imgui\imgui_impl_win32.h">
       <Filter>库\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="libs\imgui\imgui_internal.h">
+      <Filter>库\imgui</Filter>
+    </ClInclude>
     <ClInclude Include="libs\imgui\imgui_stdlib.h">
       <Filter>库\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="include\callback.hpp">
-      <Filter>头文件</Filter>
+    <ClInclude Include="libs\imgui\imstb_rectpack.h">
+      <Filter>库\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="include\config.hpp">
-      <Filter>头文件</Filter>
+    <ClInclude Include="libs\imgui\imstb_textedit.h">
+      <Filter>库\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="include\framework.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="libs\imgui\imstb_truetype.h">
+      <Filter>库\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="include\gnucompat.hpp">
-      <Filter>头文件</Filter>
+    <ClInclude Include="libs\glad\glad.h">
+      <Filter>库\glad</Filter>
     </ClInclude>
-    <ClInclude Include="include\inject.hpp">
-      <Filter>头文件</Filter>
+    <ClInclude Include="libs\glad\khrplatform.h">
+      <Filter>库\glad</Filter>
     </ClInclude>
-    <ClInclude Include="include\isaac_image.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\isaac_socket.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lua.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\main.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\module.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\pch.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\reload.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\state.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\utils.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\stbi\stb_image_resize2.h">
-      <Filter>库\stbi</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\ImGuiFileDialog\ImGuiFileDialog.h">
-      <Filter>库\ImGuiFileDialog</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\ImGuiFileDialog\ImGuiFileDialogConfig.h">
-      <Filter>库\ImGuiFileDialog</Filter>
+    <ClInclude Include="libs\imsdk\GenerateTestUserSig.h">
+      <Filter>库\imsdk</Filter>
     </ClInclude>
     <ClInclude Include="libs\imsdk\TIMCloud.h">
       <Filter>库\imsdk</Filter>
@@ -302,74 +144,986 @@
     <ClInclude Include="libs\imsdk\TIMSignalingManager.h">
       <Filter>库\imsdk</Filter>
     </ClInclude>
-    <ClInclude Include="libs\imsdk\GenerateTestUserSig.h">
-      <Filter>库\imsdk</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\glad\khrplatform.h">
-      <Filter>库\glad</Filter>
-    </ClInclude>
     <ClInclude Include="libs\ImGuiFileDialog\dirent.h">
       <Filter>库\ImGuiFileDialog</Filter>
     </ClInclude>
-    <ClInclude Include="libs\stbi\stb_image_resize.h">
-      <Filter>库\stbi</Filter>
+    <ClInclude Include="libs\ImGuiFileDialog\ImGuiFileDialog.h">
+      <Filter>库\ImGuiFileDialog</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\Dynamic\Pair.h">
-      <Filter>库\Poco\Dynamic</Filter>
+    <ClInclude Include="libs\ImGuiFileDialog\ImGuiFileDialogConfig.h">
+      <Filter>库\ImGuiFileDialog</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\Dynamic\Struct.h">
-      <Filter>库\Poco\Dynamic</Filter>
+    <ClInclude Include="libs\myhttp\myhttp.hpp">
+      <Filter>库\myhttp</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\Dynamic\Var.h">
-      <Filter>库\Poco\Dynamic</Filter>
+    <ClInclude Include="libs\myws\myws.hpp">
+      <Filter>库\myws</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\Dynamic\VarHolder.h">
-      <Filter>库\Poco\Dynamic</Filter>
+    <ClInclude Include="libs\mytask\mytask.hpp">
+      <Filter>库\mytask</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\Dynamic\VarIterator.h">
-      <Filter>库\Poco\Dynamic</Filter>
+    <ClInclude Include="libs\Poco\AbstractCache.h">
+      <Filter>库\Poco\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\Dynamic\VarVisitor.h">
-      <Filter>库\Poco\Dynamic</Filter>
+    <ClInclude Include="libs\Poco\AbstractDelegate.h">
+      <Filter>库\Poco\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\JSON\Array.h">
-      <Filter>库\Poco\JSON</Filter>
+    <ClInclude Include="libs\Poco\AbstractEvent.h">
+      <Filter>库\Poco\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\JSON\Handler.h">
-      <Filter>库\Poco\JSON</Filter>
+    <ClInclude Include="libs\Poco\AbstractObserver.h">
+      <Filter>库\Poco\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\JSON\JSON.h">
-      <Filter>库\Poco\JSON</Filter>
+    <ClInclude Include="libs\Poco\AbstractPriorityDelegate.h">
+      <Filter>库\Poco\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\JSON\JSONException.h">
-      <Filter>库\Poco\JSON</Filter>
+    <ClInclude Include="libs\Poco\AbstractStrategy.h">
+      <Filter>库\Poco\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\JSON\Object.h">
-      <Filter>库\Poco\JSON</Filter>
+    <ClInclude Include="libs\Poco\AccessExpirationDecorator.h">
+      <Filter>库\Poco\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\JSON\ParseHandler.h">
-      <Filter>库\Poco\JSON</Filter>
+    <ClInclude Include="libs\Poco\AccessExpireCache.h">
+      <Filter>库\Poco\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\JSON\Parser.h">
-      <Filter>库\Poco\JSON</Filter>
+    <ClInclude Include="libs\Poco\AccessExpireLRUCache.h">
+      <Filter>库\Poco\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\JSON\ParserImpl.h">
-      <Filter>库\Poco\JSON</Filter>
+    <ClInclude Include="libs\Poco\AccessExpireStrategy.h">
+      <Filter>库\Poco\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\JSON\PrintHandler.h">
-      <Filter>库\Poco\JSON</Filter>
+    <ClInclude Include="libs\Poco\ActiveDispatcher.h">
+      <Filter>库\Poco\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\JSON\Query.h">
-      <Filter>库\Poco\JSON</Filter>
+    <ClInclude Include="libs\Poco\ActiveMethod.h">
+      <Filter>库\Poco\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\JSON\Stringifier.h">
-      <Filter>库\Poco\JSON</Filter>
+    <ClInclude Include="libs\Poco\ActiveResult.h">
+      <Filter>库\Poco\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\JSON\Template.h">
-      <Filter>库\Poco\JSON</Filter>
+    <ClInclude Include="libs\Poco\ActiveRunnable.h">
+      <Filter>库\Poco\Foundation</Filter>
     </ClInclude>
-    <ClInclude Include="libs\Poco\JSON\TemplateCache.h">
-      <Filter>库\Poco\JSON</Filter>
+    <ClInclude Include="libs\Poco\ActiveStarter.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ActiveThreadPool.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Activity.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Alignment.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Any.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ArchiveStrategy.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Array.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Ascii.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ASCIIEncoding.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\AsyncChannel.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\AtomicCounter.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\AtomicFlag.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\AutoPtr.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\AutoReleasePool.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Base32Decoder.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Base32Encoder.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Base64Decoder.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Base64Encoder.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\BasicEvent.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\BinaryReader.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\BinaryWriter.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Buffer.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\BufferAllocator.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\BufferedBidirectionalStreamBuf.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\BufferedStreamBuf.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Bugcheck.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ByteOrder.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Channel.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Checksum.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ClassLibrary.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ClassLoader.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Clock.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Condition.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Config.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Configurable.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ConsoleChannel.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\CountingStream.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DataURIStream.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DataURIStreamFactory.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DateTime.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DateTimeFormat.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DateTimeFormatter.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DateTimeParser.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Debugger.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DefaultStrategy.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DeflatingStream.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Delegate.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DigestEngine.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DigestStream.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DirectoryIterator.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DirectoryIterator_UNIX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DirectoryIterator_WIN32U.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DirectoryIteratorStrategy.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DirectoryWatcher.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DynamicAny.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DynamicAnyHolder.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DynamicFactory.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\DynamicStruct.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Environment.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Environment_UNIX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Environment_VX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Environment_WIN32U.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Error.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ErrorHandler.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Event.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Event_POSIX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Event_VX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Event_WIN32.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\EventArgs.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\EventChannel.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\EventLogChannel.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Exception.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ExpirationDecorator.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Expire.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ExpireCache.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ExpireLRUCache.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ExpireStrategy.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FIFOBuffer.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FIFOBufferStream.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FIFOEvent.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FIFOStrategy.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\File.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\File_UNIX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\File_VX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\File_WIN32U.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FileChannel.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FileStream.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FileStream_POSIX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FileStream_WIN32.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FileStreamFactory.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Format.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Formatter.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FormattingChannel.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Foundation.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FPEnvironment.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FPEnvironment_C99.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FPEnvironment_DEC.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FPEnvironment_DUMMY.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FPEnvironment_QNX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FPEnvironment_SUN.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FPEnvironment_WIN32.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FunctionDelegate.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\FunctionPriorityDelegate.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Glob.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Hash.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\HashFunction.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\HashMap.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\HashSet.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\HashStatistic.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\HashTable.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\HexBinaryDecoder.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\HexBinaryEncoder.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\HMACEngine.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\InflatingStream.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Instantiator.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSONString.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\KeyValueArgs.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Latin1Encoding.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Latin2Encoding.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Latin9Encoding.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\LinearHashTable.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\LineEndingConverter.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ListMap.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\LocalDateTime.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\LogFile.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\LogFile_STD.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\LogFile_WIN32U.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Logger.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\LoggingFactory.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\LoggingRegistry.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\LogStream.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\LRUCache.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\LRUStrategy.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Manifest.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\MD4Engine.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\MD5Engine.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\MemoryPool.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\MemoryStream.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Message.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\MetaObject.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\MetaProgramming.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Mutex.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Mutex_POSIX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Mutex_STD.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Mutex_VX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Mutex_WIN32.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NamedEvent.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NamedEvent_Android.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NamedEvent_UNIX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NamedEvent_WIN32U.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NamedMutex.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NamedMutex_Android.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NamedMutex_UNIX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NamedMutex_WIN32U.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NamedTuple.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NestedDiagnosticContext.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NObserver.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Notification.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NotificationCenter.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NotificationQueue.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NotificationStrategy.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Nullable.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NullChannel.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NullStream.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NumberFormatter.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NumberParser.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\NumericString.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ObjectPool.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Observer.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Optional.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ordered_hash.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ordered_map.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ordered_set.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\OrderedMap.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\OrderedSet.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Path.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Path_UNIX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Path_WIN32U.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\PatternFormatter.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\PBKDF2Engine.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\PIDFile.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Pipe.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\PipeImpl.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\PipeImpl_DUMMY.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\PipeImpl_POSIX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\PipeImpl_WIN32.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\PipeStream.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Platform.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Platform_POSIX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Platform_VX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Platform_WIN32.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Poco.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\PriorityDelegate.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\PriorityEvent.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\PriorityExpire.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\PriorityNotificationQueue.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\PriorityStrategy.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Process.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Process_UNIX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Process_VX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Process_WIN32U.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ProcessOptions.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ProcessRunner.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\PurgeStrategy.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Random.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\RandomStream.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\RecursiveDirectoryIterator.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\RecursiveDirectoryIteratorImpl.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\RefCountedObject.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\RegularExpression.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\RotateStrategy.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Runnable.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\RunnableAdapter.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\RWLock.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\RWLock_Android.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\RWLock_POSIX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\RWLock_VX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\RWLock_WIN32.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ScopedLock.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ScopedUnlock.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Semaphore.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Semaphore_POSIX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Semaphore_VX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Semaphore_WIN32.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SHA1Engine.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SHA2Engine.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SharedLibrary.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SharedLibrary_HPUX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SharedLibrary_UNIX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SharedLibrary_VX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SharedLibrary_WIN32U.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SharedMemory.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SharedMemory_DUMMY.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SharedMemory_POSIX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SharedMemory_WIN32.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SharedPtr.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SignalHandler.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SimpleFileChannel.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SimpleHashTable.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SingletonHolder.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SortedDirectoryIterator.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SplitterChannel.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Stopwatch.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\StrategyCollection.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\StreamChannel.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\StreamConverter.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\StreamCopier.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\StreamTokenizer.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\StreamUtil.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\String.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\StringTokenizer.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SynchronizedObject.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\SyslogChannel.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Task.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\TaskManager.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\TaskNotification.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\TeeStream.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\TemporaryFile.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\TextBufferIterator.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\TextConverter.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\TextEncoding.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\TextIterator.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Thread.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Thread_POSIX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Thread_VX.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Thread_WIN32.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ThreadLocal.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ThreadPool.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ThreadTarget.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\TimedNotificationQueue.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Timer.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Timespan.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Timestamp.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Timezone.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Token.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Tuple.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\TypeList.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Types.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\UnbufferedStreamBuf.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Unicode.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\UnicodeConverter.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\UniqueAccessExpireCache.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\UniqueAccessExpireLRUCache.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\UniqueAccessExpireStrategy.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\UniqueExpireCache.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\UniqueExpireLRUCache.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\UniqueExpireStrategy.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\UnWindows.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\URI.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\URIStreamFactory.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\URIStreamOpener.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\UTF8Encoding.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\UTF8String.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\UTF16Encoding.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\UTF32Encoding.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\UTFString.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\UUID.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\UUIDGenerator.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\ValidArgs.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Version.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Void.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Windows1250Encoding.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Windows1251Encoding.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Windows1252Encoding.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\WindowsConsoleChannel.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\zconf.h">
+      <Filter>库\Poco\Foundation</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\zlib.h">
+      <Filter>库\Poco\Foundation</Filter>
     </ClInclude>
     <ClInclude Include="libs\Poco\Net\AbstractHTTPRequestHandler.h">
       <Filter>库\Poco\Net</Filter>
@@ -812,6 +1566,63 @@
     <ClInclude Include="libs\Poco\Net\X509Certificate.h">
       <Filter>库\Poco\Net</Filter>
     </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\Array.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\Handler.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\JSON.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\JSONException.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\Object.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\ParseHandler.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\Parser.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\ParserImpl.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\PrintHandler.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\Query.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\Stringifier.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\Template.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\JSON\TemplateCache.h">
+      <Filter>库\Poco\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Dynamic\Pair.h">
+      <Filter>库\Poco\Dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Dynamic\Struct.h">
+      <Filter>库\Poco\Dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Dynamic\Var.h">
+      <Filter>库\Poco\Dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Dynamic\VarHolder.h">
+      <Filter>库\Poco\Dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Dynamic\VarIterator.h">
+      <Filter>库\Poco\Dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\Poco\Dynamic\VarVisitor.h">
+      <Filter>库\Poco\Dynamic</Filter>
+    </ClInclude>
     <ClInclude Include="libs\Poco\Util\AbstractConfiguration.h">
       <Filter>库\Poco\Util</Filter>
     </ClInclude>
@@ -914,21 +1725,176 @@
     <ClInclude Include="libs\Poco\Util\XMLConfiguration.h">
       <Filter>库\Poco\Util</Filter>
     </ClInclude>
-    <ClInclude Include="include\udata.hpp">
+    <ClInclude Include="libs\stbi\stb_image.h">
+      <Filter>库\stbi</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\stbi\stb_image_resize.h">
+      <Filter>库\stbi</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\stbi\stb_image_resize2.h">
+      <Filter>库\stbi</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\stbi\stb_image_write.h">
+      <Filter>库\stbi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\callback.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\result.hpp">
+    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\config.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="libs\myws\myws.hpp">
-      <Filter>库\myws</Filter>
+    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\framework.h">
+      <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="libs\myhttp\myhttp.hpp">
+    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\gnucompat.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\inject.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\isaac_image.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\isaac_socket.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\lua.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\main.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\module.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\pch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\reload.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\result.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\state.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\udata.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\utils.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui.cpp">
+      <Filter>库\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_demo.cpp">
+      <Filter>库\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_draw.cpp">
+      <Filter>库\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_impl_opengl3.cpp">
+      <Filter>库\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_impl_win32.cpp">
+      <Filter>库\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_stdlib.cpp">
+      <Filter>库\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_tables.cpp">
+      <Filter>库\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_widgets.cpp">
+      <Filter>库\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\glad\glad.cpp">
+      <Filter>库\glad</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imsdk\GenerateTestUserSig.cpp">
+      <Filter>库\imsdk</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\ImGuiFileDialog\ImGuiFileDialog.cpp">
+      <Filter>库\ImGuiFileDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\myhttp\myhttp.cpp">
       <Filter>库\myhttp</Filter>
-    </ClInclude>
-    <ClInclude Include="libs\mytask\mytask.hpp">
+    </ClCompile>
+    <ClCompile Include="libs\myws\myws.cpp">
+      <Filter>库\myws</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\mytask\mytask.cpp">
       <Filter>库\mytask</Filter>
-    </ClInclude>
+    </ClCompile>
+    <ClCompile Include="src\modules\http.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\image.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\imgui_.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\isaac_.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\isaac_api.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\memory.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\opengl.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\sound.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\system_.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\tim.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\web_socket.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modules\win_api.cpp">
+      <Filter>源文件\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\callback.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\config.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dllmain.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\inject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\isaac_socket.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reload.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\result.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\state.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\task_.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="libs\imsdk\ImSDK.lib">

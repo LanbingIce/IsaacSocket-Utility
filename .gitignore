@@ -1,9 +1,8 @@
 /IsaacSocket/bin/
 /IsaacSocket/obj/
 /IsaacSocket-DLL/Release
-/IsaacSocket-Utility/Release
-/IsaacSocket-Utility/Debug
-/Debug
+/IsaacSocket-EXE/Release
+/IsaacSocket-EXE/imgui.ini
 /Release
 
 # 忽略 Visual Studio 的一些文件
