@@ -1,4 +1,4 @@
-// Dear ImGui: standalone example application for Win32 + OpenGL 3
+Ôªø// Dear ImGui: standalone example application for Win32 + OpenGL 3
 
 // Learn about Dear ImGui:
 // - FAQ                  https://dearimgui.com/faq
@@ -9,6 +9,7 @@
 // This is provided for completeness, however it is strongly recommended you use OpenGL with SDL or GLFW.
 
 #include "render.hpp"
+#include "utils.hpp"
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_opengl3.h>
@@ -21,7 +22,7 @@
 #include <tchar.h>
 
 #pragma comment(lib, "opengl32.lib")
-#pragma comment(linker, R"(/subsystem:"windows" /entry:"mainCRTStartup")") // Ω˚÷πøÿ÷∆Ã®
+#pragma comment(linker, R"(/subsystem:"windows" /entry:"mainCRTStartup")") // Á¶ÅÊ≠¢ÊéßÂà∂Âè∞
 
 // Data stored per platform window
 struct WGL_WindowData { HDC hDC; };
@@ -106,6 +107,12 @@ int main(int, char**)
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;       // Enable Docking
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;     // Enable Multi-Viewport / Platform Windows
     io.ConfigViewportsNoAutoMerge = true;
+
+    static const string iniFileName = utils::GetDataFilePath("exe_imgui.ini");
+    static const string logFileName = utils::GetDataFilePath("exe_imgui_log.txt");
+
+    io.IniFilename = iniFileName.c_str();
+    io.LogFilename = logFileName.c_str();
 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
