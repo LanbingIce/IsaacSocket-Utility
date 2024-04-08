@@ -9,6 +9,13 @@ namespace render_ {
         static bool console;
 
         ImGui::Begin("##IsaacSocket_Window", &open);
+        static HWND hWnd;
+        if (!hWnd)
+        {
+            hWnd = (HWND)ImGui::GetWindowViewport()->PlatformHandle;
+            SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+            SetActiveWindow(hWnd);
+        }
         if (ImGui::Checkbox("Console", &console))
         {
             if (console)
