@@ -3,6 +3,7 @@
 /IsaacSocket-DLL/Release
 /IsaacSocket-EXE/Release
 /IsaacSocket-EXE/imgui.ini
+/Debug
 /Release
 
 # 忽略 Visual Studio 的一些文件
