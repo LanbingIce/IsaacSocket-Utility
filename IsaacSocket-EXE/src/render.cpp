@@ -1,4 +1,5 @@
 ﻿#include <render.hpp>
+#include <utils.hpp>
 #include <imgui/imgui.h>
 namespace render_ {
     bool show_demo_window = true;
@@ -7,7 +8,11 @@ namespace render_ {
         bool open = true; 
         
         ImGui::Begin("##IsaacSocket_Window", &open);
-        ImGui::Button("button");
+        if (ImGui::Button("button"))
+        {
+            mb("hello");
+        }
+        
         ImGui::End();
         return !open;
     }

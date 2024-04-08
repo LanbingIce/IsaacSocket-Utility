@@ -104,6 +104,9 @@
     <ClInclude Include="include\framework.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\utils.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="libs\zlib\zlibstatic.lib">

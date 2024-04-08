@@ -25,6 +25,7 @@
     <ClInclude Include="include\framework.h" />
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\render.hpp" />
+    <ClInclude Include="include\utils.hpp" />
     <ClInclude Include="libs\imgui\imconfig.h" />
     <ClInclude Include="libs\imgui\imgui.h" />
     <ClInclude Include="libs\imgui\imgui_impl_opengl3.h" />
