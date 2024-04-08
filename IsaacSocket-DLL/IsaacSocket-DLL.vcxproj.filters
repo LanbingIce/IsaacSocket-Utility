@@ -1737,52 +1737,52 @@
     <ClInclude Include="libs\stbi\stb_image_write.h">
       <Filter>库\stbi</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\callback.hpp">
+    <ClInclude Include="include\callback.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\config.hpp">
+    <ClInclude Include="include\config.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\framework.h">
+    <ClInclude Include="include\framework.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\gnucompat.hpp">
+    <ClInclude Include="include\gnucompat.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\inject.hpp">
+    <ClInclude Include="include\inject.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\isaac_image.hpp">
+    <ClInclude Include="include\isaac_image.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\isaac_socket.hpp">
+    <ClInclude Include="include\isaac_socket.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\lua.hpp">
+    <ClInclude Include="include\lua.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\main.hpp">
+    <ClInclude Include="include\main.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\module.hpp">
+    <ClInclude Include="include\module.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\pch.h">
+    <ClInclude Include="include\pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\reload.hpp">
+    <ClInclude Include="include\reload.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\result.hpp">
+    <ClInclude Include="include\result.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\state.hpp">
+    <ClInclude Include="include\state.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\udata.hpp">
+    <ClInclude Include="include\udata.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\IsaacSocket\IsaacSocket-DLL\include\utils.hpp">
+    <ClInclude Include="include\utils.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
