@@ -22,7 +22,6 @@
 #include <tchar.h>
 
 #pragma comment(lib, "opengl32.lib")
-#pragma comment(linker, R"(/subsystem:"windows" /entry:"mainCRTStartup")") // 禁止控制台
 
 // Data stored per platform window
 struct WGL_WindowData { HDC hDC; };
@@ -75,8 +74,12 @@ static void Hook_Renderer_SwapBuffers(ImGuiViewport* viewport, void*)
         ::SwapBuffers(data->hDC);
 }
 
-// Main code
-int main(int, char**)
+int APIENTRY WinMain(
+    _In_ HINSTANCE hInstance,
+    _In_opt_ HINSTANCE hPrevInstance,
+    _In_ LPSTR    lpCmdLine,
+    _In_ int       nCmdShow
+)
 {
     // Create application window
     //ImGui_ImplWin32_EnableDpiAwareness();

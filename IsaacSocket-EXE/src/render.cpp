@@ -6,7 +6,7 @@ namespace render_ {
     bool show_another_window = false;
     bool Render() {
         bool open = true;
-        bool console = GetConsoleWindow();
+        static bool console;
 
         ImGui::Begin("##IsaacSocket_Window", &open);
         if (ImGui::Checkbox("Console", &console))
