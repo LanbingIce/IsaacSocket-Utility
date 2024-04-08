@@ -53,21 +53,6 @@ namespace utils {
         return u8;
     }
 
-    static void Utf8Cprintf(const char* format, ...) {
-        va_list v;
-        va_start(v, format);
-        size_t len = vsnprintf(nullptr, 0, format, v) + 1;
-        vector<char> u8(len);
-        vsnprintf(u8.data(), len, format, v);
-        va_end(v);
-        len = U8ToU16(u8.data());
-        vector<wchar_t> u16(len);
-        U8ToU16(u8.data(), u16.data(), len);
-        static std::mutex _mutex;
-        std::lock_guard _lock(_mutex);
-        _cwprintf(L"%s", u16.data());
-    }
-
     static string GetDataFilePath(const char* fileName) {
         wchar_t c_path[MAX_PATH];
         GetEnvironmentVariableW(L"APPDATA", c_path, MAX_PATH);
@@ -80,18 +65,6 @@ namespace utils {
         GetEnvironmentVariableW(L"APPDATA", c_path, MAX_PATH);
         std::filesystem::path path = std::filesystem::path(c_path) / "IsaacSocket" / fileName;
         return path.wstring();
-    }
-
-    // 折叠表达式打印可变参数列表
-    template <typename... Args>
-    void cw(const Args&... args) {
-        if (GetConsoleWindow())
-        {
-            std::ostringstream oss;
-            ((oss << args << " "), ...);
-            oss << '\n';
-            Utf8Cprintf(oss.str().c_str());
-        }
     }
 
     template <typename... Args>
@@ -141,5 +114,4 @@ namespace utils {
 #define FUNC(offset,ret,convention,...) auto f_##offset=(ret(convention*)(__VA_ARGS__))((char*)&isaac+offset)
 #define VAR_WRITE(var,value) if(var!=value){DWORD oldProtect;VirtualProtect(&var,sizeof(var),PAGE_READWRITE,&oldProtect);var=value;VirtualProtect(&var,sizeof(var),oldProtect,&oldProtect);}
 
-using utils::cw;
 using utils::mb;

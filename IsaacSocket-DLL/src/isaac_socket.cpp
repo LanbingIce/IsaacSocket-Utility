@@ -201,6 +201,9 @@ namespace isaac_socket
 
     void AllocConsole() {
         ::AllocConsole();
+        SetConsoleOutputCP(CP_UTF8);
+        FILE* stream;
+        freopen_s(&stream, "CONOUT$", "w", stdout);
         EnableMenuItem(GetSystemMenu(GetConsoleWindow(), FALSE), SC_CLOSE, MF_GRAYED);
     }
 

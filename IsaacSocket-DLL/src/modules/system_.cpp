@@ -23,7 +23,7 @@ namespace system_
         if (GetConsoleWindow())
         {
             ARG(1, string, const char*, text);
-            utils::Utf8Cprintf(text);
+            cout << text << std::flush;
         }
         return 0;
     }

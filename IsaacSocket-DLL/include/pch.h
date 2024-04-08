@@ -39,6 +39,7 @@
 #include <queue>
 #include <unordered_map>
 #include <any>
+#include <iostream>
 
 #define POCO_STATIC
 
@@ -48,5 +49,7 @@
 
 using std::string;
 using std::vector;
+using std::cout;
+using std::endl;
 
 #endif //PCH_H
