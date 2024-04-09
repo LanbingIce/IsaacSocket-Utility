@@ -38,9 +38,13 @@
     <ClInclude Include="libs\imgui\imstb_truetype.h" />
     <ClInclude Include="libs\zlib\zconf.h" />
     <ClInclude Include="libs\zlib\zlib.h" />
+    <ClInclude Include="res\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="libs\zlib\zlibstatic.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\resource.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

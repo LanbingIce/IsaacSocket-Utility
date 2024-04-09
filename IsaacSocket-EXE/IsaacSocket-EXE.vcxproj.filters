@@ -107,10 +107,18 @@
     <ClInclude Include="include\utils.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="res\resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="libs\zlib\zlibstatic.lib">
       <Filter>库\zlib</Filter>
     </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\resource.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
