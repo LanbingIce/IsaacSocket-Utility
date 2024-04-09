@@ -14,6 +14,7 @@
 #include <vector>
 #include <filesystem>
 #include <fstream>
+#include <shellapi.h>
 
 
 #ifdef _MSC_VER

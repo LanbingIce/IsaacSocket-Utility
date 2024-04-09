@@ -32,8 +32,9 @@ namespace render_ {
             }
         }
 
-        if (ImGui::Button("button1"))
+        if (ImGui::Button("打开数据目录"))
         {
+            ShellExecuteW(nullptr, L"open", utils::GetDataFilePathW(L".").c_str(), nullptr, nullptr, SW_SHOWNORMAL);
         }
         if (ImGui::Button("button2")) {
 
