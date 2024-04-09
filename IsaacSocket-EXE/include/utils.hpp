@@ -111,12 +111,14 @@ namespace utils {
     }
 
     static vector<Byte> ReadFileBinary(const string& filePath) {
-        std::ifstream file(filePath, std::ios::binary);
+        std::filesystem::path path((char8_t*)filePath.c_str());
+        std::ifstream file(path, std::ios::in | std::ios::binary);
         return vector<Byte>((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
     }
 
     static void WriteFileBinary(const string& filePath, const vector<Byte>& data) {
-        std::ofstream outputFile(filePath, std::ios::out | std::ios::binary);
+        std::filesystem::path path((char8_t*)filePath.c_str());
+        std::ofstream outputFile(path, std::ios::out | std::ios::binary);
         outputFile.write((const char*)data.data(), data.size());
     }
 
