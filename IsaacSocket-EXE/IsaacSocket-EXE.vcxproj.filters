@@ -108,7 +108,7 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="res\resource.h">
-      <Filter>头文件</Filter>
+      <Filter>资源文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -120,5 +120,15 @@
     <ResourceCompile Include="res\resource.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\ImSDK.dll">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="res\VonwaonBitmap-16px.ttf">
+      <Filter>资源文件</Filter>
+    </Font>
   </ItemGroup>
 </Project>

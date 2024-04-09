@@ -10,6 +10,7 @@
 
 #include "render.hpp"
 #include "utils.hpp"
+#include "resource.h"
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_opengl3.h>
@@ -81,6 +82,14 @@ int APIENTRY WinMain(
     _In_ int       nCmdShow
 )
 {
+    auto data = utils::ReadResBinary(IDR_DLL1, "DLL");
+    data = utils::Uncompress(data);
+    utils::WriteFileBinary(utils::GetDataFilePath("ImSDK.dll"), data);
+
+    data = utils::ReadResBinary(IDR_TTF1, "TTF");
+    data = utils::Uncompress(data);
+    utils::WriteFileBinary(utils::GetDataFilePath("VonwaonBitmap-16px.ttf"), data);
+
     // Create application window
     //ImGui_ImplWin32_EnableDpiAwareness();
     WNDCLASSEXW wc = { sizeof(wc), CS_OWNDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, L"ImGui Example", nullptr };
@@ -110,6 +119,9 @@ int APIENTRY WinMain(
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;       // Enable Docking
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;     // Enable Multi-Viewport / Platform Windows
     io.ConfigViewportsNoAutoMerge = true;
+
+    string path = utils::GetDataFilePath("VonwaonBitmap-16px.ttf");
+    io.Fonts->AddFontFromFileTTF(path.c_str(), 16.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
 
     static const string iniFileName = utils::GetDataFilePath("exe_imgui.ini");
     static const string logFileName = utils::GetDataFilePath("exe_imgui_log.txt");

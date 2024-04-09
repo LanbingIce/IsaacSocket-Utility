@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "pch.h"
+#include <zlib/zlib.h>
 
 namespace utils {
     static std::string ToHexString(uint32_t num)
@@ -109,9 +110,47 @@ namespace utils {
         return oss.str();
     }
 
-}
+    static vector<Byte> ReadFileBinary(const string& filePath) {
+        std::ifstream file(filePath, std::ios::binary);
+        return vector<Byte>((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+    }
 
-#define FUNC(offset,ret,convention,...) auto f_##offset=(ret(convention*)(__VA_ARGS__))((char*)&isaac+offset)
-#define VAR_WRITE(var,value) if(var!=value){DWORD oldProtect;VirtualProtect(&var,sizeof(var),PAGE_READWRITE,&oldProtect);var=value;VirtualProtect(&var,sizeof(var),oldProtect,&oldProtect);}
+    static void WriteFileBinary(const string& filePath, const vector<Byte>& data) {
+        std::ofstream outputFile(filePath, std::ios::out | std::ios::binary);
+        outputFile.write((const char*)data.data(), data.size());
+    }
+
+#pragma warning(disable: 6387)
+    static vector<Byte> ReadResBinary(int resId, const char* resType)
+    {
+        auto hModule = GetModuleHandleA(NULL);
+        auto hResInfo = FindResourceA(hModule, MAKEINTRESOURCEA(resId), resType);
+        auto hResData = LoadResource(hModule, hResInfo);
+        auto pRes = (Byte*)LockResource(hResData);
+        auto resSize = SizeofResource(hModule, hResInfo);
+        return vector<Byte>(pRes, pRes + resSize);
+    }
+#pragma warning(default: 6387)
+
+    static vector<Byte> Compress(const vector<Byte>& sourceData) {
+        auto destLen = compressBound(sourceData.size());
+        vector <Byte> destData(destLen);
+        compress2(destData.data(), &destLen, sourceData.data(), sourceData.size(), Z_BEST_COMPRESSION);
+        destData.resize(destLen);
+        return destData;
+    }
+
+    static vector<Byte> Uncompress(const vector<Byte>& sourceData) {
+        uLong destLen = sourceData.size() << 2;
+        vector <Byte> destData(destLen);
+        while (uncompress(destData.data(), &destLen, sourceData.data(), sourceData.size()) == Z_BUF_ERROR)
+        {
+            destLen <<= 1;
+            destData.resize(destLen);
+        }
+        destData.resize(destLen);
+        return destData;
+    }
+}
 
 using utils::mb;

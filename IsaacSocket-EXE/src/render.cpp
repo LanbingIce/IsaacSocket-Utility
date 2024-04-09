@@ -2,20 +2,20 @@
 #include <utils.hpp>
 #include <imgui/imgui.h>
 namespace render_ {
-    bool show_demo_window = true;
-    bool show_another_window = false;
     bool Render() {
-        bool open = true;
-        static bool console;
-
-        ImGui::Begin("##IsaacSocket_Window", &open);
+        bool openWindow = true;
+        ImGui::Begin("##IsaacSocket_Window", &openWindow);
         static HWND hWnd;
         if (!hWnd)
         {
             hWnd = (HWND)ImGui::GetWindowViewport()->PlatformHandle;
-            SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-            SetActiveWindow(hWnd);
+            if (hWnd)
+            {
+                SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+            }
         }
+
+        static bool console;
         if (ImGui::Checkbox("Console", &console))
         {
             if (console)
@@ -32,12 +32,17 @@ namespace render_ {
             }
         }
 
-        if (ImGui::Button("button"))
+        if (ImGui::Button("button1"))
         {
-            cout << "测试";
+        }
+        if (ImGui::Button("button2")) {
+
+        }
+        if (ImGui::Button("button3")) {
+
         }
 
         ImGui::End();
-        return !open;
+        return !openWindow;
     }
 }
