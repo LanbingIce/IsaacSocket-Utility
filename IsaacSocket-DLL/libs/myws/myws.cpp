@@ -11,6 +11,7 @@
 #include <Poco/Net/HTTPResponse.h>
 #include <Poco/Net/HTTPSClientSession.h>
 
+using std::string;
 using FrameOpcodes = Poco::Net::WebSocket::FrameOpcodes;
 using FrameFlags = Poco::Net::WebSocket::FrameFlags;
 

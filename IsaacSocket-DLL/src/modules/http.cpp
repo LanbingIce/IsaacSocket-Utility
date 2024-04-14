@@ -5,6 +5,9 @@
 
 #include <myhttp/myhttp.hpp>
 #include <Poco/Net/HTTPResponse.h>
+
+using std::string;
+
 using MapStringString = std::map<string, string>;
 namespace udata {
     int ResponseResult::lua_index(lua_State* L) {

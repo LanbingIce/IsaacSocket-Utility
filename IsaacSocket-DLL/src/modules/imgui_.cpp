@@ -6,6 +6,10 @@
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_stdlib.h>
+
+using std::string;
+using std::vector;
+
 namespace udata
 {
     int p_ImVec2::__index(lua_State* L) {

@@ -53,7 +53,7 @@ namespace utils {
         return u8;
     }
 
-    static string GetDataFilePath(const char* fileName) {
+    static std::string GetDataFilePath(const char* fileName) {
         wchar_t c_path[MAX_PATH];
         GetEnvironmentVariableW(L"APPDATA", c_path, MAX_PATH);
         std::filesystem::path path = std::filesystem::path(c_path) / "IsaacSocket" / (char8_t*)fileName;
@@ -72,13 +72,13 @@ namespace utils {
         std::ostringstream oss;
         ((oss << args << " "), ...);
         size_t len = U8ToU16(oss.str().c_str());
-        vector<wchar_t> u16(len);
+        std::vector<wchar_t> u16(len);
         U8ToU16(oss.str().c_str(), u16.data(), len);
         MessageBoxW(0, u16.data(), L"", 0);
     }
 
     // 将文本写入指定文件
-    static void WriteFile(const string& filePath, const string& text)
+    static void WriteFile(const std::string& filePath, const std::string& text)
     {
         std::ofstream ofs(std::filesystem::path((const char8_t*)filePath.c_str()));
         if (!ofs)
@@ -89,7 +89,7 @@ namespace utils {
     }
 
     // 读取指定文件的文本
-    static std::string ReadFile(const string& filePath, const char* defaultText = "") {
+    static std::string ReadFile(const std::string& filePath, const char* defaultText = "") {
 
         if (!std::filesystem::exists(filePath))
         {

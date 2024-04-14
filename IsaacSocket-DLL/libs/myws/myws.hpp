@@ -17,20 +17,20 @@ namespace myws {
     public:
         std::function<void()>OnOpen = [] {};
         std::function<void(const char*, int, bool)>OnMessage = [](const char*, int, bool) {};
-        std::function<void(short, const string&)>OnClose = [](short, const string&) {};
-        std::function<void(const string&) >OnError = [](const string&) {};
+        std::function<void(short, const std::string&)>OnClose = [](short, const std::string&) {};
+        std::function<void(const std::string&) >OnError = [](const std::string&) {};
 
         void Connect();
         int Send(const char* message, int len, bool isBinary = false);
-        bool Close(short closeStatus = 1000, const string& statusDescription = "");
+        bool Close(short closeStatus = 1000, const std::string& statusDescription = "");
 
-        MyWS(const string& url);
+        MyWS(const std::string& url);
         ~MyWS();
     private:
         WebSocketState _GetState();
         void _Connect();
-        void _OnClose(short closeStatus = 1000, const string& statusDescription = "");
-        const string _url;
+        void _OnClose(short closeStatus = 1000, const std::string& statusDescription = "");
+        const std::string _url;
         std::shared_ptr<Poco::Net::WebSocket> _pws;
         std::mutex _mutex;
         WebSocketState _state = NONE;

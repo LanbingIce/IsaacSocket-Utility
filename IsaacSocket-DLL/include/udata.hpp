@@ -35,9 +35,9 @@ namespace udata {
     struct ResponseResult
     {
         Poco::Net::HTTPResponse::HTTPStatus statusCode;
-        string reasonPhrase;
-        std::map<string, string> headers;
-        string body;
+        std::string reasonPhrase;
+        std::map<std::string, std::string> headers;
+        std::string body;
         Poco::Net::HTTPResponse response;
         static int lua_index(lua_State* L);
         static int lua_newindex(lua_State* L);
@@ -51,7 +51,7 @@ namespace udata {
             FAULTED
         }state = RUNNING;
         int id;
-        string error;
+        std::string error;
         std::any result;
         std::any executor;
         std::mutex _mutex;
@@ -76,7 +76,7 @@ namespace udata {
         int id;
         std::mutex _mutex;
         myws::MyWS ws;
-        WebSocketClient(const string& url);
+        WebSocketClient(const std::string& url);
         ~WebSocketClient();
         static int IsOpen(lua_State* L);
         static int IsClosed(lua_State* L);

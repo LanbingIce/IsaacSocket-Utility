@@ -5,6 +5,8 @@
 #include <imsdk/GenerateTestUserSig.h>
 #include <Poco/JSON/Object.h>
 
+using std::string;
+
 namespace tim {
     static void TIMRecvNewMsgCallback(const char* json_msg_array, const void* user_data)
     {

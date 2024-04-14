@@ -29,33 +29,33 @@ namespace result {
 
     struct ErrorResult :TaskResult
     {
-        string error;
-        ErrorResult(int id, const string& error) :TaskResult(id), error(error) {}
+        std::string error;
+        ErrorResult(int id, const std::string& error) :TaskResult(id), error(error) {}
     };
 
     struct TIMRecvNewMsgResult :Result
     {
-        string json_msg_array;
-        string user_data;
-        TIMRecvNewMsgResult(const string& json_msg_array, const string& user_data) :json_msg_array(json_msg_array), user_data(user_data) {}
+        std::string json_msg_array;
+        std::string user_data;
+        TIMRecvNewMsgResult(const std::string& json_msg_array, const std::string& user_data) :json_msg_array(json_msg_array), user_data(user_data) {}
     };
 
     struct TIMCommResult :Result
     {
         int32_t code;
-        string desc;
-        string json_params;
-        string user_data;
-        TIMCommResult(int32_t code, const string& desc, const string& json_params, const string& user_data) :code(code), desc(desc), json_params(json_params), user_data(user_data) {}
+        std::string desc;
+        std::string json_params;
+        std::string user_data;
+        TIMCommResult(int32_t code, const std::string& desc, const std::string& json_params, const std::string& user_data) :code(code), desc(desc), json_params(json_params), user_data(user_data) {}
     };
 
     struct ResponseResult :TaskResult
     {
         Poco::Net::HTTPResponse::HTTPStatus statusCode;
-        string reasonPhrase;
-        std::map<string, string> headers;
-        string body;
-        ResponseResult(int id, Poco::Net::HTTPResponse::HTTPStatus statusCode, const string& reasonPhrase, const std::map<string, string>& headers, const string& body) :TaskResult(id), statusCode(statusCode), reasonPhrase(reasonPhrase), headers(headers), body(body) {}
+        std::string reasonPhrase;
+        std::map<std::string, std::string> headers;
+        std::string body;
+        ResponseResult(int id, Poco::Net::HTTPResponse::HTTPStatus statusCode, const std::string& reasonPhrase, const std::map<std::string, std::string>& headers, const std::string& body) :TaskResult(id), statusCode(statusCode), reasonPhrase(reasonPhrase), headers(headers), body(body) {}
     };
 
     struct WebSocketOpenResult :TaskResult
@@ -64,19 +64,19 @@ namespace result {
     };
     struct WebSocketMessageResult :TaskResult
     {
-        string message;
+        std::string message;
         bool isBinary;
         WebSocketMessageResult(int id, int len, const char* message, bool isBinary) :TaskResult(id), message(message, len), isBinary(isBinary) {}
     };
     struct WebSocketClosedResult :TaskResult
     {
         short closeStatus;
-        string statusDescription;
-        WebSocketClosedResult(int id, short closeStatus, const string& statusDescription) :TaskResult(id), closeStatus(closeStatus), statusDescription(statusDescription) {}
+        std::string statusDescription;
+        WebSocketClosedResult(int id, short closeStatus, const std::string& statusDescription) :TaskResult(id), closeStatus(closeStatus), statusDescription(statusDescription) {}
     };
     struct WebSocketErrorResult :TaskResult
     {
-        string message;
-        WebSocketErrorResult(int id, const string& message) :TaskResult(id), message(message) {}
+        std::string message;
+        WebSocketErrorResult(int id, const std::string& message) :TaskResult(id), message(message) {}
     };
 }

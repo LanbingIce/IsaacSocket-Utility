@@ -275,7 +275,7 @@ static std::string lua_tostdstring(lua_State* L, int i)
 
 static std::wstring lua_tostdwstring(lua_State* L, int n)
 {
-    string u8 = lua_tolstring(L, n, NULL);
+    std::string u8 = lua_tolstring(L, n, NULL);
     std::wstring u16 = utils::U8ToU16(u8);
     return u16;
 }
@@ -505,11 +505,11 @@ static int (*lua_cppfunction())(lua_State*) {
             return fp(L);
         }
         catch (std::exception const& e) {
-            cout << "Exception in cpp function:" << e.what() << endl;
+            std::cout << "Exception in cpp function:" << e.what() << std::endl;
             return luaL_error(L, "Exception in cpp function: %s", e.what());
         }
         catch (...) {
-            cout << "Exception in cpp function: unknown exception" << endl;
+            std::cout << "Exception in cpp function: unknown exception" << std::endl;
             return luaL_error(L, "Exception in cpp function: unknown exception");
         }
         };

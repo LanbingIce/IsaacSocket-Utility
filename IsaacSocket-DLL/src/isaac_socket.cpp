@@ -16,6 +16,8 @@
 #include <imgui/imgui_impl_opengl3.h>
 #include <imgui/imgui_impl_win32.h>
 
+using std::string;
+
 namespace _isaac_socket
 {
     static int Connect(lua_State* L) {

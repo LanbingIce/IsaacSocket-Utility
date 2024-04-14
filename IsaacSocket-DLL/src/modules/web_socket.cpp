@@ -5,6 +5,8 @@
 #include "isaac_socket.hpp"
 #include <myws/myws.hpp>
 
+using std::string;
+
 namespace result {
     static RegisterResultType HandleResult(
         [](const std::any& aResult, lua_State* L)

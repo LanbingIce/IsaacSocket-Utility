@@ -1,5 +1,7 @@
-#include "inject.hpp"
+﻿#include "inject.hpp"
 #include "state.hpp"
+
+using std::string;
 
 namespace inject {
 

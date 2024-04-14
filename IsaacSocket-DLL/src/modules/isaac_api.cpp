@@ -9,23 +9,28 @@
 
 #include <imgui/imgui.h>
 
-int udata::HistoryItem::__index(lua_State* L) {
-    auto& item = ARG_UDATA(1, isaac_image::HistoryItem);
-    METATABLE_BEGIN(isaac_image::HistoryItem, item);
-    METATABLE_INDEX(integer, time);
-    METATABLE_INDEX(boolean, isTrinket);
-    METATABLE_INDEX(integer, id);
-    METATABLE_INDEX(integer, levelStage);
-    METATABLE_INDEX(integer, stageType);
-    METATABLE_INDEX(integer, roomType);
-    METATABLE_INDEX(integer, itemPoolType);
-    METATABLE_END();
-}
+using std::vector;
+using std::string;
 
-int udata::HistoryItem::__newindex(lua_State* L) {
-    auto& item = ARG_UDATA(1, isaac_image::HistoryItem);
-    METATABLE_BEGIN(isaac_image::HistoryItem, item);
-    METATABLE_END();
+namespace udata {
+    int HistoryItem::__index(lua_State* L) {
+        auto& item = ARG_UDATA(1, isaac_image::HistoryItem);
+        METATABLE_BEGIN(isaac_image::HistoryItem, item);
+        METATABLE_INDEX(integer, time);
+        METATABLE_INDEX(boolean, isTrinket);
+        METATABLE_INDEX(integer, id);
+        METATABLE_INDEX(integer, levelStage);
+        METATABLE_INDEX(integer, stageType);
+        METATABLE_INDEX(integer, roomType);
+        METATABLE_INDEX(integer, itemPoolType);
+        METATABLE_END();
+    }
+
+    int HistoryItem::__newindex(lua_State* L) {
+        auto& item = ARG_UDATA(1, isaac_image::HistoryItem);
+        METATABLE_BEGIN(isaac_image::HistoryItem, item);
+        METATABLE_END();
+    }
 }
 
 namespace isaac_api {

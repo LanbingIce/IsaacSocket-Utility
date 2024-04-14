@@ -2,6 +2,8 @@
 #include "isaac_socket.hpp"
 #include "module.hpp"
 
+using std::string;
+
 namespace udata {
     Task::Task() :id(
         [] {

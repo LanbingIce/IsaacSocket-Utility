@@ -13,6 +13,8 @@
 #include <imgui/imgui.h>
 #include <ImGuiFileDialog/ImGuiFileDialog.h>
 
+using std::string;
+
 namespace callback {
 
     // 小彭老师专用代码开始

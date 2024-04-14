@@ -11,10 +11,10 @@ namespace config {
 
 #define _(type,Type,def) if constexpr (std::is_same_v<T, type>){return (type)_config.get##Type(path,def);}
     template <typename T>
-    static T Get(const string& path) {
+    static T Get(const std::string& path) {
         _CheckConfigLoad();
         _(int, Int, 0);
-        _(string, String, "");
+        _(std::string, String, "");
         _(double, Double, 0.0);
         _(float, Double, 0.0F);
         return 0;
@@ -23,11 +23,11 @@ namespace config {
 
 #define _(type,Type) if constexpr (std::is_same_v<T, type>) {if (Get<type>(path)==value)return;_config.set##Type(path,value);_Save();return;}
     template <typename T>
-    static void Set(const string& path, T value) {
+    static void Set(const std::string& path, T value) {
         _CheckConfigLoad();
         _(int, Int);
         _(const char*, String);
-        _(string, String);
+        _(std::string, String);
         _(float, Double);
         _(double, Double);
     }

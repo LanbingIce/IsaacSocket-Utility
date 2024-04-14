@@ -9,6 +9,8 @@
 #include <Poco/Net/HTTPResponse.h>
 #include <Poco/Net/HTTPSClientSession.h>
 
+using std::string;
+
 namespace myhttp {
     void MyHTTP::_Connect() {
         try

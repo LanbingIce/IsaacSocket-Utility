@@ -47,7 +47,7 @@ namespace opengl
     static void opengl_check_error(const char* filename, int lineno, const char* expr) {
         GLenum err = glGetError();
         if (err != GL_NO_ERROR) [[unlikely]] {
-            cout << filename << ":" << lineno << ": " << expr << " failed: " << opengl_errno_name(err) << endl;
+            std::cout << filename << ":" << lineno << ": " << expr << " failed: " << opengl_errno_name(err) << std::endl;
             /* system("pause"); */
             /* std::terminate(); */
             }

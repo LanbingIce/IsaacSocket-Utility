@@ -9,10 +9,10 @@ namespace isaac_socket
     void LogOutput(const char* text, uint32_t type = 0);
 
     // 进行一次 “控制台输出”
-    void ConsoleOutput(string text, uint32_t color = 0xFFD3D3D3);
+    void ConsoleOutput(std::string text, uint32_t color = 0xFFD3D3D3);
 
     // 进行一次 “执行控制台指令”
-    void ExecuteCommand(string commandText);
+    void ExecuteCommand(std::string commandText);
 
     // 手动发送一条窗口过程消息
     LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);

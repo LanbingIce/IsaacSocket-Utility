@@ -47,9 +47,4 @@
 #define FASTCALL __fastcall
 #endif //_MSC_VER
 
-using std::string;
-using std::vector;
-using std::cout;
-using std::endl;
-
 #endif //PCH_H

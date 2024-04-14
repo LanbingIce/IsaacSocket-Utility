@@ -2,6 +2,9 @@
 #include "udata.hpp"
 #undef MessageBox
 
+using std::string;
+using std::vector;
+
 namespace win_api
 {
     static int AllocConsole(lua_State* L) {
