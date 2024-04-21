@@ -15,23 +15,6 @@ namespace render_ {
             }
         }
 
-        static bool console;
-        if (ImGui::Checkbox("Console", &console))
-        {
-            if (console)
-            {
-                AllocConsole();
-                SetConsoleOutputCP(CP_UTF8);
-                FILE* stream;
-                freopen_s(&stream, "CONOUT$", "w", stdout);
-            }
-            else
-            {
-                ShowWindow(GetConsoleWindow(), SW_HIDE);
-                FreeConsole();
-            }
-        }
-
         if (ImGui::Button("打开数据目录"))
         {
             ShellExecuteW(nullptr, L"open", utils::GetDataFilePathW(L".").c_str(), nullptr, nullptr, SW_SHOWNORMAL);

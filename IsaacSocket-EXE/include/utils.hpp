@@ -153,6 +153,25 @@ namespace utils {
         destData.resize(destLen);
         return destData;
     }
+
+    static void AllocConsole() {
+        ::AllocConsole();
+        SetConsoleOutputCP(CP_UTF8);
+        FILE* stream;
+        freopen_s(&stream, "CONOUT$", "w", stdout);
+    }
+
+    static vector<string> GetCommandArgs() {
+        vector <string> args;
+        LPWSTR commandLine = GetCommandLineW();
+        int argc;
+        LPWSTR* argv = CommandLineToArgvW(commandLine, &argc);
+        for (int i = 1; i < argc; ++i) {
+            args.push_back(U16ToU8(std::wstring(argv[i])));
+        }
+        LocalFree(argv);
+        return args;
+    }
 }
 
 using utils::mb;

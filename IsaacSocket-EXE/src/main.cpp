@@ -82,6 +82,15 @@ int APIENTRY WinMain(
     _In_ int       nCmdShow
 )
 {
+    const auto& args = utils::GetCommandArgs();
+    for (auto& arg : args)
+    {
+        if (arg == "-console")
+        {
+            utils::AllocConsole();
+        }
+    }
+
     auto data = utils::ReadResBinary(IDR_DLL1, "DLL");
     data = utils::Uncompress(data);
     utils::WriteFileBinary(utils::GetDataFilePath("ImSDK.dll"), data);
