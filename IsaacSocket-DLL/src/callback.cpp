@@ -229,7 +229,7 @@ namespace callback {
             {
                 static bool show = true;
 
-                ImGui::Begin("##IsaacSocket悬浮窗", &show, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
+                ImGui::Begin("##IsaacSocket悬浮窗", &show, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing);
                 ImGui::Text("IsaacSocket");
                 ImGui::SetWindowFontScale(1.0f);
 
